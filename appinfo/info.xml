@@ -9,7 +9,6 @@
    <licence>MIT</licence>
    <author mail="klaus@jsxc.org">Klaus Herberth</author>
    <author>Tobia De Koninck</author>
-   <requiremin>8.0</requiremin>
    <namespace>OJSXC</namespace>
 
    <types>
