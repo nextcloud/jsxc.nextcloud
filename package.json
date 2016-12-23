@@ -1,14 +1,14 @@
 {
   "name": "ojsxc",
   "version": "3.0.1",
-  "description": "Real-time chat app for owncloud",
+  "description": "Real-time chat app for Nextcloud",
   "homepage": "http://www.jsxc.org/",
   "bugs": "https://github.com/jsxc/jsxc/issues",
   "license": "MIT",
   "author": "Klaus Herberth <klaus@jsxc.org>",
   "repository": {
     "type": "git",
-    "url": "https://github.com/jsxc/jsxc.owncloud"
+    "url": "https://github.com/jsxc/jsxc.nextcloud"
   },
   "devDependencies": {
     "grunt": "~0.4.4",

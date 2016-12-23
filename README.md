@@ -1,12 +1,8 @@
 __Bugtracker and issues:__ https://github.com/jsxc/jsxc/issues<br />
 
-# ownCloud JavaScript Xmpp Client
+# Nextcloud JavaScript Xmpp Client
 
-[![Build Status](https://travis-ci.org/owncloud/jsxc.chat.svg?branch=master)](https://travis-ci.org/owncloud/jsxc.chat)
-
-Real-time chat app for OwnCloud. This app requires external XMPP server (openfire, ejabberd etc.).
-
-More information about features, supported protocols/browsers, screenshots and planned features at [www.jsxc.org](https://www.jsxc.org/).
+Real-time chat app for Nextcloud. More information about features, supported protocols/browsers, screenshots and planned features at [www.jsxc.org](https://www.jsxc.org/).
 
 ![Screenshot](https://www.jsxc.org/assets/screenshot-owncloud-latest.png)
 

@@ -145,7 +145,7 @@ $(function() {
    });
 
    jsxc.init({
-      app_name: 'Owncloud',
+      app_name: 'Nextcloud',
       loginForm: {
          form: '#body-login form',
          jid: '#user',

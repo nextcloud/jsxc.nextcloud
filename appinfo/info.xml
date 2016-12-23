@@ -23,7 +23,7 @@
 
    <website>https://www.jsxc.org</website>
    <bugs>http://github.com/jsxc/jsxc/issues</bugs>
-   <repository type="git">https://github.com/owncloud/jsxc.chat.git</repository>
+   <repository type="git">https://github.com/jsxc/jsxc.nextcloud.git</repository>
 
    <ocsid>162257</ocsid>
 
@@ -36,6 +36,6 @@
       <lib>xmlreader</lib>
       <lib>xmlwriter</lib>
       <lib>dom</lib>
-      <owncloud min-version="8.0" max-version="9.2"/>
+      <nextcloud min-version="8.0" max-version="11"/>
    </dependencies>
 </info>
