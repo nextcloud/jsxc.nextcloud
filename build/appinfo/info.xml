@@ -1,11 +1,14 @@
 <?xml version="1.0"?>
-<info>
+<info xmlns:xsi= "http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="https://apps.nextcloud.com/schema/apps/info.xsd">
    <id>ojsxc</id>
    <name>JavaScript XMPP Chat</name>
+   <summary>Facebook-like chat</summary>
    <description>Facebook-like chat with end-to-end encrypted conversation, video calls, multi-user rooms, XMPP and internal server backend.</description>
-   <version>3.0.1</version>
+   <version>3.0.2</version>
    <licence>MIT</licence>
-   <author>Klaus Herberth, Tobia De Koninck</author>
+   <author mail="klaus@jsxc.org">Klaus Herberth</author>
+   <author>Tobia De Koninck</author>
    <requiremin>8.0</requiremin>
    <namespace>OJSXC</namespace>
 
@@ -16,14 +19,15 @@
    <documentation>
       <user>https://www.jsxc.org/manual.html</user>
       <admin>https://github.com/jsxc/jsxc/wiki/Install-ojsxc-(owncloud)</admin>
-   	<developer>https://github.com/jsxc/jsxc/wiki/Contributor-Guide</developer>
+      <developer>https://github.com/jsxc/jsxc/wiki/Contributor-Guide</developer>
    </documentation>
 
    <category>tools</category>
 
    <website>https://www.jsxc.org</website>
    <bugs>http://github.com/jsxc/jsxc/issues</bugs>
-   <repository type="git">https://github.com/owncloud/jsxc.chat.git</repository>
+   <repository type="git">https://github.com/jsxc/jsxc.nextcloud.git</repository>
+   <screenshot>https://www.jsxc.org/assets/screenshot-owncloud-latest.png</screenshot>
 
    <ocsid>162257</ocsid>
 
@@ -36,6 +40,7 @@
       <lib>xmlreader</lib>
       <lib>xmlwriter</lib>
       <lib>dom</lib>
-      <owncloud min-version="8.0" max-version="9.2"/>
+      <owncloud min-version="8.0" max-version="9"/>
+      <nextcloud min-version="8.0" max-version="11"/>
    </dependencies>
 </info>

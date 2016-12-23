@@ -39,9 +39,9 @@ if ($data ['serverType'] === 'internal') {
     exit;
 }
 
-$data ['xmpp'] ['url'] = $config->getAppValue('ojsxc', 'boshUrl');
-$data ['xmpp'] ['domain'] = $config->getAppValue('ojsxc', 'xmppDomain');
-$data ['xmpp'] ['resource'] = $config->getAppValue('ojsxc', 'xmppResource');
+$data ['xmpp'] ['url'] = trim($config->getAppValue('ojsxc', 'boshUrl'));
+$data ['xmpp'] ['domain'] = trim($config->getAppValue('ojsxc', 'xmppDomain'));
+$data ['xmpp'] ['resource'] = trim($config->getAppValue('ojsxc', 'xmppResource'));
 $data ['xmpp'] ['overwrite'] = validateBoolean($config->getAppValue('ojsxc', 'xmppOverwrite'));
 $data ['xmpp'] ['onlogin'] = true;
 

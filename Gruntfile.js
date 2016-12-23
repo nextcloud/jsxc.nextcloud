@@ -94,7 +94,7 @@ module.exports = function(grunt) {
                src: [ 'CHANGELOG.md' ]
             },
             options: {
-               searchString: "^## <%= app.version %>",
+               searchString: "## <%= app.version %>",
                logFormat: 'console',
                onComplete: function(m) {
                   if (m.numMatches === 0) {
@@ -194,6 +194,5 @@ module.exports = function(grunt) {
 
    grunt.registerTask('build:release', [ 'search:changelog', 'build:prerelease' ]);
 
-   // @deprecated
-   grunt.registerTask('pre', [ 'build:prerelease' ]);
+   grunt.registerTask('sign:release', [ 'exec:signRelease' ]);
 };
