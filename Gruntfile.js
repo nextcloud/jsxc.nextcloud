@@ -94,11 +94,25 @@ module.exports = function(grunt) {
                src: [ 'CHANGELOG.md' ]
             },
             options: {
-               searchString: "<%= app.version %>",
+               searchString: "^## <%= app.version %>",
                logFormat: 'console',
                onComplete: function(m) {
                   if (m.numMatches === 0) {
                      grunt.fail.fatal("No entry in CHANGELOG.md for current version found.");
+                  }
+               }
+            }
+         },
+         changelogNightly: {
+            files: {
+               src: [ 'CHANGELOG.md' ]
+            },
+            options: {
+               searchString: "^## [Unreleased]",
+               logFormat: 'console',
+               onComplete: function(m) {
+                  if (m.numMatches === 0) {
+                     grunt.fail.fatal("No entry in CHANGELOG.md for nightly found.");
                   }
                }
             }
@@ -107,7 +121,8 @@ module.exports = function(grunt) {
       compress: {
          main: {
             options: {
-               archive: "archives/ojsxc-<%= app.version %>.zip"
+               archive: 'archives/ojsxc-<%= app.version %>.tar.gz',
+               mode: 'tgz'
             },
             files: [ {
                src: [ '**' ],
@@ -116,6 +131,14 @@ module.exports = function(grunt) {
                cwd: 'build/'
             } ]
          }
+      },
+      exec: {
+        signRelease: {
+          command: 'openssl dgst -sha512 -sign ' +
+            '~/.nextcloud/certificates/ojsxc.key ' +
+            'archives/ojsxc-<%= app.version %>.tar.gz | openssl base64 > ' +
+            'archives/ojsxc-<%= app.version %>.tar.gz.sig'
+        }
       },
       autoprefixer: {
          no_dest: {
@@ -161,6 +184,7 @@ module.exports = function(grunt) {
    grunt.loadNpmTasks('grunt-autoprefixer');
    grunt.loadNpmTasks('grunt-data-uri');
    grunt.loadNpmTasks('grunt-contrib-watch');
+   grunt.loadNpmTasks('grunt-exec');
 
    grunt.registerTask('default', [ 'build', 'watch' ]);
 
