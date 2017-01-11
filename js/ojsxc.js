@@ -119,6 +119,11 @@ $(function() {
       return;
    }
 
+   if (window.parent && window !== window.parent) {
+      // abort if inside a frame
+      return;
+   }
+
    if (typeof jsxc === 'undefined') {
       // abort if core or dependencies threw an error
       return;
