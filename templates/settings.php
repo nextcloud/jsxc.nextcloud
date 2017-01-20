@@ -4,7 +4,7 @@
 		<div class="form-group">
 			<input type="radio" name="serverType" id="serverTypeInternal" required="required" value="internal" <?php if($_['serverType'] === 'internal')echo 'checked'; ?> />
 			<label for="serverTypeInternal">Internal (Experimental)</label>
-			<em>Internal server is not ready for production and contains not all features of an external server. To be precise only one-to-one messages are possible.</em>
+			<em>Limited functionality only: No clients besides JSXC in ownCloud, no multi-user chat, no server-to-server federations.</em>
 		</div>
 		<div class="form-group">
 			<input type="radio" name="serverType" id="serverTypeExternal" class="required" required="required" value="external" <?php if($_['serverType'] === 'external')echo 'checked'; ?> />
@@ -20,6 +20,10 @@
 			<div class="form-group">
 				<label for="xmppDomain">* XMPP domain</label>
 				<input type="text" name="xmppDomain" id="xmppDomain" class="required" required="required" value="<?php p($_['xmppDomain']); ?>" />
+			</div>
+			<div class="form-group">
+				<label for="xmppPreferMail">Prefer mail address to loginName@xmppDomain</label>
+				<input type="checkbox" name="xmppPreferMail" id="xmppPreferMail" value="true" <?php if($_['xmppPreferMail'] === 'true' || $_['xmppPreferMail'] === true) echo "checked"; ?> />
 			</div>
 			<div class="form-group">
 				<label for="boshUrl">* BOSH url</label>
