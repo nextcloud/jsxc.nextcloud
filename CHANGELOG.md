@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [Unreleased]
+### Added
+- add option to use user email as jid
+
+### Fixed
+- fix untrimmed settings
+- ignore empty webrtc configuration
+- do not start jsxc inside a frame
+
 ## 3.0.2 - 2016-12-23
 ### Changed
 - rebrand from owncloud to nextcloud

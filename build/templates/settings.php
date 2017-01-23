@@ -4,22 +4,26 @@
 		<div class="form-group">
 			<input type="radio" name="serverType" id="serverTypeInternal" required="required" value="internal" <?php if($_['serverType'] === 'internal')echo 'checked'; ?> />
 			<label for="serverTypeInternal">Internal (Experimental)</label>
-			<em>Internal server is not ready for production and contains not all features of an external server. To be precise only one-to-one messages are possible.</em>
+			<em>Limited functionality only: No clients besides JSXC in ownCloud, no multi-user chat, no server-to-server federations.</em>
 		</div>
 		<div class="form-group">
 			<input type="radio" name="serverType" id="serverTypeExternal" class="required" required="required" value="external" <?php if($_['serverType'] === 'external')echo 'checked'; ?> />
 			<label for="serverTypeExternal">External</label>
 			<em>Choose this option to use your own XMPP server.</em>
 		</div>
-		
+
 		<div class="ojsxc-internal hidden">
 
 		</div>
-		
+
 		<div class="ojsxc-external hidden">
 			<div class="form-group">
 				<label for="xmppDomain">* XMPP domain</label>
 				<input type="text" name="xmppDomain" id="xmppDomain" class="required" required="required" value="<?php p($_['xmppDomain']); ?>" />
+			</div>
+			<div class="form-group">
+				<label for="xmppPreferMail">Prefer mail address to loginName@xmppDomain</label>
+				<input type="checkbox" name="xmppPreferMail" id="xmppPreferMail" value="true" <?php if($_['xmppPreferMail'] === 'true' || $_['xmppPreferMail'] === true) echo "checked"; ?> />
 			</div>
 			<div class="form-group">
 				<label for="boshUrl">* BOSH url</label>
@@ -35,39 +39,55 @@
 				<input type="checkbox" name="xmppOverwrite" id="xmppOverwrite" value="true" <?php if($_['xmppOverwrite'] === 'true' || $_['xmppOverwrite'] === true) echo "checked"; ?> />
 			</div>
 		</div>
-		
+
 		<div class="form-group">
 			<label for="xmppStartMinimized">Hide roster after first login</label>
 			<input type="checkbox" name="xmppStartMinimized" id="xmppStartMinimized" value="true" <?php if($_['xmppStartMinimized'] === 'true' || $_['xmppStartMinimized'] === true) echo "checked"; ?> />
 		</div>
-		<div class="form-group">
-			<label for="iceUrl">TURN Url</label>
-			<input type="text" name="iceUrl" id="iceUrl" value="<?php p($_['iceUrl']); ?>" />
-		</div>
-		<div class="form-group">
-			<label for="iceUsername">TURN Username</label>
-			<input type="text" name="iceUsername" id="iceUrl" value="<?php p($_['iceUsername']); ?>" />
-			<em>If no username is set, TURN-REST-API credentials are used.</em>
-		</div>
-		<div class="form-group">
-			<label for="iceCredential">TURN Credential</label>
-			<input type="text" name="iceCredential" id="iceCredential" value="<?php p($_['iceCredential']); ?>" />
-			<em>If no password is set, TURN-REST-API credentials are used.</em>
-		</div>
-		<div class="form-group">
-			<label for="iceSecret">TURN Secret</label>
-			<input type="text" name="iceSecret" id="iceSecret" value="<?php p($_['iceSecret']); ?>" />
-			<em>Secret for TURN-REST-API credentials as described <a href="http://tools.ietf.org/html/draft-uberti-behave-turn-rest-00" target="_blank">here</a>.</em>
-		</div>
-		<div class="form-group">
-			<label for="iceTtl">TURN TTL</label>
-			<input type="text" name="iceTtl" id="iceTtl" value="<?php p($_['iceTtl']); ?>" />
-			<em>Lifetime for TURN-REST-API credentials in seconds.</em>
-		</div>
-		
+		<fieldset>
+			<h3>ICE server <small>(WebRTC)</small></h3>
+			<div class="form-group">
+				<label for="iceUrl">Url</label>
+				<input type="text" name="iceUrl" id="iceUrl" value="<?php p($_['iceUrl']); ?>" placeholder="stun:stun.stunprotocol.org" pattern="^(stun|turn):.+" />
+			</div>
+			<div class="form-group">
+				<label for="iceUsername">TURN Username</label>
+				<input type="text" name="iceUsername" id="iceUrl" value="<?php p($_['iceUsername']); ?>" />
+				<em>If no username is set, TURN-REST-API credentials are used.</em>
+			</div>
+			<div class="form-group">
+				<label for="iceCredential">TURN Credential</label>
+				<input type="text" name="iceCredential" id="iceCredential" value="<?php p($_['iceCredential']); ?>" />
+				<em>If no password is set, TURN-REST-API credentials are used.</em>
+			</div>
+			<div class="form-group">
+				<label for="iceSecret">TURN Secret</label>
+				<input type="text" name="iceSecret" id="iceSecret" value="<?php p($_['iceSecret']); ?>" />
+				<em>Secret for TURN-REST-API credentials as described <a href="http://tools.ietf.org/html/draft-uberti-behave-turn-rest-00" target="_blank">here</a>.</em>
+			</div>
+			<div class="form-group">
+				<label for="iceTtl">TURN TTL</label>
+				<input type="number" name="iceTtl" id="iceTtl" value="<?php p($_['iceTtl']); ?>" />
+				<em>Lifetime for TURN-REST-API credentials in seconds.</em>
+			</div>
+		</fieldset>
+		<fieldset>
+			<h3>Screen sharing</h3>
+			<div class="form-group">
+				<label for="firefoxExtension">Firefox Extension Url</label>
+				<input type="url" name="firefoxExtension" id="firefoxExtension" value="<?php p($_['firefoxExtension']); ?>" />
+				<em>Firefox needs an extension in order to support screen sharing. <a href="https://github.com/jsxc/jsxc/wiki/Screen-sharing">More details.</a></em>
+			</div>
+			<div class="form-group">
+				<label for="chromeExtension">Chrome Extension Url</label>
+				<input type="url" name="chromeExtension" id="chromeExtension" value="<?php p($_['chromeExtension']); ?>" />
+				<em>Chrome needs an extension in order to support screen sharing. <a href="https://github.com/jsxc/jsxc/wiki/Screen-sharing">More details.</a></em>
+			</div>
+		</fieldset>
+
 		<div class="form-offset-label">
 			<div class="msg"></div>
-			
+
 			<input type="submit" value="Save settings" />
 		</div>
 	</form>

@@ -39,11 +39,26 @@ if ($data ['serverType'] === 'internal') {
     exit;
 }
 
+$data ['screenMediaExtension']['firefox'] = trim($config->getAppValue('ojsxc', 'firefoxExtension'));
+$data ['screenMediaExtension']['chrome'] = trim($config->getAppValue('ojsxc', 'chromeExtension'));
+
 $data ['xmpp'] ['url'] = trim($config->getAppValue('ojsxc', 'boshUrl'));
 $data ['xmpp'] ['domain'] = trim($config->getAppValue('ojsxc', 'xmppDomain'));
 $data ['xmpp'] ['resource'] = trim($config->getAppValue('ojsxc', 'xmppResource'));
 $data ['xmpp'] ['overwrite'] = validateBoolean($config->getAppValue('ojsxc', 'xmppOverwrite'));
 $data ['xmpp'] ['onlogin'] = true;
+
+if (validateBoolean($config->getAppValue('ojsxc', 'xmppPreferMail'))) {
+    $mail = $config->getUserValue($username,'settings','email');
+
+    if ($mail !== null) {
+	list($u, $d) = explode("@", $mail, 2);
+	if ($d !== null && $d !== "") {
+	    $data ['xmpp'] ['username'] = $u;
+	    $data ['xmpp'] ['domain'] = $d;
+	}
+    }
+}
 
 $options = $config->getUserValue($username, 'ojsxc', 'options');
 
