@@ -42,6 +42,11 @@ function onRosterToggle(event, state, duration) {
          right: (roster_width + toggle_width) + 'px'
       });
    }
+
+   // trigger nextcloud/owncloud triggers
+   setTimeout(function(){
+      $(window).resize();
+   }, duration + 50);
 }
 
 /**
@@ -100,6 +105,9 @@ function onRosterReady() {
       if ($('#app-sidebar').length > 0) {
          $('#app-sidebar').css('right', (roster_width + roster_right + toggle_width) + 'px');
       }
+
+      // trigger nextcloud/owncloud triggers
+      $(window).resize();
    }, 500);
 
    function getValues() {
