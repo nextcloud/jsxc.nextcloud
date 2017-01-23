@@ -1,142 +1,160 @@
 #jsxc_roster {
-   top: 45px;
-   z-index: 1500;
+  top: 45px;
+  z-index: 1500;
 }
 
 #jsxc_windowList, #jsxc_windowListSB {
-   z-index: 1500;
+  z-index: 1500;
 }
 
 #jsxc {
-   padding: 20px;
-   h1 {
-      margin: 15px 0px 5px 0px;
-      font-size: 1.5em;
-   }
-   a {
-      color: blue;
-      text-decoration: underline;
-      &:hover {
-         text-decoration: none;
-      }
-   }
+  padding: 20px;
+
+  h1 {
+    margin: 15px 0 5px;
+    font-size: 1.5em;
+  }
+
+  a {
+    color: blue;
+    text-decoration: underline;
+
+    &:hover {
+      text-decoration: none;
+    }
+  }
 }
 
 #jsxc_alt {
-   text-align: right;
-   margin: 15px;
-   opacity: 0.5;
-   font-style: italic;
-   padding-top: 5px;
-   clear: both;
-   &:hover {
-      opacity: 0.8;
-   }
+  text-align: right;
+  margin: 15px;
+  opacity: 0.5;
+  font-style: italic;
+  padding-top: 5px;
+  clear: both;
+
+  &:hover {
+    opacity: 0.8;
+  }
 }
 
 #ojsxc {
-   .form-group {
-      margin-bottom: 0.8em;
-   }
-   .form-offset-label {
-      @media (min-width: 768px) {
-         padding-left: 280px;
-      }
-   }
-   h3 {
-      @media (min-width: 768px) {
-         margin-left: 285px;
-      }
-   }
-   label {
-      box-sizing: border-box;
-      padding-right: 15px;
-      display: inline-block;
-      @media (min-width: 768px) {
-         width: 280px;
-         text-align: right;
-      }
-   }
-   input {
-      box-sizing: border-box;
-      padding-right: 15px;
-      display: inline-block;
-      width: 100%;
-      &[type='checkbox'] {
-         width: auto;
-      }
-      &[type='radio'] {
-         width: auto;
-      }
-      @media (min-width: 768px) {
-         width: auto;
-      }
-   }
-   input+label {
+  .form-group {
+    margin-bottom: 0.8em;
+  }
+
+  .form-offset-label {
+    @media (min-width: 768px) {
+      padding-left: 280px;
+    }
+  }
+
+  h3 {
+    @media (min-width: 768px) {
+      margin-left: 285px;
+    }
+  }
+
+  label {
+    box-sizing: border-box;
+    padding-right: 15px;
+    display: inline-block;
+
+    @media (min-width: 768px) {
+      width: 280px;
+      text-align: right;
+    }
+  }
+
+  input {
+    box-sizing: border-box;
+    padding-right: 15px;
+    display: inline-block;
+    width: 100%;
+
+    &[type='checkbox'] {
       width: auto;
-   }
-   input+label+em {
-      padding-left: 20px;
-   }
-   em, .boshUrl-msg {
-      display: block;
-      @media (min-width: 768px) {
-         padding-left: 280px;
+    }
+
+    &[type='radio'] {
+      width: auto;
+    }
+
+    @media (min-width: 768px) {
+      width: auto;
+    }
+
+    + label {
+      width: auto;
+
+      + em {
+        padding-left: 20px;
       }
-   }
+    }
+  }
+
+  em, .boshUrl-msg {
+    display: block;
+
+    @media (min-width: 768px) {
+      padding-left: 280px;
+    }
+  }
 }
 
 %msg {
-   border: 1px solid #fff;
-   border-radius: 3px;
-   padding: 3px;
-   padding-left: 22px;
-   background-position: 3px center;
-   background-repeat: no-repeat;
-   margin: 3px;
-   width: -moz-fit-content;
-   width: -webkit-fit-content;
+  border: 1px solid #fff;
+  border-radius: 3px;
+  padding: 3px;
+  padding-left: 22px;
+  background-position: 3px center;
+  background-repeat: no-repeat;
+  margin: 3px;
+  width: -moz-fit-content;
+  width: -webkit-fit-content;
 }
 
 .jsxc_success {
-   @extend %msg;
-   background-color: #A1F6BB;
-   background-image: url('../img/pass-icon.png');
-   color: #003300;
-   border-color: #003300;
+  @extend %msg;
+
+  background-color: #A1F6BB;
+  background-image: url("../img/pass-icon.png");
+  color: #030;
+  border-color: #030;
 }
 
 .jsxc_fail {
-   @extend %msg;
-   background-color: #FF9999;
-   background-image: url('../img/fail-icon.png');
-   color: #800000;
-   border-color: #800000;
+  @extend %msg;
+
+  background-color: #F99;
+  background-image: url("../img/fail-icon.png");
+  color: #800000;
+  border-color: #800000;
 }
 
 .jsxc_log {
-   width: 500px;
+  width: 500px;
 }
 
 #mainContainer, #odf-toolbar {
-   right: 0px;
-   left: 0px;
-   width: auto !important;
-   z-index: 70 !important;
+  right: 0;
+  left: 0;
+  width: auto !important;
+  z-index: 70 !important;
 }
 
 #header .jsxc_chatIcon {
-   width: 45px;
-   height: 45px;
-   float: right;
-   background-image: url('../img/chat-icon-white.svg');
-   background-size: 20px;
-   background-repeat: no-repeat;
-   background-position: center;
-   opacity: 0.7;
-   cursor: pointer;
+  width: 45px;
+  height: 45px;
+  float: right;
+  background-image: url("../img/chat-icon-white.svg");
+  background-size: 20px;
+  background-repeat: no-repeat;
+  background-position: center;
+  opacity: 0.7;
+  cursor: pointer;
 
-   &:hover {
-      opacity: 1;
-   }
+  &:hover {
+    opacity: 1;
+  }
 }
