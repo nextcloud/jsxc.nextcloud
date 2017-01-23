@@ -19,4 +19,7 @@ $config->setAppValue('ojsxc', 'iceCredential', $_POST ['iceCredential']);
 $config->setAppValue('ojsxc', 'iceSecret', $_POST ['iceSecret']);
 $config->setAppValue('ojsxc', 'iceTtl', $_POST ['iceTtl']);
 
+$config->setAppValue('ojsxc', 'firefoxExtension', $_POST ['firefoxExtension']);
+$config->setAppValue('ojsxc', 'chromeExtension', $_POST ['chromeExtension']);
+
 echo 'true';

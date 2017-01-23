@@ -39,6 +39,9 @@ if ($data ['serverType'] === 'internal') {
     exit;
 }
 
+$data ['screenMediaExtension']['firefox'] = trim($config->getAppValue('ojsxc', 'firefoxExtension'));
+$data ['screenMediaExtension']['chrome'] = trim($config->getAppValue('ojsxc', 'chromeExtension'));
+
 $data ['xmpp'] ['url'] = trim($config->getAppValue('ojsxc', 'boshUrl'));
 $data ['xmpp'] ['domain'] = trim($config->getAppValue('ojsxc', 'xmppDomain'));
 $data ['xmpp'] ['resource'] = trim($config->getAppValue('ojsxc', 'xmppResource'));

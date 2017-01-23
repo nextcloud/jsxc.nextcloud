@@ -19,5 +19,7 @@ $tmpl->assign('iceUsername', $config->getAppValue('ojsxc', 'iceUsername'));
 $tmpl->assign('iceCredential', $config->getAppValue('ojsxc', 'iceCredential'));
 $tmpl->assign('iceSecret', $config->getAppValue('ojsxc', 'iceSecret'));
 $tmpl->assign('iceTtl', $config->getAppValue('ojsxc', 'iceTtl'));
+$tmpl->assign('firefoxExtension', $config->getAppValue('ojsxc', 'firefoxExtension'));
+$tmpl->assign('chromeExtension', $config->getAppValue('ojsxc', 'chromeExtension'));
 
 return $tmpl->fetchPage();

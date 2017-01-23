@@ -40,7 +40,12 @@
    }
    .form-offset-label {
       @media (min-width: 768px) {
-         padding-left: 280px; 
+         padding-left: 280px;
+      }
+   }
+   h3 {
+      @media (min-width: 768px) {
+         margin-left: 285px;
       }
    }
    label {
@@ -49,7 +54,7 @@
       display: inline-block;
       @media (min-width: 768px) {
          width: 280px;
-         text-align: right;      
+         text-align: right;
       }
    }
    input {
