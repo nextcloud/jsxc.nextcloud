@@ -5,6 +5,10 @@
 $font_sans: Arial, sans-serif;
 $font_serif: serif;
 
+$window_bar_bg: #0082c9;
+$window_bar_color: #c0dff1;
+$window_bar_color_hover: #fff;
+
 @import 'js/jsxc/scss/modules',
         'js/jsxc/scss/buddylist',
         'js/jsxc/scss/state',
@@ -12,7 +16,7 @@ $font_serif: serif;
         'js/jsxc/scss/roster',
         'js/jsxc/scss/window',
         'js/jsxc/scss/muc';
-        
+
 @import 'js/jsxc/scss/jsxc';
 @import 'js/jsxc/scss/webrtc';
 
