@@ -31,7 +31,7 @@
 				</div>
 				<div class="form-group">
 					<label for="xmppPreferMail">Prefer mail address to loginName@xmppDomain</label>
-					<input type="checkbox" name="xmppPreferMail" id="xmppPreferMail" value="true" <?php if($_[ 'xmppPreferMail']==='true' || $_[ 'xmppPreferMail']===t rue) echo "checked"; ?> />
+					<input type="checkbox" name="xmppPreferMail" id="xmppPreferMail" value="true" <?php if($_[ 'xmppPreferMail']==='true' || $_[ 'xmppPreferMail']===true) echo "checked"; ?> />
 				</div>
 				<div class="form-group">
 					<label for="boshUrl">* BOSH url</label>
@@ -49,7 +49,7 @@
 				<div class="form-group">
 					<label for="xmppOverwrite">Allow user to overwrite XMPP settings</label>
 					<div class="form-col">
-						<input type="checkbox" name="xmppOverwrite" id="xmppOverwrite" value="true" <?php if($_[ 'xmppOverwrite']==='true' || $_[ 'xmppOverwrite']===t rue) echo "checked"; ?> />
+						<input type="checkbox" name="xmppOverwrite" id="xmppOverwrite" value="true" <?php if($_[ 'xmppOverwrite']==='true' || $_[ 'xmppOverwrite']===true) echo "checked"; ?> />
 					</div>
 				</div>
 			</div>
@@ -57,7 +57,7 @@
 			<div class="form-group">
 				<label for="xmppStartMinimized">Hide roster after first login</label>
 				<div class="form-col">
-					<input type="checkbox" name="xmppStartMinimized" id="xmppStartMinimized" value="true" <?php if($_[ 'xmppStartMinimized']==='true' || $_[ 'xmppStartMinimized']===t rue) echo "checked"; ?> />
+					<input type="checkbox" name="xmppStartMinimized" id="xmppStartMinimized" value="true" <?php if($_[ 'xmppStartMinimized']==='true' || $_[ 'xmppStartMinimized']===true) echo "checked"; ?> />
 				</div>
 			</div>
 		</fieldset>
