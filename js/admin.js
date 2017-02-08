@@ -3,7 +3,7 @@
 $(document).ready(function() {
    /**
     * Test if bosh server is up and running.
-    * 
+    *
     * @param  {string}   url    BOSH url
     * @param  {string}   domain host domain for BOSH server
     * @param  {Function} cb     called if test is done
@@ -152,5 +152,14 @@ $(document).ready(function() {
             status.hide('slow');
          }, 3000);
       });
+   });
+
+   $('#ojsxc .add-input').click(function(ev) {
+      ev.preventDefault();
+
+      var clone = $(this).prev().clone();
+      clone.val('');
+
+      $(this).before(clone);
    });
 });

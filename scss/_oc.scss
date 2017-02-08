@@ -40,39 +40,55 @@
 
 #ojsxc {
   .form-group {
-    margin-bottom: 0.8em;
-  }
+    overflow: hidden;
 
-  .form-offset-label {
-    @media (min-width: 768px) {
-      padding-left: 280px;
-    }
-  }
-
-  h3 {
-    @media (min-width: 768px) {
-      margin-left: 285px;
+    > label, > .form-col {
+      float: left;
     }
   }
 
   label {
     box-sizing: border-box;
-    padding-right: 15px;
-    display: inline-block;
+    padding: 6px 15px 6px 0;
+    width: 100%;
+    margin: 3px 0;
 
     @media (min-width: 768px) {
-      width: 280px;
+      width: 33%;
       text-align: right;
+    }
+  }
+
+  .form-no-padding {
+    padding: 0;
+  }
+
+  .form-col {
+    width: 100%;
+    overflow: hidden;
+
+    @media (min-width: 768px) {
+      width: 66%;
+    }
+
+    input {
+      display: block;
+    }
+  }
+
+  .form-col-offset {
+    @media (min-width: 768px) {
+      padding-left: 33%;
     }
   }
 
   input {
     box-sizing: border-box;
     padding-right: 15px;
-    display: inline-block;
     width: 100%;
 
     &[type='checkbox'] {
+      margin: 13px 0;
       width: auto;
     }
 
@@ -80,24 +96,28 @@
       width: auto;
     }
 
-    @media (min-width: 768px) {
-      width: auto;
-    }
-
-    + label {
-      width: auto;
-
-      + em {
-        padding-left: 20px;
-      }
+    &:invalid {
+      border: 1px solid red;
+      position: relative;
     }
   }
 
   em, .boshUrl-msg {
     display: block;
+    clear: left;
+    margin-bottom: 0.8em;
+  }
+
+  .text-left {
+    text-align: left;
+  }
+
+  h3 {
+    width: 100%;
 
     @media (min-width: 768px) {
-      padding-left: 280px;
+      width: 33%;
+      border-bottom: 1px solid #e1e1e1;
     }
   }
 }

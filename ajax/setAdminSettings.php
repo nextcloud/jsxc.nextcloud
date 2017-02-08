@@ -22,4 +22,12 @@ $config->setAppValue('ojsxc', 'iceTtl', $_POST ['iceTtl']);
 $config->setAppValue('ojsxc', 'firefoxExtension', $_POST ['firefoxExtension']);
 $config->setAppValue('ojsxc', 'chromeExtension', $_POST ['chromeExtension']);
 
+$externalServices = array();
+foreach($_POST['externalServices'] as $es) {
+   if (preg_match('/^(https:\/\/)?([\w\d*][\w\d-]*)(\.[\w\d-]+)+(:[\d]+)?$/', $es)) {
+      $externalServices[] = $es;
+   }
+}
+$config->setAppValue('ojsxc', 'externalServices', implode('|', $externalServices));
+
 echo 'true';

@@ -48,6 +48,13 @@ if(class_exists('\\OCP\\AppFramework\\Http\\EmptyContentSecurityPolicy')) {
 		$policy->addAllowedConnectDomain($boshDomain);
 	}
 
+	$externalServices = \OC::$server->getConfig()->getAppValue('ojsxc', 'externalServices');
+	$externalServices = explode("|", $externalServices);
+
+	foreach($externalServices as $es) {
+		$policy->addAllowedConnectDomain($es);
+	}
+
 	$manager->addDefaultPolicy($policy);
 }
 
