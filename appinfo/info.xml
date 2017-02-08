@@ -26,7 +26,7 @@
    <website>https://www.jsxc.org</website>
    <bugs>http://github.com/jsxc/jsxc/issues</bugs>
    <repository type="git">https://github.com/jsxc/jsxc.nextcloud.git</repository>
-   <screenshot>https://www.jsxc.org/assets/screenshot-owncloud-latest.png</screenshot>
+   <screenshot>https://www.jsxc.org/assets/screenshot-nextcloud-latest.png</screenshot>
 
    <dependencies>
       <php min-version="5.4" max-version="7"/>
