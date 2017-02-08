@@ -4,7 +4,7 @@ __Bugtracker and issues:__ https://github.com/jsxc/jsxc/issues<br />
 
 Real-time chat app for Nextcloud. More information about features, supported protocols/browsers, screenshots and planned features at [www.jsxc.org](https://www.jsxc.org/).
 
-![Screenshot](https://www.jsxc.org/assets/screenshot-owncloud-latest.png)
+![Screenshot](https://www.jsxc.org/assets/screenshot-nextcloud-latest.png)
 
 ## Documentation
 - __Wiki__ https://github.com/jsxc/jsxc/wiki
