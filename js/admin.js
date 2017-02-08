@@ -132,8 +132,11 @@ $(document).ready(function() {
       self.data('timeout', timeout);
    });
 
-   $('#ojsxc').submit(function(event) {
-      event.preventDefault();
+   function saveAdminSettings() {
+      if (OC.PasswordConfirmation && OC.PasswordConfirmation.requiresPasswordConfirmation()) {
+         OC.PasswordConfirmation.requirePasswordConfirmation(saveAdminSettings);
+         return;
+      }
 
       var post = $(this).serialize();
 
@@ -152,6 +155,12 @@ $(document).ready(function() {
             status.hide('slow');
          }, 3000);
       });
+   }
+
+   $('#ojsxc').submit(function(event) {
+      event.preventDefault();
+
+      saveAdminSettings();
    });
 
    $('#ojsxc .add-input').click(function(ev) {

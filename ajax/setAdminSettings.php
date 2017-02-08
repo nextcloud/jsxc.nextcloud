@@ -3,6 +3,18 @@
 OCP\User::checkAdminUser();
 OCP\JSON::callCheck();
 
+$version = \OCP\Util::getVersion();
+preg_match('/^([0-9]+)\.', $version, $versionMatches);
+$majorVersion = intval($versionMatches[1]);
+
+// copied from owncloud/settings/ajax/installapp.php
+$lastConfirm = (int) \OC::$server->getSession()->get('last-password-confirm');
+if ($majorVersion >= 11 && $lastConfirm < (time() - 30 * 60 + 15)) {
+	$l = \OC::$server->getL10N('core');
+	OC_JSON::error(array( 'data' => array( 'message' => $l->t('Password confirmation is required'))));
+	exit();
+}
+
 $config = \OC::$server->getConfig();
 
 $config->setAppValue('ojsxc', 'serverType', $_POST ['serverType']);
