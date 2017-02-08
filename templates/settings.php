@@ -125,7 +125,7 @@
 					<input type="text" name="externalServices[]" value="<?php p($external); ?>" pattern="^(https://)?([\w\d*][\w\d-]*)(\.[\w\d-]+)+(:[\d]+)?$" />
 					<?php endforeach;?>
 					<button class="add-input">+</button>
-					<em>All domains of external services which JSXC should reach. E.g. http file upload service.</em>
+					<em>All domains of external services which JSXC should reach. E.g. http file upload service. <a href="#" id="insert-upload-service">Insert upload services automatically</a>.</em>
 				</div>
 			</div>
 		</fieldset>

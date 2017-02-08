@@ -162,4 +162,39 @@ $(document).ready(function() {
 
       $(this).before(clone);
    });
+
+   $('#insert-upload-service').click(function(ev) {
+      ev.preventDefault();
+
+      if (!jsxc.xmpp.conn || !jsxc.xmpp.conn.connected) {
+         console.warn('Not connected to any XMPP server.');
+         return;
+      }
+
+      var options = jsxc.options.get('httpUpload') || {};
+
+      var services = $('[name="externalServices[]"]').map(function(){
+         var inputField = $(this);
+
+         return inputField.val() || null;
+      });
+
+      if (options.server && services.toArray().indexOf(options.server) < 0) {
+         // insert service
+         var emptyInputFields = $('[name="externalServices[]"]').filter(function(){
+            return $(this).val() === '';
+         });
+
+         var targetInputField;
+
+         if(emptyInputFields.length === 0) {
+            $(this).parents('.form-group').find('.add-input').click();
+            targetInputField = $('[name="externalServices[]"]').last();
+         } else {
+            targetInputField = $(emptyInputFields[0]);
+         }
+
+         targetInputField.val(options.server);
+      }
+   });
 });
