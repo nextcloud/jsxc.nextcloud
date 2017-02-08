@@ -34,7 +34,11 @@
   clear: both;
 
   &:hover {
-    opacity: 0.8;
+    opacity: 1;
+  }
+
+  a {
+    color: #fff;
   }
 }
 
