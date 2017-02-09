@@ -138,7 +138,7 @@ $(document).ready(function() {
          return;
       }
 
-      var post = $(this).serialize();
+      var post = $('#ojsxc').serialize();
 
       $('#ojsxc .msg').html('<div>');
       var status = $('#ojsxc .msg div');
