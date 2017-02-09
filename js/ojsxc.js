@@ -36,6 +36,13 @@ function onRosterToggle(event, state, duration) {
       });
    }
 
+   // update rich documents (collabora)
+   if (typeof documentsMain !== 'undefined') {
+      $('#mainContainer').animate({
+         right: (roster_width + toggle_width) + 'px'
+      });
+   }
+
    // update app sidebar
    if ($('#app-sidebar').length > 0) {
       $('#app-sidebar').animate({
@@ -99,6 +106,13 @@ function onRosterReady() {
          }
       }
    });
+
+   // update rich documents (collabora)
+   if (typeof documentsMain !== 'undefined') {
+      $('#mainContainer').animate({
+         right: (roster_width + roster_right + toggle_width) + 'px'
+      });
+   }
 
    setTimeout(function(){
       // update app sidebar
