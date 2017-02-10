@@ -7,11 +7,23 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased]
 ### Added
 - add option to use user email as jid
+- add option to add external services
+- add option to add external upload service automatically to csp
 
 ### Fixed
 - fix untrimmed settings
 - ignore empty webrtc configuration
 - do not start jsxc inside a frame
+- fix disabled chat on login
+
+### Changed
+- upgrade jsxc to v3.1.0
+- change category to social
+- minor settings redesign
+- use nc colors
+- minor style change
+- require admin password to save settings
+- handle richdocuments ui
 
 ## 3.0.2 - 2016-12-23
 ### Changed
