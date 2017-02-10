@@ -22,4 +22,8 @@ $tmpl->assign('iceTtl', $config->getAppValue('ojsxc', 'iceTtl'));
 $tmpl->assign('firefoxExtension', $config->getAppValue('ojsxc', 'firefoxExtension'));
 $tmpl->assign('chromeExtension', $config->getAppValue('ojsxc', 'chromeExtension'));
 
+$externalServices = $config->getAppValue('ojsxc', 'externalServices');
+$externalServices = explode("|", $externalServices);
+$tmpl->assign('externalServices', $externalServices);
+
 return $tmpl->fetchPage();

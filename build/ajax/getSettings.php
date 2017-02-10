@@ -46,7 +46,7 @@ $data ['xmpp'] ['url'] = trim($config->getAppValue('ojsxc', 'boshUrl'));
 $data ['xmpp'] ['domain'] = trim($config->getAppValue('ojsxc', 'xmppDomain'));
 $data ['xmpp'] ['resource'] = trim($config->getAppValue('ojsxc', 'xmppResource'));
 $data ['xmpp'] ['overwrite'] = validateBoolean($config->getAppValue('ojsxc', 'xmppOverwrite'));
-$data ['xmpp'] ['onlogin'] = true;
+$data ['xmpp'] ['onlogin'] = null;
 
 if (validateBoolean($config->getAppValue('ojsxc', 'xmppPreferMail'))) {
     $mail = $config->getUserValue($username,'settings','email');

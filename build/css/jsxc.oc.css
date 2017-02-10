@@ -1,5 +1,5 @@
 /*!
- * ojsxc v3.1.0-beta - 2017-01-23
+ * ojsxc v3.1.0-beta.2 - 2017-02-10
  * 
  * Copyright (c) 2017 Klaus Herberth <klaus@jsxc.org> <br>
  * Released under the MIT license
@@ -7,208 +7,11 @@
  * Please see http://www.jsxc.org/
  * 
  * @author Klaus Herberth <klaus@jsxc.org>
- * @version 3.1.0-beta
+ * @version 3.1.0-beta.2
  * @license MIT
  */
 
 @charset "UTF-8";
-/* basic scrollbar styling */
-/* vertical scrollbar */
-.mCSB_container {
-  width: auto;
-  margin-right: 30px;
-  overflow: hidden; }
-
-.mCSB_container.mCS_no_scrollbar {
-  margin-right: 0; }
-
-.mCS_disabled .mCSB_container.mCS_no_scrollbar, .mCS_destroyed .mCSB_container.mCS_no_scrollbar {
-  margin-right: 30px; }
-
-.mCustomScrollBox .mCSB_scrollTools {
-  width: 16px;
-  height: 100%;
-  top: 0;
-  right: 0; }
-
-.mCSB_scrollTools .mCSB_draggerContainer {
-  height: 100%;
-  box-sizing: border-box; }
-
-.mCSB_scrollTools .mCSB_buttonUp + .mCSB_draggerContainer {
-  padding-bottom: 40px; }
-
-.mCSB_scrollTools .mCSB_draggerRail {
-  width: 2px;
-  height: 100%;
-  margin: 0 auto;
-  border-radius: 10px; }
-
-.mCSB_scrollTools .mCSB_dragger {
-  cursor: pointer;
-  width: 100%;
-  height: 30px; }
-
-.mCSB_scrollTools .mCSB_dragger .mCSB_dragger_bar {
-  width: 4px;
-  height: 100%;
-  margin: 0 auto;
-  border-radius: 10px;
-  text-align: center; }
-
-.mCSB_scrollTools .mCSB_buttonUp, .mCSB_scrollTools .mCSB_buttonDown {
-  height: 20px;
-  overflow: hidden;
-  margin: 0 auto;
-  cursor: pointer; }
-
-.mCSB_scrollTools .mCSB_buttonDown {
-  bottom: 0;
-  margin-top: -40px; }
-
-/* horizontal scrollbar */
-.mCSB_horizontal .mCSB_container {
-  height: auto;
-  margin-right: 0;
-  margin-bottom: 30px;
-  overflow: hidden; }
-
-.mCSB_horizontal .mCSB_container.mCS_no_scrollbar {
-  margin-bottom: 0; }
-
-.mCS_disabled .mCSB_horizontal .mCSB_container.mCS_no_scrollbar, .mCS_destroyed .mCSB_horizontal .mCSB_container.mCS_no_scrollbar {
-  margin-right: 0;
-  margin-bottom: 30px; }
-
-.mCSB_horizontal.mCustomScrollBox .mCSB_scrollTools {
-  width: 100%;
-  height: 16px;
-  top: auto;
-  right: auto;
-  bottom: 0;
-  left: 0;
-  overflow: hidden; }
-
-.mCSB_horizontal .mCSB_scrollTools .mCSB_draggerContainer {
-  height: 100%;
-  width: auto;
-  box-sizing: border-box;
-  overflow: hidden; }
-
-.mCSB_horizontal .mCSB_scrollTools .mCSB_buttonLeft + .mCSB_draggerContainer {
-  padding-bottom: 0;
-  padding-right: 20px; }
-
-.mCSB_horizontal .mCSB_scrollTools .mCSB_draggerRail {
-  width: 100%;
-  height: 2px;
-  margin: 7px 0;
-  border-radius: 10px; }
-
-.mCSB_horizontal .mCSB_scrollTools .mCSB_dragger {
-  width: 30px;
-  height: 100%; }
-
-.mCSB_horizontal .mCSB_scrollTools .mCSB_dragger .mCSB_dragger_bar {
-  width: 100%;
-  height: 4px;
-  margin: 6px auto;
-  border-radius: 10px; }
-
-.mCSB_horizontal .mCSB_scrollTools .mCSB_buttonLeft, .mCSB_horizontal .mCSB_scrollTools .mCSB_buttonRight {
-  width: 20px;
-  height: 100%;
-  overflow: hidden;
-  margin: 0 auto;
-  cursor: pointer;
-  float: left; }
-
-.mCSB_horizontal .mCSB_scrollTools .mCSB_buttonRight {
-  right: 0;
-  bottom: auto;
-  margin-left: -40px;
-  margin-top: -16px;
-  float: right; }
-
-/* default scrollbar colors and backgrounds */
-.mCustomScrollBox .mCSB_scrollTools {
-  opacity: 0.75; }
-
-.mCustomScrollBox:hover .mCSB_scrollTools {
-  opacity: 1; }
-
-.mCSB_scrollTools .mCSB_draggerRail {
-  background: #000;
-  /* rgba fallback */
-  background: rgba(0, 0, 0, 0.4);
-  filter: "alpha(opacity=40)";
-  -ms-filter: "alpha(opacity=40)";
-  /* old ie */ }
-
-.mCSB_scrollTools .mCSB_dragger .mCSB_dragger_bar {
-  background: #fff;
-  /* rgba fallback */
-  background: rgba(255, 255, 255, 0.75);
-  filter: "alpha(opacity=75)";
-  -ms-filter: "alpha(opacity=75)";
-  /* old ie */ }
-
-.mCSB_scrollTools .mCSB_dragger:hover .mCSB_dragger_bar {
-  background: rgba(255, 255, 255, 0.85);
-  filter: "alpha(opacity=85)";
-  -ms-filter: "alpha(opacity=85)";
-  /* old ie */ }
-
-.mCSB_scrollTools .mCSB_dragger:active .mCSB_dragger_bar, .mCSB_scrollTools .mCSB_dragger.mCSB_dragger_onDrag .mCSB_dragger_bar {
-  background: rgba(255, 255, 255, 0.9);
-  filter: "alpha(opacity=90)";
-  -ms-filter: "alpha(opacity=90)";
-  /* old ie */ }
-
-.mCSB_scrollTools .mCSB_buttonUp, .mCSB_scrollTools .mCSB_buttonDown, .mCSB_scrollTools .mCSB_buttonLeft, .mCSB_scrollTools .mCSB_buttonRight {
-  background-image: url(mCSB_buttons.png);
-  background-repeat: no-repeat;
-  opacity: 0.4;
-  filter: "alpha(opacity=40)";
-  -ms-filter: "alpha(opacity=40)";
-  /* old ie */ }
-
-.mCSB_scrollTools .mCSB_buttonUp {
-  background-position: 0 0;
-  /* 
-	sprites locations are 0 0/-16px 0/-32px 0/-48px 0 (light) and -80px 0/-96px 0/-112px 0/-128px 0 (dark) 
-	*/ }
-
-.mCSB_scrollTools .mCSB_buttonDown {
-  background-position: 0 -20px;
-  /* 
-	sprites locations are 0 -20px/-16px -20px/-32px -20px/-48px -20px (light) and -80px -20px/-96px -20px/-112px -20px/-128px -20px (dark) 
-	*/ }
-
-.mCSB_scrollTools .mCSB_buttonLeft {
-  background-position: 0 -40px;
-  /* 
-	sprites locations are 0 -40px/-20px -40px/-40px -40px/-60px -40px (light) and -80px -40px/-100px -40px/-120px -40px/-140px -40px (dark) 
-	*/ }
-
-.mCSB_scrollTools .mCSB_buttonRight {
-  background-position: 0 -56px;
-  /* 
-	sprites locations are 0 -56px/-20px -56px/-40px -56px/-60px -56px (light) and -80px -56px/-100px -56px/-120px -56px/-140px -56px (dark) 
-	*/ }
-
-.mCSB_scrollTools .mCSB_buttonUp:hover, .mCSB_scrollTools .mCSB_buttonDown:hover, .mCSB_scrollTools .mCSB_buttonLeft:hover, .mCSB_scrollTools .mCSB_buttonRight:hover {
-  opacity: 0.75;
-  filter: "alpha(opacity=75)";
-  -ms-filter: "alpha(opacity=75)";
-  /* old ie */ }
-
-.mCSB_scrollTools .mCSB_buttonUp:active, .mCSB_scrollTools .mCSB_buttonDown:active, .mCSB_scrollTools .mCSB_buttonLeft:active, .mCSB_scrollTools .mCSB_buttonRight:active {
-  opacity: 0.9;
-  filter: "alpha(opacity=90)";
-  -ms-filter: "alpha(opacity=90)";
-  /* old ie */ }
-
 /* Magnific Popup CSS */
 .mfp-bg {
   top: 0;
@@ -3235,12 +3038,12 @@ fieldset[disabled] #jsxc_webrtc .checkbox label {
     display: none; }
 
 .jsxc_bar {
-  background-color: #1d2d44;
+  background-color: #0082c9;
   cursor: pointer;
   height: 44px;
   line-height: 26px;
   padding: 2px;
-  color: #bbb;
+  color: #c0dff1;
   width: 100%;
   box-sizing: border-box;
   position: relative; }
@@ -3710,7 +3513,7 @@ div.jsxc_transfer {
 .jsxc_windowItem .jsxc_memberlist {
   height: 44px;
   width: 100%;
-  background-color: #1d2d44;
+  background-color: #0082c9;
   overflow: hidden;
   position: absolute;
   top: 0;
@@ -3720,8 +3523,8 @@ div.jsxc_transfer {
   .jsxc_windowItem .jsxc_memberlist ul {
     white-space: nowrap;
     position: absolute;
-    background-color: #1d2d44;
-    color: #bbb;
+    background-color: #0082c9;
+    color: #c0dff1;
     overflow: hidden;
     -webkit-transition: left 400ms;
             transition: left 400ms;
@@ -4617,50 +4420,68 @@ div.jsxc_video {
   padding-top: 5px;
   clear: both; }
   #jsxc_alt:hover {
-    opacity: 0.8; }
+    opacity: 1; }
+  #jsxc_alt a {
+    color: #fff; }
 
 #ojsxc .form-group {
-  margin-bottom: 0.8em; }
-
-@media (min-width: 768px) {
-  #ojsxc .form-offset-label {
-    padding-left: 280px; } }
-
-@media (min-width: 768px) {
-  #ojsxc h3 {
-    margin-left: 285px; } }
+  overflow: hidden; }
+  #ojsxc .form-group > label, #ojsxc .form-group > .form-col {
+    float: left; }
 
 #ojsxc label {
   box-sizing: border-box;
-  padding-right: 15px;
-  display: inline-block; }
+  padding: 6px 15px 6px 0;
+  width: 100%;
+  margin: 3px 0; }
   @media (min-width: 768px) {
     #ojsxc label {
-      width: 280px;
+      width: 33%;
       text-align: right; } }
+
+#ojsxc .form-no-padding {
+  padding: 0; }
+
+#ojsxc .form-col {
+  width: 100%;
+  overflow: hidden; }
+  @media (min-width: 768px) {
+    #ojsxc .form-col {
+      width: 66%; } }
+  #ojsxc .form-col input {
+    display: block; }
+
+@media (min-width: 768px) {
+  #ojsxc .form-col-offset {
+    padding-left: 33%; } }
 
 #ojsxc input {
   box-sizing: border-box;
   padding-right: 15px;
-  display: inline-block;
   width: 100%; }
   #ojsxc input[type='checkbox'] {
+    margin: 13px 0;
     width: auto; }
   #ojsxc input[type='radio'] {
     width: auto; }
-  @media (min-width: 768px) {
-    #ojsxc input {
-      width: auto; } }
-  #ojsxc input + label {
-    width: auto; }
-    #ojsxc input + label + em {
-      padding-left: 20px; }
+  #ojsxc input:invalid {
+    border: 1px solid red;
+    position: relative; }
 
 #ojsxc em, #ojsxc .boshUrl-msg {
-  display: block; }
+  display: block;
+  clear: left;
+  margin-bottom: 0.8em; }
+
+#ojsxc .text-left {
+  text-align: left; }
+
+#ojsxc h3 {
+  width: 100%; }
   @media (min-width: 768px) {
-    #ojsxc em, #ojsxc .boshUrl-msg {
-      padding-left: 280px; } }
+    #ojsxc h3 {
+      width: 33%;
+      border-bottom: 1px solid #e1e1e1; } }
 
 .jsxc_success, .jsxc_fail {
   border: 1px solid #fff;
