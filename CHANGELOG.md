@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - ignore empty webrtc configuration
 - do not start jsxc inside a frame
 - fix disabled chat on login
+- fix user setting retrieval
 
 ### Changed
 - upgrade jsxc to v3.1.0
