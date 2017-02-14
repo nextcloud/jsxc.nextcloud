@@ -14,7 +14,7 @@ $currentUser = false;
 if(!empty($_POST['password']) && !empty($_POST['username'])) {
    $currentUser = \OC::$server->getUserManager()->checkPassword($_POST['username'], $_POST['password']);
 } else if (OCP\User::isLoggedIn()) {
-   $currentUser = \OC::$server->getUserSession()->getUser()->getUID();
+   $currentUser = \OC::$server->getUserSession()->getUser();
 }
 
 if (!$currentUser) {
@@ -23,6 +23,8 @@ if (!$currentUser) {
     ));
     exit();
 }
+
+$currentUID = $currentUser->getUID();
 
 $config = \OC::$server->getConfig();
 
@@ -50,7 +52,7 @@ $data ['xmpp'] ['overwrite'] = validateBoolean($config->getAppValue('ojsxc', 'xm
 $data ['xmpp'] ['onlogin'] = null;
 
 if (validateBoolean($config->getAppValue('ojsxc', 'xmppPreferMail'))) {
-    $mail = $config->getUserValue($currentUser,'settings','email');
+    $mail = $config->getUserValue($currentUID,'settings','email');
 
     if ($mail !== null) {
 	list($u, $d) = explode("@", $mail, 2);
@@ -61,7 +63,7 @@ if (validateBoolean($config->getAppValue('ojsxc', 'xmppPreferMail'))) {
     }
 }
 
-$options = $config->getUserValue($currentUser, 'ojsxc', 'options');
+$options = $config->getUserValue($currentUID, 'ojsxc', 'options');
 
 if ($options !== null) {
     $options = (array) json_decode($options, true);
