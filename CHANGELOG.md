@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## 3.1.1 - 2017-02-14
+- upgrade jsxc to v3.1.1
+
 ## 3.1.0 - 2017-02-14
 ### Added
 - add option to use user email as jid
