@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+
+## 3.1.0 - 2017-02-14
 ### Added
 - add option to use user email as jid
 - add option to add external services
@@ -18,7 +20,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - fix user setting retrieval
 
 ### Changed
-- upgrade jsxc to v3.1.0
+- upgrade jsxc to v3.1.0 ([change log](https://github.com/jsxc/jsxc/blob/master/CHANGELOG.md))
 - change category to social
 - minor settings redesign
 - use nc colors

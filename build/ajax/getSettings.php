@@ -9,19 +9,22 @@ function validateBoolean($val)
 
 OCP\JSON::callCheck();
 
-$username = $_POST ['username'];
-$password = $_POST ['password'];
+$currentUser = false;
 
-$ocUser = new OCP\User();
+if(!empty($_POST['password']) && !empty($_POST['username'])) {
+   $currentUser = \OC::$server->getUserManager()->checkPassword($_POST['username'], $_POST['password']);
+} else if (OCP\User::isLoggedIn()) {
+   $currentUser = \OC::$server->getUserSession()->getUser();
+}
 
-$auth = ($password !== null) ? $ocUser->checkPassword($username, $password) : OCP\User::isLoggedIn();
-
-if (!$auth) {
+if (!$currentUser) {
     echo json_encode(array(
             'result' => 'noauth',
     ));
     exit();
 }
+
+$currentUID = $currentUser->getUID();
 
 $config = \OC::$server->getConfig();
 
@@ -49,7 +52,7 @@ $data ['xmpp'] ['overwrite'] = validateBoolean($config->getAppValue('ojsxc', 'xm
 $data ['xmpp'] ['onlogin'] = null;
 
 if (validateBoolean($config->getAppValue('ojsxc', 'xmppPreferMail'))) {
-    $mail = $config->getUserValue($username,'settings','email');
+    $mail = $config->getUserValue($currentUID,'settings','email');
 
     if ($mail !== null) {
 	list($u, $d) = explode("@", $mail, 2);
@@ -60,7 +63,7 @@ if (validateBoolean($config->getAppValue('ojsxc', 'xmppPreferMail'))) {
     }
 }
 
-$options = $config->getUserValue($username, 'ojsxc', 'options');
+$options = $config->getUserValue($currentUID, 'ojsxc', 'options');
 
 if ($options !== null) {
     $options = (array) json_decode($options, true);
