@@ -11,10 +11,10 @@ OCP\JSON::callCheck();
 
 $currentUser = false;
 
-if(!empty($_POST['password']) && !empty($_POST['username'])) {
-   $currentUser = \OC::$server->getUserManager()->checkPassword($_POST['username'], $_POST['password']);
-} else if (OCP\User::isLoggedIn()) {
+if (OCP\User::isLoggedIn()) {
    $currentUser = \OC::$server->getUserSession()->getUser();
+} else if(!empty($_POST['password']) && !empty($_POST['username'])) {
+   $currentUser = \OC::$server->getUserManager()->checkPassword($_POST['username'], $_POST['password']);
 }
 
 if (!$currentUser) {
