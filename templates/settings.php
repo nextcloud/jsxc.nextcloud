@@ -52,6 +52,12 @@
 						<input type="checkbox" name="xmppOverwrite" id="xmppOverwrite" value="true" <?php if($_[ 'xmppOverwrite']==='true' || $_[ 'xmppOverwrite']===true) echo "checked"; ?> />
 					</div>
 				</div>
+				<div class="form-group">
+					<label>Secure API token</label>
+					<div class="form-col">
+						<input type="text" readonly="readonly" value="<?php p($_['apiSecret']); ?>" />
+					</div>
+				</div>
 			</div>
 
 			<div class="form-group">
