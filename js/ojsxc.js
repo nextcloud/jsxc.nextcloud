@@ -1,4 +1,4 @@
-/* global jsxc, oc_appswebroots, OC, $, oc_requesttoken, dijit, oc_config */
+/* global jsxc, oc_appswebroots, OC, oc_requesttoken, dijit, oc_config */
 /* jshint latedef: nofunc */
 
 
