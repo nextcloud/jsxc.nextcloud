@@ -182,3 +182,25 @@
     opacity: 1;
   }
 }
+
+@media (min-width: 768px) {
+  #content-wrapper, #filestable > thead {
+    padding-right: 0;
+    transition: padding-right 0.5s;
+  }
+
+  #mainContainer, #odf-toolbar, #app-sidebar {
+    right: 0;
+    transition: right 0.5s;
+  }
+
+  .jsxc-roster-shown {
+    #content-wrapper, #filestable > thead {
+      padding-right: 210px;
+    }
+
+    #mainContainer, #odf-toolbar, #app-sidebar {
+      right: 210px;
+    }
+  }
+}
