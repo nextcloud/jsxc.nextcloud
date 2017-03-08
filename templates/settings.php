@@ -52,18 +52,30 @@
 						<input type="checkbox" name="xmppOverwrite" id="xmppOverwrite" value="true" <?php if($_[ 'xmppOverwrite']==='true' || $_[ 'xmppOverwrite']===true) echo "checked"; ?> />
 					</div>
 				</div>
-				<div class="form-group">
-					<label>Secure API token</label>
-					<div class="form-col">
-						<input type="text" readonly="readonly" value="<?php p($_['apiSecret']); ?>" />
-					</div>
-				</div>
 			</div>
 
 			<div class="form-group">
 				<label for="xmppStartMinimized">Hide roster after first login</label>
 				<div class="form-col">
 					<input type="checkbox" name="xmppStartMinimized" id="xmppStartMinimized" value="true" <?php if($_[ 'xmppStartMinimized']==='true' || $_[ 'xmppStartMinimized']===true) echo "checked"; ?> />
+				</div>
+			</div>
+		</fieldset>
+
+		<fieldset>
+			<div class="ojsxc-external hidden">
+				<h3>External authentication</h3>
+				<div class="form-group">
+					<label>API URL</label>
+					<div class="form-col">
+						<input id="jsxc-api-url" type="text" readonly="readonly" />
+					</div>
+				</div>
+				<div class="form-group">
+					<label>Secure API token</label>
+					<div class="form-col">
+						<input type="text" readonly="readonly" value="<?php p($_['apiSecret']); ?>" />
+					</div>
 				</div>
 			</div>
 		</fieldset>

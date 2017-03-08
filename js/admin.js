@@ -206,4 +206,7 @@ $(document).ready(function() {
          targetInputField.val(options.server);
       }
    });
+
+   var apiUrl = window.location.origin + OC.filePath('ojsxc', 'ajax', 'externalApi.php');
+   $('#jsxc-api-url').val(apiUrl);
 });
