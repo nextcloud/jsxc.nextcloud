@@ -8,6 +8,8 @@ $apiSecret = $config->getAppValue('ojsxc', 'apiSecret');
 function abort($msg) {
    http_response_code(500);
 
+   \OCP\Util::writeLog('ojsxc', 'ExAPI: Abort with message: '.$msg, \OCP\Util::WARN );
+
    die(json_encode(array(
       'result' => 'error',
       'data' => array(
@@ -18,6 +20,8 @@ function abort($msg) {
 
 function checkPassword() {
    $currentUser = null;
+
+   \OCP\Util::writeLog('ojsxc', 'ExAPI: Check password for user: '.$_POST['username'], \OCP\Util::INFO );
 
    if(!empty($_POST['password']) && !empty($_POST['username'])) {
       $currentUser = \OC::$server->getUserManager()->checkPassword($_POST['username'], $_POST['password']);
