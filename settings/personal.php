@@ -2,10 +2,10 @@
 
 \OC_Util::checkLoggedIn();
 
-OCP\Util::addScript('ojsxc', 'personal');
+OCP\Util::addScript('ojsxc', 'settings/personal');
 
 $config = \OC::$server->getConfig();
-$tmpl = new \OCP\Template('ojsxc', 'personal');
+$tmpl = new \OCP\Template('ojsxc', 'settings/personal');
 
 $currentUID = \OC::$server->getUserSession()->getUser()->getUID();
 $options = $config->getUserValue($currentUID, 'ojsxc', 'options');

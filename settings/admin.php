@@ -2,10 +2,10 @@
 
 OCP\User::checkAdminUser();
 
-OCP\Util::addScript('ojsxc', 'admin');
+OCP\Util::addScript('ojsxc', 'settings/admin');
 
 $config = \OC::$server->getConfig();
-$tmpl = new OCP\Template('ojsxc', 'settings');
+$tmpl = new OCP\Template('ojsxc', 'settings/admin');
 
 $tmpl->assign('serverType', $config->getAppValue('ojsxc', 'serverType'));
 $tmpl->assign('boshUrl', $config->getAppValue('ojsxc', 'boshUrl'));
