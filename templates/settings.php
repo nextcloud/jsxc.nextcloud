@@ -65,6 +65,9 @@
 		<fieldset>
 			<div class="ojsxc-external hidden">
 				<h3>External authentication</h3>
+				<p class="text">This information is needed for the ejabberd/prosody
+					<a href="https://github.com/jsxc/ejabberd-cloud-auth" target="_blank">authentication module</a>
+					and can not be changed.</p>
 				<div class="form-group">
 					<label>API URL</label>
 					<div class="form-col">
