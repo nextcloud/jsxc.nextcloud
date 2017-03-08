@@ -8,6 +8,7 @@
  * @author Klaus Herberth <klaus@jsxc.org>
  */
 OCP\App::registerAdmin ( 'ojsxc', 'settings' );
+\OCP\App::registerPersonal('ojsxc', 'personal');
 
 $jsxc_root = (defined('JSXC_ENV') && JSXC_ENV === 'dev')? 'jsxc/dev/' : 'jsxc/';
 
