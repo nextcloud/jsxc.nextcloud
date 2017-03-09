@@ -202,6 +202,10 @@
     #mainContainer, #odf-toolbar, #app-sidebar {
       right: 210px;
     }
+
+    #app-content.with-app-sidebar {
+      padding-right: 50px;
+    }
   }
 }
 
