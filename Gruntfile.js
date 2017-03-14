@@ -20,7 +20,7 @@ module.exports = function(grunt) {
          build: {
             files: [ {
                expand: true,
-               src: [ 'js/*.js', 'css/*', 'appinfo/*', 'ajax/*', 'img/**', 'templates/*', 'sound/*', 'vendor/**', 'lib/**', 'settings.php', 'LICENSE' ],
+               src: [ 'js/*.js', 'js/settings/**', 'css/*', 'appinfo/*', 'ajax/*', 'img/**', 'templates/**', 'sound/*', 'vendor/**', 'lib/**', 'settings/**', 'LICENSE' ],
                dest: 'build/'
             }, {
                expand: true,
