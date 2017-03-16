@@ -63,6 +63,27 @@
 		</fieldset>
 
 		<fieldset>
+			<div class="ojsxc-external hidden">
+				<h3>External authentication</h3>
+				<p class="text">This information is needed for the ejabberd/prosody
+					<a href="https://github.com/jsxc/ejabberd-cloud-auth" target="_blank">authentication module</a>
+					and can not be changed.</p>
+				<div class="form-group">
+					<label>API URL</label>
+					<div class="form-col">
+						<input id="jsxc-api-url" type="text" readonly="readonly" />
+					</div>
+				</div>
+				<div class="form-group">
+					<label>Secure API token</label>
+					<div class="form-col">
+						<input type="text" readonly="readonly" value="<?php p($_['apiSecret']); ?>" />
+					</div>
+				</div>
+			</div>
+		</fieldset>
+
+		<fieldset>
 			<h3>ICE server <small>(WebRTC)</small></h3>
 			<div class="form-group">
 				<label for="iceUrl">Url</label>

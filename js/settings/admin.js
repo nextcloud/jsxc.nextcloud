@@ -206,4 +206,13 @@ $(document).ready(function() {
          targetInputField.val(options.server);
       }
    });
+
+   var apiUrl = window.location.origin + OC.filePath('ojsxc', 'ajax', 'externalApi.php');
+   $('#jsxc-api-url').val(apiUrl);
+
+   $('#ojsxc input[readonly]').focus(function(){
+      if(typeof this.select === 'function') {
+         this.select();
+      }
+   });
 });
