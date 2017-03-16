@@ -52,15 +52,35 @@ $data ['xmpp'] ['overwrite'] = validateBoolean($config->getAppValue('ojsxc', 'xm
 $data ['xmpp'] ['onlogin'] = null;
 
 if (validateBoolean($config->getAppValue('ojsxc', 'xmppPreferMail'))) {
-    $mail = $config->getUserValue($currentUID,'settings','email');
+   $mail = $config->getUserValue($currentUID,'settings','email');
 
-    if ($mail !== null) {
-	list($u, $d) = explode("@", $mail, 2);
-	if ($d !== null && $d !== "") {
-	    $data ['xmpp'] ['username'] = $u;
-	    $data ['xmpp'] ['domain'] = $d;
-	}
-    }
+   if ($mail !== null) {
+      list($u, $d) = explode("@", $mail, 2);
+      if ($d !== null && $d !== "") {
+          $data ['xmpp'] ['username'] = $u;
+          $data ['xmpp'] ['domain'] = $d;
+      }
+   }
+}
+
+if (validateBoolean($config->getAppValue('ojsxc', 'timeLimitedToken'))) {
+   $data['xmpp']['username'] = $currentUID;
+   $jid = $data['xmpp']['username'] . '@' . $data['xmpp']['domain'];
+   $expiry = time() + 60*60;
+   $secret = $config->getAppValue('ojsxc', 'apiSecret');
+
+   $version = hex2bin('00');
+   $secretID = substr(hash('sha256', $secret, true), 0, 2);
+   $header = $secretID.pack('N', $expiry);
+   $challenge = $version.$header.$jid;
+   $hmac = hash_hmac('sha256', $challenge, $secret, true);
+   $token = $version.substr($hmac, 0, 16).$header;
+
+   // format as "user-friendly" base64
+   $token = str_replace('=', '', strtr(base64_encode($token),
+      'OIl', '-$%'));
+
+   $data['xmpp']['password'] = $token;
 }
 
 $options = $config->getUserValue($currentUID, 'ojsxc', 'options');
