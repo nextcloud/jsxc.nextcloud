@@ -39,8 +39,6 @@
                 var conferenceServer = jsxc.options.get('muc').server;
                 var room = roomId+"@"+conferenceServer;
                 var nickname = Strophe.getNodeFromJid(jsxc.muc.conn.jid);
-                var $div = $('<div id="joinButtonContainer" style="text-align: center; margin-top:-75px; width:100%; " />');
-                $(".jsxc_bottom").append($div);
                 var $list = $('<li class="jsxc_joinDocumentChat" data-i18n="Join document chat">Join document chat</li>');
                 $list.insertAfter(".jsxc_about");
                 $(".jsxc_joinDocumentChat").click(function(){
