@@ -25,6 +25,35 @@
       }, duration + 50);
    }
 
+    function checkForChatRoom() {
+        if($("#chatroom").length == 0) {
+            if($(".jsxc_joinDocumentChat").length > 0) {
+                $(".jsxc_joinDocumentChat").remove();
+            }
+        } else {
+            if($(".jsxc_joinDocumentChat").length == 0) {
+                var roomPassword = $("#chatroom").data("chatroom-password");
+                var roomId = $("#chatroom").data("chatroom-name");
+                roomId = "jsxcdocumentchat"+roomId;
+                var roomName = $("#chatroom").data("chatroom-title");
+                var conferenceServer = jsxc.options.get('muc').server;
+                var room = roomId+"@"+conferenceServer;
+                var nickname = Strophe.getNodeFromJid(jsxc.muc.conn.jid);
+                var $div = $('<div id="joinButtonContainer" style="text-align: center; margin-top:-75px; width:100%; " />');
+                $(".jsxc_bottom").append($div);
+                var $list = $('<li class="jsxc_joinDocumentChat" data-i18n="Join document chat">Join document chat</li>');
+                $list.insertAfter(".jsxc_about");
+                $(".jsxc_joinDocumentChat").click(function(){
+                    jsxc.gui.window.clear(room);
+                    jsxc.storage.setUserItem('member', roomId, {});
+                    jsxc.muc.join(room, nickname, roomPassword, roomName, "Document group chat", false, false);
+                    jsxc.gui.window.open(room);
+                });
+            }
+        }
+        setTimeout(checkForChatRoom, 200);
+    }
+
    function onRosterReady() {
       if (typeof $('#jsxc_roster').outerWidth() !== 'number') {
          setTimeout(onRosterReady, 200);
@@ -46,6 +75,7 @@
             }
          }
       });
+       checkForChatRoom();
    }
 
    // initialization
