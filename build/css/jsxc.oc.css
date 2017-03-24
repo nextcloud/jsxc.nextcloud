@@ -4527,3 +4527,17 @@ div.jsxc_video {
   cursor: pointer; }
   #header .jsxc_chatIcon:hover {
     opacity: 1; }
+
+#header .jsxc_documentChatIcon {
+  width: 45px;
+  height: 45px;
+  float: right;
+  background-image: url("../js/jsxc/img/group_white.svg");
+  background-size: 20px;
+  background-repeat: no-repeat;
+  background-position: center;
+  opacity: 0.7;
+  cursor: pointer; }
+
+#header .jsxc_documentChatIcon:hover {
+  opacity: 1; }
