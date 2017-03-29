@@ -25,33 +25,48 @@
       }, duration + 50);
    }
 
-   function checkForChatRoom() {
-      if($('#chatroom').length == 0) {
-         if($('.jsxc_documentChatIcon').length > 0) {
-            $('.jsxc_documentChatIcon').remove();
-         }
-      } else {
-         if($('.jsxc_documentChatIcon').length == 0) {
-            var roomPassword = $('#chatroom').data('chatroom-password');
-            var roomId = $('#chatroom').data('chatroom-name');
-            roomId = 'jsxcdocumentchat'+roomId;
-            var roomName = $('#chatroom').data('chatroom-title');
-            var conferenceServer = jsxc.options.get('muc').server;
-            var room = roomId+'@'+conferenceServer;
-            var nickname = Strophe.getNodeFromJid(jsxc.muc.conn.jid);
-            var div = $('<div/>');
-            div.addClass('jsxc_documentChatIcon');
-            $('.jsxc_chatIcon').after(div);
-            $('.jsxc_documentChatIcon').click(function(){
-               jsxc.gui.window.clear(room);
-               jsxc.storage.setUserItem('member', roomId, {});
-               jsxc.muc.join(room, nickname, roomPassword, roomName, 'Document group chat', false, false);
-               jsxc.gui.window.open(room);
-            });
-         }
-      }
-      setTimeout(checkForChatRoom, 1000);
-   }
+	function checkForChatRoom() {
+		if($('#richdocumentsframe').length == 0) {
+			if($('.jsxc_documentChatIcon').length > 0) {
+				$('.jsxc_documentChatIcon').remove();
+			}
+		} else {
+			if($('.jsxc_documentChatIcon').length == 0) {
+				var srcString = $('#richdocumentsframe').attr('src');
+				srcString = srcString.split('fileId=')[1];
+				srcString = srcString.split('_')[0];
+				$.ajax({type: 'GET',
+					url: OC.filePath('ojsxc', 'ajax', 'generateDocumentChat.php'),
+					data: {id: srcString},
+					async: false,
+					success: function(result) {
+						if(result.status==='success'){
+							var roomPassword = result.password;
+							var roomId = result.name;
+							roomId = 'jsxcdocumentchat'+roomId;
+							var conferenceServer = jsxc.options.get('muc').server;
+							var room = roomId+'@'+conferenceServer;
+							var nickname = Strophe.getNodeFromJid(jsxc.muc.conn.jid);
+							var div = $('<div/>');
+							div.addClass('jsxc_documentChatIcon');
+							$('.jsxc_chatIcon').after(div);
+							$('.jsxc_documentChatIcon').click(function(){
+								jsxc.gui.window.clear(room);
+								jsxc.storage.setUserItem('member', roomId, {});
+								jsxc.muc.join(room, nickname, roomPassword, 'Document chat', 'Document group chat', false, false);
+								jsxc.gui.window.open(room);
+							});
+						} else {
+							console.log(result.message);
+						}
+					}, error: function(xhr, textStatus, errorThrown){
+						console.log(errorThrown);
+					}
+				});
+			}
+		}
+		setTimeout(checkForChatRoom, 1000);
+	}
 
    function onRosterReady() {
       if (typeof $('#jsxc_roster').outerWidth() !== 'number') {
