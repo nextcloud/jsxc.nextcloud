@@ -80,6 +80,14 @@
 						<input type="text" readonly="readonly" value="<?php p($_['apiSecret']); ?>" />
 					</div>
 				</div>
+				<div class="form-group">
+					<label for="timeLimitedToken">Activate time-limited tokens (beta)</label>
+					<div class="form-col">
+						<input type="checkbox" name="timeLimitedToken" id="timeLimitedToken" value="true" <?php if($_[ 'timeLimitedToken']==='true' || $_[ 'timeLimitedToken']===true) echo "checked"; ?> />
+						<em>Activate this checkbox if the XMPP server supports time-limited tokens
+							from <a href="https://github.com/jsxc/xmpp-cloud-auth" target="_blank">xmpp-cloud-auth</a>.</em>
+					</div>
+				</div>
 			</div>
 		</fieldset>
 

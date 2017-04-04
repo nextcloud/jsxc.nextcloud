@@ -32,5 +32,6 @@ if(!$apiSecret) {
    $config->setAppValue('ojsxc', 'apiSecret', $apiSecret);
 }
 $tmpl->assign('apiSecret', $apiSecret);
+$tmpl->assign('timeLimitedToken', $config->getAppValue('ojsxc', 'timeLimitedToken'));
 
 return $tmpl->fetchPage();
