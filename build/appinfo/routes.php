@@ -1,4 +1,4 @@
-<?php 
+<?php
 /**
  * ownCloud - JavaScript XMPP Chat
  *
@@ -24,6 +24,9 @@ $this->create('ojsxc_ajax_setUserSettings', 'ajax/setUserSettings.php')
 
 $this->create('ojsxc_ajax_getUsers', 'ajax/getUsers.php')
 	->actionInclude('ojsxc/ajax/getUsers.php');
+
+$this->create('ojsxc_ajax_externalApi', 'ajax/externalApi.php')
+	->actionInclude('ojsxc/ajax/externalApi.php');
 
 $application = new Application();
 $application->registerRoutes($this, array(

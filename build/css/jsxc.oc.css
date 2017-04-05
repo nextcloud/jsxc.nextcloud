@@ -1,5 +1,5 @@
 /*!
- * ojsxc v3.1.1 - 2017-02-14
+ * ojsxc v3.2.0-beta.1 - 2017-04-05
  * 
  * Copyright (c) 2017 Klaus Herberth <klaus@jsxc.org> <br>
  * Released under the MIT license
@@ -7,7 +7,7 @@
  * Please see http://www.jsxc.org/
  * 
  * @author Klaus Herberth <klaus@jsxc.org>
- * @version 3.1.1
+ * @version 3.2.0-beta.1
  * @license MIT
  */
 
@@ -2415,7 +2415,8 @@ fieldset[disabled] #jsxc_webrtc .checkbox label {
     width: 100%; }
 
 #jsxc_dialog .mfp-close, #jsxc_webrtc .mfp-close {
-  font-size: 23px; }
+  font-size: 23px;
+  font-weight: normal; }
 
 .mfp-bg {
   z-index: 9000; }
@@ -3010,15 +3011,14 @@ fieldset[disabled] #jsxc_webrtc .checkbox label {
   position: fixed;
   left: 0;
   bottom: 0;
-  width: 30px;
-  height: 30px; }
+  width: 30px; }
   @media (max-width: 768px) {
     #jsxc_windowListSB {
       display: none; } }
   #jsxc_windowListSB > div {
     box-sizing: border-box;
     width: 14px;
-    height: 100%;
+    height: 30px;
     background-color: #cccccc;
     color: gray;
     text-align: center;
@@ -3128,7 +3128,8 @@ fieldset[disabled] #jsxc_webrtc .checkbox label {
     .jsxc_window .jsxc_emoticons:hover:after {
       opacity: 0.5; }
   .jsxc_window .jsxc_fade {
-    position: relative; }
+    position: relative;
+    overflow: hidden; }
     .jsxc_window .jsxc_fade .jsxc_overlay {
       display: none;
       background-color: rgba(0, 0, 0, 0.5);
@@ -3178,6 +3179,31 @@ fieldset[disabled] #jsxc_webrtc .checkbox label {
           text-overflow: ellipsis; }
         .jsxc_window .jsxc_fade .jsxc_overlay > div a:hover {
           text-decoration: underline; }
+    .jsxc_window .jsxc_fade .jsxc_mam-load-more {
+      display: none;
+      text-align: center;
+      font-size: 0.8em;
+      font-style: italic;
+      position: absolute;
+      top: -42px;
+      left: 0;
+      right: 0;
+      height: 42px;
+      cursor: pointer;
+      z-index: 80;
+      line-height: 42px;
+      opacity: 0;
+      -webkit-transition: opacity 0.5s, top 0.5s;
+              transition: opacity 0.5s, top 0.5s; }
+      .jsxc_window .jsxc_fade .jsxc_mam-load-more.jsxc_show {
+        top: 0;
+        opacity: 0.7; }
+        .jsxc_window .jsxc_fade .jsxc_mam-load-more.jsxc_show:hover {
+          opacity: 1; }
+    .jsxc_window .jsxc_fade.jsxc_mam-enable .jsxc_textarea {
+      padding-top: 42px; }
+    .jsxc_window .jsxc_fade.jsxc_mam-enable .jsxc_mam-load-more {
+      display: block; }
   .jsxc_window .jsxc_avatar {
     margin-top: 1px; }
   .jsxc_window .jsxc_textarea {
@@ -3423,26 +3449,6 @@ fieldset[disabled] #jsxc_webrtc .checkbox label {
     width: 1.2em;
     height: 1.2em;
     vertical-align: middle; }
-  .jsxc_sys.jsxc_composing {
-    text-align: center;
-    font-size: 0.9em;
-    font-style: italic;
-    display: block;
-    opacity: 0;
-    overflow: hidden;
-    -webkit-transition: opacity 0.6s;
-            transition: opacity 0.6s; }
-    .jsxc_sys.jsxc_composing:before {
-      content: " ";
-      width: 1.5em;
-      height: 1em;
-      display: inline-block;
-      background-size: 80%;
-      background-repeat: no-repeat;
-      margin: 0 3px 0 0;
-      background-image: url('../js/jsxc/img/composing.png'); }
-    .jsxc_sys.jsxc_composing.jsxc_fadein {
-      opacity: 1; }
 
 div.jsxc_settings {
   position: relative; }
@@ -3478,6 +3484,35 @@ div.jsxc_transfer {
     background-image: url('../js/jsxc/img/padlock_close_orange.svg'); }
     div.jsxc_transfer.jsxc_enc.jsxc_trust {
       background-image: url('../js/jsxc/img/padlock_close_green.svg'); }
+
+.jsxc_status-msg {
+  font-size: 12px;
+  display: none;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  height: 50%;
+  line-height: 17.5px;
+  opacity: 0.7; }
+  .jsxc_status-msg.jsxc_composing:before {
+    content: " ";
+    width: 1em;
+    height: 1em;
+    display: inline-block;
+    background-size: cover;
+    vertical-align: middle;
+    background-repeat: no-repeat;
+    background-image: url('../js/jsxc/img/composing.png'); }
+
+.jsxc_status-msg-show .jsxc_name {
+  height: 50%;
+  line-height: 20px; }
+
+.jsxc_status-msg-show .jsxc_status-msg {
+  display: block; }
+
+.jsxc_status-msg-show .jsxc_lastmsg {
+  display: none !important; }
 
 .jsxc_windowItem.jsxc_groupchat.jsxc_normal .jsxc_bar .jsxc_avatar, li[data-type='groupchat'] .jsxc_avatar {
   text-indent: 999px;
@@ -3556,6 +3591,8 @@ div.jsxc_transfer {
           color: inherit; }
       .jsxc_windowItem .jsxc_memberlist.jsxc_expand ul > li .jsxc_avatar {
         margin-right: 4px; }
+  .jsxc_windowItem .jsxc_memberlist .jsxc_avatar :before {
+    display: none; }
 
 li[data-type='groupchat'] .jsxc_video {
   display: none; }
@@ -3641,6 +3678,14 @@ li[data-type='groupchat'] .jsxc_video {
       background-color: #f2f2f2;
       padding: 10px;
       margin: 0 -30px 10px; }
+      #jsxc_dialog form fieldset h3.jsxc_experimental:after {
+        content: "experimental";
+        font-size: 0.7em;
+        border-radius: 2px;
+        padding: 1px 5px;
+        background-color: orange;
+        margin-left: 5px;
+        font-weight: normal; }
   #jsxc_dialog legend {
     border: 0;
     font-size: 20px; }
@@ -4483,6 +4528,9 @@ div.jsxc_video {
       width: 33%;
       border-bottom: 1px solid #e1e1e1; } }
 
+#ojsxc .text {
+  margin-bottom: 10px; }
+
 .jsxc_success, .jsxc_fail {
   border: 1px solid #fff;
   border-radius: 3px;
@@ -4527,3 +4575,22 @@ div.jsxc_video {
   cursor: pointer; }
   #header .jsxc_chatIcon:hover {
     opacity: 1; }
+
+@media (min-width: 768px) {
+  #content-wrapper, #filestable > thead {
+    padding-right: 0;
+    -webkit-transition: padding-right 0.5s;
+            transition: padding-right 0.5s; }
+  #mainContainer, #odf-toolbar, #app-sidebar {
+    right: 0;
+    -webkit-transition: right 0.5s;
+            transition: right 0.5s; }
+  .jsxc-roster-shown #content-wrapper, .jsxc-roster-shown #filestable > thead {
+    padding-right: 210px; }
+  .jsxc-roster-shown #mainContainer, .jsxc-roster-shown #odf-toolbar, .jsxc-roster-shown #app-sidebar {
+    right: 210px; }
+  .jsxc-roster-shown #app-content.with-app-sidebar {
+    padding-right: 50px; } }
+
+#body-login #jsxc_windowList, #body-login #jsxc_roster {
+  display: none; }

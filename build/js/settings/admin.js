@@ -1,16 +1,3 @@
-/*!
- * ojsxc v3.1.1 - 2017-02-14
- * 
- * Copyright (c) 2017 Klaus Herberth <klaus@jsxc.org> <br>
- * Released under the MIT license
- * 
- * Please see http://www.jsxc.org/
- * 
- * @author Klaus Herberth <klaus@jsxc.org>
- * @version 3.1.1
- * @license MIT
- */
-
 /* global $, OC */
 
 $(document).ready(function() {
@@ -217,6 +204,15 @@ $(document).ready(function() {
          }
 
          targetInputField.val(options.server);
+      }
+   });
+
+   var apiUrl = window.location.origin + OC.filePath('ojsxc', 'ajax', 'externalApi.php');
+   $('#jsxc-api-url').val(apiUrl);
+
+   $('#ojsxc input[readonly]').focus(function(){
+      if(typeof this.select === 'function') {
+         this.select();
       }
    });
 });
