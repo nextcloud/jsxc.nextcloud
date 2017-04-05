@@ -5,6 +5,17 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+### Added
+- add external API for [XMPP server authentication](https://github.com/jsxc/xmpp-cloud-auth)
+- [jsxc/jsxc#476](https://github.com/jsxc/jsxc/issues/476) add personal settings
+
+### Fixed
+- [jsxc/jsxc#455](https://github.com/jsxc/jsxc/issues/455) fix login with different credentials
+
+### Changed
+- upgrade jsxc to v3.2.0 ([change log](https://github.com/jsxc/jsxc/blob/master/CHANGELOG.md))
+- use css to manipulate nc ui
+- [jsxc/jsxc#436](https://github.com/jsxc/jsxc/issues/436) hide roster on login screen
 
 ## 3.1.1 - 2017-02-14
 - upgrade jsxc to v3.1.1
@@ -39,7 +50,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 - trim settings
-  [#384](https://github.com/jsxc/jsxc/issues/384)
+  [jsxc/jsxc#384](https://github.com/jsxc/jsxc/issues/384)
 
 ## 3.0.1 - 2016-10-28
 - upgrade jsxc to v3.0.1
