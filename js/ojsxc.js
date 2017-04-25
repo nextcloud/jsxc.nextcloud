@@ -239,6 +239,14 @@
 
             var alt = $('<p id="jsxc_alt"/>').append(link);
             $('#body-login form:eq(0) fieldset').append(alt);
+
+            Strophe.log = function(level, msg) {
+               if (level === 3 && /^request id/.test(msg)) {
+                  console.warn('Something went wrong during BOSH connection establishment. Continue without chat.');
+
+                  jsxc.submitLoginForm();
+               }
+            };
         }
     });
 }(jQuery));
