@@ -38,7 +38,7 @@
       <lib>xmlwriter</lib>
       <lib>dom</lib>
       <owncloud min-version="8.0" max-version="9"/>
-      <nextcloud min-version="8.0" max-version="11"/>
+      <nextcloud min-version="8.1" max-version="12"/>
    </dependencies>
 
    <ocsid>162257</ocsid>
