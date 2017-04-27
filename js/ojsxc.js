@@ -164,7 +164,7 @@
                             cb(d.data);
                         } else if (d.data && d.data.serverType === 'internal') {
                             // fake successful connection
-                            jsxc.bid = username + '@' + window.location.host;
+                            jsxc.bid = username.toLowerCase() + '@' + window.location.host;
 
                             jsxc.storage.setItem('jid', jsxc.bid + '/internal');
                             jsxc.storage.setItem('sid', 'internal');
