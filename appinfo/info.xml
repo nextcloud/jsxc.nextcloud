@@ -42,4 +42,8 @@
    </dependencies>
 
    <ocsid>162257</ocsid>
+
+   <contactsmenu>
+      <provider>OCA\OJSXC\ContactsMenu\Providers\ChatProvider</provider>
+   </contactsmenu>
 </info>

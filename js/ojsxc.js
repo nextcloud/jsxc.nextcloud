@@ -5,6 +5,31 @@
 (function($) {
     "use strict";
 
+    function observeContactsMenu() {
+        var target = document.getElementById('contactsmenu');
+
+        var observer = new MutationObserver(function(mutations) {
+            mutations.forEach(function(mutation) {
+                if (mutation.target.id !== 'contactsmenu-contacts') {
+                    return;
+                }
+
+                $(mutation.target).find('[href^="xmpp:"]').addClass('jsxc_statusIndicator');
+
+                jsxc.gui.detectUriScheme(mutation.target);
+            });
+        });
+
+        var config = {
+            attributes: true,
+            childList: true,
+            characterData: true,
+            subtree: true
+        };
+
+        observer.observe(target, config);
+    }
+
     function injectChatIcon() {
         var div = $('<div/>');
 
@@ -14,9 +39,9 @@
         });
 
         if ($('#contactsmenu').length > 0) {
-           $('#contactsmenu').before(div);
+            $('#contactsmenu').before(div);
         } else {
-           $('#settings').after(div);
+            $('#settings').after(div);
         }
     }
 
@@ -245,12 +270,16 @@
             $('#body-login form:eq(0) fieldset').append(alt);
 
             Strophe.log = function(level, msg) {
-               if (level === 3 && /^request id/.test(msg)) {
-                  console.warn('Something went wrong during BOSH connection establishment. Continue without chat.');
+                if (level === 3 && /^request id/.test(msg)) {
+                    console.warn('Something went wrong during BOSH connection establishment. Continue without chat.');
 
-                  jsxc.submitLoginForm();
-               }
+                    jsxc.submitLoginForm();
+                }
             };
+        }
+
+        if ($('#contactsmenu').length > 0) {
+            observeContactsMenu();
         }
     });
 }(jQuery));
