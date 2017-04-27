@@ -14,7 +14,8 @@ use OCP\AppFramework\App;
 use OCA\OJSXC\ILock;
 use OCA\OJSXC\DbLock;
 use OCA\OJSXC\MemLock;
-use OCP\ICache;
+use OCP\IContainer;
+use OCP\IRequest;
 
 class Application extends App {
 
@@ -36,7 +37,7 @@ class Application extends App {
 			['locking' => false]);
 
 
-		$container->registerService('HttpBindController', function($c){
+		$container->registerService('HttpBindController', function(IContainer $c) {
 			return new HttpBindController(
 				$c->query('AppName'),
 				$c->query('Request'),
@@ -59,23 +60,23 @@ class Application extends App {
 		/**
 		 * Database Layer
 		 */
-		$container->registerService('MessageMapper', function($c) {
+		$container->registerService('MessageMapper', function(IContainer $c) use ($container) {
 			return new MessageMapper(
-				$c->query('ServerContainer')->getDb(),
+				$container->getServer()->getDatabaseConnection(),
 				$c->query('Host')
 			);
 		});
 
-		$container->registerService('StanzaMapper', function($c) {
+		$container->registerService('StanzaMapper', function(IContainer $c) use ($container) {
 			return new StanzaMapper(
-				$c->query('ServerContainer')->getDb(),
+				$container->getServer()->getDatabaseConnection(),
 				$c->query('Host')
 			);
 		});
 
-		$container->registerService('PresenceMapper', function($c) {
+		$container->registerService('PresenceMapper', function(IContainer $c) use ($container) {
 			return new PresenceMapper(
-				$c->query('ServerContainer')->getDb(),
+				$container->getServer()->getDatabaseConnection(),
 				$c->query('Host'),
 				$c->query('UserId'),
 				$c->query('MessageMapper'),
@@ -88,7 +89,7 @@ class Application extends App {
 		/**
 		 * XMPP Stanza Handlers
 		 */
-		$container->registerService('IQHandler', function($c) {
+		$container->registerService('IQHandler', function(IContainer $c) {
 			return new IQ(
 				$c->query('UserId'),
 				$c->query('Host'),
@@ -96,7 +97,7 @@ class Application extends App {
 			);
 		});
 
-		$container->registerService('PresenceHandler', function($c) {
+		$container->registerService('PresenceHandler', function(IContainer $c) {
 			return new Presence(
 				$c->query('UserId'),
 				$c->query('Host'),
@@ -105,7 +106,7 @@ class Application extends App {
 			);
 		});
 
-		$container->registerService('MessageHandler', function($c) {
+		$container->registerService('MessageHandler', function(IContainer $c) {
 			return new Message(
 				$c->query('UserId'),
 				$c->query('Host'),
@@ -116,16 +117,13 @@ class Application extends App {
 		/**
 		 * Config values
 		 */
-		$container->registerService('Host', function($c){
+		$container->registerService('Host', function(IContainer $c) {
+			/** @var IRequest $request */
 			$request = $c->query('Request');
-			if (method_exists($request, 'getServerHost')) {
-				return $c->query('Request')->getServerHost();
-			} else {
-				return $this->getServerHost();
-			}
+			return $request->getServerHost();
 		});
 
-		$container->registerService('NewContentContainer', function($c){
+		$container->registerService('NewContentContainer', function() {
 			return new NewContentContainer();
 		});
 
@@ -155,52 +153,8 @@ class Application extends App {
 		// default
 		return new DbLock(
 			$c->query('UserId'),
-			$c->query('OCP\IDb'),
 			$c->query('OCP\IConfig')
 		);
 
 	}
-
-	/**
-	 * Helper function
-	 * https://github.com/owncloud/core/blob/a977465af5834a76b1e98854a2c9bfbe413c218c/lib/private/appframework/http/request.php#L518
-	 * @return string
-	 */
-	private function getServerHost() {
-		$host = 'localhost';
-		if (isset($this->server['HTTP_X_FORWARDED_HOST'])) {
-			if (strpos($this->server['HTTP_X_FORWARDED_HOST'], ',') !== false) {
-				$parts = explode(',', $this->server['HTTP_X_FORWARDED_HOST']);
-				$host = trim(current($parts));
-			} else {
-				$host = $this->server['HTTP_X_FORWARDED_HOST'];
-			}
-		} else {
-			if (isset($this->server['HTTP_HOST'])) {
-				$host = $this->server['HTTP_HOST'];
-			} else if (isset($this->server['SERVER_NAME'])) {
-				$host = $this->server['SERVER_NAME'];
-			}
-		}
-		if ($host !== null) {
-			return $host;
-		}
-		// get the host from the headers
-		$host = $this->getInsecureServerHost();
-		// Verify that the host is a trusted domain if the trusted domains
-		// are defined
-		// If no trusted domain is provided the first trusted domain is returned
-		$trustedDomainHelper = new TrustedDomainHelper($this->config);
-		if ($trustedDomainHelper->isTrustedDomain($host)) {
-			return $host;
-		} else {
-			$trustedList = $this->config->getSystemValue('trusted_domains', []);
-			if(!empty($trustedList)) {
-				return $trustedList[0];
-			} else {
-				return '';
-			}
-		}
-	}
-	
 }
