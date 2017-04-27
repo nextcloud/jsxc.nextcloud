@@ -5,8 +5,6 @@ namespace OCA\OJSXC\Controller;
 use OCA\OJSXC\Db\Presence;
 use OCA\OJSXC\Db\PresenceMapper;
 use OCA\OJSXC\Db\StanzaMapper;
-use OCA\OJSXC\Db\MessageMapper;
-use OCA\OJSXC\Exceptions\NewContentException;
 use OCA\OJSXC\Http\XMPPResponse;
 use OCA\OJSXC\ILock;
 use OCA\OJSXC\NewContentContainer;
@@ -17,8 +15,6 @@ use OCP\AppFramework\Controller;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\ILogger;
 use OCP\IRequest;
-use OCP\ISession;
-use Sabre\Xml\Writer;
 use Sabre\Xml\Reader;
 use Sabre\Xml\LibXMLException;
 
@@ -40,26 +36,6 @@ class HttpBindController extends Controller {
 	 * @var string $userId
 	 */
 	private $userId;
-
-	/**
-	 * @var int $pollingId
-	 */
-	private $pollingId;
-
-	/**
-	 * @var string $host
-	 */
-	private $host;
-
-	/**
-	 * @var Session OCP\ISession
-	 */
-	private $session;
-
-	/**
-	 * @var MessageMapper OCA\OJSXC\Db\MessageMapper
-	 */
-	private $messageMapper;
 
 	/**
 	 * @var StanzaMapper OCA\OJSXC\Db\StanzaMapper
@@ -100,16 +76,6 @@ class HttpBindController extends Controller {
 	 * @var ILock
 	 */
 	private $lock;
-
-	/**
-	 * @var bool
-	 */
-	private $debug;
-
-	/**
-	 * @var ILogger $logger
-	 */
-	private $logger;
 
 	/**
 	 * @var PresenceHandler $presenceHandler
@@ -163,9 +129,7 @@ class HttpBindController extends Controller {
 	) {
 		parent::__construct($appName, $request);
 		$this->userId = $userId;
-		$this->pollingId = time();
 		$this->stanzaMapper = $stanzaMapper;
-		$this->host = $host;
 		$this->iqHandler = $iqHandler;
 		$this->messageHandler = $messageHandler;
 		$this->body = $body;
@@ -173,8 +137,6 @@ class HttpBindController extends Controller {
 		$this->maxCicles = $maxCicles;
 		$this->response =  new XMPPResponse();
 		$this->lock = $lock;
-		$this->debug = defined('JSXC_ENV') && JSXC_ENV === 'dev';
-		$this->logger = $logger;
 		$this->presenceHandler = $presenceHandler;
 		$this->presenceMapper = $presenceMapper;
 		$this->newContentContainer = $newContentContainer;

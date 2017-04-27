@@ -52,14 +52,14 @@ class PresenceMapper extends Mapper {
 	/**
 	 * PresenceMapper constructor.
 	 *
-	 * @param IDb|IDBConnection $db
+	 * @param IDBConnection $db
 	 * @param string $host
 	 * @param null|string $userId
 	 * @param MessageMapper $messageMapper
 	 * @param NewContentContainer $newContentContainer
 	 * @param int $timeout
 	 */
-	public function __construct(IDb $db, $host, $userId, MessageMapper $messageMapper, NewContentContainer $newContentContainer, $timeout) {
+	public function __construct(IDBConnection $db, $host, $userId, MessageMapper $messageMapper, NewContentContainer $newContentContainer, $timeout) {
 		parent::__construct($db, 'ojsxc_presence');
 		$this->host = $host;
 		$this->userId = $userId;
@@ -76,13 +76,14 @@ class PresenceMapper extends Mapper {
 	 */
 	public function setPresence(PresenceEntity $stanza) {
 		$sql = "UPDATE `*PREFIX*ojsxc_presence` SET `presence`=?, `last_active`=? WHERE `userid` = ?";
-		$q = $this->db->prepareQuery($sql);
+
+		$q = $this->db->prepare($sql);
 		$q->execute([$stanza->getPresence(), $stanza->getLastActive(), $stanza->getUserid()]);
 
 
 		if ($q->rowCount() === 0) {
 			$sql = "INSERT INTO `*PREFIX*ojsxc_presence` (`userid`, `presence`, `last_active`) VALUES(?,?,?)";
-			$q = $this->db->prepareQuery($sql);
+			$q = $this->db->prepare($sql);
 			$q->execute([$stanza->getUserid(), $stanza->getPresence(), $stanza->getLastActive()]);
 		}
 	}
@@ -141,7 +142,7 @@ class PresenceMapper extends Mapper {
 		// just do an update since we can assume the user is already online
 		// otherwise this wouldn't make sense
 		$sql = "UPDATE `*PREFIX*ojsxc_presence` SET `last_active`=? WHERE `userid` = ?";
-		$q = $this->db->prepareQuery($sql);
+		$q = $this->db->prepare($sql);
 		$q->execute([time(), $user]);
 	}
 
