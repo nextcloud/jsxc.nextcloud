@@ -38,7 +38,7 @@ class ChatProvider implements IProvider
     public function process(IEntry $entry)
     {
         $uid = $entry->getProperty('UID');
-        $iconUrl = $this->urlGenerator->getAbsoluteURL($this->urlGenerator->imagePath('ojsxc', 'chat-icon.svg'));
+        $iconUrl = $this->urlGenerator->getAbsoluteURL($this->urlGenerator->imagePath('ojsxc', 'actions/chat.svg'));
         $localIm = null;
 
         if (is_null($uid)) {
