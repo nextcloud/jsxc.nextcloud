@@ -13,7 +13,11 @@
             jsxc.gui.roster.toggle();
         });
 
-        $('#settings').after(div);
+        if ($('#contactsmenu').length > 0) {
+           $('#contactsmenu').before(div);
+        } else {
+           $('#settings').after(div);
+        }
     }
 
     function onRosterToggle(event, state, duration) {
