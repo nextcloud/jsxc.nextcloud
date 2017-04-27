@@ -3,8 +3,6 @@
 namespace OCA\OJSXC;
 
 use OCP\IConfig;
-use OCP\IDb;
-use OCP\IDBConnection;
 
 /**
  * Class DbLock
