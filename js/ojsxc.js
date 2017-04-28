@@ -71,6 +71,134 @@
         });
     }
 
+    function defaultAvatar(jid) {
+        var cache = jsxc.storage.getUserItem('defaultAvatars') || {};
+        var user = Strophe.unescapeNode(jid.replace(/@[^@]+$/, ''));
+
+        $(this).each(function() {
+
+            var $div = $(this).find('.jsxc_avatar');
+            var size = $div.width();
+            var key = user + '@' + size;
+
+            var handleResponse = function(result) {
+                if (typeof(result) === 'object') {
+                    if (result.data && result.data.displayname) {
+                        $div.imageplaceholder(user, result.data.displayname);
+                    } else {
+                        $div.imageplaceholder(user);
+                    }
+                } else {
+                    $div.css('backgroundImage', 'url(' + result + ')');
+                }
+            };
+
+            if (typeof cache[key] === 'undefined' || cache[key] === null) {
+                var url;
+
+                url = OC.generateUrl('/avatar/' + encodeURIComponent(user) + '/' + size + '?requesttoken={requesttoken}', {
+                    user: user,
+                    size: size,
+                    requesttoken: oc_requesttoken
+                });
+
+                $.get(url, function(result) {
+
+                    var val = (typeof result === 'object') ? result : url;
+                    handleResponse(val);
+
+                    jsxc.storage.updateItem('defaultAvatars', key, val, true);
+                });
+
+            } else {
+                handleResponse(cache[key]);
+            }
+        });
+    }
+
+    function loadSettings(username, password, cb) {
+        $.ajax({
+            type: 'POST',
+            url: OC.filePath('ojsxc', 'ajax', 'getSettings.php'),
+            data: {
+                username: username,
+                password: password
+            },
+            success: function(d) {
+                if (d.result === 'success' && d.data && d.data.serverType !== 'internal' && d.data.xmpp.url !== '' && d.data.xmpp.url !== null) {
+                    cb(d.data);
+                } else if (d.data && d.data.serverType === 'internal') {
+                    // fake successful connection
+                    jsxc.bid = username.toLowerCase() + '@' + window.location.host;
+
+                    jsxc.storage.setItem('jid', jsxc.bid + '/internal');
+                    jsxc.storage.setItem('sid', 'internal');
+                    jsxc.storage.setItem('rid', '123456');
+
+                    jsxc.options.set('xmpp', {
+                        url: OC.generateUrl('apps/ojsxc/http-bind')
+                    });
+                    if (d.data.loginForm) {
+                        jsxc.options.set('loginForm', {
+                            startMinimized: d.data.loginForm.startMinimized
+                        });
+                    }
+
+                    cb(false);
+                } else {
+                    cb(false);
+                }
+            },
+            error: function() {
+                jsxc.error('XHR error on getSettings.php');
+
+                cb(false);
+            }
+        });
+    }
+
+    function saveSettinsPermanent(data, cb) {
+        $.ajax({
+            type: 'POST',
+            url: OC.filePath('ojsxc', 'ajax', 'setUserSettings.php'),
+            data: data,
+            success: function(data) {
+                cb(data.trim() === 'true');
+            },
+            error: function() {
+                cb(false);
+            }
+        });
+    }
+
+    function getUsers(search, cb) {
+        $.ajax({
+            type: 'GET',
+            url: OC.filePath('ojsxc', 'ajax', 'getUsers.php'),
+            data: {
+                search: search
+            },
+            success: cb,
+            error: function() {
+                jsxc.error('XHR error on getUsers.php');
+            }
+        });
+    }
+
+    function getViewportSize() {
+        var w = $(window).width() - $('#jsxc_windowListSB').width();
+        var h = $(window).height() - $('#header').height() - 10;
+
+        if (jsxc.storage.getUserItem('roster') === 'shown') {
+            w -= $('#jsxc_roster').outerWidth(true);
+        }
+
+        return {
+            width: w,
+            height: h
+        };
+    }
+
     // initialization
     $(function() {
         if (location.pathname.substring(location.pathname.lastIndexOf("/") + 1) === 'public.php') {
@@ -126,130 +254,12 @@
             displayRosterMinimized: function() {
                 return OC.currentUser != null;
             },
-            defaultAvatar: function(jid) {
-                var cache = jsxc.storage.getUserItem('defaultAvatars') || {};
-                var user = Strophe.unescapeNode(jid.replace(/@[^@]+$/, ''));
-
-                $(this).each(function() {
-
-                    var $div = $(this).find('.jsxc_avatar');
-                    var size = $div.width();
-                    var key = user + '@' + size;
-
-                    var handleResponse = function(result) {
-                        if (typeof(result) === 'object') {
-                            if (result.data && result.data.displayname) {
-                                $div.imageplaceholder(user, result.data.displayname);
-                            } else {
-                                $div.imageplaceholder(user);
-                            }
-                        } else {
-                            $div.css('backgroundImage', 'url(' + result + ')');
-                        }
-                    };
-
-                    if (typeof cache[key] === 'undefined' || cache[key] === null) {
-                        var url;
-
-                        url = OC.generateUrl('/avatar/' + encodeURIComponent(user) + '/' + size + '?requesttoken={requesttoken}', {
-                            user: user,
-                            size: size,
-                            requesttoken: oc_requesttoken
-                        });
-
-                        $.get(url, function(result) {
-
-                            var val = (typeof result === 'object') ? result : url;
-                            handleResponse(val);
-
-                            jsxc.storage.updateItem('defaultAvatars', key, val, true);
-                        });
-
-                    } else {
-                        handleResponse(cache[key]);
-                    }
-                });
-            },
-            loadSettings: function(username, password, cb) {
-                $.ajax({
-                    type: 'POST',
-                    url: OC.filePath('ojsxc', 'ajax', 'getSettings.php'),
-                    data: {
-                        username: username,
-                        password: password
-                    },
-                    success: function(d) {
-                        if (d.result === 'success' && d.data && d.data.serverType !== 'internal' && d.data.xmpp.url !== '' && d.data.xmpp.url !== null) {
-                            cb(d.data);
-                        } else if (d.data && d.data.serverType === 'internal') {
-                            // fake successful connection
-                            jsxc.bid = username.toLowerCase() + '@' + window.location.host;
-
-                            jsxc.storage.setItem('jid', jsxc.bid + '/internal');
-                            jsxc.storage.setItem('sid', 'internal');
-                            jsxc.storage.setItem('rid', '123456');
-
-                            jsxc.options.set('xmpp', {
-                                url: OC.generateUrl('apps/ojsxc/http-bind')
-                            });
-                            if (d.data.loginForm) {
-                                jsxc.options.set('loginForm', {
-                                    startMinimized: d.data.loginForm.startMinimized
-                                });
-                            }
-
-                            cb(false);
-                        } else {
-                            cb(false);
-                        }
-                    },
-                    error: function() {
-                        jsxc.error('XHR error on getSettings.php');
-
-                        cb(false);
-                    }
-                });
-            },
-            saveSettinsPermanent: function(data, cb) {
-                $.ajax({
-                    type: 'POST',
-                    url: OC.filePath('ojsxc', 'ajax', 'setUserSettings.php'),
-                    data: data,
-                    success: function(data) {
-                        cb(data.trim() === 'true');
-                    },
-                    error: function() {
-                        cb(false);
-                    }
-                });
-            },
-            getUsers: function(search, cb) {
-                $.ajax({
-                    type: 'GET',
-                    url: OC.filePath('ojsxc', 'ajax', 'getUsers.php'),
-                    data: {
-                        search: search
-                    },
-                    success: cb,
-                    error: function() {
-                        jsxc.error('XHR error on getUsers.php');
-                    }
-                });
-            },
+            defaultAvatar: defaultAvatar,
+            loadSettings: loadSettings,
+            saveSettinsPermanent: saveSettinsPermanent,
+            getUsers: getUsers,
             viewport: {
-                getSize: function() {
-                    var w = $(window).width() - $('#jsxc_windowListSB').width();
-                    var h = $(window).height() - $('#header').height() - 10;
-
-                    if (jsxc.storage.getUserItem('roster') === 'shown') {
-                        w -= $('#jsxc_roster').outerWidth(true);
-                    }
-
-                    return {
-                        width: w,
-                        height: h
-                    };
-                }
+                getSize: getViewportSize
             }
         });
 
