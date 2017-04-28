@@ -45,7 +45,7 @@
         }
     }
 
-    function onRosterToggle(event, state, duration) {
+    function onRosterToggle(ev, state, duration) {
         $('body').removeClass('jsxc-roster-hidden jsxc-roster-shown').addClass('jsxc-roster-' + state);
 
         // trigger nextcloud/owncloud triggers
@@ -54,15 +54,9 @@
         }, duration + 50);
     }
 
-    function onRosterReady() {
-        if (typeof $('#jsxc_roster').outerWidth() !== 'number') {
-            setTimeout(onRosterReady, 200);
-            return;
-        }
-
+    function onRosterReady(ev, rosterState) {
         injectChatIcon();
 
-        var rosterState = jsxc.storage.getUserItem('roster') || 'hidden';
         $('body').removeClass('jsxc-roster-hidden jsxc-roster-shown').addClass('jsxc-roster-' + rosterState);
 
         // update webodf
@@ -94,7 +88,7 @@
             return;
         }
 
-        $(document).one('ready.roster.jsxc', onRosterReady);
+        $(document).one('ready-roster-jsxc', onRosterReady);
         $(document).on('toggle.roster.jsxc', onRosterToggle);
 
         $(document).on('connected.jsxc', function() {
