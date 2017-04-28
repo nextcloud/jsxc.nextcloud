@@ -72,8 +72,13 @@
     }
 
     function defaultAvatar(jid) {
+        var adminSettings = jsxc.options.get('adminSettings') || {};
         var cache = jsxc.storage.getUserItem('defaultAvatars') || {};
-        var user = Strophe.unescapeNode(jid.replace(/@[^@]+$/, ''));
+        var data = jsxc.storage.getUserItem('buddy', jsxc.jidToBid(jid)) || {};
+
+        var node = Strophe.getNodeFromJid(jid);
+        var domain = Strophe.getDomainFromJid(jid);
+        var user = Strophe.unescapeNode(node);
 
         $(this).each(function() {
 
@@ -90,10 +95,21 @@
                     }
                 } else {
                     $div.css('backgroundImage', 'url(' + result + ')');
+                    $div.text('');
                 }
             };
 
-            if (typeof cache[key] === 'undefined' || cache[key] === null) {
+            if (domain !== adminSettings.xmppDomain) {
+                // probably external user, don't request avatar
+                $div.imageplaceholder(user);
+            } else if (typeof cache[key] === 'undefined' || cache[key] === null) {
+                if (data.status === 0) {
+                    // don't query avatar for offline users
+                    $div.imageplaceholder(user);
+
+                    return;
+                }
+
                 var url;
 
                 url = OC.generateUrl('/avatar/' + encodeURIComponent(user) + '/' + size + '?requesttoken={requesttoken}', {
