@@ -8,14 +8,22 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 - add external API for [XMPP server authentication](https://github.com/jsxc/xmpp-cloud-auth)
 - [jsxc/jsxc#476](https://github.com/jsxc/jsxc/issues/476) add personal settings
+- add chat icon to contact menu
 
 ### Fixed
 - [jsxc/jsxc#455](https://github.com/jsxc/jsxc/issues/455) fix login with different credentials
+- [jsxc/jsxc#516](https://github.com/jsxc/jsxc/issues/516) fix log in after connection failure
+- fix first roster initialisation
 
 ### Changed
 - upgrade jsxc to v3.2.0 ([change log](https://github.com/jsxc/jsxc/blob/master/CHANGELOG.md))
+- support nc12
 - use css to manipulate nc ui
 - [jsxc/jsxc#436](https://github.com/jsxc/jsxc/issues/436) hide roster on login screen
+- change chat icon position for nc12
+- [jsxc/jsxc#382](https://github.com/jsxc/jsxc/issues/382) make internal backend ncs
+- own section in admin settings for ojsxc
+- change design of bosh test result
 
 ## 3.1.1 - 2017-02-14
 - upgrade jsxc to v3.1.1

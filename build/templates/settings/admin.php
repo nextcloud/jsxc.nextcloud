@@ -1,3 +1,12 @@
+<?php
+/** @var $l \OCP\IL10N */
+/** @var $_ array */
+
+if (function_exists(script)) {
+	script('ojsxc', 'settings/admin');
+}
+?>
+
 <div class="section">
 	<h2>JavaScript Xmpp Client</h2>
 	<form id="ojsxc">

@@ -51,6 +51,10 @@ $data ['xmpp'] ['resource'] = trim($config->getAppValue('ojsxc', 'xmppResource')
 $data ['xmpp'] ['overwrite'] = validateBoolean($config->getAppValue('ojsxc', 'xmppOverwrite'));
 $data ['xmpp'] ['onlogin'] = null;
 
+$data ['adminSettings'] = [
+   'xmppDomain' => trim($config->getAppValue('ojsxc', 'xmppDomain'))
+];
+
 if (validateBoolean($config->getAppValue('ojsxc', 'xmppPreferMail'))) {
    $mail = $config->getUserValue($currentUID,'settings','email');
 

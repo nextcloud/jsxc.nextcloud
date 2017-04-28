@@ -1,5 +1,5 @@
 /*!
- * ojsxc v3.2.0-beta.1 - 2017-04-05
+ * ojsxc v3.2.0-beta.2 - 2017-04-28
  * 
  * Copyright (c) 2017 Klaus Herberth <klaus@jsxc.org> <br>
  * Released under the MIT license
@@ -7,7 +7,7 @@
  * Please see http://www.jsxc.org/
  * 
  * @author Klaus Herberth <klaus@jsxc.org>
- * @version 3.2.0-beta.1
+ * @version 3.2.0-beta.2
  * @license MIT
  */
 
@@ -3291,16 +3291,16 @@ fieldset[disabled] #jsxc_webrtc .checkbox label {
   position: relative;
   outline: none;
   clear: both; }
-  .jsxc_chatmessage.jsxc_error {
-    opacity: 0.7; }
-    .jsxc_chatmessage.jsxc_error:before {
-      content: " ";
-      position: absolute;
-      top: 3px;
-      right: 3px;
-      width: 8px;
-      height: 8px;
-      background-color: yellow; }
+  .jsxc_chatmessage.jsxc_error:before {
+    content: attr(data-error-msg);
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color: rgba(255, 255, 255, 0.7);
+    text-align: center;
+    padding: 10px 5px; }
   .jsxc_chatmessage a {
     color: #00f;
     text-decoration: underline;
@@ -4533,26 +4533,20 @@ div.jsxc_video {
 
 .jsxc_success, .jsxc_fail {
   border: 1px solid #fff;
-  border-radius: 3px;
-  padding: 3px;
-  padding-left: 22px;
-  background-position: 3px center;
+  color: #030;
+  padding: 11px;
+  padding-left: 38px;
+  background-position: 12px center;
   background-repeat: no-repeat;
-  margin: 3px;
-  width: -moz-fit-content;
-  width: -webkit-fit-content; }
+  background-color: #f1f1f1;
+  margin: 3px; }
 
 .jsxc_success {
-  background-color: #A1F6BB;
-  background-image: url("../img/pass-icon.png");
-  color: #030;
-  border-color: #030; }
+  background-image: url("../img/checkmark-green.svg"); }
 
 .jsxc_fail {
-  background-color: #F99;
-  background-image: url("../img/fail-icon.png");
-  color: #800000;
-  border-color: #800000; }
+  background-image: url("../img/cross-red.svg");
+  background-position: 12px 5px; }
 
 .jsxc_log {
   width: 500px; }
@@ -4594,3 +4588,12 @@ div.jsxc_video {
 
 #body-login #jsxc_windowList, #body-login #jsxc_roster {
   display: none; }
+
+#contactsmenu-contacts .jsxc_statusIndicator {
+  position: relative; }
+  #contactsmenu-contacts .jsxc_statusIndicator:before {
+    width: 6px;
+    height: 6px;
+    right: 13px;
+    top: 13px;
+    position: absolute; }

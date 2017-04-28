@@ -5,7 +5,7 @@
    <name>JavaScript XMPP Chat</name>
    <summary>Facebook-like chat</summary>
    <description>Facebook-like chat with end-to-end encrypted conversation, video calls, multi-user rooms, XMPP and internal server backend.</description>
-   <version>3.2.0-beta.1</version>
+   <version>3.2.0-beta.2</version>
    <licence>agpl</licence>
    <author mail="klaus@jsxc.org">Klaus Herberth</author>
    <author>Tobia De Koninck</author>
@@ -38,8 +38,17 @@
       <lib>xmlwriter</lib>
       <lib>dom</lib>
       <owncloud min-version="8.0" max-version="9"/>
-      <nextcloud min-version="8.0" max-version="11"/>
+      <nextcloud min-version="8.1" max-version="12"/>
    </dependencies>
 
    <ocsid>162257</ocsid>
+
+   <settings>
+      <admin>OCA\OJSXC\Settings\Admin</admin>
+      <admin-section>OCA\OJSXC\Settings\Section</admin-section>
+   </settings>
+
+   <contactsmenu>
+      <provider>OCA\OJSXC\ContactsMenu\Providers\ChatProvider</provider>
+   </contactsmenu>
 </info>

@@ -43,6 +43,23 @@ function checkPassword() {
    ));
 }
 
+function isUser() {
+   \OCP\Util::writeLog('ojsxc', 'ExAPI: Check if "'.$_POST['username'].'" exists', \OCP\Util::INFO );
+
+   $isUser = false;
+
+   if(!empty($_POST['username'])) {
+      $isUser = \OC::$server->getUserManager()->userExists($_POST['username']);
+   }
+
+   echo json_encode(array(
+      'result' => 'success',
+      'data' => array(
+         'isUser' => $isUser
+      )
+   ));
+}
+
 // check if we have a signature
 if ( ! isset( $_SERVER[ 'HTTP_X_JSXC_SIGNATURE' ] ) )
         abort( 'HTTP header "X-JSXC-Signature" is missing.' );
@@ -64,6 +81,9 @@ if ( $hash !== hash_hmac( $algo, $rawPost, $apiSecret ) )
 switch($_POST['operation']) {
    case 'auth':
       checkPassword();
+      break;
+   case 'isuser':
+      isUser();
       break;
    default:
       abort( "Unsupported operation." );
