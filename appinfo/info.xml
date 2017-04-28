@@ -43,6 +43,11 @@
 
    <ocsid>162257</ocsid>
 
+   <settings>
+      <admin>OCA\OJSXC\Settings\Admin</admin>
+      <admin-section>OCA\OJSXC\Settings\Section</admin-section>
+   </settings>
+
    <contactsmenu>
       <provider>OCA\OJSXC\ContactsMenu\Providers\ChatProvider</provider>
    </contactsmenu>
