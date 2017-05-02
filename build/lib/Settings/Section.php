@@ -4,9 +4,9 @@ namespace OCA\OJSXC\Settings;
 
 use OCP\IL10N;
 use OCP\IURLGenerator;
-use OCP\Settings\ISection;
+use OCP\Settings\IIconSection;
 
-class Section implements ISection
+class Section implements IIconSection
 {
     /** @var IL10N */
     private $l;
