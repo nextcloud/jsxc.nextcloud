@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+
+## 3.2.0 - 2017-05-17
 ### Added
 - add external API for [XMPP server authentication](https://github.com/jsxc/xmpp-cloud-auth)
 - [jsxc/jsxc#476](https://github.com/jsxc/jsxc/issues/476) add personal settings
