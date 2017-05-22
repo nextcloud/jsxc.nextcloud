@@ -62,6 +62,8 @@ if(class_exists('\\OCP\\AppFramework\\Http\\EmptyContentSecurityPolicy')) {
 	$manager->addDefaultPolicy($policy);
 }
 
-require_once __DIR__ ."/../vendor/autoload.php";
+if (!class_exists("\\Sabre\\Xml\\Version")) {
+    require_once __DIR__ . "/../vendor/autoload.php";
+}
 
 ?>
