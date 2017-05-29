@@ -9,7 +9,7 @@ services:
 env:
   global:
     - BRANCH=master
-    - REPO=oc
+    - REPO=nc
   matrix:
     - DB=mysql
 
@@ -20,25 +20,11 @@ matrix:
     - php: 5.6
       env: DB=pgsql
     - php: 5.6
-      env: DB=mysql BRANCH=stable8
-    - php: 5.6
-      env: DB=mysql BRANCH=stable8.1
-    - php: 5.6
-      env: DB=mysql BRANCH=stable8.2
-    - php: 5.6
       env: DB=mysql BRANCH=stable9
     - php: 5.6
-      env: DB=mysql BRANCH=stable9.1
-    - php: 5.4
-      env: DB=mysql BRANCH=stable9.1
-    - php: 5.5
-      env: DB=mysql BRANCH=stable9.1
+      env: DB=mysql BRANCH=stable10
     - php: 5.6
-      env: DB=mysql BRANCH=stable9 REPO=nc
-    - php: 5.6
-      env: DB=mysql BRANCH=stable10 REPO=nc
-    - php: 5.6
-      env: DB=mysql BRANCH=master REPO=nc
+      env: DB=mysql BRANCH=stable11
 
 
 
@@ -49,4 +35,4 @@ script:
   - composer install
   - phpunit -c phpunit.xml
   - phpunit -c phpunit.integration.xml
-  - cat ../../data/owncloud.log || cat ../../data/nextcloud.log
+  - cat ../../data/nextcloud.log
