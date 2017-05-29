@@ -71,7 +71,7 @@
         });
     }
 
-    function defaultAvatar(jid) {
+    function defaultAvatar(element, jid) {
         var adminSettings = jsxc.options.get('adminSettings') || {};
         var cache = jsxc.storage.getUserItem('defaultAvatars') || {};
         var data = jsxc.storage.getUserItem('buddy', jsxc.jidToBid(jid)) || {};
@@ -80,7 +80,7 @@
         var domain = Strophe.getDomainFromJid(jid);
         var user = Strophe.unescapeNode(node);
 
-        $(this).each(function() {
+        $(element).each(function() {
 
             var $div = $(this).find('.jsxc_avatar');
             var size = $div.width();
@@ -270,7 +270,9 @@
             displayRosterMinimized: function() {
                 return OC.currentUser != null;
             },
-            defaultAvatar: defaultAvatar,
+            defaultAvatar: function(jid) {
+               defaultAvatar(this, jid);
+            },
             loadSettings: loadSettings,
             saveSettinsPermanent: saveSettinsPermanent,
             getUsers: getUsers,
