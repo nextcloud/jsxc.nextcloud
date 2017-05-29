@@ -22,9 +22,9 @@
     "grunt-contrib-watch": "^0.6.1",
     "grunt-data-uri": "^0.2.0",
     "grunt-exec": "^1.0.1",
-    "grunt-sass": "1.0.0",
+    "grunt-sass": "2.0.0",
     "grunt-search": "^0.1.6",
     "grunt-text-replace": "~0.3.11",
-    "node-sass": "3.3.0"
+    "node-sass": "4.5.2"
   }
 }

@@ -153,7 +153,8 @@ class Application extends App {
 		// default
 		return new DbLock(
 			$c->query('UserId'),
-			$c->query('OCP\IConfig')
+			$c->query('OCP\IConfig'),
+			$c->getServer()->getDatabaseConnection()
 		);
 
 	}
