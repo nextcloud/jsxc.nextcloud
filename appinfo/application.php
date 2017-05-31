@@ -137,7 +137,7 @@ class Application extends App {
 		if (self::$config['use_memcache']['locking'] === true) {
 			$cache = $c->getServer()->getMemCacheFactory();
 			$version = \OC::$server->getSession()->get('OC_Version');
-			if ($version[0] === 8 && $version[1] == 0){
+			if ($version[0] === 8 && $version[1] === 0){
 				$c->getServer()->getLogger()->warning('OJSXC is configured to use memcache as backend for locking, but ownCloud version 8  doesn\'t suppor this.');
 			} else if ($cache->isAvailable()) {
 				$memcache = $cache->create('ojsxc');
