@@ -5,6 +5,17 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+### Fixed
+- don't include Sabre if already loaded
+- prevent js strict warning
+- fix DbLock (internal backend)
+- fix presence (internal backend)
+- fix undefined constant error
+
+### Changed
+- upgrade jsxc to v3.2.1 ([change log](https://github.com/jsxc/jsxc/blob/master/CHANGELOG.md))
+- only show chat icon if a backend is enabled
+- update app icon
 
 ## 3.2.0 - 2017-05-17
 ### Added
