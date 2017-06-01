@@ -2,7 +2,7 @@
 /** @var $l \OCP\IL10N */
 /** @var $_ array */
 
-if (function_exists(script)) {
+if (function_exists('script')) {
 	script('ojsxc', 'settings/admin');
 }
 ?>

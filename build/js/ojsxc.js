@@ -1,5 +1,5 @@
 /*!
- * ojsxc v3.2.0 - 2017-05-17
+ * ojsxc v3.2.1 - 2017-06-01
  * 
  * Copyright (c) 2017 Klaus Herberth <klaus@jsxc.org> <br>
  * Released under the MIT license
@@ -7,7 +7,7 @@
  * Please see http://www.jsxc.org/
  * 
  * @author Klaus Herberth <klaus@jsxc.org>
- * @version 3.2.0
+ * @version 3.2.1
  * @license MIT
  */
 
@@ -84,7 +84,7 @@
         });
     }
 
-    function defaultAvatar(jid) {
+    function defaultAvatar(element, jid) {
         var adminSettings = jsxc.options.get('adminSettings') || {};
         var cache = jsxc.storage.getUserItem('defaultAvatars') || {};
         var data = jsxc.storage.getUserItem('buddy', jsxc.jidToBid(jid)) || {};
@@ -93,7 +93,7 @@
         var domain = Strophe.getDomainFromJid(jid);
         var user = Strophe.unescapeNode(node);
 
-        $(this).each(function() {
+        $(element).each(function() {
 
             var $div = $(this).find('.jsxc_avatar');
             var size = $div.width();
@@ -283,7 +283,9 @@
             displayRosterMinimized: function() {
                 return OC.currentUser != null;
             },
-            defaultAvatar: defaultAvatar,
+            defaultAvatar: function(jid) {
+               defaultAvatar(this, jid);
+            },
             loadSettings: loadSettings,
             saveSettinsPermanent: saveSettinsPermanent,
             getUsers: getUsers,

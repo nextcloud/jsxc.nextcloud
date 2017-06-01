@@ -58,24 +58,28 @@ class ChatProvider implements IProvider
                 $domain = trim($config->getAppValue('ojsxc', 'xmppDomain'));
             }
 
-            $localIm = $uid.'@'.$domain;
-            $chatUrl = 'xmpp:'.$localIm;
+            if ($domain !== "") {
+                $localIm = $uid.'@'.$domain;
+                $chatUrl = 'xmpp:'.$localIm;
 
-            $action = $this->actionFactory->newLinkAction($iconUrl, $localIm, $chatUrl);
-            $entry->addAction($action);
+                $action = $this->actionFactory->newLinkAction($iconUrl, $localIm, $chatUrl);
+                $entry->addAction($action);
+            }
         }
 
         $imProperties = $entry->getProperty('IMPP');
 
-        foreach ($imProperties as $externalIm) {
-            if (!preg_match("/^[a-z0-9\.\-_]+@[a-z0-9\.\-_]+$/i", $externalIm) || $externalIm === $localIm) {
-                continue;
+        if (!is_null($imProperties)) {
+            foreach ($imProperties as $externalIm) {
+                if (!preg_match("/^[a-z0-9\.\-_]+@[a-z0-9\.\-_]+$/i", $externalIm) || $externalIm === $localIm) {
+                    continue;
+                }
+
+                $chatUrl = 'xmpp:'.$externalIm;
+
+                $action = $this->actionFactory->newLinkAction($iconUrl, $externalIm, $chatUrl);
+                $entry->addAction($action);
             }
-
-            $chatUrl = 'xmpp:'.$externalIm;
-
-            $action = $this->actionFactory->newLinkAction($iconUrl, $externalIm, $chatUrl);
-            $entry->addAction($action);
         }
     }
 }
