@@ -33,7 +33,7 @@ function checkPassword() {
 
    if(!empty($_POST['password']) && !empty($_POST['username'])) {
       if(!empty($_POST['domain'])) {
-         $currentUser = \OC::$server->getUserManager()->checkPassword($_POST['username'] . "@" . $_POST('domain'), $_POST['password']);
+         $currentUser = \OC::$server->getUserManager()->checkPassword($_POST['username'] . "@" . $_POST['domain'], $_POST['password']);
       }
       if($currentUser == null) {
          $currentUser = \OC::$server->getUserManager()->checkPassword($_POST['username'], $_POST['password']);
