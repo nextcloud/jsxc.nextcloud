@@ -6,7 +6,7 @@ use OCP\IL10N;
 use OCP\IURLGenerator;
 use OCP\Settings\ISection;
 
-class Section implements ISection
+class SectionBase implements ISection
 {
     /** @var IL10N */
     private $l;
@@ -61,4 +61,13 @@ class Section implements ISection
     {
         return $this->url->imagePath('ojsxc', 'chat-icon.svg');
     }
+}
+
+$version = \OCP\Util::getVersion();
+if ($version[0] >= 12) {
+        class Section extends SectionBase implements \OCP\Settings\IIconSection {
+        }
+} else {
+        class Section extends SectionBase {
+        }
 }
