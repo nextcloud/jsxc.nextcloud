@@ -65,9 +65,11 @@ class SectionBase implements ISection
 
 $version = \OCP\Util::getVersion();
 if ($version[0] >= 12) {
-        class Section extends SectionBase implements \OCP\Settings\IIconSection {
-        }
+    class Section extends SectionBase implements \OCP\Settings\IIconSection
+    {
+    }
 } else {
-        class Section extends SectionBase {
-        }
+    class Section extends SectionBase
+    {
+    }
 }
