@@ -18,13 +18,26 @@ function abort($msg) {
    )));
 }
 
+function stringOrEmpty($s) {
+   if(empty($s)) {
+      return "<empty>";
+   } else {
+      return $s;
+   }
+}
+
 function checkPassword() {
    $currentUser = null;
 
-   \OCP\Util::writeLog('ojsxc', 'ExAPI: Check password for user: '.$_POST['username'], \OCP\Util::INFO );
+   \OCP\Util::writeLog('ojsxc', 'ExAPI: Check password for user: '.stringOrEmpty($_POST['username'])."@".stringOrEmpty($_POST['domain']), \OCP\Util::INFO );
 
    if(!empty($_POST['password']) && !empty($_POST['username'])) {
-      $currentUser = \OC::$server->getUserManager()->checkPassword($_POST['username'], $_POST['password']);
+      if(!empty($_POST['domain'])) {
+         $currentUser = \OC::$server->getUserManager()->checkPassword($_POST['username'] . "@" . $_POST['domain'], $_POST['password']);
+      }
+      if($currentUser == null) {
+         $currentUser = \OC::$server->getUserManager()->checkPassword($_POST['username'], $_POST['password']);
+      }
    }
 
    if (!$currentUser) {
@@ -44,12 +57,17 @@ function checkPassword() {
 }
 
 function isUser() {
-   \OCP\Util::writeLog('ojsxc', 'ExAPI: Check if "'.$_POST['username'].'" exists', \OCP\Util::INFO );
+   \OCP\Util::writeLog('ojsxc', 'ExAPI: Check if "'.stringOrEmpty($_POST['username'])."@".stringOrEmpty($_POST['domain']).'" exists', \OCP\Util::INFO );
 
    $isUser = false;
 
    if(!empty($_POST['username'])) {
-      $isUser = \OC::$server->getUserManager()->userExists($_POST['username']);
+      if(!empty($_POST['domain'])) {
+         $isUser = \OC::$server->getUserManager()->userExists($_POST['username'] . "@" . $_POST['domain']);
+      }
+      if(!$isUser) {
+         $isUser = \OC::$server->getUserManager()->userExists($_POST['username']);
+      }
    }
 
    echo json_encode(array(
