@@ -218,15 +218,27 @@
 }
 
 #contactsmenu-contacts {
-  .jsxc_statusIndicator {
-    position: relative;
+   .jsxc_statusIndicator {
+      position: relative;
 
-    &:before {
-      width: 6px;
-      height: 6px;
-      right: 13px;
-      top: 13px;
-      position: absolute;
+       &:before {
+         width: 6px;
+         height: 6px;
+         right: 13px;
+         top: 13px;
+         position: absolute;
+       }
     }
- }
+
+   .contact {
+      &:before {
+            position: absolute;
+            top: 7px;
+            left: 7px;
+      }
+
+      .avatar {
+         cursor: pointer;
+      }
+   }
 }
