@@ -1,6 +1,7 @@
 __Bugtracker and issues:__ https://github.com/jsxc/jsxc/issues<br />
 
 # Nextcloud JavaScript Xmpp Client
+[![Build Status](https://travis-ci.org/nextcloud/jsxc.nextcloud.svg?branch=master)](https://travis-ci.org/nextcloud/jsxc.nextcloud)
 
 Real-time chat app for Nextcloud. More information about features, supported protocols/browsers, screenshots and planned features at [www.jsxc.org](https://www.jsxc.org/).
 
