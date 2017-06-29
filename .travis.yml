@@ -35,4 +35,4 @@ script:
   - composer install
   - ./vendor/bin/phpunit -c phpunit.xml
   - ./vendor/bin/phpunit -c phpunit.integration.xml
-  - cat ../../data/nextcloud.log
+  - cat ../../data/nextcloud.log  || cat ../../data/owncloud.log # in stable9 the log file is still called owncloud.log
