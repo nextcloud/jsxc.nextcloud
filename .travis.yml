@@ -33,6 +33,6 @@ install: ./tests/travis/install-$REPO-$BRANCH.sh
 # Note the install script should make sure we are in the apps/ojsxc directory
 script:
   - composer install
-  - phpunit -c phpunit.xml
-  - phpunit -c phpunit.integration.xml
+  - ./vendor/bin/phpunit -c phpunit.xml
+  - ./vendor/bin/phpunit -c phpunit.integration.xml
   - cat ../../data/nextcloud.log
