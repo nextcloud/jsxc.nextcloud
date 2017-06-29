@@ -25,6 +25,8 @@ matrix:
       env: DB=mysql BRANCH=stable10
     - php: 5.6
       env: DB=mysql BRANCH=stable11
+    - php: 5.6
+      env: DB=mysql BRANCH=stable12
 
 
 
