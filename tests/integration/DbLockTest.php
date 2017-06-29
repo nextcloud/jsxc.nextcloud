@@ -33,6 +33,12 @@ class DbLockTest extends TestCase {
 	 */
 	private $con;
 
+
+	/**
+	 * @var \OCP\AppFramework\IAppContainer
+	 */
+	private $container;
+
 	public function setUp() {
 		parent::setUp();
 		$app = new Application();
@@ -50,8 +56,8 @@ class DbLockTest extends TestCase {
 		$time = 4;
 		$this->dbLock = new DbLock(
 			'john',
-			$this->container->getServer()->getDb(),
-			$this->container->getServer()->getConfig()
+			$this->container->getServer()->getConfig(),
+			$this->container->getServer()->getDatabaseConnection()
 		);
 		$this->dbLock->setLock();
 		$result = $this->fetchLocks();
@@ -66,8 +72,8 @@ class DbLockTest extends TestCase {
 		$time = 5;
 		$this->dbLock2 = new DbLock(
 			'john',
-			$this->container->getServer()->getDb(),
-			$this->container->getServer()->getConfig()
+			$this->container->getServer()->getConfig(),
+			$this->container->getServer()->getDatabaseConnection()
 		); // simulate new lock/request
 		$this->dbLock2->setLock();
 
