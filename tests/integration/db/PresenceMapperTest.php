@@ -33,7 +33,7 @@ class PresenceMapperTest extends MapperTestUtility {
 		$this->entityName = 'OCA\OJSXC\Db\Presence';
 		$this->mapperName = 'PresenceMapper';
 		parent::setUp();
-		$this->setValueOfPrivateProperty($this->mapper, 'updatedPresense', false);
+		$this->setValueOfPrivateProperty($this->mapper, 'updatedPresence', false);
 		$this->setValueOfPrivateProperty($this->mapper, 'fetchedConnectedUsers', false);
 		$this->setValueOfPrivateProperty($this->mapper, 'connectedUsers', []);
 		$this->newContentContainer = $this->container->query('NewContentContainer');
@@ -199,15 +199,15 @@ class PresenceMapperTest extends MapperTestUtility {
 		$expected1->setUserid('derp');
 		$expected1->setPresence('online');
 		$expected1->setLastActive(23434353);
-		$expected1->setTo('admin@localhost');
-		$expected1->setFrom('derp@localhost');
+		$expected1->setTo('admin@localhost/internal');
+		$expected1->setFrom('derp@localhost/internal');
 
 		$expected2 = new PresenceEntity();
 		$expected2->setUserid('derpina');
 		$expected2->setPresence('chat');
 		$expected2->setLastActive(23445645634);
-		$expected2->setTo('admin@localhost');
-		$expected2->setFrom('derpina@localhost');
+		$expected2->setTo('admin@localhost/internal');
+		$expected2->setFrom('derpina@localhost/internal');
 		return [
 			[
 				[$input1, $input2, $input3, $input4, $input5],
