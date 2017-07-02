@@ -3,6 +3,7 @@
 namespace OCA\OJSXC\AppInfo;
 
 use OCA\OJSXC\Controller\HttpBindController;
+use OCA\OJSXC\Db\IQRosterPushMapper;
 use OCA\OJSXC\Db\MessageMapper;
 use OCA\OJSXC\Db\PresenceMapper;
 use OCA\OJSXC\Db\Stanza;
@@ -16,6 +17,7 @@ use OCP\AppFramework\App;
 use OCA\OJSXC\ILock;
 use OCA\OJSXC\DbLock;
 use OCA\OJSXC\MemLock;
+use OCA\OJSXC\Hooks;
 use OCP\IContainer;
 use OCP\IRequest;
 
@@ -65,6 +67,14 @@ class Application extends App {
 		 */
 		$container->registerService('MessageMapper', function(IContainer $c) use ($container) {
 			return new MessageMapper(
+				$container->getServer()->getDatabaseConnection(),
+				$c->query('Host'),
+				$c->query('StanzaLogger')
+			);
+		});
+
+		$container->registerService('IQRosterPushMapper', function(IContainer $c) use ($container) {
+			return new IQRosterPushMapper(
 				$container->getServer()->getDatabaseConnection(),
 				$c->query('Host'),
 				$c->query('StanzaLogger')
@@ -139,6 +149,15 @@ class Application extends App {
 			);
 		});
 
+
+		$container->registerService('UserHooks', function($c) {
+			return new Hooks(
+				$c->query('ServerContainer')->getUserManager(),
+				$c->query('ServerContainer')->getUserSession(),
+				$c->query('Host'),
+				$c->query('IQRosterPushMapper')
+			);
+		});
 
 	}
 
