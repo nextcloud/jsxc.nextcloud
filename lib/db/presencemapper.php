@@ -182,12 +182,11 @@ class PresenceMapper extends Mapper {
 			// broadcast the new presence
 			$connectedUsers = $this->getConnectedUsers();
 
-
 			$onlineUsers = array_diff($connectedUsers, $inactiveUsers); // filter out the inactive users, since we use a cache mechanism
 
-			$presenceToSend = new PresenceEntity();
-			$presenceToSend->setPresence('unavailable');
 			foreach ($inactiveUsers as $inactiveUser) {
+				$presenceToSend = new PresenceEntity();
+				$presenceToSend->setPresence('unavailable');
 				$presenceToSend->setFrom($inactiveUser);
 				foreach ($onlineUsers as $user) {
 					$presenceToSend->setTo($user);
