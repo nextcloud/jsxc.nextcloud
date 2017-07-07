@@ -59,7 +59,7 @@ class SectionBase implements ISection
      */
     public function getIcon()
     {
-        return $this->url->imagePath('ojsxc', 'chat-icon.svg');
+        return $this->url->imagePath('ojsxc', 'app-black.svg');
     }
 }
 
