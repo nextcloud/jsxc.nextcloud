@@ -218,6 +218,9 @@
                     jsxc.options.set('xmpp', {
                         url: OC.generateUrl('apps/ojsxc/http-bind')
                     });
+
+                    jsxc.options.set('adminSettings', d.data.adminSettings);
+
                     if (d.data.loginForm) {
                         jsxc.options.set('loginForm', {
                             startMinimized: d.data.loginForm.startMinimized
