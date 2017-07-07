@@ -7,7 +7,9 @@ OCP\Util::addScript('ojsxc', 'settings/admin');
 $config = \OC::$server->getConfig();
 $tmpl = new OCP\Template('ojsxc', 'settings/admin');
 
-$tmpl->assign('serverType', $config->getAppValue('ojsxc', 'serverType'));
+$serverType = $config->getAppValue('ojsxc', 'serverType');
+
+$tmpl->assign('serverType', (!empty($serverType))? $serverType : 'internal');
 $tmpl->assign('boshUrl', $config->getAppValue('ojsxc', 'boshUrl'));
 $tmpl->assign('xmppDomain', $config->getAppValue('ojsxc', 'xmppDomain'));
 $tmpl->assign('xmppPreferMail', $config->getAppValue('ojsxc', 'xmppPreferMail'));

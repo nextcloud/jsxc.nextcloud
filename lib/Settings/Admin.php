@@ -29,8 +29,10 @@ class Admin implements ISettings
             $this->config->setAppValue('ojsxc', 'apiSecret', $apiSecret);
         }
 
+        $serverType = $this->config->getAppValue('ojsxc', 'serverType');
+
         $parameters = [
-           'serverType' => $this->config->getAppValue('ojsxc', 'serverType'),
+           'serverType' => (!empty($serverType))? $serverType : 'internal',
            'boshUrl' => $this->config->getAppValue('ojsxc', 'boshUrl'),
            'xmppDomain' => $this->config->getAppValue('ojsxc', 'xmppDomain'),
            'xmppPreferMail' => $this->config->getAppValue('ojsxc', 'xmppPreferMail'),

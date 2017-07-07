@@ -28,9 +28,11 @@ $currentUID = $currentUser->getUID();
 
 $config = \OC::$server->getConfig();
 
+$serverType = $config->getAppValue('ojsxc', 'serverType');
+
 $data = array();
 $data ['xmpp'] = array();
-$data ['serverType'] = $config->getAppValue('ojsxc', 'serverType', 'external');
+$data ['serverType'] = (!empty($serverType))? $serverType : 'internal';
 $data ['loginForm'] ['startMinimized'] = validateBoolean($config->getAppValue('ojsxc', 'xmppStartMinimized'));
 
 if ($data ['serverType'] === 'internal') {
