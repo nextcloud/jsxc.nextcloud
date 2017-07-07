@@ -23,12 +23,6 @@ class Admin implements ISettings
         $externalServices = $this->config->getAppValue('ojsxc', 'externalServices');
         $externalServices = explode("|", $externalServices);
 
-        $apiSecret = $this->config->getAppValue('ojsxc', 'apiSecret');
-        if (!$apiSecret) {
-            $apiSecret = \OC::$server->getSecureRandom()->generate(23);
-            $this->config->setAppValue('ojsxc', 'apiSecret', $apiSecret);
-        }
-
         $serverType = $this->config->getAppValue('ojsxc', 'serverType');
 
         $parameters = [
@@ -48,7 +42,7 @@ class Admin implements ISettings
            'chromeExtension' => $this->config->getAppValue('ojsxc', 'chromeExtension'),
            'timeLimitedToken' => $this->config->getAppValue('ojsxc', 'timeLimitedToken'),
            'externalServices' => $externalServices,
-           'apiSecret' => $apiSecret
+           'apiSecret' => $this->config->getAppValue('ojsxc', 'apiSecret')
         ];
 
         return new TemplateResponse('ojsxc', 'settings/admin', $parameters);

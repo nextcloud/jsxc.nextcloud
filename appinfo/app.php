@@ -62,6 +62,13 @@ if(class_exists('\\OCP\\AppFramework\\Http\\EmptyContentSecurityPolicy')) {
 	$manager->addDefaultPolicy($policy);
 }
 
+$config = \OC::$server->getConfig();
+$apiSecret = $config->getAppValue('ojsxc', 'apiSecret');
+if(!$apiSecret) {
+   $apiSecret = \OC::$server->getSecureRandom()->generate(23);
+   $config->setAppValue('ojsxc', 'apiSecret', $apiSecret);
+}
+
 if (!class_exists("\\Sabre\\Xml\\Version")) {
     require_once __DIR__ . "/../vendor/autoload.php";
 }

@@ -28,12 +28,7 @@ $externalServices = $config->getAppValue('ojsxc', 'externalServices');
 $externalServices = explode("|", $externalServices);
 $tmpl->assign('externalServices', $externalServices);
 
-$apiSecret = $config->getAppValue('ojsxc', 'apiSecret');
-if(!$apiSecret) {
-   $apiSecret = \OC::$server->getSecureRandom()->generate(23);
-   $config->setAppValue('ojsxc', 'apiSecret', $apiSecret);
-}
-$tmpl->assign('apiSecret', $apiSecret);
+$tmpl->assign('apiSecret', $config->getAppValue('ojsxc', 'apiSecret'));
 $tmpl->assign('timeLimitedToken', $config->getAppValue('ojsxc', 'timeLimitedToken'));
 
 return $tmpl->fetchPage();
