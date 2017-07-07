@@ -81,4 +81,12 @@ class StanzaMapper extends Mapper {
 		return $results;
 	}
 
+	/**
+	 * @brief Deletes all stanzas addressed to a user.
+	 * @param $uid
+	 */
+	public function deleteByTo($uid) {
+		$this->execute("DELETE FROM *PREFIX*ojsxc_stanzas WHERE `to`=?", [$uid]);
+	}
+
 }

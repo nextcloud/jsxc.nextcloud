@@ -4,6 +4,8 @@ namespace OCA\OJSXC;
 
 use OCA\OJSXC\Db\IQRosterPush;
 use OCA\OJSXC\Db\IQRosterPushMapper;
+use OCA\OJSXC\Db\PresenceMapper;
+use OCA\OJSXC\Db\StanzaMapper;
 use OCP\IUserManager;
 
 use OCP\IUser;
@@ -28,11 +30,27 @@ class Hooks {
 	 */
 	private $userSession;
 
-	public function __construct(IUserManager $userManager, IUserSession $userSession, $host, IQRosterPushMapper $iqRosterPushMapper){
+	/**
+	 * @var PresenceMapper
+	 */
+	private $presenceMapper;
+
+	/**
+	 * @var StanzaMapper
+	 */
+	private $stanzaMapper;
+
+	public function __construct(IUserManager $userManager,
+								IUserSession $userSession, $host,
+								IQRosterPushMapper $iqRosterPushMapper,
+								PresenceMapper $presenceMapper,
+								StanzaMapper $stanzaMapper) {
 		$this->userManager = $userManager;
 		$this->userSession = $userSession;
 		$this->host = $host;
 		$this->iqRosterPushMapper = $iqRosterPushMapper;
+		$this->presenceMapper = $presenceMapper;
+		$this->stanzaMapper = $stanzaMapper;
 	}
 
 	public function register() {
@@ -89,6 +107,12 @@ class Hooks {
 				$this->iqRosterPushMapper->insert($iq);
 			}
 		}
+
+		// delete the presence record of this user
+		$this->presenceMapper->deletePresence($user->getUID());
+
+		// delete all stanzas addressed to this user
+		$this->stanzaMapper->deleteByTo($user->getUID());
 	}
 
 	/**
