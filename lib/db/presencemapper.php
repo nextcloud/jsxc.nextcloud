@@ -76,8 +76,6 @@ class PresenceMapper extends Mapper {
 		$this->messageMapper = $messageMapper;
 		$this->newContentContainer = $newContentContainer;
 		$this->timeout = $timeout;
-
-		$this->updatePresence();
 	}
 
 	/**
