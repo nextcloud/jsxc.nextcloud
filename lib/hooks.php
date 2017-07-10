@@ -19,13 +19,6 @@ class Hooks {
 	private $userManager;
 
 	/**
-	 * @var IQRosterPushMapper
-	 */
-	private $iqRosterPushMapper;
-
-	private $host;
-
-	/**
 	 * @var IUserSession
 	 */
 	private $userSession;
@@ -41,14 +34,13 @@ class Hooks {
 	private $stanzaMapper;
 
 	public function __construct(IUserManager $userManager,
-								IUserSession $userSession, $host,
-								IQRosterPushMapper $iqRosterPushMapper,
+								IUserSession $userSession,
+								RosterPush $rosterPush,
 								PresenceMapper $presenceMapper,
 								StanzaMapper $stanzaMapper) {
 		$this->userManager = $userManager;
 		$this->userSession = $userSession;
-		$this->host = $host;
-		$this->iqRosterPushMapper = $iqRosterPushMapper;
+		$this->rosterPush = $rosterPush;
 		$this->presenceMapper = $presenceMapper;
 		$this->stanzaMapper = $stanzaMapper;
 	}
@@ -69,19 +61,7 @@ class Hooks {
 	 * @param string $password
 	 */
 	public function onCreateUser(IUser $user, $password) {
-		$iq = new IQRosterPush();
-		$iq->setJid($user->getUID());
-		$iq->setName($user->getDisplayName());
-		$iq->setSubscription('both');
-		$iq->setFrom('');
-
-
-		foreach ($this->userManager->search('') as $recipient) {
-			if($recipient->getUID() !== $user->getUID()) {
-				$iq->setTo($recipient->getUID());
-				$this->iqRosterPushMapper->insert($iq);
-			}
-		}
+		$this->rosterPush->createOrUpdateRosterItem($user);
 	}
 
 	/**
@@ -94,19 +74,7 @@ class Hooks {
 	 * @param IUser $user
 	 */
 	public function onDeleteUser(IUser $user) {
-		$iq = new IQRosterPush();
-		$iq->setJid($user->getUID());
-		$iq->setName($user->getDisplayName());
-		$iq->setSubscription('remove');
-		$iq->setFrom('');
-
-
-		foreach ($this->userManager->search('') as $recipient) {
-			if($recipient->getUID() !== $user->getUID()) {
-				$iq->setTo($recipient->getUID());
-				$this->iqRosterPushMapper->insert($iq);
-			}
-		}
+		$this->rosterPush->removeRosterItem($user);
 
 		// delete the presence record of this user
 		$this->presenceMapper->deletePresence($user->getUID());
