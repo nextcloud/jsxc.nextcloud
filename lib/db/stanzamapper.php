@@ -2,6 +2,7 @@
 
 namespace OCA\OJSXC\Db;
 
+use OCA\OJSXC\StanzaLogger;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Db\Entity;
 use OCP\AppFramework\Db\Mapper;
@@ -19,14 +20,20 @@ class StanzaMapper extends Mapper {
 	private $host;
 
 	/**
+	 * @var StanzaLogger
+	 */
+	private $stanzaLogger;
+
+	/**
 	 * StanzaMapper constructor.
 	 *
 	 * @param IDBConnection $db
 	 * @param string $host
 	 */
-	public function __construct(IDBConnection $db, $host) {
+	public function __construct(IDBConnection $db, $host, StanzaLogger $stanzaLogger) {
 		parent::__construct($db, 'ojsxc_stanzas');
 		$this->host = $host;
+		$this->stanzaLogger = $stanzaLogger;
 	}
 
 	/**
@@ -38,6 +45,9 @@ class StanzaMapper extends Mapper {
 		$writer->openMemory();
 		$writer->write($entity);
 		$xml = $writer->outputMemory();
+
+		$this->stanzaLogger->logRaw($xml, StanzaLogger::STORING);
+
 		$sql = "INSERT INTO `*PREFIX*ojsxc_stanzas` (`to`, `from`, `stanza`) VALUES(?,?,?)";
 		$q = $this->db->prepare($sql);
 		$q->execute([$entity->getTo(), $entity->getFrom(), $xml]);

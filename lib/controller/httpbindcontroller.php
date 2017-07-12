@@ -11,6 +11,7 @@ use OCA\OJSXC\NewContentContainer;
 use OCA\OJSXC\StanzaHandlers\IQ;
 use OCA\OJSXC\StanzaHandlers\Message;
 use OCA\OJSXC\StanzaHandlers\Presence as PresenceHandler;
+use OCA\OJSXC\StanzaLogger;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\ILogger;
@@ -93,6 +94,11 @@ class HttpBindController extends Controller {
 	private $newContentContainer;
 
 	/**
+	 * @var StanzaLogger
+	 */
+	private $stanzaLogger;
+
+	/**
 	 * HttpBindController constructor.
 	 *
 	 * @param string $appName
@@ -125,7 +131,8 @@ class HttpBindController extends Controller {
 								$body,
 								$sleepTime,
 								$maxCicles,
-								NewContentContainer $newContentContainer
+								NewContentContainer $newContentContainer,
+								StanzaLogger $stanzaLogger
 	) {
 		parent::__construct($appName, $request);
 		$this->userId = $userId;
@@ -135,11 +142,12 @@ class HttpBindController extends Controller {
 		$this->body = $body;
 		$this->sleepTime = $sleepTime;
 		$this->maxCicles = $maxCicles;
-		$this->response =  new XMPPResponse();
+		$this->response =  new XMPPResponse($stanzaLogger);
 		$this->lock = $lock;
 		$this->presenceHandler = $presenceHandler;
 		$this->presenceMapper = $presenceMapper;
 		$this->newContentContainer = $newContentContainer;
+		$this->stanzaLogger = $stanzaLogger;
 	}
 
 	/**
@@ -167,6 +175,9 @@ class HttpBindController extends Controller {
 			try {
 				$stanzas = $reader->parse();
 			} catch (LibXMLException $e) {
+			}
+			if (!is_null($stanzas) && count($stanzas['value']) > 0) {
+				$this->stanzaLogger->logRaw($input, StanzaLogger::RECEIVING);
 			}
 			if (!is_null($stanzas)) {
 				$stanzas = $stanzas['value'];

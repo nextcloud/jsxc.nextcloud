@@ -5,11 +5,13 @@ namespace OCA\OJSXC\AppInfo;
 use OCA\OJSXC\Controller\HttpBindController;
 use OCA\OJSXC\Db\MessageMapper;
 use OCA\OJSXC\Db\PresenceMapper;
+use OCA\OJSXC\Db\Stanza;
 use OCA\OJSXC\Db\StanzaMapper;
 use OCA\OJSXC\NewContentContainer;
 use OCA\OJSXC\StanzaHandlers\IQ;
 use OCA\OJSXC\StanzaHandlers\Message;
 use OCA\OJSXC\StanzaHandlers\Presence;
+use OCA\OJSXC\StanzaLogger;
 use OCP\AppFramework\App;
 use OCA\OJSXC\ILock;
 use OCA\OJSXC\DbLock;
@@ -53,7 +55,8 @@ class Application extends App {
 				file_get_contents("php://input"),
 				self::$config['polling']['sleep_time'],
 				self::$config['polling']['max_cycles'],
-				$c->query('NewContentContainer')
+				$c->query('NewContentContainer'),
+				$c->query('StanzaLogger')
 			);
 		});
 
@@ -63,14 +66,16 @@ class Application extends App {
 		$container->registerService('MessageMapper', function(IContainer $c) use ($container) {
 			return new MessageMapper(
 				$container->getServer()->getDatabaseConnection(),
-				$c->query('Host')
+				$c->query('Host'),
+				$c->query('StanzaLogger')
 			);
 		});
 
 		$container->registerService('StanzaMapper', function(IContainer $c) use ($container) {
 			return new StanzaMapper(
 				$container->getServer()->getDatabaseConnection(),
-				$c->query('Host')
+				$c->query('Host'),
+				$c->query('StanzaLogger')
 			);
 		});
 
@@ -126,6 +131,14 @@ class Application extends App {
 		$container->registerService('NewContentContainer', function() {
 			return new NewContentContainer();
 		});
+
+		$container->registerService('StanzaLogger', function(IContainer $c) {
+			return new StanzaLogger(
+				$c->query('\OCP\ILogger'),
+				$c->query('UserId')
+			);
+		});
+
 
 	}
 

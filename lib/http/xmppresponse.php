@@ -1,6 +1,7 @@
 <?php
 namespace OCA\OJSXC\Http;
 
+use OCA\OJSXC\StanzaLogger;
 use OCP\AppFramework\Http\Response;
 use Sabre\Xml\Writer;
 use OCA\OJSXC\Db\Stanza;
@@ -18,11 +19,17 @@ class XMPPResponse extends Response {
 	private $writer;
 
 	/**
+	 * @var StanzaLogger
+	 */
+	private $stanzaLogger;
+
+	/**
 	 * XMPPResponse constructor.
 	 *
 	 * @param Stanza|null $stanza
+	 * @param StanzaLogger $stanzaLogger
 	 */
-	public function __construct(Stanza $stanza=null) {
+	public function __construct(StanzaLogger $stanzaLogger, Stanza $stanza=null) {
 		$this->addHeader('Content-Type', 'text/xml');
 		$this->writer =  new Writer();
 		$this->writer->openMemory();
@@ -31,12 +38,14 @@ class XMPPResponse extends Response {
 		if (!is_null($stanza)) {
 			$this->writer->write($stanza);
 		}
+		$this->stanzaLogger = $stanzaLogger;
 	}
 
 	/**
 	 * @param Stanza $input
 	 */
 	public function write(Stanza $input) {
+		$this->stanzaLogger->log($input, StanzaLogger::SENDING);
 		$this->writer->write($input);
 	}
 
