@@ -37,10 +37,13 @@ class StanzaLogger {
 	}
 
 	public function log(Stanza $stanza, $action) {
-		$writer =  new Writer();
-		$writer->openMemory();
-		$writer->write($stanza);
-		$this->logger->debug($action . " {" . $this->userId . "} : " . $writer->outputMemory(), ["app" => "ojsxc"]);
+		if (\OC::$server->getConfig()->getSystemValue('loglevel') === \OCP\Util::DEBUG) {
+			// only serialize when needed
+			$writer = new Writer();
+			$writer->openMemory();
+			$writer->write($stanza);
+			$this->logger->debug($action . " {" . $this->userId . "} : " . $writer->outputMemory(), ["app" => "ojsxc"]);
+		}
 	}
 
 	public function logRaw($stanza, $action) {

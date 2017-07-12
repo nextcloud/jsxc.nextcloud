@@ -7,6 +7,7 @@ use OCA\OJSXC\Db\Stanza;
 use OCA\OJSXC\Db\StanzaMapper;
 use OCA\OJSXC\Http\XMPPResponse;
 use OCA\OJSXC\StanzaHandlers\IQ;
+use OCA\OJSXC\StanzaLogger;
 use OCP\AppFramework\Db\DoesNotExistException;
 use PHPUnit_Framework_TestCase;
 use Sabre\Xml\Writer;
@@ -57,7 +58,13 @@ class HttpBindControllerTest extends PHPUnit_Framework_TestCase {
 	 */
 	private $newContentContainer;
 
+	/**
+	 * @var StanzaLogger
+	 */
+	private $stanzaLogger;
+
 	public function setUp() {
+		$this->stanzaLogger = $this->getMockBuilder('OCA\OJSXC\StanzaLogger')->disableOriginalConstructor()->getMock();
 	}
 
     private function mockLock() {
@@ -103,7 +110,8 @@ class HttpBindControllerTest extends PHPUnit_Framework_TestCase {
 			$requestBody,
 			0,
 			10,
-			$this->newContentContainer
+			$this->newContentContainer,
+			$this->stanzaLogger
 		);
 	}
 
@@ -111,7 +119,7 @@ class HttpBindControllerTest extends PHPUnit_Framework_TestCase {
 		$this->setUpController('<body xmlns=\'http://jabber.org/protocol/httpbind\'/>');
 		$this->mockLock();
 		$ex = new DoesNotExistException('');
-		$expResponse = new XMPPResponse();
+		$expResponse = new XMPPResponse($this->stanzaLogger);
 
 		$this->newContentContainer->expects($this->once())
 			->method('getCount')
@@ -139,7 +147,7 @@ class HttpBindControllerTest extends PHPUnit_Framework_TestCase {
 		$this->setUpController('<body rid=\'897878797\' xmlns=\'http://jabber.org/protocol/httpbind\' sid=\'7862\'/>');
 		$this->mockLock();
 
-		$expResponse = new XMPPResponse($result);
+		$expResponse = new XMPPResponse($this->stanzaLogger, $result);
 
 		$this->iqHandler->expects($this->never())
 				->method('handle')
@@ -179,7 +187,7 @@ class HttpBindControllerTest extends PHPUnit_Framework_TestCase {
 		$this->setUpController('<body rid=\'897878797\' xmlns=\'http://jabber.org/protocol/httpbind\' sid=\'7862\'/>');
 		$this->mockLock();
 
-		$expResponse = new XMPPResponse($result);
+		$expResponse = new XMPPResponse($this->stanzaLogger, $result);
 
 		$this->iqHandler->expects($this->never())
 				->method('handle')
@@ -233,7 +241,7 @@ class HttpBindControllerTest extends PHPUnit_Framework_TestCase {
 	 */
 	public function testInvalidXML() {
 		$ex = new DoesNotExistException('');
-		$expResponse = new XMPPResponse();
+		$expResponse = new XMPPResponse($this->stanzaLogger);
 
 		$this->setUpController('<x>');
         $this->mockLock();
@@ -286,7 +294,7 @@ class HttpBindControllerTest extends PHPUnit_Framework_TestCase {
 		$ex = new DoesNotExistException('');
 		$this->setUpController($body);
         $this->mockLock();
-		$expResponse = new XMPPResponse();
+		$expResponse = new XMPPResponse($this->stanzaLogger);
 		$expResponse->write($expected);
 
 		$this->iqHandler->expects($handlerCount)
@@ -313,7 +321,7 @@ class HttpBindControllerTest extends PHPUnit_Framework_TestCase {
 		$this->setUpController('<body rid=\'897878797\' xmlns=\'http://jabber.org/protocol/httpbind\' sid=\'7862\'/>');
         $this->mockLock();
 
-		$expResponse = new XMPPResponse($result);
+		$expResponse = new XMPPResponse($this->stanzaLogger, $result);
 
 		$this->iqHandler->expects($this->never())
 			->method('handle')
@@ -346,7 +354,7 @@ class HttpBindControllerTest extends PHPUnit_Framework_TestCase {
 		$this->setUpController($body);
         $this->mockLock();
 
-		$expResponse = new XMPPResponse();
+		$expResponse = new XMPPResponse($this->stanzaLogger);
 
 		$this->messageHandler->expects($this->once())
 			->method('handle');
@@ -378,7 +386,7 @@ XML;
 		$this->setUpController($body);
 		$this->mockLock();
 
-		$expResponse = new XMPPResponse();
+		$expResponse = new XMPPResponse($this->stanzaLogger);
 		$this->messageHandler->expects($this->any())
 			->method('handle');
 
@@ -433,7 +441,7 @@ XML;
 		$this->setUpController($body);
         $this->mockLock();
 
-		$expResponse = new XMPPResponse(new Stanza('test'));
+		$expResponse = new XMPPResponse($this->stanzaLogger, new Stanza('test'));
 
 		$this->messageHandler->expects($this->once())
 			->method('handle');
@@ -462,7 +470,7 @@ XML;
 	public function testPresenceReturnNothingHandler() {
 		$body = "<body xmlns='http://jabber.org/protocol/httpbind'><presence xmlns='jabber:client'><show>chat</show></presence></body>";
 		$ex = new DoesNotExistException('');
-		$expResponse = new XMPPResponse();
+		$expResponse = new XMPPResponse($this->stanzaLogger);
 
 		$this->setUpController($body);
         $this->mockLock();
@@ -489,7 +497,7 @@ XML;
 	public function testPresenceHandler() {
 		$body = "<body xmlns='http://jabber.org/protocol/httpbind'><presence xmlns='jabber:client'><show>chat</show></presence></body>";
 		$ex = new DoesNotExistException('');
-		$expResponse = new XMPPResponse();
+		$expResponse = new XMPPResponse($this->stanzaLogger);
 
 		$pres1 = new Presence();
 		$pres1->setPresence('online');
@@ -533,7 +541,7 @@ XML;
 		$body = '<body rid=\'897878985\' xmlns=\'http://jabber.org/protocol/httpbind\' sid=\'7862\'/>';
 		$this->setUpController($body);
         $this->mockLock();
-		$expResponse = new XMPPResponse();
+		$expResponse = new XMPPResponse($this->stanzaLogger);
 
 		$this->stanzaMapper->expects($this->exactly(10))
 			->method('findByTo')
