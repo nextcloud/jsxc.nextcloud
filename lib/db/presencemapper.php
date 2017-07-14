@@ -22,7 +22,7 @@ class PresenceMapper extends Mapper {
 	 * TODO We could introduce a variable in the DB which indicates this already
 	 * TODO happened x minutes ago so we shouldn't do this every request.
 	 */
-	private static $updatedPresense = false;
+	private static $updatedPresence = false;
 
 	/**
 	 * @var array of userid's which are connected.
@@ -48,6 +48,16 @@ class PresenceMapper extends Mapper {
 	 * @var int $timeout
 	 */
 	private $timeout;
+
+	/**
+	 * @var string the current host which the user is connected to
+	 */
+	private $host;
+
+	/**
+	 * @var null|string the userId of the current user
+	 */
+	private $userId;
 
 	/**
 	 * PresenceMapper constructor.
@@ -97,8 +107,8 @@ class PresenceMapper extends Mapper {
 		$stmt = $this->execute("SELECT * FROM `*PREFIX*ojsxc_presence` WHERE `userid` != ?", [$this->userId]);
 		$results = [];
 		while($row = $stmt->fetch()){
-			$row['from'] = $row['userid'] . '@' . $this->host;
-			$row['to'] = $this->userId . '@' . $this->host;
+			$row['from'] = $row['userid'] . '@' . $this->host . '/internal';
+			$row['to'] = $this->userId . '@' . $this->host . '/internal';
 			$results[] = $this->mapRowToEntity($row);
 		}
 		$stmt->closeCursor();
@@ -152,12 +162,12 @@ class PresenceMapper extends Mapper {
 	 * contacted the server for $this->timeout seconds.
 	 */
 	public function updatePresence() {
-		if (!self::$updatedPresense) {
-			self::$updatedPresense = true;
+		if (!self::$updatedPresence) {
+			self::$updatedPresence = true;
 
 			$time = time() - $this->timeout;
 
-			// first find all users who where offline for more than 30 seconds TOOD
+			// first find all users who where offline for more than 30 seconds
 			$stmt = $this->execute("SELECT `userid` FROM `*PREFIX*ojsxc_presence` WHERE `presence` != 'unavailable' AND `userid` != ? AND `last_active` < ?",
 				[$this->userId, $time]);
 
@@ -172,19 +182,18 @@ class PresenceMapper extends Mapper {
 			// broadcast the new presence
 			$connectedUsers = $this->getConnectedUsers();
 
-
 			$onlineUsers = array_diff($connectedUsers, $inactiveUsers); // filter out the inactive users, since we use a cache mechanism
 
-			$presenceToSend = new PresenceEntity();
-			$presenceToSend->setPresence('unavailable');
 			foreach ($inactiveUsers as $inactiveUser) {
+				$presenceToSend = new PresenceEntity();
+				$presenceToSend->setPresence('unavailable');
 				$presenceToSend->setFrom($inactiveUser);
 				foreach ($onlineUsers as $user) {
 					$presenceToSend->setTo($user);
 					$this->messageMapper->insert($presenceToSend);
 				}
-				$presenceToSend->setTo($this->userId . '@' . $this->host);
-				$presenceToSend->setFrom($inactiveUser . '@' . $this->host);
+				$presenceToSend->setTo($this->userId . '@' . $this->host . '/internal');
+				$presenceToSend->setFrom($inactiveUser . '@' . $this->host . '/internal');
 				$this->newContentContainer->addStanza($presenceToSend);
 			}
 

@@ -33,7 +33,7 @@ class PresenceMapperTest extends MapperTestUtility {
 		$this->entityName = 'OCA\OJSXC\Db\Presence';
 		$this->mapperName = 'PresenceMapper';
 		parent::setUp();
-		$this->setValueOfPrivateProperty($this->mapper, 'updatedPresense', false);
+		$this->setValueOfPrivateProperty($this->mapper, 'updatedPresence', false);
 		$this->setValueOfPrivateProperty($this->mapper, 'fetchedConnectedUsers', false);
 		$this->setValueOfPrivateProperty($this->mapper, 'connectedUsers', []);
 		$this->newContentContainer = $this->container->query('NewContentContainer');
@@ -199,15 +199,15 @@ class PresenceMapperTest extends MapperTestUtility {
 		$expected1->setUserid('derp');
 		$expected1->setPresence('online');
 		$expected1->setLastActive(23434353);
-		$expected1->setTo('admin@localhost');
-		$expected1->setFrom('derp@localhost');
+		$expected1->setTo('admin@localhost/internal');
+		$expected1->setFrom('derp@localhost/internal');
 
 		$expected2 = new PresenceEntity();
 		$expected2->setUserid('derpina');
 		$expected2->setPresence('chat');
 		$expected2->setLastActive(23445645634);
-		$expected2->setTo('admin@localhost');
-		$expected2->setFrom('derpina@localhost');
+		$expected2->setTo('admin@localhost/internal');
+		$expected2->setFrom('derpina@localhost/internal');
 		return [
 			[
 				[$input1, $input2, $input3, $input4, $input5],
@@ -309,13 +309,13 @@ class PresenceMapperTest extends MapperTestUtility {
 
 		$expStanza1 = new PresenceEntity();
 		$expStanza1->setPresence('unavailable');
-		$expStanza1->setFrom('derp' . '@localhost');
-		$expStanza1->setTo('admin' . '@localhost');
+		$expStanza1->setFrom('derp' . '@localhost/internal');
+		$expStanza1->setTo('admin' . '@localhost/internal');
 
 		$expStanza2 = new PresenceEntity();
 		$expStanza2->setPresence('unavailable');
-		$expStanza2->setFrom('derpina' . '@localhost');
-		$expStanza2->setTo('admin' . '@localhost');
+		$expStanza2->setFrom('derpina' . '@localhost/internal');
+		$expStanza2->setTo('admin' . '@localhost/internal');
 
 		return [
 			[
@@ -390,7 +390,7 @@ class PresenceMapperTest extends MapperTestUtility {
 		$newContent = $this->newContentContainer->getStanzas();
 		sort($expNewContent);
 		sort($newContent);
-		$this->assertObjectDbResultsEqual($expNewContent, $newContent, ['userid', 'presence', 'lastActive']);
+		$this->assertObjectDbResultsEqual($expNewContent, $newContent, ['userid', 'presence', 'lastActive', 'to', 'from']);
 		$this->assertEquals(0, $this->newContentContainer->getCount()); // stanzas will be removed once fetched
 
 		$stanzasToSend = $this->fetchAllAsArray('*PREFIX*ojsxc_stanzas');
