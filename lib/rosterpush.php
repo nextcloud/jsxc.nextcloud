@@ -10,7 +10,7 @@ use OCP\IUserManager;
 use OCP\IUser;
 use OCP\IUserSession;
 
-class RosterPush {
+class rosterpush {
 
 	/**
 	 * @var IUserManager
