@@ -309,13 +309,13 @@ class PresenceMapperTest extends MapperTestUtility {
 
 		$expStanza1 = new PresenceEntity();
 		$expStanza1->setPresence('unavailable');
-		$expStanza1->setFrom('derp' . '@localhost');
-		$expStanza1->setTo('admin' . '@localhost');
+		$expStanza1->setFrom('derp' . '@localhost/internal');
+		$expStanza1->setTo('admin' . '@localhost/internal');
 
 		$expStanza2 = new PresenceEntity();
 		$expStanza2->setPresence('unavailable');
-		$expStanza2->setFrom('derpina' . '@localhost');
-		$expStanza2->setTo('admin' . '@localhost');
+		$expStanza2->setFrom('derpina' . '@localhost/internal');
+		$expStanza2->setTo('admin' . '@localhost/internal');
 
 		return [
 			[
@@ -390,7 +390,7 @@ class PresenceMapperTest extends MapperTestUtility {
 		$newContent = $this->newContentContainer->getStanzas();
 		sort($expNewContent);
 		sort($newContent);
-		$this->assertObjectDbResultsEqual($expNewContent, $newContent, ['userid', 'presence', 'lastActive']);
+		$this->assertObjectDbResultsEqual($expNewContent, $newContent, ['userid', 'presence', 'lastActive', 'to', 'from']);
 		$this->assertEquals(0, $this->newContentContainer->getCount()); // stanzas will be removed once fetched
 
 		$stanzasToSend = $this->fetchAllAsArray('*PREFIX*ojsxc_stanzas');
