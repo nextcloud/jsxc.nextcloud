@@ -53,7 +53,8 @@ namespace OCA\OJSXC\Http {
 		 * @dataProvider writingProvider
 		 */
 		public function testWriting($stanzas, $expected) {
-			$response = new XMPPResponse();
+			$stanzaLogger = $this->getMockBuilder('OCA\OJSXC\StanzaLogger')->disableOriginalConstructor()->getMock();
+			$response = new XMPPResponse($stanzaLogger);
 			foreach ($stanzas as $stanza) {
 				$response->write($stanza);
 			}
