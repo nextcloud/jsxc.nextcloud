@@ -47,7 +47,7 @@ class Application extends App {
 			return new HttpBindController(
 				$c->query('AppName'),
 				$c->query('Request'),
-				$c->query('UserId'),
+				$c->query('OJSXC_UserId'),
 				$c->query('StanzaMapper'),
 				$c->query('IQHandler'),
 				$c->query('MessageHandler'),
@@ -95,7 +95,7 @@ class Application extends App {
 			return new PresenceMapper(
 				$container->getServer()->getDatabaseConnection(),
 				$c->query('Host'),
-				$c->query('UserId'),
+				$c->query('OJSXC_UserId'),
 				$c->query('MessageMapper'),
 				$c->query('NewContentContainer'),
 				self::$config['polling']['timeout']
@@ -108,7 +108,7 @@ class Application extends App {
 		 */
 		$container->registerService('IQHandler', function(IContainer $c) {
 			return new IQ(
-				$c->query('UserId'),
+				$c->query('OJSXC_UserId'),
 				$c->query('Host'),
 				$c->query('OCP\IUserManager')
 			);
@@ -116,7 +116,7 @@ class Application extends App {
 
 		$container->registerService('PresenceHandler', function(IContainer $c) {
 			return new Presence(
-				$c->query('UserId'),
+				$c->query('OJSXC_UserId'),
 				$c->query('Host'),
 				$c->query('PresenceMapper'),
 				$c->query('MessageMapper')
@@ -125,7 +125,7 @@ class Application extends App {
 
 		$container->registerService('MessageHandler', function(IContainer $c) {
 			return new Message(
-				$c->query('UserId'),
+				$c->query('OJSXC_UserId'),
 				$c->query('Host'),
 				$c->query('MessageMapper')
 			);
@@ -178,6 +178,14 @@ class Application extends App {
 			);
 		});
 
+		/**
+		 * A modified userID for use in OJSXC.
+		 * This is automatically made lowercase.
+		 */
+		$container->registerService('OJSXC_UserId', function(IContainer $c) {
+			return strtolower($c->query('UserId'));
+		});
+
 	}
 
 	/**
@@ -193,7 +201,7 @@ class Application extends App {
 			} else if ($cache->isAvailable()) {
 				$memcache = $cache->create('ojsxc');
 				return new MemLock(
-					$c->query('UserId'),
+					$c->query('OJSXC_UserId'),
 					$memcache
 				);
 			} else {
@@ -203,7 +211,7 @@ class Application extends App {
 
 		// default
 		return new DbLock(
-			$c->query('UserId'),
+			$c->query('OJSXC_UserId'),
 			$c->query('OCP\IConfig'),
 			$c->getServer()->getDatabaseConnection()
 		);
