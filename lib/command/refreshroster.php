@@ -2,14 +2,14 @@
 
 namespace OCA\OJSXC\Command;
 
-use OCA\OJSXC\rosterpush;
+use OCA\OJSXC\RosterPush;
 use OCP\IUserManager;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class refreshroster extends Command {
+class RefreshRoster extends Command {
 
 	/**
 	 * @var IUserManager
@@ -17,12 +17,12 @@ class refreshroster extends Command {
 	private $userManager;
 
 	/**
-	 * @var rosterpush
+	 * @var RosterPush
 	 */
 	private $rosterPush;
 
 	public function __construct(IUserManager $userManager,
-								rosterpush $rosterPush) {
+								RosterPush $rosterPush) {
 		parent::__construct();
 		$this->userManager = $userManager;
 		$this->rosterPush = $rosterPush;

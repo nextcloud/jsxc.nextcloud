@@ -4,13 +4,12 @@ namespace OCA\OJSXC;
 
 use OCA\OJSXC\Db\IQRosterPush;
 use OCA\OJSXC\Db\IQRosterPushMapper;
-use OCA\OJSXC\Db\PresenceMapper;
 use OCP\IUserManager;
 
 use OCP\IUser;
 use OCP\IUserSession;
 
-class rosterpush {
+class RosterPush {
 
 	/**
 	 * @var IUserManager
