@@ -94,8 +94,8 @@ $(document).ready(function() {
    }
 
    $('#ojsxc [name=serverType]').change(function(){
-      $('#ojsxc .ojsxc-external, #ojsxc .ojsxc-internal').hide();
-      $('#ojsxc .ojsxc-external, #ojsxc .ojsxc-internal').find('.required').removeAttr('required');
+      $('#ojsxc .ojsxc-external, #ojsxc .ojsxc-internal, #ojsxc .ojsxc-managed').hide();
+      $('#ojsxc .ojsxc-external, #ojsxc .ojsxc-internal, #ojsxc .ojsxc-managed').find('.required').removeAttr('required');
       $('#ojsxc .ojsxc-' + $(this).val()).show();
       $('#ojsxc .ojsxc-' + $(this).val()).find('.required').attr('required', 'true');
    });
@@ -207,12 +207,43 @@ $(document).ready(function() {
       }
    });
 
-   var apiUrl = window.location.origin + OC.filePath('ojsxc', 'ajax', 'externalApi.php');
-   $('#jsxc-api-url').val(apiUrl);
-
    $('#ojsxc input[readonly]').focus(function(){
       if(typeof this.select === 'function') {
          this.select();
       }
+   });
+
+   $('#ojsxc-register').click(function(){
+      var el = $(this);
+      el.prop('disabled', 'disabled');
+      el.val(el.attr('data-toggle-value'));
+
+      var msgEl = el.parents('.ojsxc-managed').find('.msg');
+
+      $.ajax({
+         url: OC.filePath('ojsxc', 'ajax', 'registerManagedServer.php'),
+      }).always(function(responseJSON) {
+         if (responseJSON && responseJSON.result === 'success') {
+            $('.ojsxc-managed-registration').hide();
+
+            msgEl.addClass('jsxc_success');
+            msgEl.text('Congratulations! You got your own XMPP server. Please log out and in again.');
+
+            var submitEl = $('#ojsxc input[type="submit"]');
+            submitEl.prop('disabled', 'disabled');
+            submitEl.val('Please reload this page to continue');
+
+            return;
+         }
+
+         if (responseJSON.responseJSON) {
+            responseJSON = responseJSON.responseJSON;
+         }
+
+         var errorMsg = (responseJSON && responseJSON.data) ? responseJSON.data.msg : 'unknown error';
+
+         msgEl.addClass('jsxc_fail');
+         msgEl.text('Sorry we couldn\'t complete your registration: ' + errorMsg);
+      });
    });
 });

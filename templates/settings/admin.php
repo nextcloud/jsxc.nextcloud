@@ -10,10 +10,11 @@ if (function_exists('script')) {
 <div class="section">
 	<h2>JavaScript Xmpp Client</h2>
 	<form id="ojsxc">
+		<h3>Server type</h3>
 		<div class="form-group">
 			<label class="text-left form-no-padding">
 				<input type="radio" name="serverType" required="required" value="internal" <?php if($_['serverType'] === 'internal')echo 'checked'; ?> />
-				Internal (Experimental)
+				Internal
 			</label>
 			<em>Limited functionality only: No clients besides JSXC in ownCloud, no multi-user chat, no server-to-server federations.</em>
 		</div>
@@ -23,6 +24,13 @@ if (function_exists('script')) {
 				External
 			</label>
 			<em>Choose this option to use your own XMPP server.</em>
+		</div>
+		<div class="form-group">
+			<label class="text-left form-no-padding">
+				<input type="radio" name="serverType" class="required" required="required" value="managed" <?php if($_['serverType'] === 'managed')echo 'checked'; ?> />
+				Managed (Beta service)
+			</label>
+			<em>Get your own full featured XMPP server directly hosted by the core team of JSXC in Germany. For more information visit <a target="_blank" href="#">[todo]</a>.</em>
 		</div>
 
 		<fieldset>
@@ -72,6 +80,43 @@ if (function_exists('script')) {
 		</fieldset>
 
 		<fieldset>
+			<div class="ojsxc-managed hidden">
+				<h3>Registration</h3>
+				<?php if($_['managedServer'] === 'registered'): ?>
+					<div class="msg jsxc_success">Congratulations! You use our managed server.</div>
+				<?php else: ?>
+					<div class="msg"></div>
+				<?php endif; ?>
+
+				<div class="ojsxc-managed-registration <?php if($_['managedServer'] === 'registered'){echo 'hidden';} ?>">
+					<p class="text">In order to register your XMPP server we will send the following information to our registration server:</p>
+
+					<div class="form-group">
+						<label>API URL</label>
+						<div class="form-col">
+							<input id="ojsxc-managed-api-url" type="text" readonly="readonly" value="<?php p($_['apiUrl']); ?>" />
+						</div>
+					</div>
+					<div class="form-group">
+						<label>Secure API token</label>
+						<div class="form-col">
+							<input id="ojsxc-managed-api-secret" type="text" readonly="readonly" value="<?php p($_['apiSecret']); ?>" />
+						</div>
+					</div>
+					<div class="form-group">
+						<label>Your user id</label>
+						<div class="form-col">
+							<input id="ojsxc-managed-user-id" type="text" readonly="readonly" value="<?php p($_['userId']); ?>" />
+						</div>
+					</div>
+					<div class="form-col-offset">
+						<input id="ojsxc-register" type="button" value="Register" data-toggle-value="Processing registration" />
+					</div>
+				</div>
+			</div>
+		</fieldset>
+
+		<fieldset>
 			<div class="ojsxc-external hidden">
 				<h3>External authentication</h3>
 				<p class="text">This information is needed for the ejabberd/prosody
@@ -80,7 +125,7 @@ if (function_exists('script')) {
 				<div class="form-group">
 					<label>API URL</label>
 					<div class="form-col">
-						<input id="jsxc-api-url" type="text" readonly="readonly" />
+						<input id="jsxc-api-url" type="text" readonly="readonly" value="<?php p($_['apiUrl']); ?>" />
 					</div>
 				</div>
 				<div class="form-group">

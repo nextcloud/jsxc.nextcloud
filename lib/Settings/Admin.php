@@ -25,6 +25,9 @@ class Admin implements ISettings
 
         $serverType = $this->config->getAppValue('ojsxc', 'serverType');
 
+        $apiUrl = \OC::$server->getURLGenerator()->linkTo('ojsxc', 'ajax/externalApi.php');
+        $apiUrl = \OC::$server->getURLGenerator()->getAbsoluteURL($apiUrl);
+
         $parameters = [
            'serverType' => (!empty($serverType))? $serverType : 'internal',
            'boshUrl' => $this->config->getAppValue('ojsxc', 'boshUrl'),
@@ -42,7 +45,10 @@ class Admin implements ISettings
            'chromeExtension' => $this->config->getAppValue('ojsxc', 'chromeExtension'),
            'timeLimitedToken' => $this->config->getAppValue('ojsxc', 'timeLimitedToken'),
            'externalServices' => $externalServices,
-           'apiSecret' => $this->config->getAppValue('ojsxc', 'apiSecret')
+           'apiUrl' => $apiUrl,
+           'apiSecret' => $this->config->getAppValue('ojsxc', 'apiSecret'),
+           'userId' => \OC::$server->getUserSession()->getUser()->getUID(),
+           'managedServer' => $this->config->getAppValue('ojsxc', 'managedServer')
         ];
 
         return new TemplateResponse('ojsxc', 'settings/admin', $parameters);

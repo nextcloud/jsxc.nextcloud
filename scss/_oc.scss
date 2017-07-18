@@ -98,10 +98,18 @@
     &[type='checkbox'] {
       margin: 13px 0;
       width: auto;
+      min-height: auto;
+      height: auto;
     }
 
     &[type='radio'] {
       width: auto;
+      min-height: auto;
+      height: auto;
+    }
+
+    &[readonly] {
+      background-color: #f1f1f1;
     }
 
     &:invalid {

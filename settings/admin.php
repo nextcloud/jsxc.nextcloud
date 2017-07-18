@@ -7,6 +7,9 @@ OCP\Util::addScript('ojsxc', 'settings/admin');
 $config = \OC::$server->getConfig();
 $tmpl = new OCP\Template('ojsxc', 'settings/admin');
 
+$apiUrl = \OC::$server->getURLGenerator()->linkTo('ojsxc', 'ajax/externalApi.php');
+$apiUrl = \OC::$server->getURLGenerator()->getAbsoluteURL($apiUrl);
+
 $serverType = $config->getAppValue('ojsxc', 'serverType');
 
 $tmpl->assign('serverType', (!empty($serverType))? $serverType : 'internal');
@@ -28,7 +31,10 @@ $externalServices = $config->getAppValue('ojsxc', 'externalServices');
 $externalServices = explode("|", $externalServices);
 $tmpl->assign('externalServices', $externalServices);
 
+$tmpl->assign('apiUrl', $apiUrl);
 $tmpl->assign('apiSecret', $config->getAppValue('ojsxc', 'apiSecret'));
 $tmpl->assign('timeLimitedToken', $config->getAppValue('ojsxc', 'timeLimitedToken'));
+$tmpl->assign('userId', \OC::$server->getUserSession()->getUser()->getUID());
+$tmpl->assign('managedServer', $this->config->getAppValue('ojsxc', 'managedServer'));
 
 return $tmpl->fetchPage();

@@ -28,6 +28,9 @@ $this->create('ojsxc_ajax_getUsers', 'ajax/getUsers.php')
 $this->create('ojsxc_ajax_externalApi', 'ajax/externalApi.php')
 	->actionInclude('ojsxc/ajax/externalApi.php');
 
+	$this->create('ojsxc_ajax_registerManagedServer', 'ajax/registerManagedServer.php')
+		->actionInclude('ojsxc/ajax/registerManagedServer.php');
+
 $application = new Application();
 $application->registerRoutes($this, array(
 	'routes' => array(
