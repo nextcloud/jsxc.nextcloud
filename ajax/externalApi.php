@@ -26,6 +26,18 @@ function stringOrEmpty($s) {
    }
 }
 
+function getUsername() {
+   if(!empty($_POST['username'])) {
+      if(!empty($_POST['domain'])) {
+         return $_POST['username'] . "@" . $_POST['domain'];
+      } else {
+         return $_POST['username'];
+      }
+   } else {
+      abort('No username provided');
+   }
+}
+
 function checkPassword() {
    $currentUser = null;
 
@@ -78,6 +90,35 @@ function isUser() {
    ));
 }
 
+function sharedRoster() {
+   $username = getUsername();
+   $roster = [];
+
+   $userGroups = \OC::$server->getGroupManager()->getUserIdGroups($username);
+
+   foreach($userGroups as $userGroup) {
+      foreach($userGroup->getUsers() as $user) {
+         $uid = $user->getUID();
+
+         if(!$roster[$uid]) {
+            $roster[$uid] = [
+               'name' => $user->getDisplayName(),
+               'groups' => []
+            ];
+         }
+
+         $roster[$uid]['groups'][] = $userGroup->getDisplayName();
+      }
+   }
+
+   echo json_encode(array(
+      'result' => 'success',
+      'data' => array(
+         'sharedRoster' => $roster
+      )
+   ));
+}
+
 // check if we have a signature
 if ( ! isset( $_SERVER[ 'HTTP_X_JSXC_SIGNATURE' ] ) )
         abort( 'HTTP header "X-JSXC-Signature" is missing.' );
@@ -103,6 +144,9 @@ switch($_POST['operation']) {
    case 'isuser':
       isUser();
       break;
+   case 'sharedroster':
+      sharedRoster();
+      break;
    default:
-      abort( "Unsupported operation." );
+      abort( "Unsupported operation.");
 }
