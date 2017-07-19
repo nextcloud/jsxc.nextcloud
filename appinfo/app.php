@@ -7,6 +7,8 @@
  * Released under the MIT license
  * @author Klaus Herberth <klaus@jsxc.org>
  */
+use OCA\OJSXC\AppInfo\Application;
+
 if (!interface_exists('\OCP\Settings\ISettings')) {
 	\OCP\App::registerAdmin ( 'ojsxc', 'settings/admin' );
 }
@@ -68,6 +70,9 @@ if(!$apiSecret) {
    $apiSecret = \OC::$server->getSecureRandom()->generate(23);
    $config->setAppValue('ojsxc', 'apiSecret', $apiSecret);
 }
+
+$app = new Application();
+$app->getContainer()->query('UserHooks')->register();
 
 if (!class_exists("\\Sabre\\Xml\\Version")) {
     require_once __DIR__ . "/../vendor/autoload.php";

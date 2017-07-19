@@ -15,6 +15,11 @@ use Sabre\Xml\Writer;
 class IQ extends StanzaHandler {
 
 	/**
+	 * @var IUserManager
+	 */
+	private $userManager;
+
+	/**
 	 * IQ constructor.
 	 *
 	 * @param string $userId
@@ -34,13 +39,13 @@ class IQ extends StanzaHandler {
 	public function handle(array $stanza) {
 		$this->to = $this->getAttribute($stanza, 'to');
 
-		if ($stanza['value'][0]['name'] === '{jabber:iq:roster}query'){
+		if ($stanza['value'][0]['name'] === '{jabber:iq:roster}query') {
 			$id = $stanza['attributes']['id'];
 			$iqRoster = new IQRoster();
 			$iqRoster->setType('result');
 			$iqRoster->setTo($this->from);
 			$iqRoster->setQid($id);
-			foreach($this->userManager->search('') as $user){
+			foreach ($this->userManager->search('') as $user) {
 				if($user->getUID() !== $this->userId) {
 					$iqRoster->addItem($user->getUID() . '@' . $this->host, $user->getDisplayName());
 				}

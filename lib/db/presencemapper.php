@@ -76,8 +76,6 @@ class PresenceMapper extends Mapper {
 		$this->messageMapper = $messageMapper;
 		$this->newContentContainer = $newContentContainer;
 		$this->timeout = $timeout;
-
-		$this->updatePresence();
 	}
 
 	/**
@@ -200,4 +198,15 @@ class PresenceMapper extends Mapper {
 		}
 	}
 
+	/**
+	 * @brief Deletes the presence records of a user.
+	 * @param string $user
+	 */
+	public function deletePresence($user) {
+		$sql = "DELETE FROM `*PREFIX*ojsxc_presence` WHERE `userid` = ?";
+
+		$q = $this->db->prepare($sql);
+		$q->execute([$user]);
+
+	}
 }

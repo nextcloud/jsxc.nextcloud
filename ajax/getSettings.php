@@ -36,6 +36,7 @@ $data ['serverType'] = (!empty($serverType))? $serverType : 'internal';
 $data ['loginForm'] ['startMinimized'] = validateBoolean($config->getAppValue('ojsxc', 'xmppStartMinimized'));
 
 if ($data ['serverType'] === 'internal') {
+    $data['adminSettings']['xmppDomain'] = \OC::$server->query('Request')->getServerHost();
     echo json_encode(array(
             'result' => 'success',
             'data' => $data,

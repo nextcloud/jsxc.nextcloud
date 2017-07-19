@@ -2,12 +2,15 @@
 
 namespace OCA\OJSXC\AppInfo;
 
+use OCA\OJSXC\Command\RefreshRoster;
 use OCA\OJSXC\Controller\HttpBindController;
+use OCA\OJSXC\Db\IQRosterPushMapper;
 use OCA\OJSXC\Db\MessageMapper;
 use OCA\OJSXC\Db\PresenceMapper;
 use OCA\OJSXC\Db\Stanza;
 use OCA\OJSXC\Db\StanzaMapper;
 use OCA\OJSXC\NewContentContainer;
+use OCA\OJSXC\RosterPush;
 use OCA\OJSXC\StanzaHandlers\IQ;
 use OCA\OJSXC\StanzaHandlers\Message;
 use OCA\OJSXC\StanzaHandlers\Presence;
@@ -16,6 +19,7 @@ use OCP\AppFramework\App;
 use OCA\OJSXC\ILock;
 use OCA\OJSXC\DbLock;
 use OCA\OJSXC\MemLock;
+use OCA\OJSXC\Hooks;
 use OCP\IContainer;
 use OCP\IRequest;
 
@@ -43,7 +47,7 @@ class Application extends App {
 			return new HttpBindController(
 				$c->query('AppName'),
 				$c->query('Request'),
-				$c->query('UserId'),
+				$c->query('OJSXC_UserId'),
 				$c->query('StanzaMapper'),
 				$c->query('IQHandler'),
 				$c->query('MessageHandler'),
@@ -71,6 +75,14 @@ class Application extends App {
 			);
 		});
 
+		$container->registerService('IQRosterPushMapper', function(IContainer $c) use ($container) {
+			return new IQRosterPushMapper(
+				$container->getServer()->getDatabaseConnection(),
+				$c->query('Host'),
+				$c->query('StanzaLogger')
+			);
+		});
+
 		$container->registerService('StanzaMapper', function(IContainer $c) use ($container) {
 			return new StanzaMapper(
 				$container->getServer()->getDatabaseConnection(),
@@ -83,7 +95,7 @@ class Application extends App {
 			return new PresenceMapper(
 				$container->getServer()->getDatabaseConnection(),
 				$c->query('Host'),
-				$c->query('UserId'),
+				$c->query('OJSXC_UserId'),
 				$c->query('MessageMapper'),
 				$c->query('NewContentContainer'),
 				self::$config['polling']['timeout']
@@ -96,7 +108,7 @@ class Application extends App {
 		 */
 		$container->registerService('IQHandler', function(IContainer $c) {
 			return new IQ(
-				$c->query('UserId'),
+				$c->query('OJSXC_UserId'),
 				$c->query('Host'),
 				$c->query('OCP\IUserManager')
 			);
@@ -104,7 +116,7 @@ class Application extends App {
 
 		$container->registerService('PresenceHandler', function(IContainer $c) {
 			return new Presence(
-				$c->query('UserId'),
+				$c->query('OJSXC_UserId'),
 				$c->query('Host'),
 				$c->query('PresenceMapper'),
 				$c->query('MessageMapper')
@@ -113,7 +125,7 @@ class Application extends App {
 
 		$container->registerService('MessageHandler', function(IContainer $c) {
 			return new Message(
-				$c->query('UserId'),
+				$c->query('OJSXC_UserId'),
 				$c->query('Host'),
 				$c->query('MessageMapper')
 			);
@@ -140,6 +152,40 @@ class Application extends App {
 		});
 
 
+		$container->registerService('RosterPush', function($c) {
+			return new RosterPush(
+				$c->query('ServerContainer')->getUserManager(),
+				$c->query('ServerContainer')->getUserSession(),
+				$c->query('Host'),
+				$c->query('IQRosterPushMapper')
+			);
+		});
+
+		$container->registerService('UserHooks', function($c) {
+			return new Hooks(
+				$c->query('ServerContainer')->getUserManager(),
+				$c->query('ServerContainer')->getUserSession(),
+				$c->query('RosterPush'),
+				$c->query('PresenceMapper'),
+				$c->query('StanzaMapper')
+			);
+		});
+
+		$container->registerService('RefreshRosterCommand', function($c) {
+			return new RefreshRoster(
+				$c->query('ServerContainer')->getUserManager(),
+				$c->query('RosterPush')
+			);
+		});
+
+		/**
+		 * A modified userID for use in OJSXC.
+		 * This is automatically made lowercase.
+		 */
+		$container->registerService('OJSXC_UserId', function(IContainer $c) {
+			return strtolower($c->query('UserId'));
+		});
+
 	}
 
 	/**
@@ -155,7 +201,7 @@ class Application extends App {
 			} else if ($cache->isAvailable()) {
 				$memcache = $cache->create('ojsxc');
 				return new MemLock(
-					$c->query('UserId'),
+					$c->query('OJSXC_UserId'),
 					$memcache
 				);
 			} else {
@@ -165,7 +211,7 @@ class Application extends App {
 
 		// default
 		return new DbLock(
-			$c->query('UserId'),
+			$c->query('OJSXC_UserId'),
 			$c->query('OCP\IConfig'),
 			$c->getServer()->getDatabaseConnection()
 		);
