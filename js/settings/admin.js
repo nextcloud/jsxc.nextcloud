@@ -75,7 +75,7 @@ $(document).ready(function() {
             }
          }
 
-         if(xhr.status === 0) {
+         if (xhr.status === 0) {
             // cross-side
             fail('Cross domain request was not possible. Either your BOSH server does not send any ' +
                'Access-Control-Allow-Origin header or the content-security-policy (CSP) blocks your request. ' +
@@ -93,7 +93,7 @@ $(document).ready(function() {
       });
    }
 
-   $('#ojsxc [name=serverType]').change(function(){
+   $('#ojsxc [name=serverType]').change(function() {
       $('#ojsxc .ojsxc-external, #ojsxc .ojsxc-internal, #ojsxc .ojsxc-managed').hide();
       $('#ojsxc .ojsxc-external, #ojsxc .ojsxc-internal, #ojsxc .ojsxc-managed').find('.required').removeAttr('required');
       $('#ojsxc .ojsxc-' + $(this).val()).show();
@@ -101,7 +101,7 @@ $(document).ready(function() {
    });
    $('#ojsxc [name=serverType]:checked').change();
 
-   $('#boshUrl, #xmppDomain').on('input', function(){
+   $('#boshUrl, #xmppDomain').on('input', function() {
       var self = $(this);
       var timeout = self.data('timeout');
 
@@ -151,7 +151,7 @@ $(document).ready(function() {
             status.addClass('jsxc_fail').text('Error!');
          }
 
-         setTimeout(function(){
+         setTimeout(function() {
             status.hide('slow');
          }, 3000);
       });
@@ -182,7 +182,7 @@ $(document).ready(function() {
 
       var options = jsxc.options.get('httpUpload') || {};
 
-      var services = $('[name="externalServices[]"]').map(function(){
+      var services = $('[name="externalServices[]"]').map(function() {
          var inputField = $(this);
 
          return inputField.val() || null;
@@ -190,13 +190,13 @@ $(document).ready(function() {
 
       if (options.server && services.toArray().indexOf(options.server) < 0) {
          // insert service
-         var emptyInputFields = $('[name="externalServices[]"]').filter(function(){
+         var emptyInputFields = $('[name="externalServices[]"]').filter(function() {
             return $(this).val() === '';
          });
 
          var targetInputField;
 
-         if(emptyInputFields.length === 0) {
+         if (emptyInputFields.length === 0) {
             $(this).parents('.form-group').find('.add-input').click();
             targetInputField = $('[name="externalServices[]"]').last();
          } else {
@@ -207,21 +207,38 @@ $(document).ready(function() {
       }
    });
 
-   $('#ojsxc input[readonly]').focus(function(){
-      if(typeof this.select === 'function') {
+   $('#ojsxc input[readonly]').focus(function() {
+      if (typeof this.select === 'function') {
          this.select();
       }
    });
 
-   $('#ojsxc-register').click(function(){
+   $('#ojsxc-register').click(function() {
       var el = $(this);
+      var msgEl = el.parents('.ojsxc-managed').find('.msg');
+      var promotionCode = $('#ojsxc-managed-promotion-code').val();
+
+      if (promotionCode.length > 0 && !/^[0-9a-z]+$/i.test(promotionCode)) {
+         msgEl.addClass('jsxc_fail');
+         msgEl.text('Your promotion code is invalid.');
+
+         $('#ojsxc-managed-promotion-code').one('input', function() {
+            msgEl.removeClass('jsxc_fail');
+            msgEl.text('');
+         });
+
+         return;
+      }
+
       el.prop('disabled', 'disabled');
       el.val(el.attr('data-toggle-value'));
 
-      var msgEl = el.parents('.ojsxc-managed').find('.msg');
-
       $.ajax({
+         method: 'POST',
          url: OC.filePath('ojsxc', 'ajax', 'registerManagedServer.php'),
+         data: {
+            promotionCode: promotionCode
+         }
       }).always(function(responseJSON) {
          if (responseJSON && responseJSON.result === 'success') {
             $('.ojsxc-managed-registration').hide();

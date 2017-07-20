@@ -37,6 +37,9 @@ function parseHeaders($headers)
     return $head;
 }
 
+$promotionCode = $_POST['promotionCode'];
+$promotionCode = (preg_match('/^[0-9a-z]+$/i', $promotionCode)) ? $promotionCode : null;
+
 $apiUrl = \OC::$server->getURLGenerator()->linkTo('ojsxc', 'ajax/externalApi.php');
 $apiUrl = \OC::$server->getURLGenerator()->getAbsoluteURL($apiUrl);
 
@@ -54,7 +57,8 @@ $context  = stream_context_create(array('http' =>
             array(
                 'apiUrl' => $apiUrl,
                 'apiSecret' => $apiSecret,
-                'userId' => $userId
+                'userId' => $userId,
+                'promotionCode' => $promotionCode
             )
         )
     )

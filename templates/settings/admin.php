@@ -109,6 +109,12 @@ if (function_exists('script')) {
 							<input id="ojsxc-managed-user-id" type="text" readonly="readonly" value="<?php p($_['userId']); ?>" />
 						</div>
 					</div>
+					<div class="form-group">
+						<label for="ojsxc-managed-promotion-code">Promotion code</label>
+						<div class="form-col">
+							<input id="ojsxc-managed-promotion-code" type="text" pattern="[a-zA-Z0-9]+" />
+						</div>
+					</div>
 					<div class="form-col-offset">
 						<input id="ojsxc-register" type="button" value="Register" data-toggle-value="Processing registration" />
 					</div>
