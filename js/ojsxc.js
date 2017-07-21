@@ -257,7 +257,7 @@
     function getUsers(search, cb) {
         $.ajax({
             type: 'GET',
-            url: OC.filePath('ojsxc', 'ajax', 'getUsers.php'),
+            url: OC.generateUrl('apps/ojsxc/settings/users'),
             data: {
                 search: search
             },

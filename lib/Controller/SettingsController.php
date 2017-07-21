@@ -210,6 +210,36 @@ class SettingsController extends Controller
       return $data;
    }
 
+   /**
+   * @NoAdminRequired
+   */
+   public function getUsers($search = '') {
+      $limit = 10;
+      $offset = 0;
+
+      $preferMail = $this->getBooleanAppValue('xmppPreferMail');
+
+      $users = $this->userManager->searchDisplayName($search, $limit, $offset);
+      $response = array();
+
+      foreach($users as $user) {
+         $uid = $user->getUID();
+         $index = $uid;
+
+         if ($preferMail) {
+            $mail = $this->config->getUserValue($uid, 'settings', 'email');
+
+            if (!empty($mail)) {
+               $index = $mail;
+            }
+         }
+
+         $response[$index] = $user->getDisplayName();
+      }
+
+      return $response;
+   }
+
     private function getCurrentUser()
     {
         $currentUser = false;
