@@ -30,6 +30,7 @@ $application->registerRoutes($this, array(
 	'routes' => array(
 		array('name' => 'http_bind#index', 'url' => '/http-bind', 'verb' => 'POST'),
 		array('name' => 'settings#index', 'url' => '/settings', 'verb' => 'POST'),
+		array('name' => 'settings#setAdmin', 'url' => '/settings/admin', 'verb' => 'POST'),
 	)
 ));
 ?>

@@ -109,6 +109,50 @@ class SettingsController extends Controller
          );
    }
 
+   public function setAdmin() {
+      if ($this->isPasswordConfirmationRequired()) {
+         $l = \OC::$server->getL10N('core');
+
+         return array(
+            'status' => 'error',
+            'data' => array(
+               'message' => $l->t('Password confirmation is required')
+            )
+         );
+      }
+
+      $this->setAppValue('serverType', $_POST ['serverType']);
+      $this->setAppValue('boshUrl', trim($_POST ['boshUrl']));
+      $this->setAppValue('xmppDomain', trim($_POST ['xmppDomain']));
+      $this->setAppValue('xmppResource', trim($_POST ['xmppResource']));
+      $this->setAppValue('xmppOverwrite', $this->getCheckboxValue($_POST ['xmppOverwrite']));
+      $this->setAppValue('xmppStartMinimized', $this->getCheckboxValue($_POST ['xmppStartMinimized']));
+      $this->setAppValue('xmppPreferMail', $this->getCheckboxValue($_POST ['xmppPreferMail']));
+
+      $this->setAppValue('iceUrl', trim($_POST ['iceUrl']));
+      $this->setAppValue('iceUsername', trim($_POST ['iceUsername']));
+      $this->setAppValue('iceCredential', $_POST ['iceCredential']);
+      $this->setAppValue('iceSecret', $_POST ['iceSecret']);
+      $this->setAppValue('iceTtl', $_POST ['iceTtl']);
+
+      $this->setAppValue('timeLimitedToken', $this->getCheckboxValue($_POST ['timeLimitedToken']));
+
+      $this->setAppValue('firefoxExtension', $_POST ['firefoxExtension']);
+      $this->setAppValue('chromeExtension', $_POST ['chromeExtension']);
+
+      $externalServices = array();
+      foreach($_POST['externalServices'] as $es) {
+         if (preg_match('/^(https:\/\/)?([\w\d*][\w\d-]*)(\.[\w\d-]+)+(:[\d]+)?$/', $es)) {
+            $externalServices[] = $es;
+         }
+      }
+      $this->setAppValue('externalServices', implode('|', $externalServices));
+
+      return array(
+         'status' => 'success'
+      );
+   }
+
     private function getCurrentUser()
     {
         $currentUser = false;
@@ -175,8 +219,27 @@ class SettingsController extends Controller
         return $this->config->getAppValue($this->appName, $key);
     }
 
+    private function setAppValue($key, $value) {
+        return $this->config->setAppValue($this->appName, $key, $value);
+    }
+
     private function validateBoolean($val)
     {
         return $val === true || $val === 'true';
     }
+
+    private function isPasswordConfirmationRequired() {
+      $version = \OCP\Util::getVersion();
+      preg_match('/^([0-9]+)\.', $version, $versionMatches);
+      $majorVersion = intval($versionMatches[1]);
+
+      // copied from owncloud/settings/ajax/installapp.php
+      $lastConfirm = (int) \OC::$server->getSession()->get('last-password-confirm');
+
+      return $majorVersion >= 11 && $lastConfirm < (time() - 30 * 60 + 15);
+   }
+
+   private function getCheckboxValue($var) {
+      return (isset($var)) ? $var : 'false';
+   }
 }
