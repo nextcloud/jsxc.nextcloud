@@ -80,7 +80,7 @@ class Hooks
 	 */
 	public function onDeleteUser(IUser $user)
 	{
-		$this->rosterPush->removeRosterItem($user);
+		$this->rosterPush->removeRosterItem($user->getUID());
 
 		// delete the presence record of this user
 		$this->presenceMapper->deletePresence($user->getUID());

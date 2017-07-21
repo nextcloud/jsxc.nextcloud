@@ -39,12 +39,8 @@ class RefreshRoster extends Command
 
 	protected function execute(InputInterface $input, OutputInterface $output)
 	{
-		$users = $this->userManager->search('');
-
-		foreach ($users as $user) {
-			$this->rosterPush->createOrUpdateRosterItem($user);
-		}
-
-		$output->writeln("<info>Refreshed " . count($users) . " rosters. </info>");
+		$stats = $this->rosterPush->refreshRoster();
+		$output->writeln("Updated " . $stats["updated"] . " roster items");
+		$output->writeln("Removed " . $stats["removed"] . " roster items");
 	}
 }
