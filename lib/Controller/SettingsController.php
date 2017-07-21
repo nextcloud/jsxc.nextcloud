@@ -271,9 +271,11 @@ class SettingsController extends Controller
         return $this->validateBoolean($this->getAppValue($key));
     }
 
-    private function getAppValue($key, $default)
+    private function getAppValue($key, $default = null)
     {
-        return $this->config->getAppValue($this->appName, $key, $default);
+        $value = $this->config->getAppValue($this->appName, $key, $default);
+
+        return (empty($value)) ? $default : $value;
     }
 
     private function setAppValue($key, $value) {
