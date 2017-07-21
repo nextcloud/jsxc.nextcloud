@@ -199,7 +199,7 @@
     function loadSettings(username, password, cb) {
         $.ajax({
             type: 'POST',
-            url: OC.filePath('ojsxc', 'ajax', 'getSettings.php'),
+            url: OC.generateUrl('apps/ojsxc/settings'),
             data: {
                 username: username,
                 password: password

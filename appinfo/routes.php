@@ -10,9 +10,6 @@
 
 use \OCA\OJSXC\AppInfo\Application;
 
-$this->create('ojsxc_ajax_getsettings', 'ajax/getSettings.php')
-	->actionInclude('ojsxc/ajax/getSettings.php');
-
 $this->create('ojsxc_ajax_getturncredentials', 'ajax/getTurnCredentials.php')
 	->actionInclude('ojsxc/ajax/getTurnCredentials.php');
 
@@ -32,6 +29,7 @@ $application = new Application();
 $application->registerRoutes($this, array(
 	'routes' => array(
 		array('name' => 'http_bind#index', 'url' => '/http-bind', 'verb' => 'POST'),
+		array('name' => 'settings#index', 'url' => '/settings', 'verb' => 'POST'),
 	)
 ));
 ?>

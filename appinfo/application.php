@@ -2,6 +2,7 @@
 
 namespace OCA\OJSXC\AppInfo;
 
+use OCA\OJSXC\Controller\SettingsController;
 use OCA\OJSXC\Controller\HttpBindController;
 use OCA\OJSXC\Db\MessageMapper;
 use OCA\OJSXC\Db\PresenceMapper;
@@ -57,6 +58,15 @@ class Application extends App {
 				self::$config['polling']['max_cycles'],
 				$c->query('NewContentContainer'),
 				$c->query('StanzaLogger')
+			);
+		});
+
+		$container->registerService('SettingsController', function(IContainer $c) {
+			return new SettingsController(
+				$c->query('AppName'),
+				$c->query('Request'),
+				$c->query('Config'),
+				$c->query('UserManager')
 			);
 		});
 
