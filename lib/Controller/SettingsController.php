@@ -54,6 +54,8 @@ class SettingsController extends Controller
          );
 
        if ($data ['serverType'] === 'internal') {
+           $data['adminSettings']['xmppDomain'] = $this->request->getServerHost();
+
            return array(
                'result' => 'success',
                'data' => $data,
