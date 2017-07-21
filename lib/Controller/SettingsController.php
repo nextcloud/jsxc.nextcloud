@@ -153,6 +153,26 @@ class SettingsController extends Controller
       );
    }
 
+   /**
+   * @NoAdminRequired
+   */
+   public function setUser() {
+      $uid = $this->userSession->getUser()->getUID();
+
+      $options = $this->config->getUserValue($uid, 'ojsxc', 'options');
+      $options = json_decode($options, true);
+
+      foreach($_POST as $key => $val) {
+         $options[$key] = $val;
+      }
+
+      $this->config->setUserValue($uid, 'ojsxc', 'options', json_encode($options));
+
+      return array(
+         'status' => 'success'
+      );
+   }
+
     private function getCurrentUser()
     {
         $currentUser = false;

@@ -16,12 +16,12 @@
 
          $.ajax({
             method: 'POST',
-            url: OC.filePath('ojsxc', 'ajax', 'setUserSettings.php'),
+            url: OC.generateUrl('apps/ojsxc/settings/user'),
             data: {
                loginForm: loginFormData
             },
             success: function(data){
-               if (data === 'true') {
+               if (data && data.status === 'success') {
                   console.log('loginFormEnable saved.');
                }
             }
