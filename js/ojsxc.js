@@ -332,7 +332,7 @@
             rosterAppend: 'body',
             root: oc_appswebroots.ojsxc + '/js/jsxc',
             RTCPeerConfig: {
-                url: OC.filePath('ojsxc', 'ajax', 'getTurnCredentials.php')
+                url: OC.generateUrl('apps/ojsxc/settings/iceServers')
             },
             displayRosterMinimized: function() {
                 return OC.currentUser != null;

@@ -32,6 +32,7 @@ $application->registerRoutes($this, array(
 		array('name' => 'settings#index', 'url' => '/settings', 'verb' => 'POST'),
 		array('name' => 'settings#setAdmin', 'url' => '/settings/admin', 'verb' => 'POST'),
 		array('name' => 'settings#setUser', 'url' => '/settings/user', 'verb' => 'POST'),
+		array('name' => 'settings#getIceServers', 'url' => '/settings/iceServers', 'verb' => 'GET'),
 	)
 ));
 ?>

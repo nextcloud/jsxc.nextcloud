@@ -173,6 +173,43 @@ class SettingsController extends Controller
       );
    }
 
+   /**
+   * @NoAdminRequired
+   */
+   public function getIceServers() {
+      $secret = $this->getAppValue('iceSecret');
+      $uid = $this->userSession->getUser()->getUID();
+
+      $ttl = $this->getAppValue('iceTtl',  3600 * 24); // one day (according to TURN-REST-API)
+      $url = $this->getAppValue('iceUrl');
+      $url = preg_match('/^(turn|stun):/', $url) || empty($url) ? $url : "turn:$url";
+
+      $usernameTRA = $secret ? (time() + $ttl).':'.$uid : $uid;
+      $username = $this->getAppValue('iceUsername', '');
+      $username = (!empty($username)) ? $username : $usernameTRA;
+
+      $credentialTRA = ($secret) ? base64_encode(hash_hmac('sha1', $username, $secret, true)) : '';
+      $credential = $this->getAppValue('iceCredential', '');
+      $credential = (!empty($credential)) ? $credential : $credentialTRA;
+
+      if (!empty($url)) {
+        $data = array(
+           'ttl' => $ttl,
+           'iceServers' => array(
+              array(
+                 'urls' => array($url),
+                 'credential' => $credential,
+                 'username' => $username,
+              ),
+           ),
+        );
+      } else {
+        $data = array();
+      }
+
+      return $data;
+   }
+
     private function getCurrentUser()
     {
         $currentUser = false;
@@ -218,7 +255,7 @@ class SettingsController extends Controller
                     if ($prop !== 'xmpp' || $data ['xmpp'] ['overwrite']) {
                         foreach ($value as $key => $v) {
                             if ($v !== '') {
-                                $data [$prop] [$key] = ($v === 'false' || $v === 'true') ? validateBoolean($v) : $v;
+                                $data [$prop] [$key] = ($v === 'false' || $v === 'true') ? $this->validateBoolean($v) : $v;
                             }
                         }
                     }
@@ -234,9 +271,9 @@ class SettingsController extends Controller
         return $this->validateBoolean($this->getAppValue($key));
     }
 
-    private function getAppValue($key)
+    private function getAppValue($key, $default)
     {
-        return $this->config->getAppValue($this->appName, $key);
+        return $this->config->getAppValue($this->appName, $key, $default);
     }
 
     private function setAppValue($key, $value) {
