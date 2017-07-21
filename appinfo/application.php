@@ -3,6 +3,8 @@
 namespace OCA\OJSXC\AppInfo;
 
 use OCA\OJSXC\Controller\SettingsController;
+use OCA\OJSXC\Controller\ExternalApiController;
+use OCA\OJSXC\Middleware\ExternalApiMiddleware;
 use OCA\OJSXC\Command\RefreshRoster;
 use OCA\OJSXC\Controller\HttpBindController;
 use OCA\OJSXC\Db\IQRosterPushMapper;
@@ -73,6 +75,29 @@ class Application extends App {
 				$c->query('UserManager')
 			);
 		});
+
+		$container->registerService('ExternalApiController', function(IContainer $c) {
+			return new ExternalApiController(
+				$c->query('AppName'),
+				$c->query('Request'),
+				$c->query('UserManager'),
+				$c->query('GroupManager'),
+				$c->query('Logger')
+			);
+		});
+
+		/**
+		 * Middleware
+		 */
+
+		$container->registerService('ExternalApiMiddleware', function(IContainer $c) {
+			return new ExternalApiMiddleware(
+				$c->query('Request'),
+				$c->query('OCP\IConfig'),
+				file_get_contents('php://input')
+			);
+		});
+		$container->registerMiddleware('ExternalApiMiddleware');
 
 		/**
 		 * Database Layer
