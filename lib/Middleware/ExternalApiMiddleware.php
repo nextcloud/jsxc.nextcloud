@@ -8,6 +8,8 @@ use OCP\IRequest;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\JSONResponse;
 use OCA\OJSXC\Exceptions\SecurityException;
+use OCA\OJSXC\Controller\SignatureProtectedApiController;
+use OCA\OJSXC\RawRequest;
 
 class ExternalApiMiddleware extends Middleware
 {
@@ -15,20 +17,18 @@ class ExternalApiMiddleware extends Middleware
 
    private $config;
 
-   private $rawPost;
+   private $rawRequest;
 
-   public function __construct(IRequest $request, IConfig $config, $rawPost)
+   public function __construct(IRequest $request, IConfig $config, RawRequest $rawRequest)
    {
       $this->request = $request;
       $this->config = $config;
-      $this->rawPost = $rawPost;
+      $this->rawRequest = $rawRequest;
    }
 
    public function beforeController($controller, $methodName)
    {
-      $controllerName = get_class($controller);
-
-      if ($controllerName !== 'OCA\OJSXC\Controller\ExternalApiController') {
+      if (!$controller instanceof SignatureProtectedApiController) {
          return;
       }
 
@@ -51,7 +51,7 @@ class ExternalApiMiddleware extends Middleware
       }
 
       // check if the key is valid
-      if ($hash !== hash_hmac($algo, $this->rawPost, $apiSecret)) {
+      if ($hash !== hash_hmac($algo, $this->rawRequest->get(), $apiSecret)) {
          throw new SecurityException('Signature does not match.');
       }
    }

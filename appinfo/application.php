@@ -18,6 +18,7 @@ use OCA\OJSXC\StanzaHandlers\IQ;
 use OCA\OJSXC\StanzaHandlers\Message;
 use OCA\OJSXC\StanzaHandlers\Presence;
 use OCA\OJSXC\StanzaLogger;
+use OCA\OJSXC\RawRequest;
 use OCP\AppFramework\App;
 use OCA\OJSXC\ILock;
 use OCA\OJSXC\DbLock;
@@ -94,7 +95,7 @@ class Application extends App {
 			return new ExternalApiMiddleware(
 				$c->query('Request'),
 				$c->query('OCP\IConfig'),
-				file_get_contents('php://input')
+				$c->query('RawRequest')
 			);
 		});
 		$container->registerMiddleware('ExternalApiMiddleware');
@@ -219,6 +220,13 @@ class Application extends App {
 		 */
 		$container->registerService('OJSXC_UserId', function(IContainer $c) {
 			return strtolower($c->query('UserId'));
+		});
+
+		/**
+		 * Raw request body
+		 */
+		 $container->registerService('RawRequest', function($c) {
+			return new RawRequest();
 		});
 
 	}

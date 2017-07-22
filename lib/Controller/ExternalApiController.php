@@ -2,7 +2,7 @@
 
 namespace OCA\OJSXC\Controller;
 
-use OCP\AppFramework\Controller;
+use OCP\AppFramework\ApiController;
 use OCP\IConfig;
 use OCP\IRequest;
 use OCP\IUserManager;
@@ -11,7 +11,7 @@ use OCP\ILogger;
 use OCP\AppFramework\Http\JSONResponse;
 use OCP\AppFramework\Http;
 
-class ExternalApiController extends Controller
+class ExternalApiController extends SignatureProtectedApiController
 {
     private $userManager;
 
@@ -37,11 +37,6 @@ class ExternalApiController extends Controller
         $this->logger = $logger;
     }
 
-    /**
-   * @NoAdminRequired
-   * @PublicPage
-   * @NoCSRFRequired
-   */
    public function index($operation)
    {
       switch($operation) {
@@ -69,11 +64,6 @@ class ExternalApiController extends Controller
       }
    }
 
-   /**
-   * @NoAdminRequired
-   * @PublicPage
-   * @NoCSRFRequired
-   */
    public function checkPassword($username = '', $password = '', $domain = '') {
       $currentUser = null;
 
@@ -103,11 +93,6 @@ class ExternalApiController extends Controller
       );
    }
 
-   /**
-   * @NoAdminRequired
-   * @PublicPage
-   * @NoCSRFRequired
-   */
    public function isUser($username = '', $domain = '') {
       $this->logger->info('ExAPI: Check if "'.$username.'@'.$domain.'" exists');
 
@@ -130,11 +115,6 @@ class ExternalApiController extends Controller
       );
    }
 
-   /**
-   * @NoAdminRequired
-   * @PublicPage
-   * @NoCSRFRequired
-   */
    public function sharedRoster($username = '', $domain = '') {
       if(!empty($username)) {
          if(!empty($domain)) {
