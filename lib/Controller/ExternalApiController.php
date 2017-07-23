@@ -2,7 +2,6 @@
 
 namespace OCA\OJSXC\Controller;
 
-use OCP\AppFramework\ApiController;
 use OCP\IConfig;
 use OCP\IRequest;
 use OCP\IUserManager;
@@ -101,8 +100,7 @@ class ExternalApiController extends SignatureProtectedApiController
       if(!empty($username)) {
          if(!empty($domain)) {
             $isUser = $this->userManager->userExists($username . '@' . $domain);
-         }
-         if(!$isUser) {
+         } else {
             $isUser = $this->userManager->userExists($username);
          }
       }
@@ -125,8 +123,9 @@ class ExternalApiController extends SignatureProtectedApiController
       }
 
       $roster = [];
+      $user = $this->userManager->get($username);
 
-      $userGroups = $this->groupManager->getUserIdGroups($username);
+      $userGroups = $this->groupManager->getUserGroups($user);
 
       foreach($userGroups as $userGroup) {
          foreach($userGroup->getUsers() as $user) {
