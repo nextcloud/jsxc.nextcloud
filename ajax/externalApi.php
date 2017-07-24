@@ -45,11 +45,14 @@ function checkPassword() {
 
    if(!empty($_POST['password']) && !empty($_POST['username'])) {
       if(!empty($_POST['domain'])) {
-         $currentUser = \OC::$server->getUserManager()->checkPassword($_POST['username'] . "@" . $_POST['domain'], $_POST['password']);
+         $loggedIn = \OC::$server->getUserSession()->login($_POST['username'] . "@" . $_POST['domain'], $_POST['password']);
       }
-      if($currentUser == null) {
-         $currentUser = \OC::$server->getUserManager()->checkPassword($_POST['username'], $_POST['password']);
+      if(!$loggedIn) {
+         $loggedIn = \OC::$server->getUserSession()->login($_POST['username'], $_POST['password']);
       }
+   }
+   if ($loggedIn) {
+      $currentUser = \OC::$server->getUserSession()->getUser();
    }
 
    if (!$currentUser) {
