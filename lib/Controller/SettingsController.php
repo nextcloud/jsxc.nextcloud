@@ -6,6 +6,8 @@ use OCP\AppFramework\Controller;
 use OCP\IConfig;
 use OCP\IRequest;
 use OCP\IUserManager;
+use OCP\IUserSession;
+use OCA\OJSXC\TimeLimitedToken;
 
 class SettingsController extends Controller
 {
@@ -18,14 +20,14 @@ class SettingsController extends Controller
     public function __construct($appName,
    IRequest $request,
    IConfig $config,
-   IUserManager $userManager)
+   IUserManager $userManager,
+   IUserSession $userSession)
     {
         parent::__construct($appName, $request);
 
         $this->config = $config;
         $this->userManager = $userManager;
-
-        $this->userSession = \OC::$server->getUserSession();
+        $this->userSession = $userSession;
     }
 
    /**
@@ -96,7 +98,7 @@ class SettingsController extends Controller
                $data['xmpp']['username'] = $currentUID;
            }
 
-           $this->generateTimeLimitedToken($data['xmpp']['username'], $data['xmpp']['domain']);
+           $token = $this->generateTimeLimitedToken($data['xmpp']['username'], $data['xmpp']['domain']);
 
            $data['xmpp']['password'] = $token;
        }
@@ -121,27 +123,27 @@ class SettingsController extends Controller
          );
       }
 
-      $this->setAppValue('serverType', $_POST ['serverType']);
-      $this->setAppValue('boshUrl', trim($_POST ['boshUrl']));
-      $this->setAppValue('xmppDomain', trim($_POST ['xmppDomain']));
-      $this->setAppValue('xmppResource', trim($_POST ['xmppResource']));
-      $this->setAppValue('xmppOverwrite', $this->getCheckboxValue($_POST ['xmppOverwrite']));
-      $this->setAppValue('xmppStartMinimized', $this->getCheckboxValue($_POST ['xmppStartMinimized']));
-      $this->setAppValue('xmppPreferMail', $this->getCheckboxValue($_POST ['xmppPreferMail']));
+      $this->setAppValue('serverType', $this->getParam('serverType'));
+      $this->setAppValue('boshUrl', $this->getTrimParam('boshUrl'));
+      $this->setAppValue('xmppDomain', $this->getTrimParam('xmppDomain'));
+      $this->setAppValue('xmppResource', $this->getTrimParam('xmppResource'));
+      $this->setAppValue('xmppOverwrite', $this->getCheckboxParam('xmppOverwrite'));
+      $this->setAppValue('xmppStartMinimized', $this->getCheckboxParam('xmppStartMinimized'));
+      $this->setAppValue('xmppPreferMail', $this->getCheckboxParam('xmppPreferMail'));
 
-      $this->setAppValue('iceUrl', trim($_POST ['iceUrl']));
-      $this->setAppValue('iceUsername', trim($_POST ['iceUsername']));
-      $this->setAppValue('iceCredential', $_POST ['iceCredential']);
-      $this->setAppValue('iceSecret', $_POST ['iceSecret']);
-      $this->setAppValue('iceTtl', $_POST ['iceTtl']);
+      $this->setAppValue('iceUrl', $this->getTrimParam('iceUrl'));
+      $this->setAppValue('iceUsername', $this->getTrimParam('iceUsername'));
+      $this->setAppValue('iceCredential', $this->getParam('iceCredential'));
+      $this->setAppValue('iceSecret', $this->getParam('iceSecret'));
+      $this->setAppValue('iceTtl', $this->getParam('iceTtl'));
 
-      $this->setAppValue('timeLimitedToken', $this->getCheckboxValue($_POST ['timeLimitedToken']));
+      $this->setAppValue('timeLimitedToken', $this->getCheckboxParam('timeLimitedToken'));
 
-      $this->setAppValue('firefoxExtension', $_POST ['firefoxExtension']);
-      $this->setAppValue('chromeExtension', $_POST ['chromeExtension']);
+      $this->setAppValue('firefoxExtension', $this->getParam('firefoxExtension'));
+      $this->setAppValue('chromeExtension', $this->getParam('chromeExtension'));
 
       $externalServices = array();
-      foreach($_POST['externalServices'] as $es) {
+      foreach($this->getParam('externalServices') as $es) {
          if (preg_match('/^(https:\/\/)?([\w\d*][\w\d-]*)(\.[\w\d-]+)+(:[\d]+)?$/', $es)) {
             $externalServices[] = $es;
          }
@@ -178,19 +180,21 @@ class SettingsController extends Controller
    */
    public function getIceServers() {
       $secret = $this->getAppValue('iceSecret');
-      $uid = $this->userSession->getUser()->getUID();
-
       $ttl = $this->getAppValue('iceTtl',  3600 * 24); // one day (according to TURN-REST-API)
       $url = $this->getAppValue('iceUrl');
+      $username = $this->getAppValue('iceUsername', '');
+      $credential = $this->getAppValue('iceCredential', '');
+
       $url = preg_match('/^(turn|stun):/', $url) || empty($url) ? $url : "turn:$url";
 
-      $usernameTRA = $secret ? (time() + $ttl).':'.$uid : $uid;
-      $username = $this->getAppValue('iceUsername', '');
-      $username = (!empty($username)) ? $username : $usernameTRA;
+      if (!empty($secret) && (empty($username) || empty($credential))) {
+         $uid = $this->userSession->getUser()->getUID();
 
-      $credentialTRA = ($secret) ? base64_encode(hash_hmac('sha1', $username, $secret, true)) : '';
-      $credential = $this->getAppValue('iceCredential', '');
-      $credential = (!empty($credential)) ? $credential : $credentialTRA;
+         $accessData = TimeLimitedToken::generateTURN($uid, $secret, $ttl);
+
+         $username = $accessData[0];
+         $credential = $accessData[1];
+      }
 
       if (!empty($url)) {
         $data = array(
@@ -246,8 +250,8 @@ class SettingsController extends Controller
 
         if (\OCP\User::isLoggedIn()) {
             $currentUser = $this->userSession->getUser();
-        } elseif (!empty($_POST['password']) && !empty($_POST['username'])) {
-            $currentUser = $this->userManager->checkPassword($_POST['username'], $_POST['password']);
+        } elseif (!empty($this->getParam('username')) && !empty($this->getParam('password'))) {
+            $currentUser = $this->userManager->checkPassword($this->getParam('username'), $this->getParam('password'));
         }
 
         return $currentUser;
@@ -255,22 +259,9 @@ class SettingsController extends Controller
 
     private function generateTimeLimitedToken($node, $domain)
     {
-        $jid =  $node. '@' . $domain;
-        $expiry = time() + 60*60;
         $secret = $this->getAppValue('apiSecret');
 
-        $version = hex2bin('00');
-        $secretID = substr(hash('sha256', $secret, true), 0, 2);
-        $header = $secretID.pack('N', $expiry);
-        $challenge = $version.$header.$jid;
-        $hmac = hash_hmac('sha256', $challenge, $secret, true);
-        $token = $version.substr($hmac, 0, 16).$header;
-
-         // format as "user-friendly" base64
-         $token = str_replace('=', '', strtr(base64_encode($token),
-         'OIl', '-$%'));
-
-        return $token;
+        return TimeLimitedToken::generateUser($node, $domain, $secret);
     }
 
     private function overwriteByUserDefined($currentUID, $data)
@@ -330,5 +321,17 @@ class SettingsController extends Controller
 
    private function getCheckboxValue($var) {
       return (isset($var)) ? $var : 'false';
+   }
+
+   private function getParam($key) {
+      return $this->request->getParam($key);
+   }
+
+   private function getCheckboxParam($key) {
+      return $this->getCheckboxValue($this->request->getParam($key));
+   }
+
+   private function getTrimParam($key) {
+      return trim($this->request->getParam($key));
    }
 }

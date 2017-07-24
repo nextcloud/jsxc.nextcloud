@@ -73,7 +73,8 @@ class Application extends App {
 				$c->query('AppName'),
 				$c->query('Request'),
 				$c->query('Config'),
-				$c->query('UserManager')
+				$c->query('UserManager'),
+				\OC::$server->getUserSession()
 			);
 		});
 
