@@ -20,9 +20,9 @@ $application->registerRoutes($this, array(
 		array('name' => 'settings#getIceServers', 'url' => '/settings/iceServers', 'verb' => 'GET'),
 		array('name' => 'settings#getUsers', 'url' => '/settings/users', 'verb' => 'GET'),
 		array('name' => 'externalApi#index', 'url' => '/ajax/externalApi.php', 'verb' => 'POST'),
-		array('name' => 'externalApi#checkPassword', 'url' => '/externalApi/checkPassword', 'verb' => 'POST'),
-		array('name' => 'externalApi#isUser', 'url' => '/externalApi/isUser', 'verb' => 'POST'),
-		array('name' => 'externalApi#sharedRoster', 'url' => '/externalApi/sharedRoster', 'verb' => 'POST'),
+		array('name' => 'externalApi#check_password', 'url' => '/api/v2/checkPassword', 'verb' => 'POST'),
+		array('name' => 'externalApi#is_user', 'url' => '/api/v2/isUser', 'verb' => 'POST'),
+		array('name' => 'externalApi#shared_roster', 'url' => '/api/v2/sharedRoster', 'verb' => 'POST'),
 	)
 ));
 ?>
