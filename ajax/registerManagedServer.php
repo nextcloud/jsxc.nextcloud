@@ -82,8 +82,20 @@ if ($responseJSON === null) {
 if ($headers['reponse_code'] !== 200) {
     \OCP\Util::writeLog('ojsxc', 'RMS: Response code: '.$headers['reponse_code'], \OCP\Util::INFO);
 
-    abort($responseJSON->message);
+    abort(htmlspecialchars($responseJSON->message));
 }
+
+if (!preg_match('#^https://#', $responseJSON->boshUrl) ||
+    !preg_match('#/http-bind/?$#', $responseJSON->boshUrl) ||
+    preg_match('#\?#', $responseJSON->boshUrl)) {
+      abort('Got a bad bosh URL');
+   }
+
+if (!preg_match('/^([a-z\d](-*[a-z\d])*)(\.([a-z\d](-*[a-z\d])*))*$/i', $responseJSON->domain) ||
+    !preg_match('/^.{1,253}$/', $responseJSON->domain) ||
+    !preg_match('/^[^\.]{1,63}(\.[^\.]{1,63})*$/', $responseJSON->domain)) {
+      abort('Got a bad domain');
+   }
 
 $config->setAppValue('ojsxc', 'serverType', 'managed');
 $config->setAppValue('ojsxc', 'boshUrl', $responseJSON->boshUrl);
