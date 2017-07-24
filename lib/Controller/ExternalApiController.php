@@ -10,6 +10,7 @@ use OCP\IGroupManager;
 use OCP\ILogger;
 use OCP\AppFramework\Http\JSONResponse;
 use OCP\AppFramework\Http;
+use OCA\OJSXC\Exceptions\UnprocessableException;
 
 class ExternalApiController extends SignatureProtectedApiController
 {
@@ -59,7 +60,7 @@ class ExternalApiController extends SignatureProtectedApiController
             );
             break;
          default:
-            throw new \Exception( 'Unsupported operation.');
+            throw new UnprocessableException( 'Unsupported operation.');
       }
    }
 
@@ -122,7 +123,7 @@ class ExternalApiController extends SignatureProtectedApiController
             $username .= '@' . $domain;
          }
       } else {
-         throw new \Exception('No username provided');
+         throw new UnprocessableException('No username provided');
       }
 
       $roster = [];

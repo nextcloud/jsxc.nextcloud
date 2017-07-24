@@ -8,6 +8,7 @@ use OCP\IRequest;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\JSONResponse;
 use OCA\OJSXC\Exceptions\SecurityException;
+use OCA\OJSXC\Exceptions\Exception;
 use OCA\OJSXC\Controller\SignatureProtectedApiController;
 use OCA\OJSXC\RawRequest;
 
@@ -58,12 +59,15 @@ class ExternalApiMiddleware extends Middleware
 
    public function afterException($controller, $methodName, \Exception $exception)
    {
-      //@TODO filter exception, because this will fetch all exceptions from all controllers in ojsxc
-      return new JSONResponse(array(
-         'result' => 'error',
-         'data' => array(
-            'msg' => $exception->getMessage()
-         )
-      ), Http::STATUS_INTERNAL_SERVER_ERROR);
+      if($exception instanceof Exception) {
+         return new JSONResponse(array(
+            'result' => 'error',
+            'data' => array(
+               'msg' => $exception->getMessage()
+            )
+         ), Http::STATUS_INTERNAL_SERVER_ERROR);
+      }
+
+      throw $exception;
    }
 }
