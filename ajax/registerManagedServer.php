@@ -102,8 +102,7 @@ $config->setAppValue('ojsxc', 'boshUrl', $responseJSON->boshUrl);
 $config->setAppValue('ojsxc', 'xmppDomain', $responseJSON->domain);
 $config->setAppValue('ojsxc', 'timeLimitedToken', 'true');
 $config->setAppValue('ojsxc', 'managedServer', 'registered');
-
-//@TODO add bosh url to content-security-policy
+$config->setAppValue('ojsxc', 'externalServices', implode('|', $responseJSON->externalServices));
 
 echo json_encode(array(
    'result' => 'success',
