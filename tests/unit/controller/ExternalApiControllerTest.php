@@ -6,6 +6,7 @@ use OCA\OJSXC\Controller\ExternalApiController;
 use OCA\OJSXC\Controller\SignatureProtectedApiController;
 use OCP\IRequest;
 use OCP\IUserManager;
+use OCP\IUserSession;
 use OCP\IGroupManager;
 use OCP\ILogger;
 use OCP\IUser;
@@ -15,6 +16,7 @@ use PHPUnit\Framework\TestCase;
 class ExternalApiControllerTest extends TestCase {
    private $request;
    private $userManager;
+   private $userSession;
    private $groupManager;
    private $logger;
    private $user;
@@ -25,6 +27,7 @@ class ExternalApiControllerTest extends TestCase {
 
       $this->request = $this->createMock(IRequest::class);
       $this->userManager = $this->createMock(IUserManager::class);
+      $this->userSession = $this->createMock(IUserSession::class);
       $this->groupManager = $this->createMock(IGroupManager::class);
       $this->logger = $this->createMock(ILogger::class);
       $this->user = $this->createMock(IUser::class);
@@ -33,6 +36,7 @@ class ExternalApiControllerTest extends TestCase {
          'ojsxc',
          $this->request,
          $this->userManager,
+         $this->userSession,
          $this->groupManager,
          $this->logger
       );
@@ -43,9 +47,9 @@ class ExternalApiControllerTest extends TestCase {
    }
 
    public function testCheckPasswordWithInvalidParams() {
-      $this->userManager
+      $this->userSession
                ->expects($this->once())
-               ->method('checkPassword')
+               ->method('login')
                ->with('foo', 'bar')
                ->willReturn(false);
 
@@ -55,9 +59,9 @@ class ExternalApiControllerTest extends TestCase {
    }
 
    public function testCheckPasswordWithInvalidParamsAndDomain() {
-      $this->userManager
+      $this->userSession
                ->expects($this->once())
-               ->method('checkPassword')
+               ->method('login')
                ->with('foo@localhost', 'bar')
                ->willReturn(false);
 
@@ -72,10 +76,14 @@ class ExternalApiControllerTest extends TestCase {
                ->expects($this->once())
                ->method('getUID')
                ->willReturn($uid);
-      $this->userManager
+      $this->userSession
                ->expects($this->once())
-               ->method('checkPassword')
+               ->method('login')
                ->with('foo', 'bar')
+               ->willReturn(true);
+      $this->userSession
+               ->expects($this->once())
+               ->method('getUser')
                ->willReturn($this->user);
 
       $return = $this->externalApiController->checkPassword('foo', 'bar');
@@ -90,10 +98,14 @@ class ExternalApiControllerTest extends TestCase {
                ->expects($this->once())
                ->method('getUID')
                ->willReturn($uid);
-      $this->userManager
+      $this->userSession
                ->expects($this->once())
-               ->method('checkPassword')
+               ->method('login')
                ->with('foo@localhost', 'bar')
+               ->willReturn(true);
+      $this->userSession
+               ->expects($this->once())
+               ->method('getUser')
                ->willReturn($this->user);
 
       $return = $this->externalApiController->checkPassword('foo', 'bar', 'localhost');

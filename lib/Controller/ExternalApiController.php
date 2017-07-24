@@ -5,6 +5,7 @@ namespace OCA\OJSXC\Controller;
 use OCP\IConfig;
 use OCP\IRequest;
 use OCP\IUserManager;
+use OCP\IUserSession;
 use OCP\IGroupManager;
 use OCP\ILogger;
 use OCP\AppFramework\Http\JSONResponse;
@@ -14,25 +15,24 @@ class ExternalApiController extends SignatureProtectedApiController
 {
     private $userManager;
 
-    private $groupManager;
-
     private $userSession;
+
+    private $groupManager;
 
     private $logger;
 
     public function __construct($appName,
    IRequest $request,
    IUserManager $userManager,
+   IUserSession $userSession,
    IGroupManager $groupManager,
    ILogger $logger)
     {
         parent::__construct($appName, $request);
 
         $this->userManager = $userManager;
+        $this->userSession = $userSession;
         $this->groupManager = $groupManager;
-
-        $this->userSession = \OC::$server->getUserSession();
-
         $this->logger = $logger;
     }
 
@@ -70,10 +70,13 @@ class ExternalApiController extends SignatureProtectedApiController
 
       if(!empty($password) && !empty($username)) {
          if(!empty($domain)) {
-            $currentUser = $this->userManager->checkPassword($username . '@' . $domain, $password);
+            $loggedIn = $this->userSession->login($username . '@' . $domain, $password);
+         } else {
+            $loggedIn = $this->userSession->login($username, $password);
          }
-         if($currentUser === null) {
-            $currentUser = $this->userManager->checkPassword($username, $password);
+
+         if($loggedIn === true) {
+            $currentUser = $this->userSession->getUser();
          }
       }
 
