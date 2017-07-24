@@ -1,6 +1,6 @@
 <?php
 
-\OC_Util::checkLoggedIn();
+OCP\User::checkLoggedIn();
 
 OCP\Util::addScript('ojsxc', 'settings/personal');
 
