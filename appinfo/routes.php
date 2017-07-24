@@ -1,12 +1,4 @@
 <?php
-/**
- * ownCloud - JavaScript XMPP Chat
- *
- * Copyright (c) 2014 Klaus Herberth <klaus@jsxc.org> <br>
- * Released under the MIT license
- *
- * @author Klaus Herberth
- */
 
 use \OCA\OJSXC\AppInfo\Application;
 
