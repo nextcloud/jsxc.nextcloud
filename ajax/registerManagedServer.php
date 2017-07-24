@@ -57,6 +57,7 @@ $context  = stream_context_create(array('http' =>
             array(
                 'apiUrl' => $apiUrl,
                 'apiSecret' => $apiSecret,
+                'apiVersion' => 1,
                 'userId' => $userId,
                 'promotionCode' => $promotionCode
             )
