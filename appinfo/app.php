@@ -2,10 +2,6 @@
 
 use OCA\OJSXC\AppInfo\Application;
 
-if (!interface_exists('\OCP\Settings\ISettings')) {
-	\OCP\App::registerAdmin ( 'ojsxc', 'settings/admin' );
-}
-
 \OCP\App::registerPersonal('ojsxc', 'settings/personal');
 
 $jsxc_root = (defined('JSXC_ENV') && JSXC_ENV === 'dev')? 'jsxc/dev/' : 'jsxc/';
