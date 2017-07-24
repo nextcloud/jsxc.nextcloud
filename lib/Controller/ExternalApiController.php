@@ -72,7 +72,8 @@ class ExternalApiController extends SignatureProtectedApiController
       if(!empty($password) && !empty($username)) {
          if(!empty($domain)) {
             $loggedIn = $this->userSession->login($username . '@' . $domain, $password);
-         } else {
+         }
+         if(!$loggedIn) {
             $loggedIn = $this->userSession->login($username, $password);
          }
 
@@ -104,7 +105,8 @@ class ExternalApiController extends SignatureProtectedApiController
       if(!empty($username)) {
          if(!empty($domain)) {
             $isUser = $this->userManager->userExists($username . '@' . $domain);
-         } else {
+         }
+         if(!$isUser) {
             $isUser = $this->userManager->userExists($username);
          }
       }

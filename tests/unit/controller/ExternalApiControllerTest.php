@@ -60,10 +60,12 @@ class ExternalApiControllerTest extends TestCase {
 
    public function testCheckPasswordWithInvalidParamsAndDomain() {
       $this->userSession
-               ->expects($this->once())
+               ->expects($this->exactly(2))
                ->method('login')
-               ->with('foo@localhost', 'bar')
-               ->willReturn(false);
+               ->will($this->returnValueMap([
+                  ['foo@localhost', 'bar', false],
+                  ['foo', 'bar', false]
+               ]));
 
       $return = $this->externalApiController->checkPassword('foo', 'bar', 'localhost');
 
@@ -129,10 +131,12 @@ class ExternalApiControllerTest extends TestCase {
 
    public function testIsUserFailWithDomain() {
       $this->userManager
-               ->expects($this->once())
+               ->expects($this->exactly(2))
                ->method('userExists')
-               ->with('foo@localhost')
-               ->willReturn(false);
+               ->will($this->returnValueMap([
+                  ['foo@localhost', false],
+                  ['foo', false]
+               ]));
 
       $return = $this->externalApiController->isUser('foo', 'localhost');
 
