@@ -199,7 +199,7 @@
     function loadSettings(username, password, cb) {
         $.ajax({
             type: 'POST',
-            url: OC.filePath('ojsxc', 'ajax', 'getSettings.php'),
+            url: OC.generateUrl('apps/ojsxc/settings'),
             data: {
                 username: username,
                 password: password
@@ -218,6 +218,9 @@
                     jsxc.options.set('xmpp', {
                         url: OC.generateUrl('apps/ojsxc/http-bind')
                     });
+
+                    jsxc.options.set('adminSettings', d.data.adminSettings);
+
                     if (d.data.loginForm) {
                         jsxc.options.set('loginForm', {
                             startMinimized: d.data.loginForm.startMinimized
@@ -254,7 +257,7 @@
     function getUsers(search, cb) {
         $.ajax({
             type: 'GET',
-            url: OC.filePath('ojsxc', 'ajax', 'getUsers.php'),
+            url: OC.generateUrl('apps/ojsxc/settings/users'),
             data: {
                 search: search
             },
@@ -329,7 +332,7 @@
             rosterAppend: 'body',
             root: oc_appswebroots.ojsxc + '/js/jsxc',
             RTCPeerConfig: {
-                url: OC.filePath('ojsxc', 'ajax', 'getTurnCredentials.php')
+                url: OC.generateUrl('apps/ojsxc/settings/iceServers')
             },
             displayRosterMinimized: function() {
                 return OC.currentUser != null;

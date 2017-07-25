@@ -157,6 +157,7 @@ class HttpBindController extends Controller {
 	 */
 	public function index() {
 		$this->lock->setLock();
+		$this->presenceMapper->updatePresence();
 		$input = $this->body;
 		$longpoll = true; // set to false when the response should directly be returned and no polling should be done
 		$longpollStart = true; // start the first long poll cycle

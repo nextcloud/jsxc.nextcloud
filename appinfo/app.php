@@ -1,15 +1,6 @@
 <?php
 
-/**
- * ownCloud - JavaScript XMPP Chat
- *
- * Copyright (c) 2014-2015 Klaus Herberth <klaus@jsxc.org> <br>
- * Released under the MIT license
- * @author Klaus Herberth <klaus@jsxc.org>
- */
-if (!interface_exists('\OCP\Settings\ISettings')) {
-	\OCP\App::registerAdmin ( 'ojsxc', 'settings/admin' );
-}
+use OCA\OJSXC\AppInfo\Application;
 
 \OCP\App::registerPersonal('ojsxc', 'settings/personal');
 
@@ -68,6 +59,9 @@ if(!$apiSecret) {
    $apiSecret = \OC::$server->getSecureRandom()->generate(23);
    $config->setAppValue('ojsxc', 'apiSecret', $apiSecret);
 }
+
+$app = new Application();
+$app->getContainer()->query('UserHooks')->register();
 
 if (!class_exists("\\Sabre\\Xml\\Version")) {
     require_once __DIR__ . "/../vendor/autoload.php";

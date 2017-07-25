@@ -65,6 +65,7 @@ class StanzaMapper extends Mapper {
 		while($row = $stmt->fetch()){
 			$row['stanza'] = preg_replace('/to="([^"@]*)"/', "to=\"$1@" .$this->host ."/internal\"", $row['stanza']);
 			$row['stanza'] = preg_replace('/from="([^"@]*)"/', "from=\"$1@" .$this->host ."/internal\"", $row['stanza']);
+			$row['stanza'] = preg_replace('/jid="([^"@]*)"/', "jid=\"$1@" .$this->host ."/internal\"", $row['stanza']);
 			$results[] = $this->mapRowToEntity($row);
 		}
 		$stmt->closeCursor();
@@ -78,6 +79,14 @@ class StanzaMapper extends Mapper {
 		}
 
 		return $results;
+	}
+
+	/**
+	 * @brief Deletes all stanzas addressed to a user.
+	 * @param $uid
+	 */
+	public function deleteByTo($uid) {
+		$this->execute("DELETE FROM *PREFIX*ojsxc_stanzas WHERE `to`=?", [$uid]);
 	}
 
 }
