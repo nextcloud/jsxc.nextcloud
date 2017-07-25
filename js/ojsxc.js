@@ -199,7 +199,7 @@
     function loadSettings(username, password, cb) {
         $.ajax({
             type: 'POST',
-            url: OC.filePath('ojsxc', 'ajax', 'getSettings.php'),
+            url: OC.generateUrl('apps/ojsxc/settings'),
             data: {
                 username: username,
                 password: password
@@ -257,7 +257,7 @@
     function getUsers(search, cb) {
         $.ajax({
             type: 'GET',
-            url: OC.filePath('ojsxc', 'ajax', 'getUsers.php'),
+            url: OC.generateUrl('apps/ojsxc/settings/users'),
             data: {
                 search: search
             },
@@ -332,7 +332,7 @@
             rosterAppend: 'body',
             root: oc_appswebroots.ojsxc + '/js/jsxc',
             RTCPeerConfig: {
-                url: OC.filePath('ojsxc', 'ajax', 'getTurnCredentials.php')
+                url: OC.generateUrl('apps/ojsxc/settings/iceServers')
             },
             displayRosterMinimized: function() {
                 return OC.currentUser != null;

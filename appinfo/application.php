@@ -2,6 +2,9 @@
 
 namespace OCA\OJSXC\AppInfo;
 
+use OCA\OJSXC\Controller\SettingsController;
+use OCA\OJSXC\Controller\ExternalApiController;
+use OCA\OJSXC\Middleware\ExternalApiMiddleware;
 use OCA\OJSXC\Command\RefreshRoster;
 use OCA\OJSXC\Controller\HttpBindController;
 use OCA\OJSXC\Db\IQRosterPushMapper;
@@ -15,6 +18,7 @@ use OCA\OJSXC\StanzaHandlers\IQ;
 use OCA\OJSXC\StanzaHandlers\Message;
 use OCA\OJSXC\StanzaHandlers\Presence;
 use OCA\OJSXC\StanzaLogger;
+use OCA\OJSXC\RawRequest;
 use OCP\AppFramework\App;
 use OCA\OJSXC\ILock;
 use OCA\OJSXC\DbLock;
@@ -63,6 +67,40 @@ class Application extends App {
 				$c->query('StanzaLogger')
 			);
 		});
+
+		$container->registerService('SettingsController', function(IContainer $c) {
+			return new SettingsController(
+				$c->query('AppName'),
+				$c->query('Request'),
+				$c->query('Config'),
+				$c->query('UserManager'),
+				\OC::$server->getUserSession()
+			);
+		});
+
+		$container->registerService('ExternalApiController', function(IContainer $c) {
+			return new ExternalApiController(
+				$c->query('AppName'),
+				$c->query('Request'),
+				$c->query('UserManager'),
+				\OC::$server->getUserSession(),
+				$c->query('GroupManager'),
+				$c->query('Logger')
+			);
+		});
+
+		/**
+		 * Middleware
+		 */
+
+		$container->registerService('ExternalApiMiddleware', function(IContainer $c) {
+			return new ExternalApiMiddleware(
+				$c->query('Request'),
+				$c->query('OCP\IConfig'),
+				$c->query('RawRequest')
+			);
+		});
+		$container->registerMiddleware('ExternalApiMiddleware');
 
 		/**
 		 * Database Layer
@@ -184,6 +222,13 @@ class Application extends App {
 		 */
 		$container->registerService('OJSXC_UserId', function(IContainer $c) {
 			return strtolower($c->query('UserId'));
+		});
+
+		/**
+		 * Raw request body
+		 */
+		 $container->registerService('RawRequest', function($c) {
+			return new RawRequest();
 		});
 
 	}

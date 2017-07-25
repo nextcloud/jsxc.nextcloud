@@ -1,17 +1,6 @@
 <?php
 
-/**
- * ownCloud - JavaScript XMPP Chat
- *
- * Copyright (c) 2014-2015 Klaus Herberth <klaus@jsxc.org> <br>
- * Released under the MIT license
- * @author Klaus Herberth <klaus@jsxc.org>
- */
 use OCA\OJSXC\AppInfo\Application;
-
-if (!interface_exists('\OCP\Settings\ISettings')) {
-	\OCP\App::registerAdmin ( 'ojsxc', 'settings/admin' );
-}
 
 \OCP\App::registerPersonal('ojsxc', 'settings/personal');
 
