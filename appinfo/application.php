@@ -2,6 +2,7 @@
 
 namespace OCA\OJSXC\AppInfo;
 
+use OCA\OJSXC\Controller\ManagedServerController;
 use OCA\OJSXC\Controller\SettingsController;
 use OCA\OJSXC\Controller\ExternalApiController;
 use OCA\OJSXC\Middleware\ExternalApiMiddleware;
@@ -19,6 +20,7 @@ use OCA\OJSXC\StanzaHandlers\Message;
 use OCA\OJSXC\StanzaHandlers\Presence;
 use OCA\OJSXC\StanzaLogger;
 use OCA\OJSXC\RawRequest;
+use OCA\OJSXC\DataRetriever;
 use OCP\AppFramework\App;
 use OCA\OJSXC\ILock;
 use OCA\OJSXC\DbLock;
@@ -86,6 +88,19 @@ class Application extends App {
 				\OC::$server->getUserSession(),
 				$c->query('GroupManager'),
 				$c->query('Logger')
+			);
+		});
+
+		$container->registerService('ManagedServerController', function(IContainer $c) {
+			return new ManagedServerController(
+				$c->query('AppName'),
+				$c->query('Request'),
+				$c->query('URLGenerator'),
+				\OC::$server->getConfig(),
+				\OC::$server->getUserSession(),
+				$c->query('Logger'),
+				$c->query('DataRetriever'),
+				'https://xmpp.jsxc.ch/registration'
 			);
 		});
 
@@ -229,6 +244,13 @@ class Application extends App {
 		 */
 		 $container->registerService('RawRequest', function($c) {
 			return new RawRequest();
+		});
+
+		/**
+		 * Data retriever
+		 */
+		 $container->registerService('DataRetriever', function($c) {
+			return new DataRetriever();
 		});
 
 	}

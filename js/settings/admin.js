@@ -235,7 +235,7 @@ $(document).ready(function() {
 
       $.ajax({
          method: 'POST',
-         url: OC.filePath('ojsxc', 'ajax', 'registerManagedServer.php'),
+         url: OC.generateUrl('apps/ojsxc/managedServer/register'),
          data: {
             promotionCode: promotionCode
          }
@@ -260,7 +260,20 @@ $(document).ready(function() {
          var errorMsg = (responseJSON && responseJSON.data) ? responseJSON.data.msg : 'unknown error';
 
          msgEl.addClass('jsxc_fail');
-         msgEl.text('Sorry we couldn\'t complete your registration: ' + errorMsg);
+         msgEl.append($('<span>').text('Sorry we couldn\'t complete your registration.'));
+         msgEl.append($('<br>'));
+         msgEl.append($('<span>').text(errorMsg));
       });
+   });
+
+   $('.ojsxc-refresh-registration').click(function(ev){
+      ev.preventDefault();
+
+      var msgEl = $(this).parents('.msg');
+
+      msgEl.removeClass('jsxc_success');
+      msgEl.empty();
+
+      $('.ojsxc-managed-registration').show();
    });
 });

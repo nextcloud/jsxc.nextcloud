@@ -30,7 +30,7 @@ if (function_exists('script')) {
 				<input type="radio" name="serverType" class="required" required="required" value="managed" <?php if($_['serverType'] === 'managed')echo 'checked'; ?> />
 				Managed (Beta service)
 			</label>
-			<em>Get your own full featured XMPP server directly hosted by the core team of JSXC in Germany. For more information visit <a target="_blank" href="#">[todo]</a>.</em>
+			<em>Get your own full featured XMPP server directly hosted by the core team of JSXC. For more information visit <a target="_blank" href="#">[todo]</a>.</em>
 		</div>
 
 		<fieldset>
@@ -83,7 +83,7 @@ if (function_exists('script')) {
 			<div class="ojsxc-managed hidden">
 				<h3>Registration</h3>
 				<?php if($_['managedServer'] === 'registered'): ?>
-					<div class="msg jsxc_success">Congratulations! You use our managed server.</div>
+					<div class="msg jsxc_success">Congratulations! You use our managed server. <a href="#" class="ojsxc-refresh-registration">Redo registration</a>.</div>
 				<?php else: ?>
 					<div class="msg"></div>
 				<?php endif; ?>

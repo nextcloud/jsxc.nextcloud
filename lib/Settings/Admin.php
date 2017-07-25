@@ -25,8 +25,7 @@ class Admin implements ISettings
 
         $serverType = $this->config->getAppValue('ojsxc', 'serverType');
 
-        $apiUrl = \OC::$server->getURLGenerator()->linkTo('ojsxc', 'ajax/externalApi.php');
-        $apiUrl = \OC::$server->getURLGenerator()->getAbsoluteURL($apiUrl);
+        $apiUrl = \OC::$server->getURLGenerator()->linkToRouteAbsolute('ojsxc.externalApi.index');
 
         $parameters = [
            'serverType' => (!empty($serverType))? $serverType : 'internal',
