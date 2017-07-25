@@ -94,7 +94,7 @@ class SettingsController extends Controller
        }
 
        if ($this->getBooleanAppValue('timeLimitedToken')) {
-           if (!is_string($data['xmpp']['username'])) {
+           if (!array_key_exists('username', $data['xmpp']) || empty($data['xmpp']['username'])) {
                $data['xmpp']['username'] = $currentUID;
            }
 

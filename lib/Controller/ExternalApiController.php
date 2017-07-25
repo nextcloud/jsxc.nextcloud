@@ -70,6 +70,7 @@ class ExternalApiController extends SignatureProtectedApiController
       $this->logger->info('ExAPI: Check password for user: '.$username.'@'.$domain);
 
       if(!empty($password) && !empty($username)) {
+         $loggedIn = false;
          if(!empty($domain)) {
             $loggedIn = $this->userSession->login($username . '@' . $domain, $password);
          }
@@ -137,7 +138,7 @@ class ExternalApiController extends SignatureProtectedApiController
          foreach($userGroup->getUsers() as $user) {
             $uid = $user->getUID();
 
-            if(!$roster[$uid]) {
+            if(!array_key_exists($uid, $roster)) {
                $roster[$uid] = [
                   'name' => $user->getDisplayName(),
                   'groups' => []

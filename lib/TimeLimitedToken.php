@@ -3,8 +3,8 @@
 namespace OCA\OJSXC;
 
 class TimeLimitedToken {
-   public static function generateUser($node, $domain, $secret, $ttl = 60*60, $time) {
-      if (!isset($time)) {
+   public static function generateUser($node, $domain, $secret, $ttl = 60*60, $time = null) {
+      if (!isset($time) || $time === null) {
          $time = time();
       }
 
@@ -25,8 +25,8 @@ class TimeLimitedToken {
       return $token;
    }
 
-   public static function generateTURN($uid, $secret, $ttl = 3600 * 24, $time) {
-      if (!isset($time)) {
+   public static function generateTURN($uid, $secret, $ttl = 3600 * 24, $time = null) {
+      if (!isset($time) || $time === null) {
          $time = time();
       }
 
