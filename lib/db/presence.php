@@ -23,7 +23,8 @@ use Sabre\Xml\Element\keyValue;
  * @method string getPresence()
  * @method int getLastActive()
  */
-class Presence extends Stanza implements XmlSerializable, XmlDeserializable{
+class Presence extends Stanza implements XmlSerializable, XmlDeserializable
+{
 
 	/**
 	 * @var string $userid
@@ -40,14 +41,16 @@ class Presence extends Stanza implements XmlSerializable, XmlDeserializable{
 	 */
 	public $lastActive;
 
-	public function __construct() {
+	public function __construct()
+	{
 		$this->addType('lastActive', 'integer');
 	}
 	
 	/**
 	 * @param Writer $writer
 	 */
-	public function xmlSerialize(Writer $writer) {
+	public function xmlSerialize(Writer $writer)
+	{
 		if ($this->presence === 'online' || $this->presence === '') {
 			$writer->write([
 				[
@@ -60,7 +63,7 @@ class Presence extends Stanza implements XmlSerializable, XmlDeserializable{
 					'value' => null
 				]
 			]);
-		} else if ($this->presence === 'unavailable') {
+		} elseif ($this->presence === 'unavailable') {
 			$writer->write([
 				[
 					'name' => 'presence',
@@ -99,7 +102,8 @@ class Presence extends Stanza implements XmlSerializable, XmlDeserializable{
 	 * @param string $userId
 	 * @return Presence
 	 */
-	public static function createFromXml(Reader $reader, $userId){
+	public static function createFromXml(Reader $reader, $userId)
+	{
 		$newElement = self::xmlDeserialize($reader);
 		$newElement->setUserid($userId);
 		return $newElement;
@@ -109,13 +113,14 @@ class Presence extends Stanza implements XmlSerializable, XmlDeserializable{
 	 * @param Reader $reader
 	 * @return Presence
 	 */
-	public static function xmlDeserialize(Reader $reader) {
+	public static function xmlDeserialize(Reader $reader)
+	{
 		$newElement = new self();
 		$attributes = $reader->parseAttributes();
 		$children = $reader->parseInnerTree();
 		if (key_exists('type', $attributes) && $attributes['type'] === 'unavailable') {
 			$newElement->presence = 'unavailable';
-		} else if (is_null($children)) {
+		} elseif (is_null($children)) {
 			// this match elements which don't have children -> online
 			$newElement->presence = 'online';
 		} else {
@@ -134,6 +139,4 @@ class Presence extends Stanza implements XmlSerializable, XmlDeserializable{
 		$newElement->lastActive = time();
 		return $newElement;
 	}
-
-
 }

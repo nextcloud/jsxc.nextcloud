@@ -15,8 +15,8 @@ use Sabre\Xml\Writer;
  *
  * @package OCA\OJSXC\Db
  */
-class StanzaMapper extends Mapper {
-
+class StanzaMapper extends Mapper
+{
 	private $host;
 
 	/**
@@ -30,7 +30,8 @@ class StanzaMapper extends Mapper {
 	 * @param IDBConnection $db
 	 * @param string $host
 	 */
-	public function __construct(IDBConnection $db, $host, StanzaLogger $stanzaLogger) {
+	public function __construct(IDBConnection $db, $host, StanzaLogger $stanzaLogger)
+	{
 		parent::__construct($db, 'ojsxc_stanzas');
 		$this->host = $host;
 		$this->stanzaLogger = $stanzaLogger;
@@ -40,7 +41,8 @@ class StanzaMapper extends Mapper {
 	 * @param Entity $entity
 	 * @return void
 	 */
-	public function insert(Entity $entity) {
+	public function insert(Entity $entity)
+	{
 		$writer = new Writer();
 		$writer->openMemory();
 		$writer->write($entity);
@@ -59,10 +61,11 @@ class StanzaMapper extends Mapper {
 	 * @return Stanza[]
 	 * @throws DoesNotExistException
 	 */
-	public function findByTo($to){
+	public function findByTo($to)
+	{
 		$stmt = $this->execute("SELECT stanza, id FROM *PREFIX*ojsxc_stanzas WHERE `to`=?", [$to]);
 		$results = [];
-		while($row = $stmt->fetch()){
+		while ($row = $stmt->fetch()) {
 			$row['stanza'] = preg_replace('/to="([^"@]*)"/', "to=\"$1@" .$this->host ."/internal\"", $row['stanza']);
 			$row['stanza'] = preg_replace('/from="([^"@]*)"/', "from=\"$1@" .$this->host ."/internal\"", $row['stanza']);
 			$row['stanza'] = preg_replace('/jid="([^"@]*)"/', "jid=\"$1@" .$this->host ."/internal\"", $row['stanza']);
@@ -70,11 +73,11 @@ class StanzaMapper extends Mapper {
 		}
 		$stmt->closeCursor();
 
-		if (count($results) === 0){
+		if (count($results) === 0) {
 			throw new DoesNotExistException('Not Found');
 		}
 
-		foreach($results as $result){
+		foreach ($results as $result) {
 			$this->delete($result);
 		}
 
@@ -85,8 +88,8 @@ class StanzaMapper extends Mapper {
 	 * @brief Deletes all stanzas addressed to a user.
 	 * @param $uid
 	 */
-	public function deleteByTo($uid) {
+	public function deleteByTo($uid)
+	{
 		$this->execute("DELETE FROM *PREFIX*ojsxc_stanzas WHERE `to`=?", [$uid]);
 	}
-
 }

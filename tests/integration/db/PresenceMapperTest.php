@@ -8,7 +8,8 @@ use OCA\OJSXC\Utility\MapperTestUtility;
 
 $time = 0;
 
-function time() {
+function time()
+{
 	global $time;
 	return $time;
 }
@@ -17,7 +18,8 @@ function time() {
 /**
  * @group DB
  */
-class PresenceMapperTest extends MapperTestUtility {
+class PresenceMapperTest extends MapperTestUtility
+{
 
 	/**
 	 * @var PresenceMapper
@@ -29,7 +31,8 @@ class PresenceMapperTest extends MapperTestUtility {
 	 */
 	protected $newContentContainer;
 
-	protected function setUp() {
+	protected function setUp()
+	{
 		$this->entityName = 'OCA\OJSXC\Db\Presence';
 		$this->mapperName = 'PresenceMapper';
 		parent::setUp();
@@ -43,7 +46,8 @@ class PresenceMapperTest extends MapperTestUtility {
 	/**
 	 * @return array
 	 */
-	public function presenceIfNotExitsProvider() {
+	public function presenceIfNotExitsProvider()
+	{
 		$input1 = new PresenceEntity();
 		$input1->setPresence('online');
 		$input1->setUserid('admin');
@@ -90,7 +94,8 @@ class PresenceMapperTest extends MapperTestUtility {
 	 * @param PresenceEntity[] $inputs
 	 * @param array $expected
 	 */
-	public function testSetPresenceIfNotExists($inputs, $expected) {
+	public function testSetPresenceIfNotExists($inputs, $expected)
+	{
 		foreach ($inputs as $input) {
 			$this->mapper->setPresence($input);
 		}
@@ -102,7 +107,8 @@ class PresenceMapperTest extends MapperTestUtility {
 	/**
 	 * @return array
 	 */
-	public function presenceIfExitsProvider() {
+	public function presenceIfExitsProvider()
+	{
 		$input1 = new PresenceEntity();
 		$input1->setPresence('online');
 		$input1->setUserid('admin');
@@ -158,7 +164,8 @@ class PresenceMapperTest extends MapperTestUtility {
 	 * @param PresenceEntity[] $inputs
 	 * @param array $expected
 	 */
-	public function testSetPresenceIfExists($inputs, $expected) {
+	public function testSetPresenceIfExists($inputs, $expected)
+	{
 		foreach ($inputs as $input) {
 			$this->mapper->setPresence($input);
 		}
@@ -168,7 +175,8 @@ class PresenceMapperTest extends MapperTestUtility {
 		$this->assertArrayDbResultsEqual($expected, $result, ['userid', 'presence', 'last_active']);
 	}
 
-	public function getPresenceProvider() {
+	public function getPresenceProvider()
+	{
 		$input1 = new PresenceEntity();
 		$input1->setPresence('online');
 		$input1->setUserid('admin');
@@ -221,7 +229,8 @@ class PresenceMapperTest extends MapperTestUtility {
 	 * @param $inputs
 	 * @param $expected
 	 */
-	public function testGetPresence($inputs, $expected) {
+	public function testGetPresence($inputs, $expected)
+	{
 		foreach ($inputs as $input) {
 			$this->mapper->setPresence($input);
 		}
@@ -231,7 +240,8 @@ class PresenceMapperTest extends MapperTestUtility {
 		$this->assertObjectDbResultsEqual($expected, $result, ['userid', 'presence', 'lastActive', 'to', 'from']);
 	}
 
-	public function getConnectedUsersProvider() {
+	public function getConnectedUsersProvider()
+	{
 		$input1 = new PresenceEntity();
 		$input1->setPresence('online');
 		$input1->setUserid('admin');
@@ -273,7 +283,8 @@ class PresenceMapperTest extends MapperTestUtility {
 	/**
 	 * @dataProvider getConnectedUsersProvider
 	 */
-	public function testGetConnectedUsers($inputs, $expected) {
+	public function testGetConnectedUsers($inputs, $expected)
+	{
 		foreach ($inputs as $input) {
 			$this->mapper->setPresence($input);
 		}
@@ -286,7 +297,8 @@ class PresenceMapperTest extends MapperTestUtility {
 		$this->assertEquals($expected, $result);
 	}
 
-	public function updatePresenceProvider() {
+	public function updatePresenceProvider()
+	{
 		$input1 = new PresenceEntity();
 		$input1->setPresence('online');
 		$input1->setUserid('admin');
@@ -370,8 +382,8 @@ class PresenceMapperTest extends MapperTestUtility {
 	 * @param int $expNewContentCount
 	 * @param array $expStanzasToSend
 	 */
-	public function testUpdatePresence($inputs, $expInput, $expConnectedUsers,  $expNewContent, $expNewContentCount, $expStanzasToSend) {
-
+	public function testUpdatePresence($inputs, $expInput, $expConnectedUsers, $expNewContent, $expNewContentCount, $expStanzasToSend)
+	{
 		global $time;
 		$time = 1000;
 		foreach ($inputs as $input) {
@@ -396,10 +408,10 @@ class PresenceMapperTest extends MapperTestUtility {
 		$stanzasToSend = $this->fetchAllAsArray('*PREFIX*ojsxc_stanzas');
 
 		$this->assertArrayDbResultsEqual($expStanzasToSend, $stanzasToSend, ['to', 'from', 'stanza']);
-
 	}
 
-	public function setActiveProvider() {
+	public function setActiveProvider()
+	{
 		$input1 = new PresenceEntity();
 		$input1->setPresence('online');
 		$input1->setUserid('admin');
@@ -452,7 +464,8 @@ class PresenceMapperTest extends MapperTestUtility {
 	/**
 	 * @dataProvider  setActiveProvider
 	 */
-	public function testSetActive($inputs, $expected) {
+	public function testSetActive($inputs, $expected)
+	{
 		global $time;
 
 		foreach ($inputs as $input) {
@@ -466,7 +479,5 @@ class PresenceMapperTest extends MapperTestUtility {
 		$result = $this->fetchAllAsArray();
 
 		$this->assertArrayDbResultsEqual($expected, $result, ['userid', 'last_active', 'presence']);
-
 	}
-
 }

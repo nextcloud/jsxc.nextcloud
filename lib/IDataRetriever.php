@@ -2,6 +2,7 @@
 
 namespace OCA\OJSXC;
 
-interface IDataRetriever {
-   public function fetchUrl($url, $data);
+interface IDataRetriever
+{
+	public function fetchUrl($url, $data);
 }

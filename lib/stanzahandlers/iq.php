@@ -12,7 +12,8 @@ use Sabre\Xml\Writer;
  *
  * @package OCA\OJSXC\StanzaHandlers
  */
-class IQ extends StanzaHandler {
+class IQ extends StanzaHandler
+{
 
 	/**
 	 * @var IUserManager
@@ -26,7 +27,8 @@ class IQ extends StanzaHandler {
 	 * @param string $host
 	 * @param IUserManager $userManager
 	 */
-	public function __construct($userId, $host, IUserManager $userManager) {
+	public function __construct($userId, $host, IUserManager $userManager)
+	{
 		parent::__construct($userId, $host);
 		$this->userManager = $userManager;
 	}
@@ -36,7 +38,8 @@ class IQ extends StanzaHandler {
 	 * @param array $stanza
 	 * @return IQRoster
 	 */
-	public function handle(array $stanza) {
+	public function handle(array $stanza)
+	{
 		$this->to = $this->getAttribute($stanza, 'to');
 
 		if ($stanza['value'][0]['name'] === '{jabber:iq:roster}query') {
@@ -46,13 +49,11 @@ class IQ extends StanzaHandler {
 			$iqRoster->setTo($this->from);
 			$iqRoster->setQid($id);
 			foreach ($this->userManager->search('') as $user) {
-				if($user->getUID() !== $this->userId) {
+				if ($user->getUID() !== $this->userId) {
 					$iqRoster->addItem($user->getUID() . '@' . $this->host, $user->getDisplayName());
 				}
 			}
 			return $iqRoster;
 		}
-
 	}
-
 }

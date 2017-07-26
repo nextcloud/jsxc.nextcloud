@@ -11,25 +11,28 @@ use OCA\OJSXC\Db\Stanza;
  * without adding extra features/code to the `HTTPBindController` class.
  * @package OCA\OJSXC
  */
-class NewContentContainer {
+class NewContentContainer
+{
 
 	/**
 	 * @var Stanza[]
 	 */
 	private static $stanzas;
 
-	public function addStanza(Stanza $stanza) {
+	public function addStanza(Stanza $stanza)
+	{
 		self::$stanzas[] = $stanza;
 	}
 
-	public function getStanzas() {
+	public function getStanzas()
+	{
 		$tmp = self::$stanzas;
 		self::$stanzas = [];
 		return $tmp;
 	}
 
-	public function getCount() {
+	public function getCount()
+	{
 		return count(self::$stanzas);
 	}
-	
 }

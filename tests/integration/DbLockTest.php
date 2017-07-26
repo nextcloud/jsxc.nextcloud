@@ -8,7 +8,8 @@ use OCA\OJSXC\DbLock;
 
 $time = 0;
 
-function time() {
+function time()
+{
 	global $time;
 	return $time;
 }
@@ -16,7 +17,8 @@ function time() {
 /**
  * @group DB
  */
-class DbLockTest extends TestCase {
+class DbLockTest extends TestCase
+{
 
 	/**
 	 * @var \OCA\OJSXC\DbLock
@@ -39,7 +41,8 @@ class DbLockTest extends TestCase {
 	 */
 	private $container;
 
-	public function setUp() {
+	public function setUp()
+	{
 		parent::setUp();
 		$app = new Application();
 		$this->container = $app->getContainer();
@@ -51,7 +54,8 @@ class DbLockTest extends TestCase {
 	 * Tests the setLock and stillLocked function by setting up and lock
 	 * and then setting a new lock.
 	 */
-	public function testLock() {
+	public function testLock()
+	{
 		global $time;
 		$time = 4;
 		$this->dbLock = new DbLock(
@@ -86,20 +90,19 @@ class DbLockTest extends TestCase {
 		$this->assertEquals($result[0]['configkey'], 'longpolling');
 		$this->assertEquals($result[0]['configvalue'], '5');
 		$this->assertTrue($this->dbLock2->stillLocked());
-
 	}
 
-	private function  fetchLocks() {
+	private function fetchLocks()
+	{
 		$stmt = $this->con->executeQuery("SELECT * FROM `*PREFIX*preferences` WHERE `appid`='ojsxc' AND `configkey`='longpolling'");
 
 		$reuslt = [];
 
-		while($row = $stmt->fetch()){
+		while ($row = $stmt->fetch()) {
 			$result[] = $row;
 		}
 
 
 		return $result;
 	}
-
 }

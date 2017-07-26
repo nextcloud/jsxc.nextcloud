@@ -14,162 +14,166 @@ use OCA\OJSXC\Exceptions\UnprocessableException;
 
 class ExternalApiController extends SignatureProtectedApiController
 {
-    private $userManager;
+	private $userManager;
 
-    private $userSession;
+	private $userSession;
 
-    private $groupManager;
+	private $groupManager;
 
-    private $logger;
+	private $logger;
 
-    public function __construct($appName,
+	public function __construct(
+		$appName,
    IRequest $request,
    IUserManager $userManager,
    IUserSession $userSession,
    IGroupManager $groupManager,
-   ILogger $logger)
-    {
-        parent::__construct($appName, $request);
+   ILogger $logger
+	) {
+		parent::__construct($appName, $request);
 
-        $this->userManager = $userManager;
-        $this->userSession = $userSession;
-        $this->groupManager = $groupManager;
-        $this->logger = $logger;
-    }
+		$this->userManager = $userManager;
+		$this->userSession = $userSession;
+		$this->groupManager = $groupManager;
+		$this->logger = $logger;
+	}
 
-   /**
-    * @PublicPage
-    * @NoCSRFRequired
-    */
-   public function index($operation)
-   {
-      switch($operation) {
-         case 'auth':
-            return $this->checkPassword(
-               $this->request->getParam('username'),
-               $this->request->getParam('password'),
-               $this->request->getParam('domain')
-            );
-            break;
-         case 'isuser':
-            return $this->isUser(
-               $this->request->getParam('username'),
-               $this->request->getParam('domain')
-            );
-            break;
-         case 'sharedroster':
-            return $this->sharedRoster(
-               $this->request->getParam('username'),
-               $this->request->getParam('domain')
-            );
-            break;
-         default:
-            throw new UnprocessableException( 'Unsupported operation.');
-      }
-   }
+	/**
+	* @PublicPage
+	* @NoCSRFRequired
+	*/
+	public function index($operation)
+	{
+		switch ($operation) {
+		 case 'auth':
+			return $this->checkPassword(
+			   $this->request->getParam('username'),
+			   $this->request->getParam('password'),
+			   $this->request->getParam('domain')
+			);
+			break;
+		 case 'isuser':
+			return $this->isUser(
+			   $this->request->getParam('username'),
+			   $this->request->getParam('domain')
+			);
+			break;
+		 case 'sharedroster':
+			return $this->sharedRoster(
+			   $this->request->getParam('username'),
+			   $this->request->getParam('domain')
+			);
+			break;
+		 default:
+			throw new UnprocessableException('Unsupported operation.');
+	  }
+	}
 
-   /**
-    * @PublicPage
-    * @NoCSRFRequired
-    */
-   public function checkPassword($username = '', $password = '', $domain = '') {
-      $currentUser = null;
+	/**
+	* @PublicPage
+	* @NoCSRFRequired
+	*/
+	public function checkPassword($username = '', $password = '', $domain = '')
+	{
+		$currentUser = null;
 
-      $this->logger->info('ExAPI: Check password for user: '.$username.'@'.$domain);
+		$this->logger->info('ExAPI: Check password for user: '.$username.'@'.$domain);
 
-      if(!empty($password) && !empty($username)) {
-         $loggedIn = false;
-         if(!empty($domain)) {
-            $loggedIn = $this->userSession->login($username . '@' . $domain, $password);
-         }
-         if(!$loggedIn) {
-            $loggedIn = $this->userSession->login($username, $password);
-         }
+		if (!empty($password) && !empty($username)) {
+			$loggedIn = false;
+			if (!empty($domain)) {
+				$loggedIn = $this->userSession->login($username . '@' . $domain, $password);
+			}
+			if (!$loggedIn) {
+				$loggedIn = $this->userSession->login($username, $password);
+			}
 
-         if($loggedIn === true) {
-            $currentUser = $this->userSession->getUser();
-         }
-      }
+			if ($loggedIn === true) {
+				$currentUser = $this->userSession->getUser();
+			}
+		}
 
-      if (!$currentUser) {
-          return array(
-             'result' => 'noauth',
-          );
-      }
+		if (!$currentUser) {
+			return [
+			 'result' => 'noauth',
+		  ];
+		}
 
-      $data = array();
-      $data ['uid'] = $currentUser->getUID();
+		$data = [];
+		$data ['uid'] = $currentUser->getUID();
 
-      return array(
-         'result' => 'success',
-         'data' => $data,
-      );
-   }
+		return [
+		 'result' => 'success',
+		 'data' => $data,
+	  ];
+	}
 
-   /**
-    * @PublicPage
-    * @NoCSRFRequired
-    */
-   public function isUser($username = '', $domain = '') {
-      $this->logger->info('ExAPI: Check if "'.$username.'@'.$domain.'" exists');
+	/**
+	* @PublicPage
+	* @NoCSRFRequired
+	*/
+	public function isUser($username = '', $domain = '')
+	{
+		$this->logger->info('ExAPI: Check if "'.$username.'@'.$domain.'" exists');
 
-      $isUser = false;
+		$isUser = false;
 
-      if(!empty($username)) {
-         if(!empty($domain)) {
-            $isUser = $this->userManager->userExists($username . '@' . $domain);
-         }
-         if(!$isUser) {
-            $isUser = $this->userManager->userExists($username);
-         }
-      }
+		if (!empty($username)) {
+			if (!empty($domain)) {
+				$isUser = $this->userManager->userExists($username . '@' . $domain);
+			}
+			if (!$isUser) {
+				$isUser = $this->userManager->userExists($username);
+			}
+		}
 
-      return array(
-         'result' => 'success',
-         'data' => array(
-            'isUser' => $isUser
-         )
-      );
-   }
+		return [
+		 'result' => 'success',
+		 'data' => [
+			'isUser' => $isUser
+		 ]
+	  ];
+	}
 
-   /**
-    * @PublicPage
-    * @NoCSRFRequired
-    */
-   public function sharedRoster($username = '', $domain = '') {
-      if(!empty($username)) {
-         if(!empty($domain)) {
-            $username .= '@' . $domain;
-         }
-      } else {
-         throw new UnprocessableException('No username provided');
-      }
+	/**
+	* @PublicPage
+	* @NoCSRFRequired
+	*/
+	public function sharedRoster($username = '', $domain = '')
+	{
+		if (!empty($username)) {
+			if (!empty($domain)) {
+				$username .= '@' . $domain;
+			}
+		} else {
+			throw new UnprocessableException('No username provided');
+		}
 
-      $roster = [];
-      $user = $this->userManager->get($username);
+		$roster = [];
+		$user = $this->userManager->get($username);
 
-      $userGroups = $this->groupManager->getUserGroups($user);
+		$userGroups = $this->groupManager->getUserGroups($user);
 
-      foreach($userGroups as $userGroup) {
-         foreach($userGroup->getUsers() as $user) {
-            $uid = $user->getUID();
+		foreach ($userGroups as $userGroup) {
+			foreach ($userGroup->getUsers() as $user) {
+				$uid = $user->getUID();
 
-            if(!array_key_exists($uid, $roster)) {
-               $roster[$uid] = [
-                  'name' => $user->getDisplayName(),
-                  'groups' => []
-               ];
-            }
+				if (!array_key_exists($uid, $roster)) {
+					$roster[$uid] = [
+				  'name' => $user->getDisplayName(),
+				  'groups' => []
+			   ];
+				}
 
-            $roster[$uid]['groups'][] = $userGroup->getDisplayName();
-         }
-      }
+				$roster[$uid]['groups'][] = $userGroup->getDisplayName();
+			}
+		}
 
-      return array(
-         'result' => 'success',
-         'data' => array(
-            'sharedRoster' => $roster
-         )
-      );
-   }
+		return [
+		 'result' => 'success',
+		 'data' => [
+			'sharedRoster' => $roster
+		 ]
+	  ];
+	}
 }

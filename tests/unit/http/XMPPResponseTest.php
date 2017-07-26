@@ -1,7 +1,8 @@
 <?php
 
 namespace  OCA\OJSXC\Db {
-	function uniqid() {
+	function uniqid()
+	{
 		return 4; // chosen by fair dice roll.
 		// guaranteed to be unique.
 	}
@@ -13,10 +14,10 @@ namespace OCA\OJSXC\Http {
 	use OCA\OJSXC\Db\Stanza;
 	use PHPUnit_Framework_TestCase;
 
-
-	class XMPPResponseTest extends PHPUnit_Framework_TestCase {
-
-		public function writingProvider() {
+	class XMPPResponseTest extends PHPUnit_Framework_TestCase
+	{
+		public function writingProvider()
+		{
 			$stanza1 = new Stanza();
 			$stanza1->setFrom('test@test.be');
 			$stanza1->setTo('test.be');
@@ -50,9 +51,10 @@ namespace OCA\OJSXC\Http {
 		}
 
 		/**
-		 * @dataProvider writingProvider
-		 */
-		public function testWriting($stanzas, $expected) {
+	     * @dataProvider writingProvider
+	     */
+		public function testWriting($stanzas, $expected)
+		{
 			$stanzaLogger = $this->getMockBuilder('OCA\OJSXC\StanzaLogger')->disableOriginalConstructor()->getMock();
 			$response = new XMPPResponse($stanzaLogger);
 			foreach ($stanzas as $stanza) {
@@ -61,7 +63,6 @@ namespace OCA\OJSXC\Http {
 			$result = $response->render();
 			$this->assertEquals($expected, $result);
 		}
-
 	}
 
 }

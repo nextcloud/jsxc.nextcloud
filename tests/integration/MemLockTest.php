@@ -13,7 +13,8 @@ use OCA\OJSXC\MemLock;
 /**
  * @group DB
  */
-class MemLockTest extends TestCase {
+class MemLockTest extends TestCase
+{
 
 	/**
 	 * @var \OCA\OJSXC\MemLock
@@ -37,7 +38,8 @@ class MemLockTest extends TestCase {
 
 	public static $time;
 
-	public function setUp() {
+	public function setUp()
+	{
 		parent::setUp();
 		$app = new Application();
 		$this->container = $app->getContainer();
@@ -46,14 +48,14 @@ class MemLockTest extends TestCase {
 		if ($version[0] === 8 && $version[1] == 0) {
 			$this->markTestSkipped();
 		}
-
 	}
 
 	/**
 	 * Tests the setLock and stillLocked function by setting up and lock
 	 * and then setting a new lock.
 	 */
-	public function testLock() {
+	public function testLock()
+	{
 		global $time;
 		$time = 4;
 		$cache = $this->container->getServer()->getMemCacheFactory();
@@ -87,11 +89,10 @@ class MemLockTest extends TestCase {
 		$this->assertTrue($this->memLock2->stillLocked());
 		$result = $this->fetchLock();
 		$this->assertEquals('5', $result);
-
 	}
 
-	private function fetchLock() {
+	private function fetchLock()
+	{
 		return $this->memCache->get('-john-ojxsc-lock');
 	}
-
 }
