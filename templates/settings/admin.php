@@ -89,7 +89,7 @@ if (function_exists('script')) {
 				<?php endif; ?>
 
 				<div class="ojsxc-managed-registration <?php if($_['managedServer'] === 'registered'){echo 'hidden';} ?>">
-					<p class="text">In order to register your XMPP server we will send the following information to our registration server:</p>
+					<p class="text">In order to register your XMPP server we will send the following information to our registration server. Please be patient. This can take several seconds.</p>
 
 					<div class="form-group">
 						<label>API URL</label>

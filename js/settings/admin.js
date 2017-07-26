@@ -232,6 +232,7 @@ $(document).ready(function() {
 
       el.prop('disabled', 'disabled');
       el.val(el.attr('data-toggle-value'));
+      el.addClass('jsxc-loading');
 
       $.ajax({
          method: 'POST',
@@ -240,6 +241,8 @@ $(document).ready(function() {
             promotionCode: promotionCode
          }
       }).always(function(responseJSON) {
+         el.removeClass('jsxc-loading');
+
          if (responseJSON && responseJSON.result === 'success') {
             $('.ojsxc-managed-registration').hide();
 
@@ -263,6 +266,8 @@ $(document).ready(function() {
          msgEl.append($('<span>').text('Sorry we couldn\'t complete your registration.'));
          msgEl.append($('<br>'));
          msgEl.append($('<span>').text(errorMsg));
+
+         el.val('Registration failed');
       });
    });
 
