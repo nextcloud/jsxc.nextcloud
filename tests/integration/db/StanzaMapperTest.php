@@ -8,20 +8,23 @@ use OCP\AppFramework\Db\DoesNotExistException;
 /**
  * @group DB
  */
-class StanzaMapperTest extends MapperTestUtility {
+class StanzaMapperTest extends MapperTestUtility
+{
 
 	/**
 	 * @var StanzaMapper
 	 */
 	protected $mapper;
 
-	protected function setUp() {
+	protected function setUp()
+	{
 		$this->entityName = 'OCA\OJSXC\Db\Stanza';
 		$this->mapperName = 'StanzaMapper';
 		parent::setUp();
 	}
 
-	public function insertProvider() {
+	public function insertProvider()
+	{
 		return [
 			[
 				'john@localhost',
@@ -34,7 +37,8 @@ class StanzaMapperTest extends MapperTestUtility {
 	/**
 	 * @dataProvider insertProvider
 	 */
-	public function testInsert($from, $to, $data) {
+	public function testInsert($from, $to, $data)
+	{
 		$stanza = new Stanza();
 		$stanza->setFrom($from);
 		$stanza->setTo($to);
@@ -50,21 +54,23 @@ class StanzaMapperTest extends MapperTestUtility {
 
 		$this->assertCount(1, $result);
 		$this->assertEquals($stanza->getFrom(), $result[0]->getFrom());
-		$this->assertEquals($stanza->getTo(),  $result[0]->getTo());
-		$this->assertEquals($stanza->getStanza(),  $result[0]->getStanza());
+		$this->assertEquals($stanza->getTo(), $result[0]->getTo());
+		$this->assertEquals($stanza->getStanza(), $result[0]->getStanza());
 	}
 
 	/**
 	 * @expectedException \OCP\AppFramework\Db\DoesNotExistException
 	 */
-	public function testFindByToNotFound() {
+	public function testFindByToNotFound()
+	{
 		$this->mapper->findByTo('test');
 	}
 
 	/**
 	 * @expectedException \OCP\AppFramework\Db\DoesNotExistException
 	 */
-	public function testFindByToNotFound2() {
+	public function testFindByToNotFound2()
+	{
 		$stanza = new Stanza();
 		$stanza->setFrom('john@localhost');
 		$stanza->setTo('john@localhost');
@@ -74,7 +80,8 @@ class StanzaMapperTest extends MapperTestUtility {
 		$this->mapper->findByTo('test');
 	}
 
-	public function testFindByToFound() {
+	public function testFindByToFound()
+	{
 		$stanza1 = new Stanza();
 		$stanza1->setFrom('jan@localhost');
 		$stanza1->setTo('john@localhost');
@@ -95,15 +102,13 @@ class StanzaMapperTest extends MapperTestUtility {
 		// check findByTo
 		$result = $this->mapper->findByTo('john@localhost');
 		$this->assertCount(1, $result);
-		$this->assertEquals($stanza1->getStanza(),  $result[0]->getStanza());
+		$this->assertEquals($stanza1->getStanza(), $result[0]->getStanza());
 
 		// check if element is deleted
 		$result = $this->fetchAll();
 		$this->assertCount(1, $result);
 		$this->assertEquals($stanza2->getFrom(), $result[0]->getFrom());
-		$this->assertEquals($stanza2->getTo(),  $result[0]->getTo());
-		$this->assertEquals($stanza2->getStanza(),  $result[0]->getStanza());
-
+		$this->assertEquals($stanza2->getTo(), $result[0]->getTo());
+		$this->assertEquals($stanza2->getStanza(), $result[0]->getStanza());
 	}
-
 }

@@ -8,13 +8,14 @@ use Sabre\Xml\LibXMLException;
 use Sabre\Xml\ParseException;
 use OCA\OJSXC\Utility\TestCase;
 
-class PresenceTest extends TestCase{
-
-	private function generateFactoryData($xml, $from, $to, $presence, $userId) {
+class PresenceTest extends TestCase
+{
+	private function generateFactoryData($xml, $from, $to, $presence, $userId)
+	{
 		$reader = new Reader();
 		$reader->xml($xml);
 		$reader->elementMap = [
-			'{jabber:client}presence' => function(Reader $reader) use ($userId) {
+			'{jabber:client}presence' => function (Reader $reader) use ($userId) {
 				return Presence::createFromXml($reader, $userId);
 			}
 		];
@@ -30,10 +31,10 @@ class PresenceTest extends TestCase{
 			$userId,
 			$expected
 		];
-
 	}
 
-	public function factoryProvider() {
+	public function factoryProvider()
+	{
 		return [
 			$this->generateFactoryData("<presence xmlns='jabber:client' type='unavailable'/>", null, null, 'unavailable', 'admin'),
 			$this->generateFactoryData("<presence xmlns='jabber:client' type='unavailable'></presence>", null, null, 'unavailable', 'admin'),
@@ -52,7 +53,8 @@ class PresenceTest extends TestCase{
 	/**
 	 * @dataProvider factoryProvider
 	 */
-	public function testFactory($reader, $userid, Presence $expectedElement) {
+	public function testFactory($reader, $userid, Presence $expectedElement)
+	{
 		$result = $reader->parse();
 		$result = $result['value'];
 		$this->assertEquals($expectedElement->getTo(), $result->getTo());
@@ -62,8 +64,9 @@ class PresenceTest extends TestCase{
 	}
 
 
-	private function generateSerializeData($to, $from, $presence, $expected) {
-		$writer =  new Writer();
+	private function generateSerializeData($to, $from, $presence, $expected)
+	{
+		$writer = new Writer();
 		$writer->openMemory();
 		$writer->startElement('body');
 		$writer->writeAttribute('xmlns', 'http://jabber.org/protocol/httpbind');
@@ -82,7 +85,8 @@ class PresenceTest extends TestCase{
 			$presence
 		];
 	}
-	public function serializeProvider() {
+	public function serializeProvider()
+	{
 		return [
 			$this->generateSerializeData('admin@own.dev', 'derp@own.dev', 'chat', '<body xmlns="http://jabber.org/protocol/httpbind"><presence from="derp@own.dev" to="admin@own.dev" xmlns="jabber:client"><show>chat</show></presence></body>'),
 			$this->generateSerializeData('admin@own.dev', 'derp@own.dev', 'online', '<body xmlns="http://jabber.org/protocol/httpbind"><presence from="derp@own.dev" to="admin@own.dev" xmlns="jabber:client" /></body>'),
@@ -97,7 +101,8 @@ class PresenceTest extends TestCase{
 	/**
 	 * @dataProvider serializeProvider
 	 */
-	public function testSerialize(Writer $writer, Presence $presenceEntity, $expected, $to, $from, $presence) {
+	public function testSerialize(Writer $writer, Presence $presenceEntity, $expected, $to, $from, $presence)
+	{
 		$writer->write($presenceEntity);
 		$writer->endElement();
 		$result = $writer->outputMemory();

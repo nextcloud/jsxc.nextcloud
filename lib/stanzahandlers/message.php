@@ -12,7 +12,8 @@ use OCA\OJSXC\Db\Message as MessageEntity;
  *
  * @package OCA\OJSXC\StanzaHandlers
  */
-class Message extends StanzaHandler {
+class Message extends StanzaHandler
+{
 
 	/**
 	 * @var MessageMapper $messageMapper
@@ -41,7 +42,8 @@ class Message extends StanzaHandler {
 	 * @param string $host
 	 * @param MessageMapper $messageMapper
 	 */
-	public function __construct($userId, $host, MessageMapper $messageMapper) {
+	public function __construct($userId, $host, MessageMapper $messageMapper)
+	{
 		parent::__construct($userId, $host);
 		$this->messageMapper = $messageMapper;
 	}
@@ -49,15 +51,16 @@ class Message extends StanzaHandler {
 	/**
 	 * @param array $stanza
 	 */
-	public function handle(array $stanza) {
+	public function handle(array $stanza)
+	{
 		$to = $this->getAttribute($stanza, 'to');
 		$pos = strpos($to, '@');
 		$this->to = substr($to, 0, $pos);
-		foreach($stanza['value'] as $keyRaw=>$value) {
+		foreach ($stanza['value'] as $keyRaw => $value) {
 			// remove namespace from key as it is unneeded and cause problems
 			$key = substr($keyRaw, strpos($keyRaw, '}') + 1, strlen($keyRaw));
 			// fetch namespace from key to readd it
-			$ns = substr($keyRaw, 1, strpos($keyRaw, '}')-1);
+			$ns = substr($keyRaw, 1, strpos($keyRaw, '}') - 1);
 
 			$this->values[] = [
 				"name" => $key,
@@ -76,5 +79,4 @@ class Message extends StanzaHandler {
 		$this->messageMapper->insert($message);
 		$this->values = [];
 	}
-
 }

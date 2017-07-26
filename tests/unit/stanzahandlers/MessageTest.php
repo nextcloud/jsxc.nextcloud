@@ -6,7 +6,8 @@ use OCA\OJSXC\Db\Message as MessageEntity;
 use PHPUnit_Framework_TestCase;
 use PHPUnit_Framework_MockObject_MockObject;
 
-class MessageTest extends PHPUnit_Framework_TestCase {
+class MessageTest extends PHPUnit_Framework_TestCase
+{
 
 	/**
 	 * @var Message $message
@@ -28,14 +29,16 @@ class MessageTest extends PHPUnit_Framework_TestCase {
 	 */
 	private $host;
 
-	public function setUp() {
+	public function setUp()
+	{
 		$this->host = 'localhost';
 		$this->userId = 'john';
 		$this->messageMapper = $this->getMockBuilder('OCA\OJSXC\Db\MessageMapper')->disableOriginalConstructor()->getMock();
 		$this->message = new Message($this->userId, $this->host, $this->messageMapper);
 	}
 
-	public function messageProvider(){
+	public function messageProvider()
+	{
 		$values = [
 			[
 				"name" => "body",
@@ -78,13 +81,12 @@ class MessageTest extends PHPUnit_Framework_TestCase {
 	/**
 	 * @dataProvider messageProvider
 	 */
-	public function testMessage(array $stanza, $expected) {
+	public function testMessage(array $stanza, $expected)
+	{
 		$this->messageMapper->expects($this->once())
 			->method('insert')
 			->with($expected);
 
 		$this->message->handle($stanza);
-
 	}
-
 }

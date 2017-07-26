@@ -7,6 +7,6 @@ namespace OCA\OJSXC\Db;
  *
  * @package OCA\OJSXC\Db
  */
-class IQRosterPushMapper extends StanzaMapper {
-
+class IQRosterPushMapper extends StanzaMapper
+{
 }

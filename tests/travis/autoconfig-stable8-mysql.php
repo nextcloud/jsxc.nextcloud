@@ -1,5 +1,5 @@
 <?php
-$AUTOCONFIG = array (
+$AUTOCONFIG = [
 	'installed' => false,
 	'dbtype' => 'mysql',
 	'dbtableprefix' => 'oc_',
@@ -10,5 +10,4 @@ $AUTOCONFIG = array (
 	'dbhost' => 'localhost',
 	'dbpass' => '',
 	'directory' => getcwd() . '/data',
-);
-
+];

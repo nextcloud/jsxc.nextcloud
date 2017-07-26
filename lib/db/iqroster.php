@@ -7,7 +7,6 @@ use Sabre\Xml\Writer;
 use Sabre\Xml\XmlDeserializable;
 use Sabre\Xml\XmlSerializable;
 
-
 /**
  * This is an entity used by the IqHandler, but not stored/mapped in the database.
  * Class IQRoster
@@ -20,7 +19,8 @@ use Sabre\Xml\XmlSerializable;
  * @method string getQid()
  * @method array getItems()
  */
-class IQRoster extends Stanza implements XmlSerializable{
+class IQRoster extends Stanza implements XmlSerializable
+{
 
 	/**
 	 * @var string $type
@@ -37,7 +37,8 @@ class IQRoster extends Stanza implements XmlSerializable{
 	 */
 	public $items;
 
-	public function xmlSerialize(Writer $writer) {
+	public function xmlSerialize(Writer $writer)
+	{
 		$writer->write([
 			[
 				'name' => 'iq',
@@ -61,7 +62,8 @@ class IQRoster extends Stanza implements XmlSerializable{
 	 * @param string $jid
 	 * @param string $name
 	 */
-	public function addItem($jid, $name){
+	public function addItem($jid, $name)
+	{
 		$this->items[] = [
 			"name" => "item",
 			"attributes" => [
@@ -72,5 +74,4 @@ class IQRoster extends Stanza implements XmlSerializable{
 			"value" => ''
 		];
 	}
-
 }

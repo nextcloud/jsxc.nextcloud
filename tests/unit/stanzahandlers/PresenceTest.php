@@ -7,9 +7,8 @@ use OCA\OJSXC\Db\Presence as PresenceEntity;
 use PHPUnit_Framework_MockObject_MockObject;
 use PHPUnit_Framework_TestCase;
 
-
-class PresenceTest extends PHPUnit_Framework_TestCase {
-
+class PresenceTest extends PHPUnit_Framework_TestCase
+{
 	private $host;
 
 	private $userId;
@@ -29,17 +28,18 @@ class PresenceTest extends PHPUnit_Framework_TestCase {
 	 */
 	private $presence;
 
-	public function setUp() {
+	public function setUp()
+	{
 		$this->host = 'localhost';
 		$this->userId = 'john';
 		$this->presenceMapper = $this->getMockBuilder('OCA\OJSXC\Db\PresenceMapper')->disableOriginalConstructor()->getMock();
 		$this->messageMapper = $this->getMockBuilder('OCA\OJSXC\Db\MessageMapper')->disableOriginalConstructor()->getMock();
 
-		$this->presence = new Presence($this->userId, $this->host
-		, $this->presenceMapper, $this->messageMapper);
+		$this->presence = new Presence($this->userId, $this->host, $this->presenceMapper, $this->messageMapper);
 	}
 
-	public function handleProvider() {
+	public function handleProvider()
+	{
 		$presence = new PresenceEntity();
 		$presence->setPresence('online');
 		$presence->setUserid('john');
@@ -68,8 +68,8 @@ class PresenceTest extends PHPUnit_Framework_TestCase {
 	/**
 	 * @dataProvider handleProvider
 	 */
-	public function testHandle($presenceEntity, $connectedUsers, $presences, $insert) {
-
+	public function testHandle($presenceEntity, $connectedUsers, $presences, $insert)
+	{
 		$this->presenceMapper->expects($this->once())
 			->method('setPresence')
 			->with($presenceEntity);
@@ -97,7 +97,8 @@ class PresenceTest extends PHPUnit_Framework_TestCase {
 	}
 
 
-	public function unavailableHandleProvider() {
+	public function unavailableHandleProvider()
+	{
 		$presence = new PresenceEntity();
 		$presence->setPresence('unavailable');
 		$presence->setUserid('john');
@@ -127,8 +128,8 @@ class PresenceTest extends PHPUnit_Framework_TestCase {
 	/**
 	 * @dataProvider UnavailableHandleProvider
 	 */
-	public function testUnavailableHandle($presenceEntity, $connectedUsers, $presences, $insert) {
-
+	public function testUnavailableHandle($presenceEntity, $connectedUsers, $presences, $insert)
+	{
 		$this->presenceMapper->expects($this->once())
 			->method('setPresence')
 			->with($presenceEntity);

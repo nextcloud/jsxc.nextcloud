@@ -9,7 +9,8 @@ use Sabre\Xml\Writer;
  *
  * @package OCA\OJSXC\StanzaHandlers
  */
-class StanzaHandler {
+class StanzaHandler
+{
 
 	/**
 	 * @var string $userId
@@ -32,7 +33,8 @@ class StanzaHandler {
 	 * @param string 1$userId
 	 * @param string $host
 	 */
-	public function __construct($userId, $host) {
+	public function __construct($userId, $host)
+	{
 		$this->userId = $userId;
 		$this->host = $host;
 		$this->from = $this->userId;
@@ -45,9 +47,8 @@ class StanzaHandler {
 	 * @param $attr
 	 * @return null|string
 	 */
-	protected function getAttribute($stanza, $attr){
+	protected function getAttribute($stanza, $attr)
+	{
 		return isset($stanza['attributes'][$attr]) ? (string) $stanza['attributes'][$attr] : null;
 	}
-
-
 }

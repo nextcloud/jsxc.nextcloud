@@ -19,18 +19,17 @@ use OCP\IRequest;
 use Sabre\Xml\Reader;
 use Sabre\Xml\LibXMLException;
 
-
 /**
  * Class HttpBindController
  *
  * @package OCA\OJSXC\Controller
  */
-class HttpBindController extends Controller {
-
-	const MESSAGE=0;
-	const IQ=1;
-	const PRESENCE=2;
-	const BODY=2;
+class HttpBindController extends Controller
+{
+	const MESSAGE = 0;
+	const IQ = 1;
+	const PRESENCE = 2;
+	const BODY = 2;
 
 
 	/**
@@ -117,7 +116,8 @@ class HttpBindController extends Controller {
 	 * @param int $maxCicles
 	 * @param NewContentContainer $newContentContainer
 	 */
-	public function __construct($appName,
+	public function __construct(
+		$appName,
 								IRequest $request,
 								$userId,
 								StanzaMapper $stanzaMapper,
@@ -142,7 +142,7 @@ class HttpBindController extends Controller {
 		$this->body = $body;
 		$this->sleepTime = $sleepTime;
 		$this->maxCicles = $maxCicles;
-		$this->response =  new XMPPResponse($stanzaLogger);
+		$this->response = new XMPPResponse($stanzaLogger);
 		$this->lock = $lock;
 		$this->presenceHandler = $presenceHandler;
 		$this->presenceMapper = $presenceMapper;
@@ -155,7 +155,8 @@ class HttpBindController extends Controller {
 	 * @NoCSRFRequired
 	 * @return XMPPResponse
 	 */
-	public function index() {
+	public function index()
+	{
 		$this->lock->setLock();
 		$this->presenceMapper->updatePresence();
 		$input = $this->body;
@@ -168,8 +169,8 @@ class HttpBindController extends Controller {
 			$reader->xml($input);
 			$reader->elementMap = [
 				'{jabber:client}message' => 'Sabre\Xml\Element\KeyValue',
-				'{jabber:client}presence' => function(Reader $reader) {
-					return Presence::createFromXml($reader,$this->userId);
+				'{jabber:client}presence' => function (Reader $reader) {
+					return Presence::createFromXml($reader, $this->userId);
 				}
 			];
 			$stanzas = null;
@@ -187,13 +188,13 @@ class HttpBindController extends Controller {
 						$stanzaType = $this->getStanzaType($stanza);
 						if ($stanzaType === self::MESSAGE) {
 							$this->messageHandler->handle($stanza);
-						} else if ($stanzaType === self::IQ) {
+						} elseif ($stanzaType === self::IQ) {
 							$result = $this->iqHandler->handle($stanza);
 							if (!is_null($result)) {
 								$longpoll = false;
 								$this->response->write($result);
 							}
-						} else if ($stanza['value'] instanceof Presence) {
+						} elseif ($stanza['value'] instanceof Presence) {
 							$results = $this->presenceHandler->handle($stanza['value']);
 							if (!is_null($results) && is_array($results)) {
 								$longpoll = false;
@@ -210,7 +211,7 @@ class HttpBindController extends Controller {
 
 		// Start long polling
 		$this->presenceMapper->setActive($this->userId);
-		if ($this->newContentContainer->getCount() > 0 ){
+		if ($this->newContentContainer->getCount() > 0) {
 			foreach ($this->newContentContainer->getStanzas() as $stanz) {
 				$this->response->write($stanz);
 			}
@@ -227,7 +228,7 @@ class HttpBindController extends Controller {
 						$this->response->write($stanz);
 					}
 					$recordFound = true;
-				} Catch (DoesNotExistException $e) {
+				} catch (DoesNotExistException $e) {
 					sleep($this->sleepTime);
 					$recordFound = false;
 				}
@@ -242,8 +243,9 @@ class HttpBindController extends Controller {
 	 * @return int
 	 * @codeCoverageIgnore
 	 */
-	private function getStanzaType($stanza){
-		switch($stanza['name']){
+	private function getStanzaType($stanza)
+	{
+		switch ($stanza['name']) {
 			case '{jabber:client}message':
 				return self::MESSAGE;
 			case '{jabber:client}iq':

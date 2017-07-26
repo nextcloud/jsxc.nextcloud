@@ -7,7 +7,6 @@ use Sabre\Xml\Writer;
 use Sabre\Xml\XmlDeserializable;
 use Sabre\Xml\XmlSerializable;
 
-
 /**
  * This entity represents a roster push.
  * @see https://tools.ietf.org/html/rfc6121#section-2.1.6
@@ -21,7 +20,8 @@ use Sabre\Xml\XmlSerializable;
  * @method string getName()
  * @method string getSubscription()
  */
-class IQRosterPush extends Stanza implements XmlSerializable{
+class IQRosterPush extends Stanza implements XmlSerializable
+{
 
 	/**
 	 * @var string jid of the user, when inserting this into the DB, only userid
@@ -39,7 +39,8 @@ class IQRosterPush extends Stanza implements XmlSerializable{
 	 */
 	public $subscription;
 
-	public function xmlSerialize(Writer $writer) {
+	public function xmlSerialize(Writer $writer)
+	{
 		$writer->write([
 			[
 				'name' => 'iq',
@@ -66,5 +67,4 @@ class IQRosterPush extends Stanza implements XmlSerializable{
 			]
 		]);
 	}
-
 }

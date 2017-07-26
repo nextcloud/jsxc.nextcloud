@@ -6,18 +6,21 @@ use OCA\OJSXC\Db\Message;
 use OCA\OJSXC\Db\Stanza;
 use PHPUnit_Framework_TestCase;
 
-class NewContentContainerTest extends PHPUnit_Framework_TestCase {
+class NewContentContainerTest extends PHPUnit_Framework_TestCase
+{
 
 	/**
 	 * @var NewContentContainer $newContentContainer
 	 */
 	private $newContentContainer;
 
-	public function setUp() {
+	public function setUp()
+	{
 		$this->newContentContainer = new NewContentContainer();
 	}
 
-	public function testProvider() {
+	public function testProvider()
+	{
 		$stanza1 = new Stanza();
 		$stanza1->setFrom('test@own.dev');
 		$stanza1->setTo('adsffdsst@own.dev');
@@ -38,7 +41,8 @@ class NewContentContainerTest extends PHPUnit_Framework_TestCase {
 	/**
 	 * @dataProvider testProvider
 	 */
-	public function test($stanzas, $count) {
+	public function test($stanzas, $count)
+	{
 		foreach ($stanzas as $stanza) {
 			$this->newContentContainer->addStanza($stanza);
 		}
@@ -46,8 +50,5 @@ class NewContentContainerTest extends PHPUnit_Framework_TestCase {
 
 		$result = $this->newContentContainer->getStanzas();
 		$this->assertEquals(sort($stanzas), sort($result));
-
 	}
-
-
 }
