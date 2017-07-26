@@ -37,24 +37,28 @@ class ExternalApiController extends SignatureProtectedApiController
         $this->logger = $logger;
     }
 
+   /**
+    * @PublicPage
+    * @NoCSRFRequired
+    */
    public function index($operation)
    {
       switch($operation) {
          case 'auth':
-            return checkPassword(
+            return $this->checkPassword(
                $this->request->getParam('username'),
                $this->request->getParam('password'),
                $this->request->getParam('domain')
             );
             break;
          case 'isuser':
-            return isUser(
+            return $this->isUser(
                $this->request->getParam('username'),
                $this->request->getParam('domain')
             );
             break;
          case 'sharedroster':
-            return sharedRoster(
+            return $this->sharedRoster(
                $this->request->getParam('username'),
                $this->request->getParam('domain')
             );
@@ -64,6 +68,10 @@ class ExternalApiController extends SignatureProtectedApiController
       }
    }
 
+   /**
+    * @PublicPage
+    * @NoCSRFRequired
+    */
    public function checkPassword($username = '', $password = '', $domain = '') {
       $currentUser = null;
 
@@ -98,6 +106,10 @@ class ExternalApiController extends SignatureProtectedApiController
       );
    }
 
+   /**
+    * @PublicPage
+    * @NoCSRFRequired
+    */
    public function isUser($username = '', $domain = '') {
       $this->logger->info('ExAPI: Check if "'.$username.'@'.$domain.'" exists');
 
@@ -120,6 +132,10 @@ class ExternalApiController extends SignatureProtectedApiController
       );
    }
 
+   /**
+    * @PublicPage
+    * @NoCSRFRequired
+    */
    public function sharedRoster($username = '', $domain = '') {
       if(!empty($username)) {
          if(!empty($domain)) {

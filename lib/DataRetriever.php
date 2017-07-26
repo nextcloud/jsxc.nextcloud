@@ -37,7 +37,7 @@ class DataRetriever implements IDataRetriever {
            } else {
                $head[] = $v;
                if (preg_match('#HTTP/[0-9\.]+\s+([0-9]+)#', $v, $out)) {
-                   $head['reponse_code'] = intval($out[1]);
+                   $head['response_code'] = intval($out[1]);
                }
            }
        }
