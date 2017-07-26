@@ -9,7 +9,8 @@ use OCP\ICache;
  *
  * @package OCA\OJSXC
  */
-class MemLock implements ILock {
+class MemLock implements ILock
+{
 
 	/**
 	 * @var \OCP\ICache $memcache
@@ -32,13 +33,15 @@ class MemLock implements ILock {
 	 * @param $userId
 	 * @param ICache $cache
 	 */
-	public function __construct($userId, ICache $cache) {
+	public function __construct($userId, ICache $cache)
+	{
 		$this->userId = $userId;
 		$this->memcache = $cache;
 		$this->pollingId = time();
 	}
 
-	public function setLock() {
+	public function setLock()
+	{
 		$this->memcache->remove('-' . $this->userId . '-ojxsc-lock');
 		$this->memcache->add('-' . $this->userId . '-ojxsc-lock', $this->pollingId);
 	}
@@ -46,9 +49,9 @@ class MemLock implements ILock {
 	/**
 	 * @return bool
 	 */
-	public function stillLocked() {
+	public function stillLocked()
+	{
 		$r = $this->memcache->get('-' . $this->userId . '-ojxsc-lock');
 		return $r === $this->pollingId;
 	}
-
 }

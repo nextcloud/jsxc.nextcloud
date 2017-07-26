@@ -14,7 +14,8 @@ use OCP\IDb;
  *
  * @package OCA\OJSXC\Db
  */
-class PresenceMapper extends Mapper {
+class PresenceMapper extends Mapper
+{
 
 	/**
 	 * @var bool this value indicates if we already have updated the presence
@@ -69,7 +70,8 @@ class PresenceMapper extends Mapper {
 	 * @param NewContentContainer $newContentContainer
 	 * @param int $timeout
 	 */
-	public function __construct(IDBConnection $db, $host, $userId, MessageMapper $messageMapper, NewContentContainer $newContentContainer, $timeout) {
+	public function __construct(IDBConnection $db, $host, $userId, MessageMapper $messageMapper, NewContentContainer $newContentContainer, $timeout)
+	{
 		parent::__construct($db, 'ojsxc_presence');
 		$this->host = $host;
 		$this->userId = $userId;
@@ -82,7 +84,8 @@ class PresenceMapper extends Mapper {
 	 * @brief This function sets or update the presence of a user.
 	 * @param PresenceEntity $stanza
 	 */
-	public function setPresence(PresenceEntity $stanza) {
+	public function setPresence(PresenceEntity $stanza)
+	{
 		$sql = "UPDATE `*PREFIX*ojsxc_presence` SET `presence`=?, `last_active`=? WHERE `userid` = ?";
 
 		$q = $this->db->prepare($sql);
@@ -101,10 +104,11 @@ class PresenceMapper extends Mapper {
 	 * the current user.
 	 * @return array
 	 */
-	public function getPresences() {
+	public function getPresences()
+	{
 		$stmt = $this->execute("SELECT * FROM `*PREFIX*ojsxc_presence` WHERE `userid` != ?", [$this->userId]);
 		$results = [];
-		while($row = $stmt->fetch()){
+		while ($row = $stmt->fetch()) {
 			$row['from'] = $row['userid'] . '@' . $this->host . '/internal';
 			$row['to'] = $this->userId . '@' . $this->host . '/internal';
 			$results[] = $this->mapRowToEntity($row);
@@ -124,7 +128,8 @@ class PresenceMapper extends Mapper {
 	 * and return it as an array of the userids.
 	 * @return array
 	 */
-	public function getConnectedUsers() {
+	public function getConnectedUsers()
+	{
 		if (!self::$fetchedConnectedUsers) {
 			self::$fetchedConnectedUsers = true;
 
@@ -146,7 +151,8 @@ class PresenceMapper extends Mapper {
 	 * @brief updates the last_active label in the DB.
 	 * @param the user to update the last_active field
 	 */
-	public function setActive($user) {
+	public function setActive($user)
+	{
 		// just do an update since we can assume the user is already online
 		// otherwise this wouldn't make sense
 		$sql = "UPDATE `*PREFIX*ojsxc_presence` SET `last_active`=? WHERE `userid` = ?";
@@ -159,7 +165,8 @@ class PresenceMapper extends Mapper {
 	 * @brief this function will update the presence of users who doesn't
 	 * contacted the server for $this->timeout seconds.
 	 */
-	public function updatePresence() {
+	public function updatePresence()
+	{
 		if (!self::$updatedPresence) {
 			self::$updatedPresence = true;
 
@@ -194,7 +201,6 @@ class PresenceMapper extends Mapper {
 				$presenceToSend->setFrom($inactiveUser . '@' . $this->host . '/internal');
 				$this->newContentContainer->addStanza($presenceToSend);
 			}
-
 		}
 	}
 
@@ -202,11 +208,11 @@ class PresenceMapper extends Mapper {
 	 * @brief Deletes the presence records of a user.
 	 * @param string $user
 	 */
-	public function deletePresence($user) {
+	public function deletePresence($user)
+	{
 		$sql = "DELETE FROM `*PREFIX*ojsxc_presence` WHERE `userid` = ?";
 
 		$q = $this->db->prepare($sql);
 		$q->execute([$user]);
-
 	}
 }

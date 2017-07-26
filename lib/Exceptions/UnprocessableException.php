@@ -2,4 +2,6 @@
 
 namespace OCA\OJSXC\Exceptions;
 
-class UnprocessableException extends Exception {}
+class UnprocessableException extends Exception
+{
+}

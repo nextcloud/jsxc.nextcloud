@@ -9,7 +9,8 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class RefreshRoster extends Command {
+class RefreshRoster extends Command
+{
 
 	/**
 	 * @var IUserManager
@@ -22,20 +23,21 @@ class RefreshRoster extends Command {
 	private $rosterPush;
 
 	public function __construct(IUserManager $userManager,
-								RosterPush $rosterPush) {
+								RosterPush $rosterPush)
+	{
 		parent::__construct();
 		$this->userManager = $userManager;
 		$this->rosterPush = $rosterPush;
-
 	}
 
-	protected function configure() {
+	protected function configure()
+	{
 		$this->setName('ojsxc:refresh-roster');
 		$this->setDescription('Refresh the roster of all users');
 	}
 
-	protected function execute(InputInterface $input, OutputInterface $output) {
-
+	protected function execute(InputInterface $input, OutputInterface $output)
+	{
 		$users = $this->userManager->search('');
 
 		foreach ($users as $user) {
@@ -44,5 +46,4 @@ class RefreshRoster extends Command {
 
 		$output->writeln("<info>Refreshed " . count($users) . " rosters. </info>");
 	}
-
 }

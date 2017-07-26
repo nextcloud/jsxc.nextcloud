@@ -6,8 +6,8 @@ use OCA\OJSXC\Db\IQRoster;
 use PHPUnit_Framework_MockObject_MockObject;
 use PHPUnit_Framework_TestCase;
 
-
-class IQTest extends PHPUnit_Framework_TestCase {
+class IQTest extends PHPUnit_Framework_TestCase
+{
 
 	/**
 	 * @var IQ $iq
@@ -29,14 +29,16 @@ class IQTest extends PHPUnit_Framework_TestCase {
 	 */
 	private $host;
 
-	public function setUp() {
+	public function setUp()
+	{
 		$this->host = 'localhost';
 		$this->userId = 'john';
 		$this->userManager = $this->getMockBuilder('OCP\IUserManager')->disableOriginalConstructor()->getMock();
 		$this->iq = new IQ($this->userId, $this->host, $this->userManager);
 	}
 
-	public function iqRosterProvider() {
+	public function iqRosterProvider()
+	{
 		$user1 = $this->getMockBuilder('OCP\IUser')->disableOriginalConstructor()->getMock();
 		$user1->expects($this->any())
 			->method('getUID')
@@ -140,7 +142,8 @@ class IQTest extends PHPUnit_Framework_TestCase {
 	/**
 	 * @dataProvider iqRosterProvider
 	 */
-	public function testIqRoster(array $stanza, array $users, $searchCount, $expected) {
+	public function testIqRoster(array $stanza, array $users, $searchCount, $expected)
+	{
 		$this->userManager->expects($searchCount)
 			->method('search')
 			->with('')
@@ -149,7 +152,6 @@ class IQTest extends PHPUnit_Framework_TestCase {
 		$result = $this->iq->handle($stanza);
 
 		if ($expected instanceof IQRoster) {
-
 			$this->assertEquals($expected->getFrom(), $result->getFrom());
 			$this->assertEquals($expected->getId(), $result->getId());
 			$this->assertEquals($expected->getItems(), $result->getItems());
@@ -161,5 +163,4 @@ class IQTest extends PHPUnit_Framework_TestCase {
 			$this->assertEquals($expected, $result);
 		}
 	}
-
 }

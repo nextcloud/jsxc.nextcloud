@@ -11,7 +11,8 @@ use OCP\IUserManager;
 use OCP\IUser;
 use OCP\IUserSession;
 
-class Hooks {
+class Hooks
+{
 
 	/**
 	 * @var IUserManager
@@ -37,7 +38,8 @@ class Hooks {
 								IUserSession $userSession,
 								RosterPush $rosterPush,
 								PresenceMapper $presenceMapper,
-								StanzaMapper $stanzaMapper) {
+								StanzaMapper $stanzaMapper)
+	{
 		$this->userManager = $userManager;
 		$this->userSession = $userSession;
 		$this->rosterPush = $rosterPush;
@@ -45,7 +47,8 @@ class Hooks {
 		$this->stanzaMapper = $stanzaMapper;
 	}
 
-	public function register() {
+	public function register()
+	{
 		$this->userManager->listen('\OC\User', 'postCreateUser', [$this, 'onCreateUser']);
 		$this->userManager->listen('\OC\User', 'postDelete', [$this, 'onDeleteUser']);
 		$this->userSession->listen('\OC\User', 'changeUser', [$this, 'onChangeUser']);
@@ -60,7 +63,8 @@ class Hooks {
 	 * @param IUser $user
 	 * @param string $password
 	 */
-	public function onCreateUser(IUser $user, $password) {
+	public function onCreateUser(IUser $user, $password)
+	{
 		$this->rosterPush->createOrUpdateRosterItem($user);
 	}
 
@@ -73,7 +77,8 @@ class Hooks {
 	 * @see https://tools.ietf.org/html/rfc6121#section-2.1.6
 	 * @param IUser $user
 	 */
-	public function onDeleteUser(IUser $user) {
+	public function onDeleteUser(IUser $user)
+	{
 		$this->rosterPush->removeRosterItem($user);
 
 		// delete the presence record of this user
@@ -93,20 +98,19 @@ class Hooks {
 	 * @param string $feature feature which was changed. Enabled and displayName are supported.
 	 * @param string $value
 	 */
-	public function onChangeUser(IUser $user, $feature, $value) {
+	public function onChangeUser(IUser $user, $feature, $value)
+	{
 		if ($feature === "enabled") {
 			if ($value === "true") {
 				// if user is enabled, add to roster
 				$this->onCreateUser($user, '');
-
-			} else if ($value === "false") {
+			} elseif ($value === "false") {
 				// if user is enabled, remove from roster
 				$this->onDeleteUser($user);
 			}
-		} else if ($feature === "displayName") {
+		} elseif ($feature === "displayName") {
 			// if the user was changed, resend the whole roster item
 			$this->onCreateUser($user, '');
 		}
 	}
-
 }

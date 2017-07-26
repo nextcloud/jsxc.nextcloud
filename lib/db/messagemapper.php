@@ -7,6 +7,6 @@ namespace OCA\OJSXC\Db;
  *
  * @package OCA\OJSXC\Db
  */
-class MessageMapper extends StanzaMapper {
-
+class MessageMapper extends StanzaMapper
+{
 }

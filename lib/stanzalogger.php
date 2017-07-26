@@ -6,7 +6,8 @@ use OCA\OJSXC\Db\Stanza;
 use OCP\ILogger;
 use Sabre\Xml\Writer;
 
-class StanzaLogger {
+class StanzaLogger
+{
 
 	/**
 	 * @var ILogger
@@ -30,13 +31,14 @@ class StanzaLogger {
 	private $userId;
 
 
-	public function __construct(ILogger $logger, $userId) {
+	public function __construct(ILogger $logger, $userId)
+	{
 		$this->logger = $logger;
 		$this->userId = $userId;
-
 	}
 
-	public function log(Stanza $stanza, $action) {
+	public function log(Stanza $stanza, $action)
+	{
 		if (\OC::$server->getConfig()->getSystemValue('loglevel') === \OCP\Util::DEBUG) {
 			// only serialize when needed
 			$writer = new Writer();
@@ -46,7 +48,8 @@ class StanzaLogger {
 		}
 	}
 
-	public function logRaw($stanza, $action) {
+	public function logRaw($stanza, $action)
+	{
 		$this->logger->debug($action . " {" . $this->userId . "} : " . $stanza, ["app" => "ojsxc"]);
 	}
 }

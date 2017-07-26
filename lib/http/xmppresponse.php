@@ -11,7 +11,8 @@ use OCA\OJSXC\Db\Stanza;
  *
  * @package OCA\OJSXC\Http
  */
-class XMPPResponse extends Response {
+class XMPPResponse extends Response
+{
 
 	/**
 	 * @var Writer $writer
@@ -29,9 +30,10 @@ class XMPPResponse extends Response {
 	 * @param Stanza|null $stanza
 	 * @param StanzaLogger $stanzaLogger
 	 */
-	public function __construct(StanzaLogger $stanzaLogger, Stanza $stanza=null) {
+	public function __construct(StanzaLogger $stanzaLogger, Stanza $stanza = null)
+	{
 		$this->addHeader('Content-Type', 'text/xml');
-		$this->writer =  new Writer();
+		$this->writer = new Writer();
 		$this->writer->openMemory();
 		$this->writer->startElement('body');
 		$this->writer->writeAttribute('xmlns', 'http://jabber.org/protocol/httpbind');
@@ -44,7 +46,8 @@ class XMPPResponse extends Response {
 	/**
 	 * @param Stanza $input
 	 */
-	public function write(Stanza $input) {
+	public function write(Stanza $input)
+	{
 		$this->stanzaLogger->log($input, StanzaLogger::SENDING);
 		$this->writer->write($input);
 	}
@@ -52,9 +55,9 @@ class XMPPResponse extends Response {
 	/**
 	 * @return string
 	 */
-	public function render() {
+	public function render()
+	{
 		$this->writer->endElement();
 		return $this->writer->outputMemory();
 	}
-
 }

@@ -11,7 +11,8 @@ use OCP\IDBConnection;
  *
  * @package OCA\OJSXC
  */
-class DbLock implements ILock {
+class DbLock implements ILock
+{
 	/**
 	 * @var IConfig $config
 	 */
@@ -33,26 +34,28 @@ class DbLock implements ILock {
 	 * @param string $userId
 	 * @param IConfig $config
 	 */
-	public function __construct($userId, IConfig $config, IDBConnection $con) {
+	public function __construct($userId, IConfig $config, IDBConnection $con)
+	{
 		$this->userId = $userId;
 		$this->config = $config;
 		$this->pollingId = time();
 		$this->con = $con;
 	}
 
-	public function setLock() {
+	public function setLock()
+	{
 		$this->config->setUserValue($this->userId, 'ojsxc', 'longpolling', $this->pollingId);
 	}
 
 	/**
 	 * @return bool
 	 */
-	public function stillLocked() {
+	public function stillLocked()
+	{
 		$sql = "SELECT `configvalue` FROM `*PREFIX*preferences` WHERE `userid` = ? AND `appid`='ojsxc' AND `configkey`='longpolling'";
 		$q = $this->con->prepare($sql);
 		$q->execute([$this->userId]);
 		$r = $q->fetch();
 		return (int)$r['configvalue'] === (int)$this->pollingId;
 	}
-
 }

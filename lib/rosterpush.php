@@ -9,7 +9,8 @@ use OCP\IUserManager;
 use OCP\IUser;
 use OCP\IUserSession;
 
-class RosterPush {
+class RosterPush
+{
 
 	/**
 	 * @var IUserManager
@@ -30,7 +31,8 @@ class RosterPush {
 
 	public function __construct(IUserManager $userManager,
 								IUserSession $userSession, $host,
-								IQRosterPushMapper $iqRosterPushMapper) {
+								IQRosterPushMapper $iqRosterPushMapper)
+	{
 		$this->userManager = $userManager;
 		$this->userSession = $userSession;
 		$this->host = $host;
@@ -41,7 +43,8 @@ class RosterPush {
 	 * @see https://tools.ietf.org/html/rfc6121#section-2.1.6
 	 * @param IUser $user
 	 */
-	public function createOrUpdateRosterItem(IUser $user) {
+	public function createOrUpdateRosterItem(IUser $user)
+	{
 		$iq = new IQRosterPush();
 		$iq->setJid($user->getUID());
 		$iq->setName($user->getDisplayName());
@@ -50,7 +53,7 @@ class RosterPush {
 
 
 		foreach ($this->userManager->search('') as $recipient) {
-			if($recipient->getUID() !== $user->getUID()) {
+			if ($recipient->getUID() !== $user->getUID()) {
 				$iq->setTo($recipient->getUID());
 				$this->iqRosterPushMapper->insert($iq);
 			}
@@ -61,7 +64,8 @@ class RosterPush {
 	 * @see https://tools.ietf.org/html/rfc6121#section-2.1.6
 	 * @param IUser $user
 	 */
-	public function removeRosterItem(IUser $user) {
+	public function removeRosterItem(IUser $user)
+	{
 		$iq = new IQRosterPush();
 		$iq->setJid($user->getUID());
 		$iq->setName($user->getDisplayName());
@@ -70,7 +74,7 @@ class RosterPush {
 
 
 		foreach ($this->userManager->search('') as $recipient) {
-			if($recipient->getUID() !== $user->getUID()) {
+			if ($recipient->getUID() !== $user->getUID()) {
 				$iq->setTo($recipient->getUID());
 				$this->iqRosterPushMapper->insert($iq);
 			}

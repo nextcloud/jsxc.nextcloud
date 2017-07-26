@@ -5,7 +5,8 @@ namespace OCA\OJSXC\Db;
 use OCA\OJSXC\Utility\MapperTestUtility;
 use OCP\AppFramework\Db\DoesNotExistException;
 
-function uniqid() {
+function uniqid()
+{
 	return 4; // chosen by fair dice roll.
 			  // guaranteed to be unique.
 }
@@ -13,20 +14,23 @@ function uniqid() {
 /**
  * @group DB
  */
-class MessageMapperTest extends MapperTestUtility {
+class MessageMapperTest extends MapperTestUtility
+{
 
 	/**
 	 * @var StanzaMapper
 	 */
 	protected $mapper;
 
-	protected function setUp() {
+	protected function setUp()
+	{
 		$this->entityName = 'OCA\OJSXC\Db\Message';
 		$this->mapperName = 'MessageMapper';
 		parent::setUp();
 	}
 
-	public function insertProvider() {
+	public function insertProvider()
+	{
 		return [
 			[
 				'john@localhost',
@@ -42,7 +46,8 @@ class MessageMapperTest extends MapperTestUtility {
 	/**
 	 * @dataProvider insertProvider
 	 */
-	public function testInsert($from, $to, $data, $type, $msg, $expectedStanza) {
+	public function testInsert($from, $to, $data, $type, $msg, $expectedStanza)
+	{
 		$stanza = new Message();
 		$stanza->setFrom($from);
 		$stanza->setTo($to);
@@ -61,22 +66,24 @@ class MessageMapperTest extends MapperTestUtility {
 
 		$this->assertCount(1, $result);
 		$this->assertEquals($stanza->getFrom(), $result[0]->getFrom());
-		$this->assertEquals($stanza->getTo(),  $result[0]->getTo());
-		$this->assertEquals($expectedStanza,  $result[0]->getStanza());
-		$this->assertEquals(null,  $result[0]->getType()); // type is saved into the XML string, not the DB.
+		$this->assertEquals($stanza->getTo(), $result[0]->getTo());
+		$this->assertEquals($expectedStanza, $result[0]->getStanza());
+		$this->assertEquals(null, $result[0]->getType()); // type is saved into the XML string, not the DB.
 	}
 
 	/**
 	 * @expectedException \OCP\AppFramework\Db\DoesNotExistException
 	 */
-	public function testFindByToNotFound() {
+	public function testFindByToNotFound()
+	{
 		$this->mapper->findByTo('test');
 	}
 
 	/**
 	 * @expectedException \OCP\AppFramework\Db\DoesNotExistException
 	 */
-	public function testFindByToNotFound2() {
+	public function testFindByToNotFound2()
+	{
 		$stanza = new Message();
 		$stanza->setFrom('john@localhost');
 		$stanza->setTo('john@localhost');
@@ -88,7 +95,8 @@ class MessageMapperTest extends MapperTestUtility {
 		$this->mapper->findByTo('test');
 	}
 
-	public function testFindByToFound() {
+	public function testFindByToFound()
+	{
 		$stanza1 = new Message();
 		$stanza1->setFrom('jan@localhost');
 		$stanza1->setTo('john@localhost');
@@ -113,15 +121,13 @@ class MessageMapperTest extends MapperTestUtility {
 		// check findByTo
 		$result = $this->mapper->findByTo('john@localhost');
 		$this->assertCount(1, $result);
-		$this->assertEquals('<message to="john@localhost" from="jan@localhost" type="test" xmlns="jabber:client" id="4-msg">Messageabc</message>',  $result[0]->getStanza());
+		$this->assertEquals('<message to="john@localhost" from="jan@localhost" type="test" xmlns="jabber:client" id="4-msg">Messageabc</message>', $result[0]->getStanza());
 
 		// check if element is deleted
 		$result = $this->fetchAll();
 		$this->assertCount(1, $result);
 		$this->assertEquals($stanza2->getFrom(), $result[0]->getFrom());
-		$this->assertEquals($stanza2->getTo(),  $result[0]->getTo());
-		$this->assertEquals('<message to="jan@localhost" from="thomas@localhost" type="test2" xmlns="jabber:client" id="4-msg">Message</message>',  $result[0]->getStanza());
-
+		$this->assertEquals($stanza2->getTo(), $result[0]->getTo());
+		$this->assertEquals('<message to="jan@localhost" from="thomas@localhost" type="test2" xmlns="jabber:client" id="4-msg">Message</message>', $result[0]->getStanza());
 	}
-
 }
