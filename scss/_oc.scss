@@ -1,3 +1,9 @@
+@keyframes jsxc-left-to-right {
+  0% {background-position-x: 0%}
+  50% {background-position-x: 100%}
+  100% {background-position-x: 0%}
+}
+
 #jsxc_roster {
   top: 45px;
   z-index: 1500;
@@ -98,16 +104,32 @@
     &[type='checkbox'] {
       margin: 13px 0;
       width: auto;
+      min-height: auto;
+      height: auto;
     }
 
     &[type='radio'] {
       width: auto;
+      min-height: auto;
+      height: auto;
+    }
+
+    &[readonly] {
+      background-color: #f1f1f1;
     }
 
     &:invalid {
       border: 1px solid red;
       position: relative;
     }
+
+    &.jsxc-loading {
+      background-image: linear-gradient(to right, #fff, #fff);
+      background-position-x: 10%;
+      background-size: 30px 100%;
+      background-repeat: no-repeat;
+      animation: jsxc-left-to-right 5s linear infinite;
+   }
   }
 
   em, .boshUrl-msg {
