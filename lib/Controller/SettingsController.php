@@ -87,15 +87,15 @@ class SettingsController extends Controller
            if ($mail !== null) {
                list($u, $d) = explode("@", $mail, 2);
                if ($d !== null && $d !== "") {
-                   $data ['xmpp'] ['username'] = $u;
-                   $data ['xmpp'] ['domain'] = $d;
+                   $data ['xmpp'] ['username'] = strtolower($u);
+                   $data ['xmpp'] ['domain'] = strtolower($d);
                }
            }
        }
 
        if ($this->getBooleanAppValue('timeLimitedToken')) {
            if (!array_key_exists('username', $data['xmpp']) || empty($data['xmpp']['username'])) {
-               $data['xmpp']['username'] = $currentUID;
+               $data['xmpp']['username'] = strtolower($currentUID);
            }
 
            $token = $this->generateTimeLimitedToken($data['xmpp']['username'], $data['xmpp']['domain']);
