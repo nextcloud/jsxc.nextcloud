@@ -2,6 +2,7 @@ __Bugtracker and issues:__ https://github.com/jsxc/jsxc/issues<br />
 
 # Nextcloud JavaScript Xmpp Client
 [![Build Status](https://travis-ci.org/nextcloud/jsxc.nextcloud.svg?branch=master)](https://travis-ci.org/nextcloud/jsxc.nextcloud)
+[![codecov](https://codecov.io/gh/nextcloud/jsxc.nextcloud/branch/master/graph/badge.svg)](https://codecov.io/gh/nextcloud/jsxc.nextcloud)
 ![Downloads](https://img.shields.io/github/downloads/nextcloud/jsxc.nextcloud/total.svg)
 ![GitHub release](https://img.shields.io/github/release/nextcloud/jsxc.nextcloud.svg)
 
