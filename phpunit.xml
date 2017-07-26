@@ -12,6 +12,7 @@
         <whitelist processUncoveredFilesFromWhitelist="true">
             <directory suffix=".php">lib</directory>
             <exclude>
+                <directory suffix=".php">lib/ContactsMenu</directory>
                 <directory suffix=".php">lib/db</directory>
                 <file>lib/ilock.php</file>
                 <file>lib/memlock.php</file>

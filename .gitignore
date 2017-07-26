@@ -17,3 +17,4 @@ coverage
 # vim
 .phpstorm_helpers
 .phpcomplete_extended
+.php_cs.cache
