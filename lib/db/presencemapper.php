@@ -173,8 +173,10 @@ class PresenceMapper extends Mapper
 			$time = time() - $this->timeout;
 
 			// first find all users who where offline for more than 30 seconds
-			$stmt = $this->execute("SELECT `userid` FROM `*PREFIX*ojsxc_presence` WHERE `presence` != 'unavailable' AND `userid` != ? AND `last_active` < ?",
-				[$this->userId, $time]);
+			$stmt = $this->execute(
+				"SELECT `userid` FROM `*PREFIX*ojsxc_presence` WHERE `presence` != 'unavailable' AND `userid` != ? AND `last_active` < ?",
+				[$this->userId, $time]
+			);
 
 			$inactiveUsers = [];
 			while ($row = $stmt->fetch()) {

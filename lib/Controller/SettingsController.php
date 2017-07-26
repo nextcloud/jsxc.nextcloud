@@ -17,12 +17,13 @@ class SettingsController extends Controller
 
 	private $userSession;
 
-	public function __construct($appName,
+	public function __construct(
+		$appName,
    IRequest $request,
    IConfig $config,
    IUserManager $userManager,
-   IUserSession $userSession)
-	{
+   IUserSession $userSession
+	) {
 		parent::__construct($appName, $request);
 
 		$this->config = $config;
@@ -30,46 +31,46 @@ class SettingsController extends Controller
 		$this->userSession = $userSession;
 	}
 
-   /**
-   * @NoAdminRequired
-   * @PublicPage
-   */
-   public function index()
-   {
-   	$currentUser = $this->getCurrentUser();
+	/**
+	* @NoAdminRequired
+	* @PublicPage
+	*/
+	public function index()
+	{
+		$currentUser = $this->getCurrentUser();
 
-   	if (!$currentUser) {
-   		return [
+		if (!$currentUser) {
+			return [
 			'result' => 'noauth',
 		 ];
-   	}
+		}
 
-   	$currentUID = $currentUser->getUID();
+		$currentUID = $currentUser->getUID();
 
-   	$serverType = $this->getAppValue('serverType');
+		$serverType = $this->getAppValue('serverType');
 
-   	$data = [
+		$data = [
 		 'serverType' => (!empty($serverType))? $serverType : 'internal',
 		 'loginForm' => [
 			'startMinimized' => $this->getBooleanAppValue('xmppStartMinimized')
 			]
 		 ];
 
-   	if ($data ['serverType'] === 'internal') {
-   		$data['adminSettings']['xmppDomain'] = $this->request->getServerHost();
+		if ($data ['serverType'] === 'internal') {
+			$data['adminSettings']['xmppDomain'] = $this->request->getServerHost();
 
-   		return [
+			return [
 			   'result' => 'success',
 			   'data' => $data,
 			];
-   	}
+		}
 
-   	$data ['screenMediaExtension'] = [
+		$data ['screenMediaExtension'] = [
 			'firefox' => trim($this->getAppValue('firefoxExtension')),
 			'chrome' => trim($this->getAppValue('chromeExtension'))
 		 ];
 
-   	$data ['xmpp'] = [
+		$data ['xmpp'] = [
 			'url' => trim($this->getAppValue('boshUrl')),
 			'domain' => trim($this->getAppValue('xmppDomain')),
 			'resource' => trim($this->getAppValue('xmppResource')),
@@ -77,39 +78,39 @@ class SettingsController extends Controller
 			'onlogin' => null
 		 ];
 
-   	$data ['adminSettings'] = [
+		$data ['adminSettings'] = [
 			'xmppDomain' => trim($this->getAppValue('xmppDomain'))
 		 ];
 
-   	if ($this->getBooleanAppValue('xmppPreferMail')) {
-   		$mail = $this->config->getUserValue($currentUID, 'settings', 'email');
+		if ($this->getBooleanAppValue('xmppPreferMail')) {
+			$mail = $this->config->getUserValue($currentUID, 'settings', 'email');
 
-   		if ($mail !== null) {
-   			list($u, $d) = explode("@", $mail, 2);
-   			if ($d !== null && $d !== "") {
-   				$data ['xmpp'] ['username'] = $u;
-   				$data ['xmpp'] ['domain'] = $d;
-   			}
-   		}
-   	}
+			if ($mail !== null) {
+				list($u, $d) = explode("@", $mail, 2);
+				if ($d !== null && $d !== "") {
+					$data ['xmpp'] ['username'] = strtolower($u);
+					$data ['xmpp'] ['domain'] = strtolower($d);
+				}
+			}
+		}
 
-   	if ($this->getBooleanAppValue('timeLimitedToken')) {
-   		if (!array_key_exists('username', $data['xmpp']) || empty($data['xmpp']['username'])) {
-   			$data['xmpp']['username'] = $currentUID;
-   		}
+		if ($this->getBooleanAppValue('timeLimitedToken')) {
+			if (!array_key_exists('username', $data['xmpp']) || empty($data['xmpp']['username'])) {
+				$data['xmpp']['username'] = strtolower($currentUID);
+			}
 
-   		$token = $this->generateTimeLimitedToken($data['xmpp']['username'], $data['xmpp']['domain']);
+			$token = $this->generateTimeLimitedToken($data['xmpp']['username'], $data['xmpp']['domain']);
 
-   		$data['xmpp']['password'] = $token;
-   	}
+			$data['xmpp']['password'] = $token;
+		}
 
-   	$data = $this->overwriteByUserDefined($currentUID, $data);
+		$data = $this->overwriteByUserDefined($currentUID, $data);
 
-   	return [
+		return [
 			'result' => 'success',
 			'data' => $data,
 		 ];
-   }
+	}
 
 	public function setAdmin()
 	{
@@ -156,51 +157,51 @@ class SettingsController extends Controller
 	  ];
 	}
 
-   /**
-   * @NoAdminRequired
-   */
-   public function setUser()
-   {
-   	$uid = $this->userSession->getUser()->getUID();
+	/**
+	* @NoAdminRequired
+	*/
+	public function setUser()
+	{
+		$uid = $this->userSession->getUser()->getUID();
 
-   	$options = $this->config->getUserValue($uid, 'ojsxc', 'options');
-   	$options = json_decode($options, true);
+		$options = $this->config->getUserValue($uid, 'ojsxc', 'options');
+		$options = json_decode($options, true);
 
-   	foreach ($_POST as $key => $val) {
-   		$options[$key] = $val;
-   	}
+		foreach ($_POST as $key => $val) {
+			$options[$key] = $val;
+		}
 
-   	$this->config->setUserValue($uid, 'ojsxc', 'options', json_encode($options));
+		$this->config->setUserValue($uid, 'ojsxc', 'options', json_encode($options));
 
-   	return [
+		return [
 		 'status' => 'success'
 	  ];
-   }
+	}
 
-   /**
-   * @NoAdminRequired
-   */
-   public function getIceServers()
-   {
-   	$secret = $this->getAppValue('iceSecret');
-   	$ttl = $this->getAppValue('iceTtl', 3600 * 24); // one day (according to TURN-REST-API)
-	  $url = $this->getAppValue('iceUrl');
-   	$username = $this->getAppValue('iceUsername', '');
-   	$credential = $this->getAppValue('iceCredential', '');
+	/**
+	* @NoAdminRequired
+	*/
+	public function getIceServers()
+	{
+		$secret = $this->getAppValue('iceSecret');
+		$ttl = $this->getAppValue('iceTtl', 3600 * 24); // one day (according to TURN-REST-API)
+		$url = $this->getAppValue('iceUrl');
+		$username = $this->getAppValue('iceUsername', '');
+		$credential = $this->getAppValue('iceCredential', '');
 
-   	$url = preg_match('/^(turn|stun):/', $url) || empty($url) ? $url : "turn:$url";
+		$url = preg_match('/^(turn|stun):/', $url) || empty($url) ? $url : "turn:$url";
 
-   	if (!empty($secret) && (empty($username) || empty($credential))) {
-   		$uid = $this->userSession->getUser()->getUID();
+		if (!empty($secret) && (empty($username) || empty($credential))) {
+			$uid = $this->userSession->getUser()->getUID();
 
-   		$accessData = TimeLimitedToken::generateTURN($uid, $secret, $ttl);
+			$accessData = TimeLimitedToken::generateTURN($uid, $secret, $ttl);
 
-   		$username = $accessData[0];
-   		$credential = $accessData[1];
-   	}
+			$username = $accessData[0];
+			$credential = $accessData[1];
+		}
 
-   	if (!empty($url)) {
-   		$data = [
+		if (!empty($url)) {
+			$data = [
 		   'ttl' => $ttl,
 		   'iceServers' => [
 			  [
@@ -210,43 +211,43 @@ class SettingsController extends Controller
 			  ],
 		   ],
 		];
-   	} else {
-   		$data = [];
-   	}
+		} else {
+			$data = [];
+		}
 
-   	return $data;
-   }
+		return $data;
+	}
 
-   /**
-   * @NoAdminRequired
-   */
-   public function getUsers($search = '')
-   {
-   	$limit = 10;
-   	$offset = 0;
+	/**
+	* @NoAdminRequired
+	*/
+	public function getUsers($search = '')
+	{
+		$limit = 10;
+		$offset = 0;
 
-   	$preferMail = $this->getBooleanAppValue('xmppPreferMail');
+		$preferMail = $this->getBooleanAppValue('xmppPreferMail');
 
-   	$users = $this->userManager->searchDisplayName($search, $limit, $offset);
-   	$response = [];
+		$users = $this->userManager->searchDisplayName($search, $limit, $offset);
+		$response = [];
 
-   	foreach ($users as $user) {
-   		$uid = $user->getUID();
-   		$index = $uid;
+		foreach ($users as $user) {
+			$uid = $user->getUID();
+			$index = $uid;
 
-   		if ($preferMail) {
-   			$mail = $this->config->getUserValue($uid, 'settings', 'email');
+			if ($preferMail) {
+				$mail = $this->config->getUserValue($uid, 'settings', 'email');
 
-   			if (!empty($mail)) {
-   				$index = $mail;
-   			}
-   		}
+				if (!empty($mail)) {
+					$index = $mail;
+				}
+			}
 
-   		$response[$index] = $user->getDisplayName();
-   	}
+			$response[$index] = $user->getDisplayName();
+		}
 
-   	return $response;
-   }
+		return $response;
+	}
 
 	private function getCurrentUser()
 	{
@@ -319,8 +320,8 @@ class SettingsController extends Controller
 		preg_match('/^([0-9]+)\.', $version, $versionMatches);
 		$majorVersion = intval($versionMatches[1]);
 
-	  // copied from owncloud/settings/ajax/installapp.php
-	  $lastConfirm = (int) \OC::$server->getSession()->get('last-password-confirm');
+		// copied from owncloud/settings/ajax/installapp.php
+		$lastConfirm = (int) \OC::$server->getSession()->get('last-password-confirm');
 
 		return $majorVersion >= 11 && $lastConfirm < (time() - 30 * 60 + 15);
 	}

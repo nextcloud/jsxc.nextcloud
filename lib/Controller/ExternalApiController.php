@@ -22,13 +22,14 @@ class ExternalApiController extends SignatureProtectedApiController
 
 	private $logger;
 
-	public function __construct($appName,
+	public function __construct(
+		$appName,
    IRequest $request,
    IUserManager $userManager,
    IUserSession $userSession,
    IGroupManager $groupManager,
-   ILogger $logger)
-	{
+   ILogger $logger
+	) {
 		parent::__construct($appName, $request);
 
 		$this->userManager = $userManager;

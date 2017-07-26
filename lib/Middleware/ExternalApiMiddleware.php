@@ -36,25 +36,25 @@ class ExternalApiMiddleware extends Middleware
 		$apiSecret = $this->config->getAppValue('ojsxc', 'apiSecret');
 		$jsxcSignatureHeader = $this->request->getHeader('X-JSXC-SIGNATURE');
 
-	  // check if we have a signature
-	  if (! isset($jsxcSignatureHeader)) {
-	  	throw new SecurityException('HTTP header "X-JSXC-Signature" is missing.');
-	  } elseif (! extension_loaded('hash')) {
-	  	throw new SecurityException('Missing "hash" extension to check the secret code validity.');
-	  } elseif (! $apiSecret) {
-	  	throw new SecurityException('Missing secret.');
-	  }
+		// check if we have a signature
+		if (! isset($jsxcSignatureHeader)) {
+			throw new SecurityException('HTTP header "X-JSXC-Signature" is missing.');
+		} elseif (! extension_loaded('hash')) {
+			throw new SecurityException('Missing "hash" extension to check the secret code validity.');
+		} elseif (! $apiSecret) {
+			throw new SecurityException('Missing secret.');
+		}
 
-	  // check if the algo is supported
-	  list($algo, $hash) = explode('=', $jsxcSignatureHeader, 2) + [ '', '' ];
+		// check if the algo is supported
+		list($algo, $hash) = explode('=', $jsxcSignatureHeader, 2) + [ '', '' ];
 		if (! in_array($algo, hash_algos(), true)) {
 			throw new SecurityException("Hash algorithm '$algo' is not supported.");
 		}
 
-	  // check if the key is valid
-	  if ($hash !== hash_hmac($algo, $this->rawRequest->get(), $apiSecret)) {
-	  	throw new SecurityException('Signature does not match.');
-	  }
+		// check if the key is valid
+		if ($hash !== hash_hmac($algo, $this->rawRequest->get(), $apiSecret)) {
+			throw new SecurityException('Signature does not match.');
+		}
 	}
 
 	public function afterException($controller, $methodName, \Exception $exception)

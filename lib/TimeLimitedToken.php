@@ -20,9 +20,12 @@ class TimeLimitedToken
 		$hmac = hash_hmac('sha256', $challenge, $secret, true);
 		$token = $version.substr($hmac, 0, 16).$header;
 
-	  // format as "user-friendly" base64
-	  $token = str_replace('=', '', strtr(base64_encode($token),
-	   'OIl', '-$%'));
+		// format as "user-friendly" base64
+		$token = str_replace('=', '', strtr(
+		base64_encode($token),
+	   'OIl',
+		'-$%'
+	  ));
 
 		return $token;
 	}

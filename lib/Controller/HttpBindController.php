@@ -116,7 +116,8 @@ class HttpBindController extends Controller
 	 * @param int $maxCicles
 	 * @param NewContentContainer $newContentContainer
 	 */
-	public function __construct($appName,
+	public function __construct(
+		$appName,
 								IRequest $request,
 								$userId,
 								StanzaMapper $stanzaMapper,

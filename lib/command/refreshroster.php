@@ -22,9 +22,10 @@ class RefreshRoster extends Command
 	 */
 	private $rosterPush;
 
-	public function __construct(IUserManager $userManager,
-								RosterPush $rosterPush)
-	{
+	public function __construct(
+		IUserManager $userManager,
+								RosterPush $rosterPush
+	) {
 		parent::__construct();
 		$this->userManager = $userManager;
 		$this->rosterPush = $rosterPush;

@@ -412,7 +412,8 @@ XML;
 					'to' => 'derp@own.dev',
 					'type' => 'chat',
 					'id' => '1452960296859-msg',
-				]]),
+				]]
+				),
 				$this->equalTo([	'name' => '{jabber:client}message',
 					'value' => [
 					'{jabber:client}body' => 'abc2',

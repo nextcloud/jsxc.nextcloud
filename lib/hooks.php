@@ -34,12 +34,13 @@ class Hooks
 	 */
 	private $stanzaMapper;
 
-	public function __construct(IUserManager $userManager,
+	public function __construct(
+		IUserManager $userManager,
 								IUserSession $userSession,
 								RosterPush $rosterPush,
 								PresenceMapper $presenceMapper,
-								StanzaMapper $stanzaMapper)
-	{
+								StanzaMapper $stanzaMapper
+	) {
 		$this->userManager = $userManager;
 		$this->userSession = $userSession;
 		$this->rosterPush = $rosterPush;

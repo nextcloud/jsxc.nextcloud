@@ -9,7 +9,7 @@ use OCP\IConfig;
 class Admin implements ISettings
 {
 	/** @var IConfig */
-   private $config;
+	private $config;
 
 	public function __construct(IConfig $config)
 	{
