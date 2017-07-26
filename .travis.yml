@@ -36,6 +36,7 @@ script:
   - ./vendor/bin/phpunit -c phpunit.xml --coverage-clover=unit-coverage.xml
   - ./vendor/bin/phpunit -c phpunit.integration.xml --coverage-clover=integration-coverage.xml
   - cat ../../data/nextcloud.log
+  - ../../occ app:check-code ojsxc
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
