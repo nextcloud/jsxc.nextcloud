@@ -4,7 +4,7 @@ use OCA\OJSXC\AppInfo\Application;
 
 \OCP\App::registerPersonal('ojsxc', 'settings/personal');
 
-$jsxc_root = (defined('JSXC_ENV') && JSXC_ENV === 'dev')? 'jsxc/dev/' : 'jsxc/';
+$jsxc_root = (\OC::$server->getConfig()->getSystemValue('jsxc.environment') === 'dev')? 'jsxc/dev/' : 'jsxc/';
 
 OCP\Util::addScript ( 'ojsxc', $jsxc_root.'lib/jquery.slimscroll' );
 OCP\Util::addScript ( 'ojsxc', $jsxc_root.'lib/jquery.fullscreen' );
