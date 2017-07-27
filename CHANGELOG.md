@@ -5,6 +5,38 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+### Added
+- [#28](https://github.com/nextcloud/jsxc.nextcloud/issues/28) add admin section icon to NC 12
+- [#23](https://github.com/nextcloud/jsxc.nextcloud/issues/23) support user@domain Nextcloud usernames for XMPP Cloud Auth
+- [#21](https://github.com/nextcloud/jsxc.nextcloud/issues/21) extend NC contact menu
+- add logging of stanzas (internal)
+- update roster when user is created, deleted or changed (internal)
+- add command to refresh roster of all users (internal)
+- [#36](https://github.com/nextcloud/jsxc.nextcloud/issues/36) add sharedroster operation to external api
+- [#37](https://github.com/nextcloud/jsxc.nextcloud/issues/37) add registration form for managed server service (beta)
+- [#38](https://github.com/nextcloud/jsxc.nextcloud/issues/38) allow authentication with app passwords via external api
+- add pre-commit hook template
+
+### Fixed
+- [#24](https://github.com/nextcloud/jsxc.nextcloud/issues/24) fix prefer mail address to login
+- [#19](https://github.com/nextcloud/jsxc.nextcloud/issues/19) fix inaccurate presence (internal)
+- fix presence when muliple users go offline (internal)
+- fix loading of avatars (internal)
+- clean up chat data after an user got removed (internal)
+- [#35](https://github.com/nextcloud/jsxc.nextcloud/issues/35) fix message exchange (internal)
+- fix multiple php warnings
+- use system value to determine jsxc environment
+
+### Changed
+- update jsxc to v3.3.0 ([change log](https://github.com/jsxc/jsxc/blob/master/CHANGELOG.md))
+- drop support for NC 9
+- set internal server as default for new installations
+- move api secret generation to app.php
+- [#39](https://github.com/nextcloud/jsxc.nextcloud/issues/39) transfer all ajax endpoints to controller
+- update phpunit to 5.7
+- update npm dependencies
+- use codecov
+- [#46](https://github.com/nextcloud/jsxc.nextcloud/issues/46) use php-cs-fixer to be PSR-2 compliant
 
 ## 3.2.1 - 2017-06-01
 ### Fixed
