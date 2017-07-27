@@ -17,9 +17,9 @@ $application->registerRoutes($this, array(
 		array('name' => 'settings#getUsers', 'url' => '/settings/users', 'verb' => 'GET'),
 
 		array('name' => 'externalApi#index', 'url' => '/ajax/externalApi.php', 'verb' => 'POST'),
-		array('name' => 'externalApi#check_password', 'url' => '/api/v2/checkPassword', 'verb' => 'POST'),
-		array('name' => 'externalApi#is_user', 'url' => '/api/v2/isUser', 'verb' => 'POST'),
-		array('name' => 'externalApi#shared_roster', 'url' => '/api/v2/sharedRoster', 'verb' => 'POST'),
+		// array('name' => 'externalApi#check_password', 'url' => '/api/v2/checkPassword', 'verb' => 'POST'),
+		// array('name' => 'externalApi#is_user', 'url' => '/api/v2/isUser', 'verb' => 'POST'),
+		// array('name' => 'externalApi#shared_roster', 'url' => '/api/v2/sharedRoster', 'verb' => 'POST'),
 
 		array('name' => 'managedServer#register', 'url' => '/managedServer/register', 'verb' => 'POST')
 	)
