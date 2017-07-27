@@ -1,0 +1,5 @@
+#!/bin/sh
+
+./vendor/bin/phpunit -c phpunit.xml
+./vendor/bin/phpunit -c phpunit.integration.xml
+./vendor/bin/php-cs-fixer fix --dry-run
