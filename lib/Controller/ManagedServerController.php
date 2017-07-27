@@ -116,6 +116,7 @@ class ManagedServerController extends Controller
 		$this->config->setAppValue('ojsxc', 'boshUrl', $responseJSON->boshUrl);
 		$this->config->setAppValue('ojsxc', 'xmppDomain', $responseJSON->domain);
 		$this->config->setAppValue('ojsxc', 'timeLimitedToken', 'true');
+		$this->config->setAppValue('ojsxc', 'xmppPreferMail', 'false');
 		$this->config->setAppValue('ojsxc', 'managedServer', 'registered');
 		$this->config->setAppValue('ojsxc', 'externalServices', implode('|', $responseJSON->externalServices));
 
