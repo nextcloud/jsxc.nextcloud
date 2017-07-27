@@ -280,7 +280,7 @@ class SettingsController extends Controller
 				foreach ($options as $prop => $value) {
 					if ($prop !== 'xmpp' || $data ['xmpp'] ['overwrite']) {
 						foreach ($value as $key => $v) {
-							if ($v !== '') {
+							if ($v !== '' && $key !== 'url') {
 								$data [$prop] [$key] = ($v === 'false' || $v === 'true') ? $this->validateBoolean($v) : $v;
 							}
 						}
