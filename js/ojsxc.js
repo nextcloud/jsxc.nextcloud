@@ -294,9 +294,14 @@
             return;
         }
 
-        if (typeof jsxc === 'undefined') {
+        if (typeof jsxc === 'undefined' || typeof emojione === 'undefined') {
             // abort if core or dependencies threw an error
             return;
+        }
+
+        if (OC.generateUrl('login/flow') === window.location.pathname) {
+           // abort on login flow
+           return;
         }
 
         $(document).one('ready-roster-jsxc', onRosterReady);
