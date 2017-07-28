@@ -100,6 +100,7 @@ class Application extends App {
 				\OC::$server->getUserSession(),
 				$c->query('Logger'),
 				$c->query('DataRetriever'),
+				$c->query('SecureRandom'),
 				'https://xmpp.jsxc.ch/registration'
 			);
 		});

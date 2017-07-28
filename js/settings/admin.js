@@ -264,8 +264,10 @@ $(document).ready(function() {
 
          msgEl.addClass('jsxc_fail');
          msgEl.append($('<span>').text('Sorry we couldn\'t complete your registration.'));
-         msgEl.append($('<br>'));
+         msgEl.append($('<br><br>'));
          msgEl.append($('<span>').text(errorMsg));
+         msgEl.append($('<br><br>'));
+         msgEl.append($('<span>').html('Please report this to our <a href="https://jsxc.ch/managed-issue-tracker" target="_blank">issue tracker</a> and mention the request id ' + responseJSON.data.requestId + '.'));
 
          el.val('Registration failed');
       });

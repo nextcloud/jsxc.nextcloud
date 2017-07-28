@@ -12,6 +12,7 @@ use OCP\AppFramework\Http\JSONResponse;
 use OCP\AppFramework\Http;
 use OCA\OJSXC\Exceptions\Exception;
 use OCA\OJSXC\IDataRetriever;
+use OCP\Security\ISecureRandom;
 use PHPUnit\Framework\TestCase;
 
 class ManagedServerControllerTest extends TestCase
@@ -22,6 +23,7 @@ class ManagedServerControllerTest extends TestCase
 	private $userSession;
 	private $logger;
 	private $dataRetriever;
+	private $random;
 	private $registrationUrl;
 
 	private $apiUrl;
@@ -40,12 +42,17 @@ class ManagedServerControllerTest extends TestCase
 		$this->userSession = $this->createMock(IUserSession::class);
 		$this->logger = $this->createMock(ILogger::class);
 		$this->dataRetriever = $this->createMock(IDataRetriever::class);
+		$this->random = $this->createMock(ISecureRandom::class);
 		$this->registrationUrl = '';
 
 		$this->apiUrl = 'https://localhost/api';
 		$this->apiSecret = 'dummySecret';
 		$this->userId = 'dummyUser';
 
+		$this->random
+		 ->expects($this->once())
+		 ->method('generate')
+		 ->willReturn('dummyRandom');
 		$this->urlGenerator
 		 ->expects($this->once())
 		 ->method('linkToRouteAbsolute')
@@ -69,6 +76,7 @@ class ManagedServerControllerTest extends TestCase
 		 $this->userSession,
 		 $this->logger,
 		 $this->dataRetriever,
+		 $this->random,
 		 $this->registrationUrl
 	  );
 	}
@@ -174,7 +182,7 @@ class ManagedServerControllerTest extends TestCase
 		$this->dataRetriever
 		 ->expects($this->once())
 		 ->method('fetchUrl')
-		 ->with($this->registrationUrl, [
+		 ->with($this->registrationUrl.'?rid=dummyRandom', [
 			  'apiUrl' => $this->apiUrl,
 			  'apiSecret' => $this->apiSecret,
 			  'apiVersion' => 1,

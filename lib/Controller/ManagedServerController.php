@@ -12,6 +12,7 @@ use OCP\AppFramework\Http\JSONResponse;
 use OCP\AppFramework\Http;
 use OCA\OJSXC\Exceptions\Exception;
 use OCA\OJSXC\IDataRetriever;
+use OCP\Security\ISecureRandom;
 
 class ManagedServerController extends Controller
 {
@@ -21,6 +22,7 @@ class ManagedServerController extends Controller
 	private $logger;
 	private $dataRetriever;
 	private $registrationUrl;
+	private $random;
 
 	public function __construct(
 	$appName,
@@ -30,6 +32,7 @@ class ManagedServerController extends Controller
 								 IUserSession $userSession,
 								 ILogger $logger,
 								 IDataRetriever $dataRetriever,
+								 ISecureRandom $random,
 								 $registrationUrl
    ) {
 		parent::__construct($appName, $request);
@@ -39,23 +42,29 @@ class ManagedServerController extends Controller
 		$this->userSession = $userSession;
 		$this->logger = $logger;
 		$this->dataRetriever = $dataRetriever;
+		$this->random = $random;
 		$this->registrationUrl = $registrationUrl;
 	}
 
 	public function register($promotionCode = null)
 	{
+		$requestId = $this->random->generate(
+			20,
+			ISecureRandom::CHAR_LOWER.ISecureRandom::CHAR_UPPER.ISecureRandom::CHAR_DIGITS
+		);
 		$promotionCode = (preg_match('/^[0-9a-z]+$/i', $promotionCode)) ? $promotionCode : null;
 		$registrationResult = false;
 
 		try {
-			$registrationResult = $this->doRegistration($promotionCode);
+			$registrationResult = $this->doRegistration($promotionCode, $requestId);
 		} catch (\Exception $exception) {
 			$this->logger->warning('RMS: Abort with message: '.$exception->getMessage());
 
 			return new JSONResponse([
 			'result' => 'error',
 			'data' => [
-			   'msg' => $exception->getMessage()
+			   'msg' => $exception->getMessage(),
+				'requestId' => $requestId
 			]
 		 ], Http::STATUS_INTERNAL_SERVER_ERROR);
 		}
@@ -68,7 +77,7 @@ class ManagedServerController extends Controller
 		}
 	}
 
-	private function doRegistration($promotionCode)
+	private function doRegistration($promotionCode, $requestId)
 	{
 		$apiUrl = $this->urlGenerator->linkToRouteAbsolute('ojsxc.externalApi.index');
 		$apiSecret = $this->config->getAppValue('ojsxc', 'apiSecret');
@@ -82,7 +91,7 @@ class ManagedServerController extends Controller
 		  'promotionCode' => $promotionCode
 	  ];
 
-		$response = $this->dataRetriever->fetchUrl($this->registrationUrl, $data);
+		$response = $this->dataRetriever->fetchUrl($this->registrationUrl.'?rid='.$requestId, $data);
 
 		if ($response['body'] === false) {
 			throw new Exception('Couldn\'t reach the registration server');
