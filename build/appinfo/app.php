@@ -1,19 +1,10 @@
 <?php
 
-/**
- * ownCloud - JavaScript XMPP Chat
- *
- * Copyright (c) 2014-2015 Klaus Herberth <klaus@jsxc.org> <br>
- * Released under the MIT license
- * @author Klaus Herberth <klaus@jsxc.org>
- */
-if (!interface_exists('\OCP\Settings\ISettings')) {
-	\OCP\App::registerAdmin ( 'ojsxc', 'settings/admin' );
-}
+use OCA\OJSXC\AppInfo\Application;
 
 \OCP\App::registerPersonal('ojsxc', 'settings/personal');
 
-$jsxc_root = (defined('JSXC_ENV') && JSXC_ENV === 'dev')? 'jsxc/dev/' : 'jsxc/';
+$jsxc_root = (\OC::$server->getConfig()->getSystemValue('jsxc.environment') === 'dev')? 'jsxc/dev/' : 'jsxc/';
 
 OCP\Util::addScript ( 'ojsxc', $jsxc_root.'lib/jquery.slimscroll' );
 OCP\Util::addScript ( 'ojsxc', $jsxc_root.'lib/jquery.fullscreen' );
@@ -61,6 +52,16 @@ if(class_exists('\\OCP\\AppFramework\\Http\\EmptyContentSecurityPolicy')) {
 
 	$manager->addDefaultPolicy($policy);
 }
+
+$config = \OC::$server->getConfig();
+$apiSecret = $config->getAppValue('ojsxc', 'apiSecret');
+if(!$apiSecret) {
+   $apiSecret = \OC::$server->getSecureRandom()->generate(23);
+   $config->setAppValue('ojsxc', 'apiSecret', $apiSecret);
+}
+
+$app = new Application();
+$app->getContainer()->query('UserHooks')->register();
 
 if (!class_exists("\\Sabre\\Xml\\Version")) {
     require_once __DIR__ . "/../vendor/autoload.php";

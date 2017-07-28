@@ -3,7 +3,7 @@
 function die {
    [ $1 -ne 0 ] && echo -e "\n\e[31m✘ Error!\e[0m Pre-commit hook failed. Nothing commited."
 
-   git stash pop -q stash@{/$STASH_NAME}
+   git stash pop -q stash@{$STASH_NAME}
 
    exit $1
 }

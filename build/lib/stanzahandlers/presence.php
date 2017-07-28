@@ -13,7 +13,8 @@ use OCA\OJSXC\Db\Presence as PresenceEntity;
  *
  * @package OCA\OJSXC\StanzaHandlers
  */
-class Presence extends StanzaHandler {
+class Presence extends StanzaHandler
+{
 
 	/**
 	 * @var PresenceMapper $presenceMapper
@@ -33,7 +34,8 @@ class Presence extends StanzaHandler {
 	 * @param PresenceMapper $presenceMapper
 	 * @param MessageMapper $messageMapper
 	 */
-	public function __construct($userId, $host, PresenceMapper $presenceMapper, MessageMapper $messageMapper) {
+	public function __construct($userId, $host, PresenceMapper $presenceMapper, MessageMapper $messageMapper)
+	{
 		parent::__construct($userId, $host);
 		$this->presenceMapper = $presenceMapper;
 		$this->messageMapper = $messageMapper;
@@ -48,7 +50,8 @@ class Presence extends StanzaHandler {
 	 * @param PresenceEntity $presence
 	 * @return PresenceEntity[]
 	 */
-	public function handle(PresenceEntity $presence) {
+	public function handle(PresenceEntity $presence)
+	{
 		// update the presence
 		$this->presenceMapper->setPresence($presence);
 
@@ -71,5 +74,4 @@ class Presence extends StanzaHandler {
 			return [];
 		}
 	}
-
 }

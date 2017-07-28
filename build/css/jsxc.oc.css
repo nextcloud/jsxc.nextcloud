@@ -1,5 +1,5 @@
 /*!
- * ojsxc v3.2.1 - 2017-06-01
+ * ojsxc v3.3.0-beta.1 - 2017-07-28
  * 
  * Copyright (c) 2017 Klaus Herberth <klaus@jsxc.org> <br>
  * Released under the MIT license
@@ -7,7 +7,7 @@
  * Please see http://www.jsxc.org/
  * 
  * @author Klaus Herberth <klaus@jsxc.org>
- * @version 3.2.1
+ * @version 3.3.0-beta.1
  * @license MIT
  */
 
@@ -115,8 +115,7 @@
 .mfp-s-error .mfp-content {
   display: none; }
 
-button.mfp-close,
-button.mfp-arrow {
+button.mfp-close, button.mfp-arrow {
   overflow: visible;
   cursor: pointer;
   background: transparent;
@@ -149,8 +148,7 @@ button::-moz-focus-inner {
   font-style: normal;
   font-size: 28px;
   font-family: Arial, Baskerville, monospace; }
-  .mfp-close:hover,
-  .mfp-close:focus {
+  .mfp-close:hover, .mfp-close:focus {
     opacity: 1; }
   .mfp-close:active {
     top: 1px; }
@@ -187,11 +185,9 @@ button::-moz-focus-inner {
   -webkit-tap-highlight-color: transparent; }
   .mfp-arrow:active {
     margin-top: -54px; }
-  .mfp-arrow:hover,
-  .mfp-arrow:focus {
+  .mfp-arrow:hover, .mfp-arrow:focus {
     opacity: 1; }
-  .mfp-arrow:before,
-  .mfp-arrow:after {
+  .mfp-arrow:before, .mfp-arrow:after {
     content: '';
     display: block;
     width: 0;
@@ -371,7 +367,7 @@ img.mfp-img {
   min-width: 20px;
   /* Inline alignment adjust the margins  */
   display: inline-block;
-  margin: -0.2ex 0.15em 0.2ex;
+  margin: -.2ex .15em .2ex;
   line-height: normal;
   vertical-align: middle; }
 
@@ -415,12 +411,10 @@ img.emojione {
   text-align: center;
   background-color: #337ab7;
   box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.15);
-  -webkit-transition: width 0.6s ease;
   transition: width 0.6s ease; }
 
 #jsxc_dialog .progress-striped .progress-bar,
 #jsxc_dialog .progress-bar-striped {
-  background-image: -webkit-linear-gradient(45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent);
   background-image: linear-gradient(45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent);
   background-size: 40px 40px; }
 
@@ -432,30 +426,24 @@ img.emojione {
 #jsxc_dialog .progress-bar-success {
   background-color: #5cb85c; }
   .progress-striped #jsxc_dialog .progress-bar-success {
-    background-image: -webkit-linear-gradient(45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent);
     background-image: linear-gradient(45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent); }
 
 #jsxc_dialog .progress-bar-info {
   background-color: #5bc0de; }
   .progress-striped #jsxc_dialog .progress-bar-info {
-    background-image: -webkit-linear-gradient(45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent);
     background-image: linear-gradient(45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent); }
 
 #jsxc_dialog .progress-bar-warning {
   background-color: #f0ad4e; }
   .progress-striped #jsxc_dialog .progress-bar-warning {
-    background-image: -webkit-linear-gradient(45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent);
     background-image: linear-gradient(45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent); }
 
 #jsxc_dialog .progress-bar-danger {
   background-color: #d9534f; }
   .progress-striped #jsxc_dialog .progress-bar-danger {
-    background-image: -webkit-linear-gradient(45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent);
     background-image: linear-gradient(45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent); }
 
-#jsxc_dialog .clearfix:before,
-#jsxc_dialog .clearfix:after, #jsxc_webrtc .clearfix:before,
-#jsxc_webrtc .clearfix:after {
+#jsxc_dialog .clearfix:before, #jsxc_dialog .clearfix:after, #jsxc_webrtc .clearfix:before, #jsxc_webrtc .clearfix:after {
   content: " ";
   display: table; }
 
@@ -553,9 +541,7 @@ img.emojione {
   margin-left: auto;
   padding-left: 15px;
   padding-right: 15px; }
-  #jsxc_dialog .container:before,
-  #jsxc_dialog .container:after, #jsxc_webrtc .container:before,
-  #jsxc_webrtc .container:after {
+  #jsxc_dialog .container:before, #jsxc_dialog .container:after, #jsxc_webrtc .container:before, #jsxc_webrtc .container:after {
     content: " ";
     display: table; }
   #jsxc_dialog .container:after, #jsxc_webrtc .container:after {
@@ -575,9 +561,7 @@ img.emojione {
   margin-left: auto;
   padding-left: 15px;
   padding-right: 15px; }
-  #jsxc_dialog .container-fluid:before,
-  #jsxc_dialog .container-fluid:after, #jsxc_webrtc .container-fluid:before,
-  #jsxc_webrtc .container-fluid:after {
+  #jsxc_dialog .container-fluid:before, #jsxc_dialog .container-fluid:after, #jsxc_webrtc .container-fluid:before, #jsxc_webrtc .container-fluid:after {
     content: " ";
     display: table; }
   #jsxc_dialog .container-fluid:after, #jsxc_webrtc .container-fluid:after {
@@ -586,9 +570,7 @@ img.emojione {
 #jsxc_dialog .row, #jsxc_webrtc .row {
   margin-left: -15px;
   margin-right: -15px; }
-  #jsxc_dialog .row:before,
-  #jsxc_dialog .row:after, #jsxc_webrtc .row:before,
-  #jsxc_webrtc .row:after {
+  #jsxc_dialog .row:before, #jsxc_dialog .row:after, #jsxc_webrtc .row:before, #jsxc_webrtc .row:after {
     content: " ";
     display: table; }
   #jsxc_dialog .row:after, #jsxc_webrtc .row:after {
@@ -1091,9 +1073,13 @@ img.emojione {
   #jsxc_dialog .alert > p + p, #jsxc_webrtc .alert > p + p {
     margin-top: 5px; }
 
-#jsxc_dialog .alert-dismissable, #jsxc_dialog .alert-dismissible, #jsxc_webrtc .alert-dismissable, #jsxc_webrtc .alert-dismissible {
+#jsxc_dialog .alert-dismissable,
+#jsxc_dialog .alert-dismissible, #jsxc_webrtc .alert-dismissable,
+#jsxc_webrtc .alert-dismissible {
   padding-right: 35px; }
-  #jsxc_dialog .alert-dismissable .close, #jsxc_dialog .alert-dismissible .close, #jsxc_webrtc .alert-dismissable .close, #jsxc_webrtc .alert-dismissible .close {
+  #jsxc_dialog .alert-dismissable .close,
+  #jsxc_dialog .alert-dismissible .close, #jsxc_webrtc .alert-dismissable .close,
+  #jsxc_webrtc .alert-dismissible .close {
     position: relative;
     top: -2px;
     right: -21px;
@@ -1155,37 +1141,19 @@ img.emojione {
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none; }
-  #jsxc_dialog .btn:focus,
-  #jsxc_dialog .btn.focus,
-  #jsxc_dialog .btn:active:focus,
-  #jsxc_dialog .btn:active.focus,
-  #jsxc_dialog .btn.active:focus,
-  #jsxc_dialog .btn.active.focus, #jsxc_webrtc .btn:focus,
-  #jsxc_webrtc .btn.focus,
-  #jsxc_webrtc .btn:active:focus,
-  #jsxc_webrtc .btn:active.focus,
-  #jsxc_webrtc .btn.active:focus,
-  #jsxc_webrtc .btn.active.focus {
+  #jsxc_dialog .btn:focus, #jsxc_dialog .btn.focus, #jsxc_dialog .btn:active:focus, #jsxc_dialog .btn:active.focus, #jsxc_dialog .btn.active:focus, #jsxc_dialog .btn.active.focus, #jsxc_webrtc .btn:focus, #jsxc_webrtc .btn.focus, #jsxc_webrtc .btn:active:focus, #jsxc_webrtc .btn:active.focus, #jsxc_webrtc .btn.active:focus, #jsxc_webrtc .btn.active.focus {
     outline: thin dotted;
     outline: 5px auto -webkit-focus-ring-color;
     outline-offset: -2px; }
-  #jsxc_dialog .btn:hover,
-  #jsxc_dialog .btn:focus,
-  #jsxc_dialog .btn.focus, #jsxc_webrtc .btn:hover,
-  #jsxc_webrtc .btn:focus,
-  #jsxc_webrtc .btn.focus {
+  #jsxc_dialog .btn:hover, #jsxc_dialog .btn:focus, #jsxc_dialog .btn.focus, #jsxc_webrtc .btn:hover, #jsxc_webrtc .btn:focus, #jsxc_webrtc .btn.focus {
     color: #333;
     text-decoration: none; }
-  #jsxc_dialog .btn:active,
-  #jsxc_dialog .btn.active, #jsxc_webrtc .btn:active,
-  #jsxc_webrtc .btn.active {
+  #jsxc_dialog .btn:active, #jsxc_dialog .btn.active, #jsxc_webrtc .btn:active, #jsxc_webrtc .btn.active {
     outline: 0;
     background-image: none;
     box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125); }
-  #jsxc_dialog .btn.disabled,
-  #jsxc_dialog .btn[disabled],
-  fieldset[disabled] #jsxc_dialog .btn, #jsxc_webrtc .btn.disabled,
-  #jsxc_webrtc .btn[disabled],
+  #jsxc_dialog .btn.disabled, #jsxc_dialog .btn[disabled],
+  fieldset[disabled] #jsxc_dialog .btn, #jsxc_webrtc .btn.disabled, #jsxc_webrtc .btn[disabled],
   fieldset[disabled] #jsxc_webrtc .btn {
     cursor: not-allowed;
     pointer-events: none;
@@ -1197,55 +1165,23 @@ img.emojione {
   color: #333;
   background-color: #fff;
   border-color: #ccc; }
-  #jsxc_dialog .btn-default:hover,
-  #jsxc_dialog .btn-default:focus,
-  #jsxc_dialog .btn-default.focus,
-  #jsxc_dialog .btn-default:active,
-  #jsxc_dialog .btn-default.active,
-  .open > #jsxc_dialog .btn-default.dropdown-toggle, #jsxc_webrtc .btn-default:hover,
-  #jsxc_webrtc .btn-default:focus,
-  #jsxc_webrtc .btn-default.focus,
-  #jsxc_webrtc .btn-default:active,
-  #jsxc_webrtc .btn-default.active,
+  #jsxc_dialog .btn-default:hover, #jsxc_dialog .btn-default:focus, #jsxc_dialog .btn-default.focus, #jsxc_dialog .btn-default:active, #jsxc_dialog .btn-default.active,
+  .open > #jsxc_dialog .btn-default.dropdown-toggle, #jsxc_webrtc .btn-default:hover, #jsxc_webrtc .btn-default:focus, #jsxc_webrtc .btn-default.focus, #jsxc_webrtc .btn-default:active, #jsxc_webrtc .btn-default.active,
   .open > #jsxc_webrtc .btn-default.dropdown-toggle {
     color: #333;
-    background-color: #e6e6e6;
+    background-color: #e6e5e5;
     border-color: #adadad; }
-  #jsxc_dialog .btn-default:active,
-  #jsxc_dialog .btn-default.active,
-  .open > #jsxc_dialog .btn-default.dropdown-toggle, #jsxc_webrtc .btn-default:active,
-  #jsxc_webrtc .btn-default.active,
+  #jsxc_dialog .btn-default:active, #jsxc_dialog .btn-default.active,
+  .open > #jsxc_dialog .btn-default.dropdown-toggle, #jsxc_webrtc .btn-default:active, #jsxc_webrtc .btn-default.active,
   .open > #jsxc_webrtc .btn-default.dropdown-toggle {
     background-image: none; }
-  #jsxc_dialog .btn-default.disabled,
-  #jsxc_dialog .btn-default.disabled:hover,
-  #jsxc_dialog .btn-default.disabled:focus,
-  #jsxc_dialog .btn-default.disabled.focus,
-  #jsxc_dialog .btn-default.disabled:active,
-  #jsxc_dialog .btn-default.disabled.active,
-  #jsxc_dialog .btn-default[disabled],
-  #jsxc_dialog .btn-default[disabled]:hover,
-  #jsxc_dialog .btn-default[disabled]:focus,
-  #jsxc_dialog .btn-default[disabled].focus,
-  #jsxc_dialog .btn-default[disabled]:active,
-  #jsxc_dialog .btn-default[disabled].active,
+  #jsxc_dialog .btn-default.disabled, #jsxc_dialog .btn-default.disabled:hover, #jsxc_dialog .btn-default.disabled:focus, #jsxc_dialog .btn-default.disabled.focus, #jsxc_dialog .btn-default.disabled:active, #jsxc_dialog .btn-default.disabled.active, #jsxc_dialog .btn-default[disabled], #jsxc_dialog .btn-default[disabled]:hover, #jsxc_dialog .btn-default[disabled]:focus, #jsxc_dialog .btn-default[disabled].focus, #jsxc_dialog .btn-default[disabled]:active, #jsxc_dialog .btn-default[disabled].active,
   fieldset[disabled] #jsxc_dialog .btn-default,
   fieldset[disabled] #jsxc_dialog .btn-default:hover,
   fieldset[disabled] #jsxc_dialog .btn-default:focus,
   fieldset[disabled] #jsxc_dialog .btn-default.focus,
   fieldset[disabled] #jsxc_dialog .btn-default:active,
-  fieldset[disabled] #jsxc_dialog .btn-default.active, #jsxc_webrtc .btn-default.disabled,
-  #jsxc_webrtc .btn-default.disabled:hover,
-  #jsxc_webrtc .btn-default.disabled:focus,
-  #jsxc_webrtc .btn-default.disabled.focus,
-  #jsxc_webrtc .btn-default.disabled:active,
-  #jsxc_webrtc .btn-default.disabled.active,
-  #jsxc_webrtc .btn-default[disabled],
-  #jsxc_webrtc .btn-default[disabled]:hover,
-  #jsxc_webrtc .btn-default[disabled]:focus,
-  #jsxc_webrtc .btn-default[disabled].focus,
-  #jsxc_webrtc .btn-default[disabled]:active,
-  #jsxc_webrtc .btn-default[disabled].active,
+  fieldset[disabled] #jsxc_dialog .btn-default.active, #jsxc_webrtc .btn-default.disabled, #jsxc_webrtc .btn-default.disabled:hover, #jsxc_webrtc .btn-default.disabled:focus, #jsxc_webrtc .btn-default.disabled.focus, #jsxc_webrtc .btn-default.disabled:active, #jsxc_webrtc .btn-default.disabled.active, #jsxc_webrtc .btn-default[disabled], #jsxc_webrtc .btn-default[disabled]:hover, #jsxc_webrtc .btn-default[disabled]:focus, #jsxc_webrtc .btn-default[disabled].focus, #jsxc_webrtc .btn-default[disabled]:active, #jsxc_webrtc .btn-default[disabled].active,
   fieldset[disabled] #jsxc_webrtc .btn-default,
   fieldset[disabled] #jsxc_webrtc .btn-default:hover,
   fieldset[disabled] #jsxc_webrtc .btn-default:focus,
@@ -1262,55 +1198,23 @@ img.emojione {
   color: #fff;
   background-color: #337ab7;
   border-color: #2e6da4; }
-  #jsxc_dialog .btn-primary:hover,
-  #jsxc_dialog .btn-primary:focus,
-  #jsxc_dialog .btn-primary.focus,
-  #jsxc_dialog .btn-primary:active,
-  #jsxc_dialog .btn-primary.active,
-  .open > #jsxc_dialog .btn-primary.dropdown-toggle, #jsxc_webrtc .btn-primary:hover,
-  #jsxc_webrtc .btn-primary:focus,
-  #jsxc_webrtc .btn-primary.focus,
-  #jsxc_webrtc .btn-primary:active,
-  #jsxc_webrtc .btn-primary.active,
+  #jsxc_dialog .btn-primary:hover, #jsxc_dialog .btn-primary:focus, #jsxc_dialog .btn-primary.focus, #jsxc_dialog .btn-primary:active, #jsxc_dialog .btn-primary.active,
+  .open > #jsxc_dialog .btn-primary.dropdown-toggle, #jsxc_webrtc .btn-primary:hover, #jsxc_webrtc .btn-primary:focus, #jsxc_webrtc .btn-primary.focus, #jsxc_webrtc .btn-primary:active, #jsxc_webrtc .btn-primary.active,
   .open > #jsxc_webrtc .btn-primary.dropdown-toggle {
     color: #fff;
     background-color: #286090;
     border-color: #204d74; }
-  #jsxc_dialog .btn-primary:active,
-  #jsxc_dialog .btn-primary.active,
-  .open > #jsxc_dialog .btn-primary.dropdown-toggle, #jsxc_webrtc .btn-primary:active,
-  #jsxc_webrtc .btn-primary.active,
+  #jsxc_dialog .btn-primary:active, #jsxc_dialog .btn-primary.active,
+  .open > #jsxc_dialog .btn-primary.dropdown-toggle, #jsxc_webrtc .btn-primary:active, #jsxc_webrtc .btn-primary.active,
   .open > #jsxc_webrtc .btn-primary.dropdown-toggle {
     background-image: none; }
-  #jsxc_dialog .btn-primary.disabled,
-  #jsxc_dialog .btn-primary.disabled:hover,
-  #jsxc_dialog .btn-primary.disabled:focus,
-  #jsxc_dialog .btn-primary.disabled.focus,
-  #jsxc_dialog .btn-primary.disabled:active,
-  #jsxc_dialog .btn-primary.disabled.active,
-  #jsxc_dialog .btn-primary[disabled],
-  #jsxc_dialog .btn-primary[disabled]:hover,
-  #jsxc_dialog .btn-primary[disabled]:focus,
-  #jsxc_dialog .btn-primary[disabled].focus,
-  #jsxc_dialog .btn-primary[disabled]:active,
-  #jsxc_dialog .btn-primary[disabled].active,
+  #jsxc_dialog .btn-primary.disabled, #jsxc_dialog .btn-primary.disabled:hover, #jsxc_dialog .btn-primary.disabled:focus, #jsxc_dialog .btn-primary.disabled.focus, #jsxc_dialog .btn-primary.disabled:active, #jsxc_dialog .btn-primary.disabled.active, #jsxc_dialog .btn-primary[disabled], #jsxc_dialog .btn-primary[disabled]:hover, #jsxc_dialog .btn-primary[disabled]:focus, #jsxc_dialog .btn-primary[disabled].focus, #jsxc_dialog .btn-primary[disabled]:active, #jsxc_dialog .btn-primary[disabled].active,
   fieldset[disabled] #jsxc_dialog .btn-primary,
   fieldset[disabled] #jsxc_dialog .btn-primary:hover,
   fieldset[disabled] #jsxc_dialog .btn-primary:focus,
   fieldset[disabled] #jsxc_dialog .btn-primary.focus,
   fieldset[disabled] #jsxc_dialog .btn-primary:active,
-  fieldset[disabled] #jsxc_dialog .btn-primary.active, #jsxc_webrtc .btn-primary.disabled,
-  #jsxc_webrtc .btn-primary.disabled:hover,
-  #jsxc_webrtc .btn-primary.disabled:focus,
-  #jsxc_webrtc .btn-primary.disabled.focus,
-  #jsxc_webrtc .btn-primary.disabled:active,
-  #jsxc_webrtc .btn-primary.disabled.active,
-  #jsxc_webrtc .btn-primary[disabled],
-  #jsxc_webrtc .btn-primary[disabled]:hover,
-  #jsxc_webrtc .btn-primary[disabled]:focus,
-  #jsxc_webrtc .btn-primary[disabled].focus,
-  #jsxc_webrtc .btn-primary[disabled]:active,
-  #jsxc_webrtc .btn-primary[disabled].active,
+  fieldset[disabled] #jsxc_dialog .btn-primary.active, #jsxc_webrtc .btn-primary.disabled, #jsxc_webrtc .btn-primary.disabled:hover, #jsxc_webrtc .btn-primary.disabled:focus, #jsxc_webrtc .btn-primary.disabled.focus, #jsxc_webrtc .btn-primary.disabled:active, #jsxc_webrtc .btn-primary.disabled.active, #jsxc_webrtc .btn-primary[disabled], #jsxc_webrtc .btn-primary[disabled]:hover, #jsxc_webrtc .btn-primary[disabled]:focus, #jsxc_webrtc .btn-primary[disabled].focus, #jsxc_webrtc .btn-primary[disabled]:active, #jsxc_webrtc .btn-primary[disabled].active,
   fieldset[disabled] #jsxc_webrtc .btn-primary,
   fieldset[disabled] #jsxc_webrtc .btn-primary:hover,
   fieldset[disabled] #jsxc_webrtc .btn-primary:focus,
@@ -1327,55 +1231,23 @@ img.emojione {
   color: #fff;
   background-color: #5cb85c;
   border-color: #4cae4c; }
-  #jsxc_dialog .btn-success:hover,
-  #jsxc_dialog .btn-success:focus,
-  #jsxc_dialog .btn-success.focus,
-  #jsxc_dialog .btn-success:active,
-  #jsxc_dialog .btn-success.active,
-  .open > #jsxc_dialog .btn-success.dropdown-toggle, #jsxc_webrtc .btn-success:hover,
-  #jsxc_webrtc .btn-success:focus,
-  #jsxc_webrtc .btn-success.focus,
-  #jsxc_webrtc .btn-success:active,
-  #jsxc_webrtc .btn-success.active,
+  #jsxc_dialog .btn-success:hover, #jsxc_dialog .btn-success:focus, #jsxc_dialog .btn-success.focus, #jsxc_dialog .btn-success:active, #jsxc_dialog .btn-success.active,
+  .open > #jsxc_dialog .btn-success.dropdown-toggle, #jsxc_webrtc .btn-success:hover, #jsxc_webrtc .btn-success:focus, #jsxc_webrtc .btn-success.focus, #jsxc_webrtc .btn-success:active, #jsxc_webrtc .btn-success.active,
   .open > #jsxc_webrtc .btn-success.dropdown-toggle {
     color: #fff;
     background-color: #449d44;
     border-color: #398439; }
-  #jsxc_dialog .btn-success:active,
-  #jsxc_dialog .btn-success.active,
-  .open > #jsxc_dialog .btn-success.dropdown-toggle, #jsxc_webrtc .btn-success:active,
-  #jsxc_webrtc .btn-success.active,
+  #jsxc_dialog .btn-success:active, #jsxc_dialog .btn-success.active,
+  .open > #jsxc_dialog .btn-success.dropdown-toggle, #jsxc_webrtc .btn-success:active, #jsxc_webrtc .btn-success.active,
   .open > #jsxc_webrtc .btn-success.dropdown-toggle {
     background-image: none; }
-  #jsxc_dialog .btn-success.disabled,
-  #jsxc_dialog .btn-success.disabled:hover,
-  #jsxc_dialog .btn-success.disabled:focus,
-  #jsxc_dialog .btn-success.disabled.focus,
-  #jsxc_dialog .btn-success.disabled:active,
-  #jsxc_dialog .btn-success.disabled.active,
-  #jsxc_dialog .btn-success[disabled],
-  #jsxc_dialog .btn-success[disabled]:hover,
-  #jsxc_dialog .btn-success[disabled]:focus,
-  #jsxc_dialog .btn-success[disabled].focus,
-  #jsxc_dialog .btn-success[disabled]:active,
-  #jsxc_dialog .btn-success[disabled].active,
+  #jsxc_dialog .btn-success.disabled, #jsxc_dialog .btn-success.disabled:hover, #jsxc_dialog .btn-success.disabled:focus, #jsxc_dialog .btn-success.disabled.focus, #jsxc_dialog .btn-success.disabled:active, #jsxc_dialog .btn-success.disabled.active, #jsxc_dialog .btn-success[disabled], #jsxc_dialog .btn-success[disabled]:hover, #jsxc_dialog .btn-success[disabled]:focus, #jsxc_dialog .btn-success[disabled].focus, #jsxc_dialog .btn-success[disabled]:active, #jsxc_dialog .btn-success[disabled].active,
   fieldset[disabled] #jsxc_dialog .btn-success,
   fieldset[disabled] #jsxc_dialog .btn-success:hover,
   fieldset[disabled] #jsxc_dialog .btn-success:focus,
   fieldset[disabled] #jsxc_dialog .btn-success.focus,
   fieldset[disabled] #jsxc_dialog .btn-success:active,
-  fieldset[disabled] #jsxc_dialog .btn-success.active, #jsxc_webrtc .btn-success.disabled,
-  #jsxc_webrtc .btn-success.disabled:hover,
-  #jsxc_webrtc .btn-success.disabled:focus,
-  #jsxc_webrtc .btn-success.disabled.focus,
-  #jsxc_webrtc .btn-success.disabled:active,
-  #jsxc_webrtc .btn-success.disabled.active,
-  #jsxc_webrtc .btn-success[disabled],
-  #jsxc_webrtc .btn-success[disabled]:hover,
-  #jsxc_webrtc .btn-success[disabled]:focus,
-  #jsxc_webrtc .btn-success[disabled].focus,
-  #jsxc_webrtc .btn-success[disabled]:active,
-  #jsxc_webrtc .btn-success[disabled].active,
+  fieldset[disabled] #jsxc_dialog .btn-success.active, #jsxc_webrtc .btn-success.disabled, #jsxc_webrtc .btn-success.disabled:hover, #jsxc_webrtc .btn-success.disabled:focus, #jsxc_webrtc .btn-success.disabled.focus, #jsxc_webrtc .btn-success.disabled:active, #jsxc_webrtc .btn-success.disabled.active, #jsxc_webrtc .btn-success[disabled], #jsxc_webrtc .btn-success[disabled]:hover, #jsxc_webrtc .btn-success[disabled]:focus, #jsxc_webrtc .btn-success[disabled].focus, #jsxc_webrtc .btn-success[disabled]:active, #jsxc_webrtc .btn-success[disabled].active,
   fieldset[disabled] #jsxc_webrtc .btn-success,
   fieldset[disabled] #jsxc_webrtc .btn-success:hover,
   fieldset[disabled] #jsxc_webrtc .btn-success:focus,
@@ -1392,55 +1264,23 @@ img.emojione {
   color: #fff;
   background-color: #5bc0de;
   border-color: #46b8da; }
-  #jsxc_dialog .btn-info:hover,
-  #jsxc_dialog .btn-info:focus,
-  #jsxc_dialog .btn-info.focus,
-  #jsxc_dialog .btn-info:active,
-  #jsxc_dialog .btn-info.active,
-  .open > #jsxc_dialog .btn-info.dropdown-toggle, #jsxc_webrtc .btn-info:hover,
-  #jsxc_webrtc .btn-info:focus,
-  #jsxc_webrtc .btn-info.focus,
-  #jsxc_webrtc .btn-info:active,
-  #jsxc_webrtc .btn-info.active,
+  #jsxc_dialog .btn-info:hover, #jsxc_dialog .btn-info:focus, #jsxc_dialog .btn-info.focus, #jsxc_dialog .btn-info:active, #jsxc_dialog .btn-info.active,
+  .open > #jsxc_dialog .btn-info.dropdown-toggle, #jsxc_webrtc .btn-info:hover, #jsxc_webrtc .btn-info:focus, #jsxc_webrtc .btn-info.focus, #jsxc_webrtc .btn-info:active, #jsxc_webrtc .btn-info.active,
   .open > #jsxc_webrtc .btn-info.dropdown-toggle {
     color: #fff;
     background-color: #31b0d5;
     border-color: #269abc; }
-  #jsxc_dialog .btn-info:active,
-  #jsxc_dialog .btn-info.active,
-  .open > #jsxc_dialog .btn-info.dropdown-toggle, #jsxc_webrtc .btn-info:active,
-  #jsxc_webrtc .btn-info.active,
+  #jsxc_dialog .btn-info:active, #jsxc_dialog .btn-info.active,
+  .open > #jsxc_dialog .btn-info.dropdown-toggle, #jsxc_webrtc .btn-info:active, #jsxc_webrtc .btn-info.active,
   .open > #jsxc_webrtc .btn-info.dropdown-toggle {
     background-image: none; }
-  #jsxc_dialog .btn-info.disabled,
-  #jsxc_dialog .btn-info.disabled:hover,
-  #jsxc_dialog .btn-info.disabled:focus,
-  #jsxc_dialog .btn-info.disabled.focus,
-  #jsxc_dialog .btn-info.disabled:active,
-  #jsxc_dialog .btn-info.disabled.active,
-  #jsxc_dialog .btn-info[disabled],
-  #jsxc_dialog .btn-info[disabled]:hover,
-  #jsxc_dialog .btn-info[disabled]:focus,
-  #jsxc_dialog .btn-info[disabled].focus,
-  #jsxc_dialog .btn-info[disabled]:active,
-  #jsxc_dialog .btn-info[disabled].active,
+  #jsxc_dialog .btn-info.disabled, #jsxc_dialog .btn-info.disabled:hover, #jsxc_dialog .btn-info.disabled:focus, #jsxc_dialog .btn-info.disabled.focus, #jsxc_dialog .btn-info.disabled:active, #jsxc_dialog .btn-info.disabled.active, #jsxc_dialog .btn-info[disabled], #jsxc_dialog .btn-info[disabled]:hover, #jsxc_dialog .btn-info[disabled]:focus, #jsxc_dialog .btn-info[disabled].focus, #jsxc_dialog .btn-info[disabled]:active, #jsxc_dialog .btn-info[disabled].active,
   fieldset[disabled] #jsxc_dialog .btn-info,
   fieldset[disabled] #jsxc_dialog .btn-info:hover,
   fieldset[disabled] #jsxc_dialog .btn-info:focus,
   fieldset[disabled] #jsxc_dialog .btn-info.focus,
   fieldset[disabled] #jsxc_dialog .btn-info:active,
-  fieldset[disabled] #jsxc_dialog .btn-info.active, #jsxc_webrtc .btn-info.disabled,
-  #jsxc_webrtc .btn-info.disabled:hover,
-  #jsxc_webrtc .btn-info.disabled:focus,
-  #jsxc_webrtc .btn-info.disabled.focus,
-  #jsxc_webrtc .btn-info.disabled:active,
-  #jsxc_webrtc .btn-info.disabled.active,
-  #jsxc_webrtc .btn-info[disabled],
-  #jsxc_webrtc .btn-info[disabled]:hover,
-  #jsxc_webrtc .btn-info[disabled]:focus,
-  #jsxc_webrtc .btn-info[disabled].focus,
-  #jsxc_webrtc .btn-info[disabled]:active,
-  #jsxc_webrtc .btn-info[disabled].active,
+  fieldset[disabled] #jsxc_dialog .btn-info.active, #jsxc_webrtc .btn-info.disabled, #jsxc_webrtc .btn-info.disabled:hover, #jsxc_webrtc .btn-info.disabled:focus, #jsxc_webrtc .btn-info.disabled.focus, #jsxc_webrtc .btn-info.disabled:active, #jsxc_webrtc .btn-info.disabled.active, #jsxc_webrtc .btn-info[disabled], #jsxc_webrtc .btn-info[disabled]:hover, #jsxc_webrtc .btn-info[disabled]:focus, #jsxc_webrtc .btn-info[disabled].focus, #jsxc_webrtc .btn-info[disabled]:active, #jsxc_webrtc .btn-info[disabled].active,
   fieldset[disabled] #jsxc_webrtc .btn-info,
   fieldset[disabled] #jsxc_webrtc .btn-info:hover,
   fieldset[disabled] #jsxc_webrtc .btn-info:focus,
@@ -1457,55 +1297,23 @@ img.emojione {
   color: #fff;
   background-color: #f0ad4e;
   border-color: #eea236; }
-  #jsxc_dialog .btn-warning:hover,
-  #jsxc_dialog .btn-warning:focus,
-  #jsxc_dialog .btn-warning.focus,
-  #jsxc_dialog .btn-warning:active,
-  #jsxc_dialog .btn-warning.active,
-  .open > #jsxc_dialog .btn-warning.dropdown-toggle, #jsxc_webrtc .btn-warning:hover,
-  #jsxc_webrtc .btn-warning:focus,
-  #jsxc_webrtc .btn-warning.focus,
-  #jsxc_webrtc .btn-warning:active,
-  #jsxc_webrtc .btn-warning.active,
+  #jsxc_dialog .btn-warning:hover, #jsxc_dialog .btn-warning:focus, #jsxc_dialog .btn-warning.focus, #jsxc_dialog .btn-warning:active, #jsxc_dialog .btn-warning.active,
+  .open > #jsxc_dialog .btn-warning.dropdown-toggle, #jsxc_webrtc .btn-warning:hover, #jsxc_webrtc .btn-warning:focus, #jsxc_webrtc .btn-warning.focus, #jsxc_webrtc .btn-warning:active, #jsxc_webrtc .btn-warning.active,
   .open > #jsxc_webrtc .btn-warning.dropdown-toggle {
     color: #fff;
     background-color: #ec971f;
     border-color: #d58512; }
-  #jsxc_dialog .btn-warning:active,
-  #jsxc_dialog .btn-warning.active,
-  .open > #jsxc_dialog .btn-warning.dropdown-toggle, #jsxc_webrtc .btn-warning:active,
-  #jsxc_webrtc .btn-warning.active,
+  #jsxc_dialog .btn-warning:active, #jsxc_dialog .btn-warning.active,
+  .open > #jsxc_dialog .btn-warning.dropdown-toggle, #jsxc_webrtc .btn-warning:active, #jsxc_webrtc .btn-warning.active,
   .open > #jsxc_webrtc .btn-warning.dropdown-toggle {
     background-image: none; }
-  #jsxc_dialog .btn-warning.disabled,
-  #jsxc_dialog .btn-warning.disabled:hover,
-  #jsxc_dialog .btn-warning.disabled:focus,
-  #jsxc_dialog .btn-warning.disabled.focus,
-  #jsxc_dialog .btn-warning.disabled:active,
-  #jsxc_dialog .btn-warning.disabled.active,
-  #jsxc_dialog .btn-warning[disabled],
-  #jsxc_dialog .btn-warning[disabled]:hover,
-  #jsxc_dialog .btn-warning[disabled]:focus,
-  #jsxc_dialog .btn-warning[disabled].focus,
-  #jsxc_dialog .btn-warning[disabled]:active,
-  #jsxc_dialog .btn-warning[disabled].active,
+  #jsxc_dialog .btn-warning.disabled, #jsxc_dialog .btn-warning.disabled:hover, #jsxc_dialog .btn-warning.disabled:focus, #jsxc_dialog .btn-warning.disabled.focus, #jsxc_dialog .btn-warning.disabled:active, #jsxc_dialog .btn-warning.disabled.active, #jsxc_dialog .btn-warning[disabled], #jsxc_dialog .btn-warning[disabled]:hover, #jsxc_dialog .btn-warning[disabled]:focus, #jsxc_dialog .btn-warning[disabled].focus, #jsxc_dialog .btn-warning[disabled]:active, #jsxc_dialog .btn-warning[disabled].active,
   fieldset[disabled] #jsxc_dialog .btn-warning,
   fieldset[disabled] #jsxc_dialog .btn-warning:hover,
   fieldset[disabled] #jsxc_dialog .btn-warning:focus,
   fieldset[disabled] #jsxc_dialog .btn-warning.focus,
   fieldset[disabled] #jsxc_dialog .btn-warning:active,
-  fieldset[disabled] #jsxc_dialog .btn-warning.active, #jsxc_webrtc .btn-warning.disabled,
-  #jsxc_webrtc .btn-warning.disabled:hover,
-  #jsxc_webrtc .btn-warning.disabled:focus,
-  #jsxc_webrtc .btn-warning.disabled.focus,
-  #jsxc_webrtc .btn-warning.disabled:active,
-  #jsxc_webrtc .btn-warning.disabled.active,
-  #jsxc_webrtc .btn-warning[disabled],
-  #jsxc_webrtc .btn-warning[disabled]:hover,
-  #jsxc_webrtc .btn-warning[disabled]:focus,
-  #jsxc_webrtc .btn-warning[disabled].focus,
-  #jsxc_webrtc .btn-warning[disabled]:active,
-  #jsxc_webrtc .btn-warning[disabled].active,
+  fieldset[disabled] #jsxc_dialog .btn-warning.active, #jsxc_webrtc .btn-warning.disabled, #jsxc_webrtc .btn-warning.disabled:hover, #jsxc_webrtc .btn-warning.disabled:focus, #jsxc_webrtc .btn-warning.disabled.focus, #jsxc_webrtc .btn-warning.disabled:active, #jsxc_webrtc .btn-warning.disabled.active, #jsxc_webrtc .btn-warning[disabled], #jsxc_webrtc .btn-warning[disabled]:hover, #jsxc_webrtc .btn-warning[disabled]:focus, #jsxc_webrtc .btn-warning[disabled].focus, #jsxc_webrtc .btn-warning[disabled]:active, #jsxc_webrtc .btn-warning[disabled].active,
   fieldset[disabled] #jsxc_webrtc .btn-warning,
   fieldset[disabled] #jsxc_webrtc .btn-warning:hover,
   fieldset[disabled] #jsxc_webrtc .btn-warning:focus,
@@ -1522,55 +1330,23 @@ img.emojione {
   color: #fff;
   background-color: #d9534f;
   border-color: #d43f3a; }
-  #jsxc_dialog .btn-danger:hover,
-  #jsxc_dialog .btn-danger:focus,
-  #jsxc_dialog .btn-danger.focus,
-  #jsxc_dialog .btn-danger:active,
-  #jsxc_dialog .btn-danger.active,
-  .open > #jsxc_dialog .btn-danger.dropdown-toggle, #jsxc_webrtc .btn-danger:hover,
-  #jsxc_webrtc .btn-danger:focus,
-  #jsxc_webrtc .btn-danger.focus,
-  #jsxc_webrtc .btn-danger:active,
-  #jsxc_webrtc .btn-danger.active,
+  #jsxc_dialog .btn-danger:hover, #jsxc_dialog .btn-danger:focus, #jsxc_dialog .btn-danger.focus, #jsxc_dialog .btn-danger:active, #jsxc_dialog .btn-danger.active,
+  .open > #jsxc_dialog .btn-danger.dropdown-toggle, #jsxc_webrtc .btn-danger:hover, #jsxc_webrtc .btn-danger:focus, #jsxc_webrtc .btn-danger.focus, #jsxc_webrtc .btn-danger:active, #jsxc_webrtc .btn-danger.active,
   .open > #jsxc_webrtc .btn-danger.dropdown-toggle {
     color: #fff;
     background-color: #c9302c;
     border-color: #ac2925; }
-  #jsxc_dialog .btn-danger:active,
-  #jsxc_dialog .btn-danger.active,
-  .open > #jsxc_dialog .btn-danger.dropdown-toggle, #jsxc_webrtc .btn-danger:active,
-  #jsxc_webrtc .btn-danger.active,
+  #jsxc_dialog .btn-danger:active, #jsxc_dialog .btn-danger.active,
+  .open > #jsxc_dialog .btn-danger.dropdown-toggle, #jsxc_webrtc .btn-danger:active, #jsxc_webrtc .btn-danger.active,
   .open > #jsxc_webrtc .btn-danger.dropdown-toggle {
     background-image: none; }
-  #jsxc_dialog .btn-danger.disabled,
-  #jsxc_dialog .btn-danger.disabled:hover,
-  #jsxc_dialog .btn-danger.disabled:focus,
-  #jsxc_dialog .btn-danger.disabled.focus,
-  #jsxc_dialog .btn-danger.disabled:active,
-  #jsxc_dialog .btn-danger.disabled.active,
-  #jsxc_dialog .btn-danger[disabled],
-  #jsxc_dialog .btn-danger[disabled]:hover,
-  #jsxc_dialog .btn-danger[disabled]:focus,
-  #jsxc_dialog .btn-danger[disabled].focus,
-  #jsxc_dialog .btn-danger[disabled]:active,
-  #jsxc_dialog .btn-danger[disabled].active,
+  #jsxc_dialog .btn-danger.disabled, #jsxc_dialog .btn-danger.disabled:hover, #jsxc_dialog .btn-danger.disabled:focus, #jsxc_dialog .btn-danger.disabled.focus, #jsxc_dialog .btn-danger.disabled:active, #jsxc_dialog .btn-danger.disabled.active, #jsxc_dialog .btn-danger[disabled], #jsxc_dialog .btn-danger[disabled]:hover, #jsxc_dialog .btn-danger[disabled]:focus, #jsxc_dialog .btn-danger[disabled].focus, #jsxc_dialog .btn-danger[disabled]:active, #jsxc_dialog .btn-danger[disabled].active,
   fieldset[disabled] #jsxc_dialog .btn-danger,
   fieldset[disabled] #jsxc_dialog .btn-danger:hover,
   fieldset[disabled] #jsxc_dialog .btn-danger:focus,
   fieldset[disabled] #jsxc_dialog .btn-danger.focus,
   fieldset[disabled] #jsxc_dialog .btn-danger:active,
-  fieldset[disabled] #jsxc_dialog .btn-danger.active, #jsxc_webrtc .btn-danger.disabled,
-  #jsxc_webrtc .btn-danger.disabled:hover,
-  #jsxc_webrtc .btn-danger.disabled:focus,
-  #jsxc_webrtc .btn-danger.disabled.focus,
-  #jsxc_webrtc .btn-danger.disabled:active,
-  #jsxc_webrtc .btn-danger.disabled.active,
-  #jsxc_webrtc .btn-danger[disabled],
-  #jsxc_webrtc .btn-danger[disabled]:hover,
-  #jsxc_webrtc .btn-danger[disabled]:focus,
-  #jsxc_webrtc .btn-danger[disabled].focus,
-  #jsxc_webrtc .btn-danger[disabled]:active,
-  #jsxc_webrtc .btn-danger[disabled].active,
+  fieldset[disabled] #jsxc_dialog .btn-danger.active, #jsxc_webrtc .btn-danger.disabled, #jsxc_webrtc .btn-danger.disabled:hover, #jsxc_webrtc .btn-danger.disabled:focus, #jsxc_webrtc .btn-danger.disabled.focus, #jsxc_webrtc .btn-danger.disabled:active, #jsxc_webrtc .btn-danger.disabled.active, #jsxc_webrtc .btn-danger[disabled], #jsxc_webrtc .btn-danger[disabled]:hover, #jsxc_webrtc .btn-danger[disabled]:focus, #jsxc_webrtc .btn-danger[disabled].focus, #jsxc_webrtc .btn-danger[disabled]:active, #jsxc_webrtc .btn-danger[disabled].active,
   fieldset[disabled] #jsxc_webrtc .btn-danger,
   fieldset[disabled] #jsxc_webrtc .btn-danger:hover,
   fieldset[disabled] #jsxc_webrtc .btn-danger:focus,
@@ -1587,36 +1363,20 @@ img.emojione {
   color: #337ab7;
   font-weight: normal;
   border-radius: 0; }
-  #jsxc_dialog .btn-link,
-  #jsxc_dialog .btn-link:active,
-  #jsxc_dialog .btn-link.active,
-  #jsxc_dialog .btn-link[disabled],
-  fieldset[disabled] #jsxc_dialog .btn-link, #jsxc_webrtc .btn-link,
-  #jsxc_webrtc .btn-link:active,
-  #jsxc_webrtc .btn-link.active,
-  #jsxc_webrtc .btn-link[disabled],
+  #jsxc_dialog .btn-link, #jsxc_dialog .btn-link:active, #jsxc_dialog .btn-link.active, #jsxc_dialog .btn-link[disabled],
+  fieldset[disabled] #jsxc_dialog .btn-link, #jsxc_webrtc .btn-link, #jsxc_webrtc .btn-link:active, #jsxc_webrtc .btn-link.active, #jsxc_webrtc .btn-link[disabled],
   fieldset[disabled] #jsxc_webrtc .btn-link {
     background-color: transparent;
     box-shadow: none; }
-  #jsxc_dialog .btn-link,
-  #jsxc_dialog .btn-link:hover,
-  #jsxc_dialog .btn-link:focus,
-  #jsxc_dialog .btn-link:active, #jsxc_webrtc .btn-link,
-  #jsxc_webrtc .btn-link:hover,
-  #jsxc_webrtc .btn-link:focus,
-  #jsxc_webrtc .btn-link:active {
+  #jsxc_dialog .btn-link, #jsxc_dialog .btn-link:hover, #jsxc_dialog .btn-link:focus, #jsxc_dialog .btn-link:active, #jsxc_webrtc .btn-link, #jsxc_webrtc .btn-link:hover, #jsxc_webrtc .btn-link:focus, #jsxc_webrtc .btn-link:active {
     border-color: transparent; }
-  #jsxc_dialog .btn-link:hover,
-  #jsxc_dialog .btn-link:focus, #jsxc_webrtc .btn-link:hover,
-  #jsxc_webrtc .btn-link:focus {
+  #jsxc_dialog .btn-link:hover, #jsxc_dialog .btn-link:focus, #jsxc_webrtc .btn-link:hover, #jsxc_webrtc .btn-link:focus {
     color: #23527c;
     text-decoration: underline;
     background-color: transparent; }
-  #jsxc_dialog .btn-link[disabled]:hover,
-  #jsxc_dialog .btn-link[disabled]:focus,
+  #jsxc_dialog .btn-link[disabled]:hover, #jsxc_dialog .btn-link[disabled]:focus,
   fieldset[disabled] #jsxc_dialog .btn-link:hover,
-  fieldset[disabled] #jsxc_dialog .btn-link:focus, #jsxc_webrtc .btn-link[disabled]:hover,
-  #jsxc_webrtc .btn-link[disabled]:focus,
+  fieldset[disabled] #jsxc_dialog .btn-link:focus, #jsxc_webrtc .btn-link[disabled]:hover, #jsxc_webrtc .btn-link[disabled]:focus,
   fieldset[disabled] #jsxc_webrtc .btn-link:hover,
   fieldset[disabled] #jsxc_webrtc .btn-link:focus {
     color: #777777;
@@ -1665,17 +1425,11 @@ img.emojione {
   #jsxc_webrtc .btn-group-vertical > .btn {
     position: relative;
     float: left; }
-    #jsxc_dialog .btn-group > .btn:hover,
-    #jsxc_dialog .btn-group > .btn:focus,
-    #jsxc_dialog .btn-group > .btn:active,
-    #jsxc_dialog .btn-group > .btn.active,
+    #jsxc_dialog .btn-group > .btn:hover, #jsxc_dialog .btn-group > .btn:focus, #jsxc_dialog .btn-group > .btn:active, #jsxc_dialog .btn-group > .btn.active,
     #jsxc_dialog .btn-group-vertical > .btn:hover,
     #jsxc_dialog .btn-group-vertical > .btn:focus,
     #jsxc_dialog .btn-group-vertical > .btn:active,
-    #jsxc_dialog .btn-group-vertical > .btn.active, #jsxc_webrtc .btn-group > .btn:hover,
-    #jsxc_webrtc .btn-group > .btn:focus,
-    #jsxc_webrtc .btn-group > .btn:active,
-    #jsxc_webrtc .btn-group > .btn.active,
+    #jsxc_dialog .btn-group-vertical > .btn.active, #jsxc_webrtc .btn-group > .btn:hover, #jsxc_webrtc .btn-group > .btn:focus, #jsxc_webrtc .btn-group > .btn:active, #jsxc_webrtc .btn-group > .btn.active,
     #jsxc_webrtc .btn-group-vertical > .btn:hover,
     #jsxc_webrtc .btn-group-vertical > .btn:focus,
     #jsxc_webrtc .btn-group-vertical > .btn:active,
@@ -1693,9 +1447,7 @@ img.emojione {
 
 #jsxc_dialog .btn-toolbar, #jsxc_webrtc .btn-toolbar {
   margin-left: -5px; }
-  #jsxc_dialog .btn-toolbar:before,
-  #jsxc_dialog .btn-toolbar:after, #jsxc_webrtc .btn-toolbar:before,
-  #jsxc_webrtc .btn-toolbar:after {
+  #jsxc_dialog .btn-toolbar:before, #jsxc_dialog .btn-toolbar:after, #jsxc_webrtc .btn-toolbar:before, #jsxc_webrtc .btn-toolbar:after {
     content: " ";
     display: table; }
   #jsxc_dialog .btn-toolbar:after, #jsxc_webrtc .btn-toolbar:after {
@@ -1780,9 +1532,7 @@ img.emojione {
   width: 100%;
   max-width: 100%; }
 
-#jsxc_dialog .btn-group-vertical > .btn-group:before,
-#jsxc_dialog .btn-group-vertical > .btn-group:after, #jsxc_webrtc .btn-group-vertical > .btn-group:before,
-#jsxc_webrtc .btn-group-vertical > .btn-group:after {
+#jsxc_dialog .btn-group-vertical > .btn-group:before, #jsxc_dialog .btn-group-vertical > .btn-group:after, #jsxc_webrtc .btn-group-vertical > .btn-group:before, #jsxc_webrtc .btn-group-vertical > .btn-group:after {
   content: " ";
   display: table; }
 
@@ -1929,7 +1679,6 @@ img.emojione {
   border: 1px solid #ccc;
   border-radius: 4px;
   box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
-  -webkit-transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
   transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s; }
   #jsxc_dialog .form-control:focus, #jsxc_webrtc .form-control:focus {
     border-color: #66afe9;
@@ -1942,10 +1691,8 @@ img.emojione {
     color: #999; }
   #jsxc_dialog .form-control::-webkit-input-placeholder, #jsxc_webrtc .form-control::-webkit-input-placeholder {
     color: #999; }
-  #jsxc_dialog .form-control[disabled],
-  #jsxc_dialog .form-control[readonly],
-  fieldset[disabled] #jsxc_dialog .form-control, #jsxc_webrtc .form-control[disabled],
-  #jsxc_webrtc .form-control[readonly],
+  #jsxc_dialog .form-control[disabled], #jsxc_dialog .form-control[readonly],
+  fieldset[disabled] #jsxc_dialog .form-control, #jsxc_webrtc .form-control[disabled], #jsxc_webrtc .form-control[readonly],
   fieldset[disabled] #jsxc_webrtc .form-control {
     background-color: #eeeeee;
     opacity: 1; }
@@ -1972,34 +1719,46 @@ img.emojione {
     #jsxc_dialog input[type="date"].input-sm,
     .input-group-sm #jsxc_dialog input[type="date"],
     #jsxc_dialog input[type="time"].input-sm,
-    .input-group-sm #jsxc_dialog input[type="time"],
+    .input-group-sm
+    #jsxc_dialog input[type="time"],
     #jsxc_dialog input[type="datetime-local"].input-sm,
-    .input-group-sm #jsxc_dialog input[type="datetime-local"],
+    .input-group-sm
+    #jsxc_dialog input[type="datetime-local"],
     #jsxc_dialog input[type="month"].input-sm,
-    .input-group-sm #jsxc_dialog input[type="month"], #jsxc_webrtc input[type="date"].input-sm,
+    .input-group-sm
+    #jsxc_dialog input[type="month"], #jsxc_webrtc input[type="date"].input-sm,
     .input-group-sm #jsxc_webrtc input[type="date"],
     #jsxc_webrtc input[type="time"].input-sm,
-    .input-group-sm #jsxc_webrtc input[type="time"],
+    .input-group-sm
+    #jsxc_webrtc input[type="time"],
     #jsxc_webrtc input[type="datetime-local"].input-sm,
-    .input-group-sm #jsxc_webrtc input[type="datetime-local"],
+    .input-group-sm
+    #jsxc_webrtc input[type="datetime-local"],
     #jsxc_webrtc input[type="month"].input-sm,
-    .input-group-sm #jsxc_webrtc input[type="month"] {
+    .input-group-sm
+    #jsxc_webrtc input[type="month"] {
       line-height: 30px; }
     #jsxc_dialog input[type="date"].input-lg,
     .input-group-lg #jsxc_dialog input[type="date"],
     #jsxc_dialog input[type="time"].input-lg,
-    .input-group-lg #jsxc_dialog input[type="time"],
+    .input-group-lg
+    #jsxc_dialog input[type="time"],
     #jsxc_dialog input[type="datetime-local"].input-lg,
-    .input-group-lg #jsxc_dialog input[type="datetime-local"],
+    .input-group-lg
+    #jsxc_dialog input[type="datetime-local"],
     #jsxc_dialog input[type="month"].input-lg,
-    .input-group-lg #jsxc_dialog input[type="month"], #jsxc_webrtc input[type="date"].input-lg,
+    .input-group-lg
+    #jsxc_dialog input[type="month"], #jsxc_webrtc input[type="date"].input-lg,
     .input-group-lg #jsxc_webrtc input[type="date"],
     #jsxc_webrtc input[type="time"].input-lg,
-    .input-group-lg #jsxc_webrtc input[type="time"],
+    .input-group-lg
+    #jsxc_webrtc input[type="time"],
     #jsxc_webrtc input[type="datetime-local"].input-lg,
-    .input-group-lg #jsxc_webrtc input[type="datetime-local"],
+    .input-group-lg
+    #jsxc_webrtc input[type="datetime-local"],
     #jsxc_webrtc input[type="month"].input-lg,
-    .input-group-lg #jsxc_webrtc input[type="month"] {
+    .input-group-lg
+    #jsxc_webrtc input[type="month"] {
       line-height: 46px; } }
 
 #jsxc_dialog .form-group, #jsxc_webrtc .form-group {
@@ -2054,35 +1813,39 @@ img.emojione {
   margin-top: 0;
   margin-left: 10px; }
 
-#jsxc_dialog input[type="radio"][disabled],
-#jsxc_dialog input[type="radio"].disabled,
+#jsxc_dialog input[type="radio"][disabled], #jsxc_dialog input[type="radio"].disabled,
 fieldset[disabled] #jsxc_dialog input[type="radio"],
 #jsxc_dialog input[type="checkbox"][disabled],
 #jsxc_dialog input[type="checkbox"].disabled,
-fieldset[disabled] #jsxc_dialog input[type="checkbox"], #jsxc_webrtc input[type="radio"][disabled],
-#jsxc_webrtc input[type="radio"].disabled,
+fieldset[disabled]
+#jsxc_dialog input[type="checkbox"], #jsxc_webrtc input[type="radio"][disabled], #jsxc_webrtc input[type="radio"].disabled,
 fieldset[disabled] #jsxc_webrtc input[type="radio"],
 #jsxc_webrtc input[type="checkbox"][disabled],
 #jsxc_webrtc input[type="checkbox"].disabled,
-fieldset[disabled] #jsxc_webrtc input[type="checkbox"] {
+fieldset[disabled]
+#jsxc_webrtc input[type="checkbox"] {
   cursor: not-allowed; }
 
 #jsxc_dialog .radio-inline.disabled,
 fieldset[disabled] #jsxc_dialog .radio-inline,
 #jsxc_dialog .checkbox-inline.disabled,
-fieldset[disabled] #jsxc_dialog .checkbox-inline, #jsxc_webrtc .radio-inline.disabled,
+fieldset[disabled]
+#jsxc_dialog .checkbox-inline, #jsxc_webrtc .radio-inline.disabled,
 fieldset[disabled] #jsxc_webrtc .radio-inline,
 #jsxc_webrtc .checkbox-inline.disabled,
-fieldset[disabled] #jsxc_webrtc .checkbox-inline {
+fieldset[disabled]
+#jsxc_webrtc .checkbox-inline {
   cursor: not-allowed; }
 
 #jsxc_dialog .radio.disabled label,
 fieldset[disabled] #jsxc_dialog .radio label,
 #jsxc_dialog .checkbox.disabled label,
-fieldset[disabled] #jsxc_dialog .checkbox label, #jsxc_webrtc .radio.disabled label,
+fieldset[disabled]
+#jsxc_dialog .checkbox label, #jsxc_webrtc .radio.disabled label,
 fieldset[disabled] #jsxc_webrtc .radio label,
 #jsxc_webrtc .checkbox.disabled label,
-fieldset[disabled] #jsxc_webrtc .checkbox label {
+fieldset[disabled]
+#jsxc_webrtc .checkbox label {
   cursor: not-allowed; }
 
 #jsxc_dialog .form-control-static, #jsxc_webrtc .form-control-static {
@@ -2090,9 +1853,7 @@ fieldset[disabled] #jsxc_webrtc .checkbox label {
   padding-bottom: 7px;
   margin-bottom: 0;
   min-height: 34px; }
-  #jsxc_dialog .form-control-static.input-lg,
-  #jsxc_dialog .form-control-static.input-sm, #jsxc_webrtc .form-control-static.input-lg,
-  #jsxc_webrtc .form-control-static.input-sm {
+  #jsxc_dialog .form-control-static.input-lg, #jsxc_dialog .form-control-static.input-sm, #jsxc_webrtc .form-control-static.input-lg, #jsxc_webrtc .form-control-static.input-sm {
     padding-left: 0;
     padding-right: 0; }
 
@@ -2384,9 +2145,7 @@ fieldset[disabled] #jsxc_webrtc .checkbox label {
 #jsxc_dialog .form-horizontal .form-group, #jsxc_webrtc .form-horizontal .form-group {
   margin-left: -15px;
   margin-right: -15px; }
-  #jsxc_dialog .form-horizontal .form-group:before,
-  #jsxc_dialog .form-horizontal .form-group:after, #jsxc_webrtc .form-horizontal .form-group:before,
-  #jsxc_webrtc .form-horizontal .form-group:after {
+  #jsxc_dialog .form-horizontal .form-group:before, #jsxc_dialog .form-horizontal .form-group:after, #jsxc_webrtc .form-horizontal .form-group:before, #jsxc_webrtc .form-horizontal .form-group:after {
     content: " ";
     display: table; }
   #jsxc_dialog .form-horizontal .form-group:after, #jsxc_webrtc .form-horizontal .form-group:after {
@@ -2590,10 +2349,6 @@ fieldset[disabled] #jsxc_webrtc .checkbox label {
   background-size: contain;
   border: 0;
   vertical-align: bottom; }
-  .jsxc_emoticon.jsxc_large {
-    width: 40px;
-    height: 40px;
-    margin-bottom: 7px; }
 
 #jsxc_roster .jsxc_emoticon.jsxc_large {
   width: 19px;
@@ -2718,7 +2473,7 @@ fieldset[disabled] #jsxc_webrtc .checkbox label {
     color: #333;
     padding: 10px; }
     #jsxc_roster p a {
-      color: #b3b3b3;
+      color: #b3b2b2;
       text-decoration: underline; }
   #jsxc_roster .jsxc_avatar {
     position: relative;
@@ -2735,16 +2490,14 @@ fieldset[disabled] #jsxc_webrtc .checkbox label {
   #jsxc_roster.jsxc_state_hidden {
     display: block;
     right: -200px;
-    -webkit-transition: right 0.5s;
-            transition: right 0.5s; }
+    transition: right 0.5s; }
     #jsxc_roster.jsxc_state_hidden #jsxc_toggleRoster:before {
       -webkit-transform: rotate(0deg);
               transform: rotate(0deg); }
   #jsxc_roster.jsxc_state_shown {
     display: block;
     right: 0;
-    -webkit-transition: right 0.5s;
-            transition: right 0.5s; }
+    transition: right 0.5s; }
   #jsxc_roster > .jsxc_bottom {
     position: absolute;
     left: 0;
@@ -2961,8 +2714,7 @@ fieldset[disabled] #jsxc_webrtc .checkbox label {
   right: 210px;
   left: 0;
   z-index: 50;
-  -webkit-transition: right 0.5s;
-          transition: right 0.5s; }
+  transition: right 0.5s; }
   #jsxc_windowList.jsxc_roster_hidden {
     right: 10px; }
   @media (min-width: 768px) {
@@ -2978,8 +2730,7 @@ fieldset[disabled] #jsxc_webrtc .checkbox label {
     height: 44px;
     overflow: visible;
     white-space: nowrap;
-    -webkit-transition: right 0.5s;
-            transition: right 0.5s; }
+    transition: right 0.5s; }
     #jsxc_windowList > ul > li {
       padding: 0;
       margin: 0;
@@ -2992,12 +2743,10 @@ fieldset[disabled] #jsxc_webrtc .checkbox label {
       cursor: pointer;
       white-space: normal; }
       #jsxc_windowList > ul > li.jsxc_normal {
-        -webkit-transition: width 0.2s;
-                transition: width 0.2s;
+        transition: width 0.2s;
         width: 250px; }
       #jsxc_windowList > ul > li.jsxc_min {
-        -webkit-transition: width 0.2s;
-                transition: width 0.2s;
+        transition: width 0.2s;
         width: 46px !important; }
         @media (min-width: 768px) {
           #jsxc_windowList > ul > li.jsxc_min {
@@ -3020,7 +2769,7 @@ fieldset[disabled] #jsxc_webrtc .checkbox label {
     width: 14px;
     height: 30px;
     background-color: #cccccc;
-    color: gray;
+    color: #807f7f;
     text-align: center;
     line-height: 30px;
     float: left;
@@ -3030,9 +2779,9 @@ fieldset[disabled] #jsxc_webrtc .checkbox label {
         -ms-user-select: none;
             user-select: none; }
     #jsxc_windowListSB > div:hover {
-      background-color: #b3b3b3; }
+      background-color: #b3b2b2; }
   #jsxc_windowListSB > .jsxc_disabled {
-    background-color: #e6e6e6 !important;
+    background-color: #e6e5e5 !important;
     color: #cccccc;
     cursor: default !important;
     display: none; }
@@ -3068,11 +2817,9 @@ fieldset[disabled] #jsxc_webrtc .checkbox label {
   border: 1px solid #e1e1e1;
   border-bottom: 0; }
   .jsxc_min .jsxc_window {
-    -webkit-transition: bottom 0.2s;
-            transition: bottom 0.2s; }
+    transition: bottom 0.2s; }
   .jsxc_normal .jsxc_window {
-    -webkit-transition: bottom 0.2s;
-            transition: bottom 0.2s; }
+    transition: bottom 0.2s; }
   .jsxc_showOverlay .jsxc_window .jsxc_overlay {
     display: block !important; }
   .jsxc_window .jsxc_emoticons {
@@ -3116,14 +2863,14 @@ fieldset[disabled] #jsxc_webrtc .checkbox label {
         z-index: 1;
         left: 7px;
         top: 100%; }
-    .jsxc_window .jsxc_emoticons li div {
+    .jsxc_window .jsxc_emoticons li span {
       float: left;
       cursor: pointer;
       border-radius: 3px;
       background-size: 30px 30px;
       width: 30px;
       height: 30px; }
-      .jsxc_window .jsxc_emoticons li div:hover {
+      .jsxc_window .jsxc_emoticons li span:hover {
         background-color: rgba(255, 255, 255, 0.8); }
     .jsxc_window .jsxc_emoticons:hover:after {
       opacity: 0.5; }
@@ -3193,8 +2940,7 @@ fieldset[disabled] #jsxc_webrtc .checkbox label {
       z-index: 80;
       line-height: 42px;
       opacity: 0;
-      -webkit-transition: opacity 0.5s, top 0.5s;
-              transition: opacity 0.5s, top 0.5s; }
+      transition: opacity 0.5s, top 0.5s; }
       .jsxc_window .jsxc_fade .jsxc_mam-load-more.jsxc_show {
         top: 0;
         opacity: 0.7; }
@@ -3225,8 +2971,7 @@ fieldset[disabled] #jsxc_webrtc .checkbox label {
     border: 0;
     display: block;
     resize: none;
-    -webkit-transition: height 0.5s;
-            transition: height 0.5s;
+    transition: height 0.5s;
     font-size: 13px; }
   .jsxc_window textarea::-webkit-input-placeholder {
     color: #000;
@@ -3321,8 +3066,7 @@ fieldset[disabled] #jsxc_webrtc .checkbox label {
       background-position: center center;
       background-repeat: no-repeat;
       opacity: 0;
-      -webkit-transition: opacity 0.5s;
-              transition: opacity 0.5s; }
+      transition: opacity 0.5s; }
     .jsxc_chatmessage a[download]:hover:before {
       opacity: 0.6; }
   .jsxc_chatmessage img {
@@ -3358,6 +3102,10 @@ fieldset[disabled] #jsxc_webrtc .checkbox label {
       opacity: 1; }
     .jsxc_chatmessage .jsxc_attachment.jsxc_text {
       background-image: url('../js/jsxc/img/filetypes/text.svg'); }
+  .jsxc_chatmessage .jsxc_emoticon.jsxc_large {
+    width: 40px;
+    height: 40px;
+    margin-bottom: 7px; }
 
 .jsxc_timestamp {
   font-size: 8px;
@@ -3552,8 +3300,7 @@ div.jsxc_transfer {
   overflow: hidden;
   position: absolute;
   top: 0;
-  -webkit-transition: height 400ms;
-          transition: height 400ms;
+  transition: height 400ms;
   z-index: 100; }
   .jsxc_windowItem .jsxc_memberlist ul {
     white-space: nowrap;
@@ -3561,8 +3308,7 @@ div.jsxc_transfer {
     background-color: #0082c9;
     color: #c0dff1;
     overflow: hidden;
-    -webkit-transition: left 400ms;
-            transition: left 400ms;
+    transition: left 400ms;
     padding: 0;
     padding-left: 6px;
     padding-right: 6px;
@@ -3696,7 +3442,7 @@ li[data-type='groupchat'] .jsxc_video {
   #jsxc_dialog .btn-group button {
     margin-right: 0; }
   #jsxc_dialog input[readonly] {
-    background-color: #e6e6e6; }
+    background-color: #e6e5e5; }
   #jsxc_dialog .jsxc_inputinfo {
     padding: 0;
     font-style: italic;
@@ -3728,7 +3474,7 @@ li[data-type='groupchat'] .jsxc_video {
   text-align: center;
   font-weight: bold;
   font-size: 30px;
-  color: #b3b3b3;
+  color: #b3b2b2;
   position: relative;
   font-family: Arial, sans-serif;
   background-size: cover;
@@ -3791,8 +3537,7 @@ ul.jsxc_vCard {
 .jsxc_list .jsxc_inner {
   box-sizing: border-box;
   max-height: 0;
-  -webkit-transition: max-height 0.5s;
-          transition: max-height 0.5s;
+  transition: max-height 0.5s;
   overflow: hidden;
   visibility: hidden;
   position: absolute;
@@ -3878,8 +3623,7 @@ img.jsxc_vCard {
   background-image: none;
   border: 1px solid transparent;
   border-radius: 4px;
-  -webkit-transition: background-color 0.5s;
-          transition: background-color 0.5s; }
+  transition: background-color 0.5s; }
   .jsxc_btn.jsxc_btn-default {
     border-color: #ccc;
     color: #555;
@@ -4274,7 +4018,7 @@ img.jsxc_vCard {
   left: 50%;
   margin-left: -100px; }
   .jsxc_noRemoteVideo > div > div {
-    background-color: #4d4d4d; }
+    background-color: #4d4c4c; }
     .jsxc_noRemoteVideo > div > div:first-child {
       width: 50%;
       height: 50%;
@@ -4353,8 +4097,7 @@ div.jsxc_video {
   right: 0;
   text-align: center;
   z-index: 9090;
-  -webkit-transition: 1s opacity;
-          transition: 1s opacity;
+  transition: 1s opacity;
   opacity: 0; }
   @media (min-width: 768px) {
     .jsxc_controlbar {
@@ -4439,6 +4182,22 @@ div.jsxc_video {
 .jsxc_videoSuitable .jsxc_name {
   font-style: italic; }
 
+@-webkit-keyframes jsxc-left-to-right {
+  0% {
+    background-position-x: 0%; }
+  50% {
+    background-position-x: 100%; }
+  100% {
+    background-position-x: 0%; } }
+
+@keyframes jsxc-left-to-right {
+  0% {
+    background-position-x: 0%; }
+  50% {
+    background-position-x: 100%; }
+  100% {
+    background-position-x: 0%; } }
+
 #jsxc_roster {
   top: 45px;
   z-index: 1500; }
@@ -4509,12 +4268,25 @@ div.jsxc_video {
   width: 100%; }
   #ojsxc input[type='checkbox'] {
     margin: 13px 0;
-    width: auto; }
+    width: auto;
+    min-height: auto;
+    height: auto; }
   #ojsxc input[type='radio'] {
-    width: auto; }
+    width: auto;
+    min-height: auto;
+    height: auto; }
+  #ojsxc input[readonly] {
+    background-color: #f1f1f1; }
   #ojsxc input:invalid {
     border: 1px solid red;
     position: relative; }
+  #ojsxc input.jsxc-loading {
+    background-image: linear-gradient(to right, #fff, #fff);
+    background-position-x: 10%;
+    background-size: 30px 100%;
+    background-repeat: no-repeat;
+    -webkit-animation: jsxc-left-to-right 5s linear infinite;
+            animation: jsxc-left-to-right 5s linear infinite; }
 
 #ojsxc em, #ojsxc .boshUrl-msg {
   display: block;
@@ -4576,12 +4348,10 @@ div.jsxc_video {
 @media (min-width: 768px) {
   #content-wrapper, #filestable > thead {
     padding-right: 0;
-    -webkit-transition: padding-right 0.5s;
-            transition: padding-right 0.5s; }
+    transition: padding-right 0.5s; }
   #mainContainer, #odf-toolbar, #app-sidebar {
     right: 0;
-    -webkit-transition: right 0.5s;
-            transition: right 0.5s; }
+    transition: right 0.5s; }
   .jsxc-roster-shown #content-wrapper, .jsxc-roster-shown #filestable > thead {
     padding-right: 210px; }
   .jsxc-roster-shown #mainContainer, .jsxc-roster-shown #odf-toolbar, .jsxc-roster-shown #app-sidebar {
@@ -4600,3 +4370,11 @@ div.jsxc_video {
     right: 13px;
     top: 13px;
     position: absolute; }
+
+#contactsmenu-contacts .contact:before {
+  position: absolute;
+  top: 7px;
+  left: 7px; }
+
+#contactsmenu-contacts .contact .avatar {
+  cursor: pointer; }

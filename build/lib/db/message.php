@@ -15,7 +15,8 @@ use Sabre\Xml\XmlSerializable;
  * @method string getType()
  * @method array getValue()
  */
-class Message extends Stanza implements XmlSerializable{
+class Message extends Stanza implements XmlSerializable
+{
 
 	/**
 	 * @var string $type
@@ -27,7 +28,8 @@ class Message extends Stanza implements XmlSerializable{
 	 */
 	public $value;
 
-	public function xmlSerialize(Writer $writer) {
+	public function xmlSerialize(Writer $writer)
+	{
 		$writer->write([
 			[
 				'name' => 'message',
@@ -42,5 +44,4 @@ class Message extends Stanza implements XmlSerializable{
 			]
 		]);
 	}
-
 }

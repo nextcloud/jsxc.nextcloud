@@ -75,7 +75,7 @@ $(document).ready(function() {
             }
          }
 
-         if(xhr.status === 0) {
+         if (xhr.status === 0) {
             // cross-side
             fail('Cross domain request was not possible. Either your BOSH server does not send any ' +
                'Access-Control-Allow-Origin header or the content-security-policy (CSP) blocks your request. ' +
@@ -93,15 +93,15 @@ $(document).ready(function() {
       });
    }
 
-   $('#ojsxc [name=serverType]').change(function(){
-      $('#ojsxc .ojsxc-external, #ojsxc .ojsxc-internal').hide();
-      $('#ojsxc .ojsxc-external, #ojsxc .ojsxc-internal').find('.required').removeAttr('required');
+   $('#ojsxc [name=serverType]').change(function() {
+      $('#ojsxc .ojsxc-external, #ojsxc .ojsxc-internal, #ojsxc .ojsxc-managed').hide();
+      $('#ojsxc .ojsxc-external, #ojsxc .ojsxc-internal, #ojsxc .ojsxc-managed').find('.required').removeAttr('required');
       $('#ojsxc .ojsxc-' + $(this).val()).show();
       $('#ojsxc .ojsxc-' + $(this).val()).find('.required').attr('required', 'true');
    });
    $('#ojsxc [name=serverType]:checked').change();
 
-   $('#boshUrl, #xmppDomain').on('input', function(){
+   $('#boshUrl, #xmppDomain').on('input', function() {
       var self = $(this);
       var timeout = self.data('timeout');
 
@@ -144,14 +144,14 @@ $(document).ready(function() {
       var status = $('#ojsxc .msg div');
       status.html('<img src="' + jsxc.options.root + '/img/loading.gif" alt="wait" width="16px" height="16px" /> Saving...');
 
-      $.post(OC.filePath('ojsxc', 'ajax', 'setAdminSettings.php'), post, function(data) {
-         if (data) {
+      $.post(OC.generateUrl('apps/ojsxc/settings/admin'), post, function(data) {
+         if (data && data.status === 'success') {
             status.addClass('jsxc_success').text('Settings saved. Please log out and in again.');
          } else {
             status.addClass('jsxc_fail').text('Error!');
          }
 
-         setTimeout(function(){
+         setTimeout(function() {
             status.hide('slow');
          }, 3000);
       });
@@ -182,7 +182,7 @@ $(document).ready(function() {
 
       var options = jsxc.options.get('httpUpload') || {};
 
-      var services = $('[name="externalServices[]"]').map(function(){
+      var services = $('[name="externalServices[]"]').map(function() {
          var inputField = $(this);
 
          return inputField.val() || null;
@@ -190,13 +190,13 @@ $(document).ready(function() {
 
       if (options.server && services.toArray().indexOf(options.server) < 0) {
          // insert service
-         var emptyInputFields = $('[name="externalServices[]"]').filter(function(){
+         var emptyInputFields = $('[name="externalServices[]"]').filter(function() {
             return $(this).val() === '';
          });
 
          var targetInputField;
 
-         if(emptyInputFields.length === 0) {
+         if (emptyInputFields.length === 0) {
             $(this).parents('.form-group').find('.add-input').click();
             targetInputField = $('[name="externalServices[]"]').last();
          } else {
@@ -207,12 +207,80 @@ $(document).ready(function() {
       }
    });
 
-   var apiUrl = window.location.origin + OC.filePath('ojsxc', 'ajax', 'externalApi.php');
-   $('#jsxc-api-url').val(apiUrl);
-
-   $('#ojsxc input[readonly]').focus(function(){
-      if(typeof this.select === 'function') {
+   $('#ojsxc input[readonly]').focus(function() {
+      if (typeof this.select === 'function') {
          this.select();
       }
+   });
+
+   $('#ojsxc-register').click(function() {
+      var el = $(this);
+      var msgEl = el.parents('.ojsxc-managed').find('.msg');
+      var promotionCode = $('#ojsxc-managed-promotion-code').val();
+
+      if (promotionCode.length > 0 && !/^[0-9a-z]+$/i.test(promotionCode)) {
+         msgEl.addClass('jsxc_fail');
+         msgEl.text('Your promotion code is invalid.');
+
+         $('#ojsxc-managed-promotion-code').one('input', function() {
+            msgEl.removeClass('jsxc_fail');
+            msgEl.text('');
+         });
+
+         return;
+      }
+
+      el.prop('disabled', 'disabled');
+      el.val(el.attr('data-toggle-value'));
+      el.addClass('jsxc-loading');
+
+      $.ajax({
+         method: 'POST',
+         url: OC.generateUrl('apps/ojsxc/managedServer/register'),
+         data: {
+            promotionCode: promotionCode
+         }
+      }).always(function(responseJSON) {
+         el.removeClass('jsxc-loading');
+
+         if (responseJSON && responseJSON.result === 'success') {
+            $('.ojsxc-managed-registration').hide();
+
+            msgEl.addClass('jsxc_success');
+            msgEl.text('Congratulations! You got your own XMPP server. Please log out and in again.');
+
+            var submitEl = $('#ojsxc input[type="submit"]');
+            submitEl.prop('disabled', 'disabled');
+            submitEl.val('Please reload this page to continue');
+
+            return;
+         }
+
+         if (responseJSON.responseJSON) {
+            responseJSON = responseJSON.responseJSON;
+         }
+
+         var errorMsg = (responseJSON && responseJSON.data) ? responseJSON.data.msg : 'unknown error';
+
+         msgEl.addClass('jsxc_fail');
+         msgEl.append($('<span>').text('Sorry we couldn\'t complete your registration.'));
+         msgEl.append($('<br><br>'));
+         msgEl.append($('<span>').text(errorMsg));
+         msgEl.append($('<br><br>'));
+         msgEl.append($('<span>').html('Please report this to our <a href="https://jsxc.ch/managed-issue-tracker" target="_blank">issue tracker</a> and mention the request id ' + responseJSON.data.requestId + '.'));
+
+         el.val('Registration failed');
+      });
+   });
+
+   $('.ojsxc-refresh-registration').click(function(ev){
+      ev.preventDefault();
+
+      var msgEl = $(this).parents('.msg');
+
+      msgEl.removeClass('jsxc_success');
+      msgEl.empty();
+
+      $('.ojsxc-managed-registration').show();
    });
 });

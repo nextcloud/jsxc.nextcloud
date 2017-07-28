@@ -1,5 +1,5 @@
 /*!
- * ojsxc v3.2.1 - 2017-06-01
+ * ojsxc v3.3.0-beta.1 - 2017-07-28
  * 
  * Copyright (c) 2017 Klaus Herberth <klaus@jsxc.org> <br>
  * Released under the MIT license
@@ -7,7 +7,7 @@
  * Please see http://www.jsxc.org/
  * 
  * @author Klaus Herberth <klaus@jsxc.org>
- * @version 3.2.1
+ * @version 3.3.0-beta.1
  * @license MIT
  */
 
@@ -29,6 +29,10 @@
 
                 $(mutation.target).find('[href^="xmpp:"]').addClass('jsxc_statusIndicator');
 
+                $(mutation.target).find('.contact').each(function(){
+                   updateContactItem($(this));
+                });
+
                 jsxc.gui.detectUriScheme(mutation.target);
             });
         });
@@ -41,6 +45,66 @@
         };
 
         observer.observe(target, config);
+    }
+
+    function updateContactItem(contactElement) {
+      var xmppAddresses = contactElement.find('[href^="xmpp:"]').map(function(){
+         return $(this).attr('href').replace(/^xmpp:/, '');
+      });
+
+      if (xmppAddresses.length === 0) {
+         return;
+      }
+
+      var lastMessages = [];
+      var highestPresent = jsxc.CONST.STATUS.indexOf('offline');
+      var highestPresentBid = xmppAddresses.get(0);
+
+      xmppAddresses.each(function(index, bid){
+         var lastMsg = jsxc.getLastMsg(bid);
+
+         if (lastMsg) {
+            lastMessages.push(lastMsg);
+         }
+
+         var data = jsxc.storage.getUserItem('buddy', bid) || {};
+
+         if (data.status > highestPresent) {
+            highestPresent = data.status;
+            highestPresentBid = bid;
+         }
+      });
+
+      var latestMsg = {date: 0};
+      $(lastMessages).each(function(index, msg){
+         if (msg.date > latestMsg.date) {
+            latestMsg = msg;
+         }
+      });
+
+      if (latestMsg.date > 0) {
+         // replace emoticons from XEP-0038 and pidgin with shortnames
+         $.each(jsxc.gui.emotions, function(i, val) {
+            latestMsg.text = latestMsg.text.replace(val[2], ':' + val[1] + ':');
+         });
+
+         // translate shortnames to images
+         latestMsg.text = jsxc.gui.shortnameToImage(latestMsg.text);
+
+         contactElement.find('.last-message').html(latestMsg.text);
+      }
+
+      if (highestPresent > 0) {
+         var status = jsxc.CONST.STATUS[highestPresent];
+
+         contactElement.removeClass('jsxc_' + jsxc.CONST.STATUS.join(' jsxc_')).addClass('jsxc_' + status);
+      }
+
+      if (highestPresentBid) {
+         contactElement.find('.avatar').click(function() {
+            jsxc.gui.queryActions.message(highestPresentBid);
+         });
+      }
     }
 
     function injectChatIcon() {
@@ -148,7 +212,7 @@
     function loadSettings(username, password, cb) {
         $.ajax({
             type: 'POST',
-            url: OC.filePath('ojsxc', 'ajax', 'getSettings.php'),
+            url: OC.generateUrl('apps/ojsxc/settings'),
             data: {
                 username: username,
                 password: password
@@ -167,6 +231,9 @@
                     jsxc.options.set('xmpp', {
                         url: OC.generateUrl('apps/ojsxc/http-bind')
                     });
+
+                    jsxc.options.set('adminSettings', d.data.adminSettings);
+
                     if (d.data.loginForm) {
                         jsxc.options.set('loginForm', {
                             startMinimized: d.data.loginForm.startMinimized
@@ -178,8 +245,19 @@
                     cb(false);
                 }
             },
-            error: function() {
+            error: function(xhr) {
                 jsxc.error('XHR error on getSettings.php');
+
+                if (xhr.responseJSON && xhr.responseJSON.message) {
+                   jsxc.debug('Error message: ' + xhr.responseJSON.message);
+                }
+
+                if (xhr.status === 412) {
+                   jsxc.debug('Refresh page to get a new CSRF token');
+
+                   window.location.href = window.location.href;
+                   return;
+                }
 
                 cb(false);
             }
@@ -203,7 +281,7 @@
     function getUsers(search, cb) {
         $.ajax({
             type: 'GET',
-            url: OC.filePath('ojsxc', 'ajax', 'getUsers.php'),
+            url: OC.generateUrl('apps/ojsxc/settings/users'),
             data: {
                 search: search
             },
@@ -240,9 +318,14 @@
             return;
         }
 
-        if (typeof jsxc === 'undefined') {
+        if (typeof jsxc === 'undefined' || typeof emojione === 'undefined') {
             // abort if core or dependencies threw an error
             return;
+        }
+
+        if (OC.generateUrl('login/flow') === window.location.pathname) {
+           // abort on login flow
+           return;
         }
 
         $(document).one('ready-roster-jsxc', onRosterReady);
@@ -278,7 +361,7 @@
             rosterAppend: 'body',
             root: oc_appswebroots.ojsxc + '/js/jsxc',
             RTCPeerConfig: {
-                url: OC.filePath('ojsxc', 'ajax', 'getTurnCredentials.php')
+                url: OC.generateUrl('apps/ojsxc/settings/iceServers')
             },
             displayRosterMinimized: function() {
                 return OC.currentUser != null;

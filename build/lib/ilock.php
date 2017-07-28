@@ -7,7 +7,8 @@ namespace OCA\OJSXC;
  *
  * @package OCA\OJSXC
  */
-interface ILock {
+interface ILock
+{
 
 	/**
 	 * @return void
@@ -18,5 +19,4 @@ interface ILock {
 	 * @return bool
 	 */
 	public function stillLocked();
-
 }
