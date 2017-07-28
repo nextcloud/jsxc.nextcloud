@@ -232,8 +232,19 @@
                     cb(false);
                 }
             },
-            error: function() {
+            error: function(xhr) {
                 jsxc.error('XHR error on getSettings.php');
+
+                if (xhr.responseJSON && xhr.responseJSON.message) {
+                   jsxc.debug('Error message: ' + xhr.responseJSON.message);
+                }
+
+                if (xhr.status === 412) {
+                   jsxc.debug('Refresh page to get a new CSRF token');
+
+                   window.location.href = window.location.href;
+                   return;
+                }
 
                 cb(false);
             }
