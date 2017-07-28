@@ -82,7 +82,7 @@ class SettingsController extends Controller
 			'xmppDomain' => trim($this->getAppValue('xmppDomain'))
 		 ];
 
-		if ($this->getBooleanAppValue('xmppPreferMail')) {
+		if ($this->getBooleanAppValue('xmppPreferMail') && !$this->getBooleanAppValue('timeLimitedToken')) {
 			$mail = $this->config->getUserValue($currentUID, 'settings', 'email');
 
 			if ($mail !== null) {
@@ -95,9 +95,7 @@ class SettingsController extends Controller
 		}
 
 		if ($this->getBooleanAppValue('timeLimitedToken')) {
-			if (!array_key_exists('username', $data['xmpp']) || empty($data['xmpp']['username'])) {
-				$data['xmpp']['username'] = strtolower($currentUID);
-			}
+			$data['xmpp']['username'] = strtolower($currentUID);
 
 			$token = $this->generateTimeLimitedToken($data['xmpp']['username'], $data['xmpp']['domain']);
 
