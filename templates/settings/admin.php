@@ -30,7 +30,7 @@ if (function_exists('script')) {
 				<input type="radio" name="serverType" class="required" required="required" value="managed" <?php if($_['serverType'] === 'managed')echo 'checked'; ?> />
 				Managed (Beta service)
 			</label>
-			<em>Get your own full featured XMPP server directly hosted by the core team of JSXC. For more information visit <a target="_blank" href="#">[todo]</a>.</em>
+			<em>Get your own full featured XMPP server directly hosted by the core team of JSXC. For more information visit <a target="_blank" href="https://jsxc.ch/managed">jsxc.ch/managed</a>.</em>
 		</div>
 
 		<fieldset>
