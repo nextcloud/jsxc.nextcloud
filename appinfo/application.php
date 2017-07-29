@@ -165,7 +165,8 @@ class Application extends App {
 			return new IQ(
 				$c->query('OJSXC_UserId'),
 				$c->query('Host'),
-				$c->query('OCP\IUserManager')
+				$c->query('OCP\IUserManager'),
+				$c->query('OCP\IConfig')
 			);
 		});
 
