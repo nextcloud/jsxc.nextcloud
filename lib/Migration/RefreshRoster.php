@@ -8,7 +8,8 @@ use OCP\ILogger;
 use OCP\Migration\IOutput;
 use OCP\Migration\IRepairStep;
 
-class RefreshRoster implements IRepairStep {
+class RefreshRoster implements IRepairStep
+{
 
 	/**
 	 * @var RosterPush
@@ -32,7 +33,8 @@ class RefreshRoster implements IRepairStep {
 	 * @param IConfig $config
 	 * @param ILogger $logger
 	 */
-	public function __construct(RosterPush $rosterPush, IConfig $config, ILogger $logger) {
+	public function __construct(RosterPush $rosterPush, IConfig $config, ILogger $logger)
+	{
 		$this->rosterPush = $rosterPush;
 		$this->config = $config;
 		$this->logger = $logger;
@@ -43,7 +45,8 @@ class RefreshRoster implements IRepairStep {
 	 *
 	 * @return string
 	 */
-	public function getName() {
+	public function getName()
+	{
 		return "Refresh the roster of all users when the app has been installed before.";
 	}
 
@@ -54,7 +57,8 @@ class RefreshRoster implements IRepairStep {
 	 * @param IOutput $output
 	 * @throws \Exception in case of failure
 	 */
-	public function run(IOutput $output) {
+	public function run(IOutput $output)
+	{
 		if ($this->config->getAppValue('ojsxc', 'serverType') === 'internal') {
 			$stats = $this->rosterPush->refreshRoster();
 			$output->info("Updated " . $stats["updated"] . " roster items");

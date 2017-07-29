@@ -88,7 +88,8 @@ class RosterPush
 	 * user which was ever deleted. The deleted user is fetched from the
 	 * `addressbookchanges` table.
 	 */
-	public function refreshRoster() {
+	public function refreshRoster()
+	{
 		$stats = [
 			"updated" => 0,
 			"removed" => 0
@@ -101,13 +102,12 @@ class RosterPush
 		}
 
 		/**
-		 * Here we look into the addressbookchanges table for deletions
-		 * of "contacts" in the system addressbook. This are actual users of the
-		 * Nextcloud instance. Because this is a private API of Nextcloud it's
-		 * encapsulated in a try/catch block.
-		 */
+	     * Here we look into the addressbookchanges table for deletions
+	     * of "contacts" in the system addressbook. This are actual users of the
+	     * Nextcloud instance. Because this is a private API of Nextcloud it's
+	     * encapsulated in a try/catch block.
+	     */
 		try {
-
 			$query = "SELECT `id` FROM `*PREFIX*addressbooks` WHERE `principaluri`='principals/system/system' LIMIT 1";
 			$addressbooks = \OC::$server->getDatabaseConnection()->executeQuery($query)->fetchAll();
 			$id = $addressbooks[0]['id'];
@@ -125,12 +125,10 @@ class RosterPush
 				$this->removeRosterItem($userid);
 				$stats["removed"]++;
 			}
-
 		} catch (\Exception $e) {
 			\OC::$server->getLogger()->logException($e);
 		}
 
 		return $stats;
-
 	}
 }
