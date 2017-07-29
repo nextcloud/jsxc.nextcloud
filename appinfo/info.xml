@@ -51,4 +51,11 @@
    <contactsmenu>
       <provider>OCA\OJSXC\ContactsMenu\Providers\ChatProvider</provider>
    </contactsmenu>
+
+   <repair-steps>
+      <install>
+         <step>OCA\OJSXC\Migration\RefreshRoster</step>
+      </install>
+   </repair-steps>
+
 </info>
