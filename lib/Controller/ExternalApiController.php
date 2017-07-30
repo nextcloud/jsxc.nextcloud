@@ -141,18 +141,25 @@ class ExternalApiController extends SignatureProtectedApiController
 	*/
 	public function sharedRoster($username = '', $domain = '')
 	{
+		$currentUser = null;
 		if (!empty($username)) {
 			if (!empty($domain)) {
-				$username .= '@' . $domain;
+				$currentUser = $this->userManager->get($username . '@' . $domain);
 			}
-		} else {
-			throw new UnprocessableException('No username provided');
+			if (!$currentUser) {
+				$currentUser = $this->userManager->get($username);
+			}
+		}
+
+		if (!$currentUser) {
+			return [
+				'result' => 'failure',
+			];
 		}
 
 		$roster = [];
-		$user = $this->userManager->get($username);
 
-		$userGroups = $this->groupManager->getUserGroups($user);
+		$userGroups = $this->groupManager->getUserGroups($currentUser);
 
 		foreach ($userGroups as $userGroup) {
 			foreach ($userGroup->getUsers() as $user) {
