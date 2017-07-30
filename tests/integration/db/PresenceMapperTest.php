@@ -480,4 +480,67 @@ class PresenceMapperTest extends MapperTestUtility
 
 		$this->assertArrayDbResultsEqual($expected, $result, ['userid', 'last_active', 'presence']);
 	}
+
+	public function deletePresenceProvider()
+	{
+		$input1 = new PresenceEntity();
+		$input1->setPresence('online');
+		$input1->setUserid('admin');
+		$input1->setLastActive(1000);
+
+		$input2 = new PresenceEntity();
+		$input2->setPresence('unavailable');
+		$input2->setUserid('foo');
+		$input2->setLastActive(1000);
+
+		$input3 = new PresenceEntity();
+		$input3->setPresence('xa');
+		$input3->setUserid('derp');
+		$input3->setLastActive(600);
+
+		$input4 = new PresenceEntity();
+		$input4->setPresence('chat');
+		$input4->setUserid('derpina');
+		$input4->setLastActive(400);
+
+		return [
+			[
+				[$input1, $input2, $input3, $input4],
+				[
+					[
+						'userid' => 'foo',
+						'presence' => 'unavailable',
+						'last_active' => '1000',
+					],
+					[
+						'userid' => 'derp',
+						'presence' => 'xa',
+						'last_active' => '600',
+					],
+					[
+						'userid' => 'derpina',
+						'presence' => 'chat',
+						'last_active' => '400',
+					],
+				]
+			]
+		];
+	}
+
+	/**
+	 * @dataProvider  deletePresenceProvider
+	 */
+
+	public function testDeletePresence($inputs, $expected)
+	{
+		foreach ($inputs as $input) {
+			$this->mapper->setPresence($input);
+		}
+
+		$this->mapper->deletePresence('admin');
+
+		$result = $this->fetchAllAsArray();
+
+		$this->assertArrayDbResultsEqual($expected, $result, ['userid', 'last_active', 'presence']);
+	}
 }

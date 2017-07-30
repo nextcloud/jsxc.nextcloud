@@ -2,8 +2,6 @@
 
 namespace OCA\OJSXC;
 
-use OCA\OJSXC\Db\IQRosterPush;
-use OCA\OJSXC\Db\IQRosterPushMapper;
 use OCA\OJSXC\Db\PresenceMapper;
 use OCA\OJSXC\Db\StanzaMapper;
 use OCP\IUserManager;

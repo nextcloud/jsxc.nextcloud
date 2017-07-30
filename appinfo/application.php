@@ -213,7 +213,8 @@ class Application extends App {
 				$c->query('ServerContainer')->getUserManager(),
 				$c->query('ServerContainer')->getUserSession(),
 				$c->query('Host'),
-				$c->query('IQRosterPushMapper')
+				$c->query('IQRosterPushMapper'),
+				$c->query('ServerContainer')->getDatabaseConnection()
 			);
 		});
 
