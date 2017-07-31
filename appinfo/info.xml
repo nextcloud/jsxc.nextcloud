@@ -46,6 +46,8 @@
    <settings>
       <admin>OCA\OJSXC\Settings\Admin</admin>
       <admin-section>OCA\OJSXC\Settings\Section</admin-section>
+      <personal>OCA\OJSXC\Settings\Personal</personal>
+      <personal-section>OCA\OJSXC\Settings\Section</personal-section>
    </settings>
 
    <contactsmenu>

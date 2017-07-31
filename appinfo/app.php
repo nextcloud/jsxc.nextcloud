@@ -10,7 +10,7 @@ OCP\Util::addScript ( 'ojsxc', $jsxc_root.'lib/jquery.slimscroll' );
 OCP\Util::addScript ( 'ojsxc', $jsxc_root.'lib/jquery.fullscreen' );
 OCP\Util::addScript ( 'ojsxc', $jsxc_root.'lib/jsxc.dep' );
 OCP\Util::addScript ( 'ojsxc', $jsxc_root.'jsxc' );
-OCP\Util::addScript('ojsxc', 'ojsxc');
+OCP\Util::addScript ( 'ojsxc', 'ojsxc');
 
 // ############# CSS #############
 OCP\Util::addStyle ( 'ojsxc', 'jsxc.oc' );
