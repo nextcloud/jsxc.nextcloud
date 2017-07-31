@@ -16,7 +16,7 @@ if (function_exists('script')) {
 				<input type="radio" name="serverType" required="required" value="internal" <?php if($_['serverType'] === 'internal')echo 'checked'; ?> />
 				Internal
 			</label>
-			<em>Limited functionality only: No clients besides JSXC in ownCloud, no multi-user chat, no server-to-server federations.</em>
+			<em>Limited functionality only: No clients besides JSXC in Nextcloud, no multi-user chat, no server-to-server federations.</em>
 		</div>
 		<div class="form-group">
 			<label class="text-left form-no-padding">
