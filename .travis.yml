@@ -1,10 +1,13 @@
+dist: trusty
+sudo: false
+
 language: php
 php:
   - 5.6
   - 7
 
 services:
-  - redis-server
+  - mysql
 
 env:
   global:
@@ -28,7 +31,9 @@ matrix:
 
 
 
-install: ./tests/travis/install-$REPO-$BRANCH.sh
+install:
+ - which mysql && until mysql -u root -e "show status" &>/dev/null; do sleep 1; done
+ - ./tests/travis/install-$REPO-$BRANCH.sh
 
 # Note the install script should make sure we are in the apps/ojsxc directory
 script:
