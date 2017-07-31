@@ -254,7 +254,7 @@
     function saveSettinsPermanent(data, cb) {
         $.ajax({
             type: 'POST',
-            url: OC.filePath('ojsxc', 'ajax', 'setUserSettings.php'),
+            url: OC.generateUrl('apps/ojsxc/settings/user'),
             data: data,
             success: function(data) {
                 cb(data.trim() === 'true');
