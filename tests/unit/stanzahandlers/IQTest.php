@@ -3,6 +3,7 @@
 namespace OCA\OJSXC\StanzaHandlers;
 
 use OCA\OJSXC\Db\IQRoster;
+use OCP\IConfig;
 use PHPUnit_Framework_MockObject_MockObject;
 use PHPUnit_Framework_TestCase;
 
@@ -29,12 +30,18 @@ class IQTest extends PHPUnit_Framework_TestCase
 	 */
 	private $host;
 
+	/**
+	 * @var PHPUnit_Framework_MockObject_MockObject | IConfig
+	 */
+	private $config;
+
 	public function setUp()
 	{
 		$this->host = 'localhost';
 		$this->userId = 'john';
 		$this->userManager = $this->getMockBuilder('OCP\IUserManager')->disableOriginalConstructor()->getMock();
-		$this->iq = new IQ($this->userId, $this->host, $this->userManager);
+		$this->config = $this->getMockBuilder('OCP\IConfig')->disableOriginalConstructor()->getMock();
+		$this->iq = new IQ($this->userId, $this->host, $this->userManager, $this->config);
 	}
 
 	public function iqRosterProvider()
@@ -144,6 +151,11 @@ class IQTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testIqRoster(array $stanza, array $users, $searchCount, $expected)
 	{
+		$this->config->expects($this->once())
+			->method('getSystemValue')
+			->with('debug')
+			->will($this->returnValue(false));
+
 		$this->userManager->expects($searchCount)
 			->method('search')
 			->with('')
