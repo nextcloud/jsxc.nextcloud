@@ -152,9 +152,7 @@ class ExternalApiController extends SignatureProtectedApiController
 		}
 
 		if (!$currentUser) {
-			return [
-				'result' => 'failure',
-			];
+			throw new UnprocessableException('Can\'t find user');
 		}
 
 		$roster = [];
