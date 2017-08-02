@@ -5,9 +5,12 @@ namespace OCA\OJSXC\Middleware;
 use OCA\OJSXC\Controller\SignatureProtectedApiController;
 use OCA\OJSXC\Middleware\ExternalApiMiddleware;
 use OCA\OJSXC\Exceptions\SecurityException;
+use OCA\OJSXC\Exceptions\Exception;
 use OCA\OJSXC\RawRequest;
 use OCP\IRequest;
 use OCP\IConfig;
+use OCP\AppFramework\ApiController;
+use OCP\AppFramework\Http\JSONResponse;
 use PHPUnit\Framework\TestCase;
 
 class ExternalApiMiddlewareTest extends TestCase
@@ -30,6 +33,14 @@ class ExternalApiMiddlewareTest extends TestCase
 		 $this->config,
 		 $this->rawRequest
 	  );
+	}
+
+	public function testBeforeControllerForNonSignatureProtected()
+	{
+		$controller = $this->createMock(ApiController::class);
+		$return = $this->externalApiMiddleware->beforeController($controller, 'someMethod');
+
+		$this->assertEquals(null, $return);
 	}
 
 	public function testBeforeControllerWithoutHeader()
@@ -155,5 +166,23 @@ class ExternalApiMiddlewareTest extends TestCase
 
 		$controller = $this->createMock(SignatureProtectedApiController::class);
 		$this->externalApiMiddleware->beforeController($controller, 'someMethod');
+	}
+
+	public function testAfterExceptionWithExternalException()
+	{
+		$this->expectException(\Exception::class);
+		$this->expectExceptionMessage('foobar');
+
+		$this->externalApiMiddleware->afterException(null, '', new \Exception('foobar'));
+	}
+
+	public function testAfterExceptionWithOwnException()
+	{
+		$return = $this->externalApiMiddleware->afterException(null, '', new Exception('foobar'));
+
+		$this->assertInstanceOf(JSONResponse::class, $return);
+		$this->assertEquals('error', $return->getData()['result']);
+		$this->assertEquals('foobar', $return->getData()['data']['msg']);
+		$this->assertEquals(500, $return->getStatus());
 	}
 }
