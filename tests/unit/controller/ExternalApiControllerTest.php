@@ -184,7 +184,7 @@ class ExternalApiControllerTest extends TestCase
 	public function testSharedRosterWithoutUsername()
 	{
 		$this->expectException(\Exception::class);
-		$this->expectExceptionMessage('No username provided');
+		$this->expectExceptionMessage('Can\'t find user');
 
 		$this->externalApiController->sharedRoster();
 	}
