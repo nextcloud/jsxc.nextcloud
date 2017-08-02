@@ -14,9 +14,13 @@
             <exclude>
                 <directory suffix=".php">lib/ContactsMenu</directory>
                 <directory suffix=".php">lib/db</directory>
+                <!-- The following three files are tested in the integration test suite -->
                 <file>lib/ilock.php</file>
                 <file>lib/memlock.php</file>
                 <file>lib/dblock.php</file>
+                <!-- The following two files are simple wrappers around other code -->
+                <file>lib/command/refreshroster.php</file>
+                <file>lib/Migration/RefreshRoster.php</file>
             </exclude>
         </whitelist>
     </filter>
