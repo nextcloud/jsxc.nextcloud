@@ -4,6 +4,7 @@ namespace OCA\OJSXC\Controller;
 
 use OCA\OJSXC\Controller\ExternalApiController;
 use OCA\OJSXC\Controller\SignatureProtectedApiController;
+use OCA\OJSXC\Exceptions\UnprocessableException;
 use OCP\IRequest;
 use OCP\IUserManager;
 use OCP\IUserSession;
@@ -47,6 +48,105 @@ class ExternalApiControllerTest extends TestCase
 	public function testSignatureProtected()
 	{
 		$this->assertInstanceOf(SignatureProtectedApiController::class, $this->externalApiController);
+	}
+
+	public function testIndexWithUnsupportedOperation()
+	{
+		$this->expectException(UnprocessableException::class);
+		$this->expectExceptionMessage('Unsupported operation.');
+
+		$this->externalApiController->index('foobar');
+	}
+
+	public function testIndexAuth()
+	{
+		$externalApiController = $this->getMockBuilder(ExternalApiController::class)
+			->setConstructorArgs([
+				'ojsxc',
+				 $this->request,
+				 $this->userManager,
+				 $this->userSession,
+				 $this->groupManager,
+				 $this->logger
+			])
+			->setMethods(['checkPassword'])
+			->getMock();
+
+		$this->request
+			   ->expects($this->exactly(3))
+			   ->method('getParam')
+			   ->will($this->returnValueMap([
+				  ['username', null, 'dummy_username'],
+				  ['password', null, 'dummy_password'],
+				  ['domain', null, 'dummy_domain']
+			   ]));
+
+		$externalApiController
+			->expects($this->once())
+			->method('checkPassword')
+			->with('dummy_username', 'dummy_password', 'dummy_domain');
+
+		$externalApiController->index('auth');
+	}
+
+	public function testIndexIsUser()
+	{
+		$externalApiController = $this->getMockBuilder(ExternalApiController::class)
+			->setConstructorArgs([
+				'ojsxc',
+				 $this->request,
+				 $this->userManager,
+				 $this->userSession,
+				 $this->groupManager,
+				 $this->logger
+			])
+			->setMethods(['isUser'])
+			->getMock();
+
+		$this->request
+			   ->expects($this->exactly(2))
+			   ->method('getParam')
+			   ->will($this->returnValueMap([
+				  ['username', null, 'dummy_username'],
+				  ['domain', null, 'dummy_domain']
+			   ]));
+
+		$externalApiController
+			->expects($this->once())
+			->method('isUser')
+			->with('dummy_username', 'dummy_domain');
+
+		$externalApiController->index('isuser');
+	}
+
+	public function testIndexSharedRoster()
+	{
+		$externalApiController = $this->getMockBuilder(ExternalApiController::class)
+			->setConstructorArgs([
+				'ojsxc',
+				 $this->request,
+				 $this->userManager,
+				 $this->userSession,
+				 $this->groupManager,
+				 $this->logger
+			])
+			->setMethods(['sharedRoster'])
+			->getMock();
+
+		$this->request
+			   ->expects($this->exactly(2))
+			   ->method('getParam')
+			   ->will($this->returnValueMap([
+				  ['username', null, 'dummy_username'],
+				  ['domain', null, 'dummy_domain']
+			   ]));
+
+		$externalApiController
+			->expects($this->once())
+			->method('sharedRoster')
+			->with('dummy_username', 'dummy_domain');
+
+		$externalApiController->index('sharedroster');
 	}
 
 	public function testCheckPasswordWithInvalidParams()
