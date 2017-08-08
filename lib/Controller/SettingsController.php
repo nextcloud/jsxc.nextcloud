@@ -186,7 +186,14 @@ class SettingsController extends Controller
 		$username = $this->getAppValue('iceUsername', '');
 		$credential = $this->getAppValue('iceCredential', $secret);
 
-		$url = preg_match('/^(turn|stun):/', $url) || empty($url) ? $url : "turn:$url";
+		$urls = array();
+		foreach (preg_split('/[\s,]+/', $url) as $u) {
+			if (preg_match('/^(turn|stun)s?:/', $u)) {
+				$urls[] = $u;
+			} elseif (!empty($url)) {
+				$urls[] = "turn:$u";
+			}
+		}
 		if (empty($username)) {
 			$uid = $this->userSession->getUser()->getUID();
 		}
@@ -197,12 +204,12 @@ class SettingsController extends Controller
 			$credential = $accessData[1];
 		}
 
-		if (!empty($url)) {
+		if (!empty($urls)) {
 			$data = [
 		   'ttl' => $ttl,
 		   'iceServers' => [
 			  [
-				 'urls' => [$url],
+				 'urls' => $urls,
 				 'credential' => $credential,
 				 'username' => $username,
 			  ],
