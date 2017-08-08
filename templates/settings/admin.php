@@ -170,7 +170,7 @@ if (function_exists('script')) {
 			<div class="form-group">
 				<label for="iceCredential">TURN Credential</label>
 				<div class="form-col">
-					<input type="text" name="iceCredential" id="iceCredential" value="<?php p($_['iceCredential'] || $_['iceSecret']); ?>" />
+					<input type="text" name="iceCredential" id="iceCredential" value="<?php p($_['iceCredential']); ?>" />
 					<em>Password/secret to use.</em>
 				</div>
 			</div>
