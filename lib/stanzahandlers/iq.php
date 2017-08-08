@@ -3,6 +3,7 @@
 namespace OCA\OJSXC\StanzaHandlers;
 
 use OCA\OJSXC\Db\IQRoster;
+use OCA\OJSXC\IUserProvider;
 use OCP\IConfig;
 use OCP\IUserManager;
 use Sabre\Xml\Reader;
@@ -28,6 +29,11 @@ class IQ extends StanzaHandler
 	private $config;
 
 	/**
+	 * @var IUserProvider
+	 */
+	private $userProvider;
+
+	/**
 	 * IQ constructor.
 	 *
 	 * @param string $userId
@@ -35,11 +41,12 @@ class IQ extends StanzaHandler
 	 * @param IUserManager $userManager
 	 * @param IConfig $config
 	 */
-	public function __construct($userId, $host, IUserManager $userManager, IConfig $config)
+	public function __construct($userId, $host, IUserManager $userManager, IConfig $config, IUserProvider $userProvider)
 	{
 		parent::__construct($userId, $host);
 		$this->userManager = $userManager;
 		$this->config = $config;
+		$this->userProvider = $userProvider;
 	}
 
 
@@ -60,10 +67,11 @@ class IQ extends StanzaHandler
 			$iqRoster->setType('result');
 			$iqRoster->setTo($this->userId);
 			$iqRoster->setQid($id);
-			foreach ($this->userManager->search('') as $user) {
-				$userId = Application::santizeUserId($user->getUID());
-				if ($debugMode || ($userId !== $this->userId && $user->isEnabled())) {
-					$iqRoster->addItem($userId . '@' . $this->host, $user->getDisplayName());
+			//$userId = Application::santizeUserId($user->getUID()); TODO
+//				if ($debugMode || ($userId !== $this->userId && $user->isEnabled())) { // TODO
+			foreach ($this->userProvider->getAllUsers() as $user) {
+				if ($debugMode || (strtolower($user->getUID()) !== $this->userId)) {
+					$iqRoster->addItem($user->getUID() . '@' . $this->host, $user->getFullName());
 				}
 			}
 			return $iqRoster;
