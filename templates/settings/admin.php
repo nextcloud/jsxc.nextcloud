@@ -154,51 +154,45 @@ if (function_exists('script')) {
 		<fieldset>
 			<h3>ICE server <small>(WebRTC)</small></h3>
 			<div class="form-group">
-				<label for="iceUrl">Url</label>
+				<label for="iceUrl">URLs</label>
 				<div class="form-col">
-					<input type="text" name="iceUrl" id="iceUrl" value="<?php p($_['iceUrl']); ?>" placeholder="stun:stun.stunprotocol.org" pattern="^(stun|turn):.+" />
+					<input type="text" name="iceUrl" id="iceUrl" value="<?php p($_['iceUrl']); ?>" placeholder="stun:stun.stunprotocol.org" pattern="^(stun|turn)s?:.+" />
+					<em>Multiple servers can be separated by ", ".</em>
 				</div>
 			</div>
 			<div class="form-group">
 				<label for="iceUsername">TURN Username</label>
 				<div class="form-col">
 					<input type="text" name="iceUsername" id="iceUsername" value="<?php p($_['iceUsername']); ?>" />
-					<em>If no username is set, TURN-REST-API credentials are used.</em>
+					<em>Leave empty to use the login name of each user.</em>
 				</div>
 			</div>
 			<div class="form-group">
 				<label for="iceCredential">TURN Credential</label>
 				<div class="form-col">
-					<input type="text" name="iceCredential" id="iceCredential" value="<?php p($_['iceCredential']); ?>" />
-					<em>If no password is set, TURN-REST-API credentials are used.</em>
+					<input type="text" name="iceCredential" id="iceCredential" value="<?php p($_['iceCredential'] || $_['iceSecret']); ?>" />
+					<em>Password/secret to use.</em>
 				</div>
 			</div>
 			<div class="form-group">
-				<label for="iceSecret">TURN Secret</label>
-				<div class="form-col">
-					<input type="text" name="iceSecret" id="iceSecret" value="<?php p($_['iceSecret']); ?>" />
-					<em>Secret for TURN-REST-API credentials as described <a href="http://tools.ietf.org/html/draft-uberti-behave-turn-rest-00" target="_blank">here</a>.</em>
-				</div>
-			</div>
-			<div class="form-group">
-				<label for="iceTtl">TURN TTL</label>
+				<label for="iceTtl">TURN TTL (seconds)</label>
 				<div class="form-col">
 					<input type="number" name="iceTtl" id="iceTtl" value="<?php p($_['iceTtl']); ?>" />
-					<em>Lifetime for TURN-REST-API credentials in seconds.</em>
+					<em>If >0, issue short-term TURN tokens instead of username/credential.</em>
 				</div>
 			</div>
 		</fieldset>
 		<fieldset>
 			<h3>Screen sharing</h3>
 			<div class="form-group">
-				<label for="firefoxExtension">Firefox Extension Url</label>
+				<label for="firefoxExtension">Firefox Extension URL</label>
 				<div class="form-col">
 					<input type="url" name="firefoxExtension" id="firefoxExtension" value="<?php p($_['firefoxExtension']); ?>" />
 					<em>Firefox needs an extension in order to support screen sharing. <a href="https://github.com/jsxc/jsxc/wiki/Screen-sharing">More details.</a></em>
 				</div>
 			</div>
 			<div class="form-group">
-				<label for="chromeExtension">Chrome Extension Url</label>
+				<label for="chromeExtension">Chrome Extension URL</label>
 				<div class="form-col">
 					<input type="url" name="chromeExtension" id="chromeExtension" value="<?php p($_['chromeExtension']); ?>" />
 					<em>Chrome needs an extension in order to support screen sharing. <a href="https://github.com/jsxc/jsxc/wiki/Screen-sharing">More details.</a></em>
@@ -214,7 +208,7 @@ if (function_exists('script')) {
 					<input type="text" name="externalServices[]" value="<?php p($external); ?>" pattern="^(https://)?([\w\d*][\w\d-]*)(\.[\w\d-]+)+(:[\d]+)?$" />
 					<?php endforeach;?>
 					<button class="add-input">+</button>
-					<em>All domains of external services which JSXC should reach. E.g. http file upload service. <a href="#" id="insert-upload-service">Insert upload services automatically</a>.</em>
+					<em>All domains of additional services JSXC should be able to contact, e.g., your XMPP server's http file upload service. <a href="#" id="insert-upload-service">Insert upload services automatically</a>.</em>
 				</div>
 			</div>
 		</fieldset>
