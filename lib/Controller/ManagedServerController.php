@@ -129,6 +129,11 @@ class ManagedServerController extends Controller
 		$this->config->setAppValue('ojsxc', 'managedServer', 'registered');
 		$this->config->setAppValue('ojsxc', 'externalServices', implode('|', $responseJSON->externalServices));
 
+		$this->config->setAppValue('ojsxc', 'iceUrl', implode(', ', $responseJSON->iceServers->urls));
+		$this->config->setAppValue('ojsxc', 'iceUsername', $responseJSON->iceServers->username);
+		$this->config->setAppValue('ojsxc', 'iceCredential', $responseJSON->iceServers->credential);
+		$this->config->setAppValue('ojsxc', 'iceTtl', 3600 * 24);
+
 		return true;
 	}
 }
