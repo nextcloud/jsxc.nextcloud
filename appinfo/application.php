@@ -191,7 +191,8 @@ class Application extends App {
 			return new Message(
 				$c->query('OJSXC_UserId'),
 				$c->query('Host'),
-				$c->query('MessageMapper')
+				$c->query('MessageMapper'),
+				$c->query('UserProvider')
 			);
 		});
 

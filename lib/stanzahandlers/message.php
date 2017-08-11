@@ -3,6 +3,7 @@
 namespace OCA\OJSXC\StanzaHandlers;
 
 use OCA\OJSXC\Db\MessageMapper;
+use OCA\OJSXC\IUserProvider;
 use Sabre\Xml\Reader;
 use Sabre\Xml\Writer;
 use OCA\OJSXC\Db\Message as MessageEntity;
@@ -19,6 +20,11 @@ class Message extends StanzaHandler
 	 * @var MessageMapper $messageMapper
 	 */
 	private $messageMapper;
+
+	/**
+	 * @var IUserProvider $userProvider
+	 */
+	private $userProvider;
 
 	/**
 	 * @var string $type
@@ -41,11 +47,13 @@ class Message extends StanzaHandler
 	 * @param string $userId
 	 * @param string $host
 	 * @param MessageMapper $messageMapper
+	 * @param IUserProvider $userProvider
 	 */
-	public function __construct($userId, $host, MessageMapper $messageMapper)
+	public function __construct($userId, $host, MessageMapper $messageMapper, IUserProvider $userProvider)
 	{
 		parent::__construct($userId, $host);
 		$this->messageMapper = $messageMapper;
+		$this->userProvider = $userProvider;
 	}
 
 	/**
@@ -56,6 +64,12 @@ class Message extends StanzaHandler
 		$to = $this->getAttribute($stanza, 'to');
 		$pos = strrpos($to, '@');
 		$this->to = substr($to, 0, $pos);
+
+		if (!$this->userProvider->hasUserByUID($this->to)) {
+			\OC::$server->getLogger()->warning('User ' . $this->userId . ' is trying to send a message to ' . $this->to . ' but this isn\'t allowed');
+			return;
+		}
+
 		foreach ($stanza['value'] as $keyRaw => $value) {
 			// remove namespace from key as it is unneeded and cause problems
 			$key = substr($keyRaw, strpos($keyRaw, '}') + 1, strlen($keyRaw));
