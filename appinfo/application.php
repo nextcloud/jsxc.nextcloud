@@ -159,7 +159,8 @@ class Application extends App {
 				$c->query('OJSXC_UserId'),
 				$c->query('MessageMapper'),
 				$c->query('NewContentContainer'),
-				self::$config['polling']['timeout']
+				self::$config['polling']['timeout'],
+				$c->query('UserProvider')
 			);
 		});
 

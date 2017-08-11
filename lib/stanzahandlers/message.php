@@ -59,7 +59,7 @@ class Message extends StanzaHandler
 		foreach ($stanza['value'] as $keyRaw => $value) {
 			// remove namespace from key as it is unneeded and cause problems
 			$key = substr($keyRaw, strpos($keyRaw, '}') + 1, strlen($keyRaw));
-			// fetch namespace from key to readd it
+			// fetch namespace from key to read it
 			$ns = substr($keyRaw, 1, strpos($keyRaw, '}') - 1);
 
 			$this->values[] = [

@@ -21,4 +21,11 @@ interface IUserProvider {
 	 */
 	public function hasUser(User $user);
 
+	/**
+	 * @brief Checks if the current user can interact with the provided user identified by it's UID.
+	 * @param string $uid the uid of the user
+	 * @return bool
+	 */
+	public function hasUserByUID($uid);
+
 }
