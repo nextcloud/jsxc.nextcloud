@@ -237,7 +237,8 @@ class Application extends App {
 				$c->query('ServerContainer')->getUserSession(),
 				$c->query('RosterPush'),
 				$c->query('PresenceMapper'),
-				$c->query('StanzaMapper')
+				$c->query('StanzaMapper'),
+				$c->query('ServerContainer')->query('OCP\IGroupManager')
 			);
 		});
 

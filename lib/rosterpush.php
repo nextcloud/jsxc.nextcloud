@@ -5,6 +5,7 @@ namespace OCA\OJSXC;
 use OCA\OJSXC\Db\IQRosterPush;
 use OCA\OJSXC\Db\IQRosterPushMapper;
 use OCP\IDBConnection;
+use OCP\IGroup;
 use OCP\IUserManager;
 
 use OCP\IUser;
@@ -158,4 +159,21 @@ class RosterPush
 
 		return $stats;
 	}
+
+	public function removeRosterItemForUsersInGroup(IGroup $group, $userId) {
+		$iq = new IQRosterPush();
+		$iq->setJid($userId);
+		$iq->setSubscription('remove');
+		$iq->setFrom('');
+
+
+		foreach ($group->getUsers() as $recipient) {
+			if ($recipient->getUID() !== $userId) {
+				$iq->setTo($recipient->getUID());
+				$this->iqRosterPushMapper->insert($iq);
+			}
+		}
+
+	}
+
 }
