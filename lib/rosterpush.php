@@ -10,6 +10,8 @@ use OCP\IUserManager;
 use OCP\IUser;
 use OCP\IUserSession;
 
+// TODO listen for changes to groups
+
 class RosterPush
 {
 
@@ -35,18 +37,35 @@ class RosterPush
 	 */
 	private $db;
 
+	/**
+	 * @var IUserProvider
+	 */
+	private $userProvider;
+
+	/**
+	 * RosterPush constructor.
+	 *
+	 * @param IUserManager $userManager
+	 * @param IUserSession $userSession
+	 * @param string $host
+	 * @param IQRosterPushMapper $iqRosterPushMapper
+	 * @param IDBConnection $db
+	 * @param IUserProvider $userProvider
+	 */
 	public function __construct(
 		IUserManager $userManager,
 								IUserSession $userSession,
 		$host,
 								IQRosterPushMapper $iqRosterPushMapper,
-								IDbConnection $db
+								IDbConnection $db,
+								IUserProvider $userProvider
 	) {
 		$this->userManager = $userManager;
 		$this->userSession = $userSession;
 		$this->host = $host;
 		$this->iqRosterPushMapper = $iqRosterPushMapper;
 		$this->db = $db;
+		$this->userProvider = $userProvider;
 	}
 
 	/**
@@ -62,7 +81,7 @@ class RosterPush
 		$iq->setFrom('');
 
 
-		foreach ($this->userManager->search('') as $recipient) {
+		foreach ($this->userProvider->getAllUsersForUserByUID($user->getUID()) as $recipient) {
 			if ($recipient->getUID() !== $user->getUID()) {
 				$iq->setTo($recipient->getUID());
 				$this->iqRosterPushMapper->insert($iq);

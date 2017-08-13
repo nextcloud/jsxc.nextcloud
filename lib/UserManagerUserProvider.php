@@ -37,12 +37,28 @@ class UserManagerUserProvider implements IUserProvider {
 
 	}
 
-	/**
-	 * @brief Checks if the current user can interact with the provided user identified by it's UID.
-	 * @param string $uid the uid of the user
-	 * @return bool
-	 */
 	public function hasUserByUID($uid) {
 		return !is_null($this->userManager->get($uid));
 	}
+
+	public function getAllUsersForUser(User $user) {
+		// since we don't have access to the ContactsStore, we don't apply the enhancement privacy rules.
+		return $this->getAllUsers();
+	}
+
+	public function getAllUsersForUserByUID($uid) {
+		// since we don't have access to the ContactsStore, we don't apply the enhancement privacy rules.
+		return $this->getAllUsers();
+	}
+
+	public function hasUserForUser(User $user1, User $user2) {
+		// since we don't have access to the ContactsStore, we don't apply the enhancement privacy rules.
+		$this->hasUser($user2);
+	}
+
+	public function hasUserForUserByUID($uid1, $uid2) {
+		// since we don't have access to the ContactsStore, we don't apply the enhancement privacy rules.
+		$this->hasUserByUID($uid2);
+	}
+
 }

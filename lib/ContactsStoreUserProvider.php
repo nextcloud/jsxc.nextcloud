@@ -2,6 +2,9 @@
 
 namespace OCA\OJSXC;
 
+use OCP\IUserManager;
+use OCP\IUserSession;
+
 class ContactsStoreUserProvider implements IUserProvider {
 
 	/**
@@ -14,14 +17,26 @@ class ContactsStoreUserProvider implements IUserProvider {
 	 */
 	private static $cache = null;
 
-	public function __construct($contactsStore) {
+	/**
+	 * @var IUserSession
+	 */
+	private $userSession;
+
+	/**
+	 * @var IUserManager
+	 */
+	private $userManager;
+
+	public function __construct($contactsStore, IUserSession $userSession, IUserManager $userManager) {
 		$this->contactsStore = $contactsStore;
+		$this->userSession = $userSession;
+		$this->userManager = $userManager;
 	}
 
 	public function getAllUsers() {
 		if (is_null(self::$cache)) {
 			$result = [];
-			$contacts = $this->contactsStore->getContacts(\OC::$server->getUserSession()->getUser(), '');
+			$contacts = $this->contactsStore->getContacts($this->userSession->getUser(), '');
 			foreach ($contacts as $contact) {
 				if ($contact->getProperty('isLocalSystemBook')) {
 					$result[] = new User($contact->getProperty('UID'), $contact->getFullName(), $contact);
@@ -35,15 +50,34 @@ class ContactsStoreUserProvider implements IUserProvider {
 	}
 
 	public function hasUser(User $user) {
-		return !is_null($this->contactsStore->findOne(\OC::$server->getUserSession()->getUser(), 0, $user->getUid()));
+		return !is_null($this->contactsStore->findOne($this->userSession->getUser(), 0, $user->getUid()));
 	}
 
-	/**
-	 * @brief Checks if the current user can interact with the provided user identified by it's UID.
-	 * @param string $uid the uid of the user
-	 * @return bool
-	 */
 	public function hasUserByUID($uid) {
-		return !is_null($this->contactsStore->findOne(\OC::$server->getUserSession()->getUser(), 0, $uid));
+		return !is_null($this->contactsStore->findOne($this->userSession->getUser(), 0, $uid));
 	}
+
+	public function getAllUsersForUser(User $user) {
+		return $this->getAllUsersForUserByUID($user->getUid());
+	}
+
+	public function getAllUsersForUserByUID($uid) {
+		$result = [];
+		$contacts = $this->contactsStore->getContacts($this->userManager->get($uid), '');
+		foreach ($contacts as $contact) {
+			if ($contact->getProperty('isLocalSystemBook')) {
+				$result[] = new User($contact->getProperty('UID'), $contact->getFullName(), $contact);
+			}
+		}
+		return $result;
+	}
+
+	public function hasUserForUser(User $user1, User $user2) {
+		return !is_null($this->contactsStore->findOne($this->userManager->get($user1->getUid()), 0, $user2->getUid()));
+	}
+
+	public function hasUserForUserByUID($uid1, $uid2) {
+		return !is_null($this->contactsStore->findOne($this->userManager->get($uid1), 0, $uid2));
+	}
+
 }

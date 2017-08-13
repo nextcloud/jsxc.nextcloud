@@ -226,7 +226,8 @@ class Application extends App {
 				$c->query('ServerContainer')->getUserSession(),
 				$c->query('Host'),
 				$c->query('IQRosterPushMapper'),
-				$c->query('ServerContainer')->getDatabaseConnection()
+				$c->query('ServerContainer')->getDatabaseConnection(),
+				$c->query('UserProvider')
 			);
 		});
 
@@ -244,7 +245,9 @@ class Application extends App {
 			$version = \OCP\Util::getVersion();
 			if (($version[0] == 12 && $version[2] >= 2) || ($version[0] >= 13)) {
 				return new ContactsStoreUserProvider(
-					$c->query('OCP\Contacts\ContactsMenu\IContactsStore')
+					$c->query('OCP\Contacts\ContactsMenu\IContactsStore'),
+					$c->query('ServerContainer')->getUserSession(),
+					$c->query('ServerContainer')->getUserManager()
 				);
 			} else {
 				return new UserManagerUserProvider(
