@@ -37,6 +37,11 @@ class RosterPushTest extends TestCase
 	 */
 	private $db;
 
+	/**
+	 * @var \PHPUnit_Framework_MockObject_MockObject | IUserProvider
+	 */
+	private $userProvider;
+
 	public function setUp()
 	{
 		$this->userManager = $this->getMockBuilder('OCP\IUserManager')
@@ -51,12 +56,15 @@ class RosterPushTest extends TestCase
 		$this->db = $this->getMockBuilder('OCP\IDbConnection')
 			->disableOriginalConstructor()->getMock();
 
+		$this->userProvider = $this->getMockBuilder('OCA\OJSXC\IUserProvider')->disableOriginalConstructor()->getMock();
+
 		$this->rosterPush = new RosterPush(
 			$this->userManager,
 			$this->userSession,
 			'localhost',
 			$this->iqRosterPushMapper,
-			$this->db
+			$this->db,
+			$this->userProvider
 		);
 	}
 
@@ -65,7 +73,7 @@ class RosterPushTest extends TestCase
 
 		/** @var \PHPUnit_Framework_MockObject_MockObject | RosterPush $rosterPush */
 		$rosterPush = $this->getMockBuilder('OCA\OJSXC\RosterPush')
-			->setConstructorArgs([$this->userManager, $this->userSession, 'host', $this->iqRosterPushMapper, $this->db])
+			->setConstructorArgs([$this->userManager, $this->userSession, 'host', $this->iqRosterPushMapper, $this->db, $this->userProvider])
 			->setMethods(['createOrUpdateRosterItem', 'removeRosterItem'])->getMock();
 
 		$user1 = $this->getMockBuilder('OCP\IUser')->getMock();
@@ -140,7 +148,7 @@ class RosterPushTest extends TestCase
 
 		/** @var \PHPUnit_Framework_MockObject_MockObject | RosterPush $rosterPush */
 		$rosterPush = $this->getMockBuilder('OCA\OJSXC\RosterPush')
-			->setConstructorArgs([$this->userManager, $this->userSession, 'host', $this->iqRosterPushMapper, $this->db])
+			->setConstructorArgs([$this->userManager, $this->userSession, 'host', $this->iqRosterPushMapper, $this->db, $this->userProvider])
 			->setMethods(['createOrUpdateRosterItem', 'removeRosterItem'])->getMock();
 
 		$user1 = $this->getMockBuilder('OCP\IUser')->getMock();
@@ -218,7 +226,7 @@ class RosterPushTest extends TestCase
 	public function testCreateOrUpdateRosterItem()
 	{
 		$user1 = $this->getMockBuilder('OCP\IUser')->getMock();
-		$user1->expects($this->exactly(5))
+		$user1->expects($this->exactly(6))
 			->method('getUID')
 			->willReturn('user1');
 		$user2 = $this->getMockBuilder('OCP\IUser')->getMock();
@@ -230,8 +238,8 @@ class RosterPushTest extends TestCase
 			->method('getUID')
 			->willReturn('user3');
 
-		$this->userManager->expects($this->once())
-			->method('search')
+		$this->userProvider->expects($this->once())
+			->method('getAllUsersForUserByUID')
 			->willReturn([$user1, $user2, $user3]);
 
 		$stanza1 = new IQRosterPush();

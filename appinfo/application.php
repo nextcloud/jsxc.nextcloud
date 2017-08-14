@@ -264,7 +264,8 @@ class Application extends App {
 		$container->registerService('RefreshRosterCommand', function($c) {
 			return new RefreshRoster(
 				$c->query('ServerContainer')->getUserManager(),
-				$c->query('RosterPush')
+				$c->query('RosterPush'),
+				$c->query('PresenceMapper')
 			);
 		});
 

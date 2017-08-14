@@ -4,6 +4,8 @@ namespace OCA\OJSXC\StanzaHandlers;
 
 use OCA\OJSXC\Db\Message as MessageEntity;
 use PHPUnit\Framework\TestCase;
+use OCA\OJSXC\Db\MessageMapper;
+use OCA\OJSXC\IUserProvider;
 use PHPUnit_Framework_TestCase;
 use PHPUnit_Framework_MockObject_MockObject;
 
@@ -16,7 +18,7 @@ class MessageTest extends TestCase
 	private $message;
 
 	/**
-	 * @var PHPUnit_Framework_MockObject_MockObject
+	 * @var PHPUnit_Framework_MockObject_MockObject | MessageMapper
 	 */
 	private $messageMapper;
 
@@ -26,16 +28,22 @@ class MessageTest extends TestCase
 	private $userId;
 
 	/**
-	 * @var string $host ;
+	 * @var string $host
 	 */
 	private $host;
+
+	/**
+	 * @var PHPUnit_Framework_MockObject_MockObject | IUserProvider
+	 */
+	private $userProvider;
 
 	public function setUp()
 	{
 		$this->host = 'localhost';
 		$this->userId = 'john';
 		$this->messageMapper = $this->getMockBuilder('OCA\OJSXC\Db\MessageMapper')->disableOriginalConstructor()->getMock();
-		$this->message = new Message($this->userId, $this->host, $this->messageMapper);
+		$this->userProvider = $this->getMockBuilder('OCA\OJSXC\IUserProvider')->disableOriginalConstructor()->getMock();
+		$this->message = new Message($this->userId, $this->host, $this->messageMapper, $this->userProvider);
 	}
 
 	public function messageProvider()
@@ -87,6 +95,11 @@ class MessageTest extends TestCase
 		$this->messageMapper->expects($this->once())
 			->method('insert')
 			->with($expected);
+
+		$this->userProvider->expects($this->once())
+			->method('hasUserByUID')
+			->with('derp')
+			->willReturn(true); // TODO test return false
 
 		$this->message->handle($stanza);
 	}

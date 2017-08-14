@@ -3,8 +3,11 @@
 namespace OCA\OJSXC\StanzaHandlers;
 
 use OCA\OJSXC\Db\IQRoster;
+use OCA\OJSXC\IUserProvider;
+use OCA\OJSXC\User;
 use OCP\IConfig;
 use PHPUnit\Framework\TestCase;
+use OCP\IUserManager;
 use PHPUnit_Framework_MockObject_MockObject;
 use PHPUnit_Framework_TestCase;
 
@@ -17,7 +20,7 @@ class IQTest extends TestCase
 	private $iq;
 
 	/**
-	 * @var PHPUnit_Framework_MockObject_MockObject
+	 * @var PHPUnit_Framework_MockObject_MockObject | IUserManager
 	 */
 	private $userManager;
 
@@ -36,37 +39,45 @@ class IQTest extends TestCase
 	 */
 	private $config;
 
+
+	/**
+	 * @var \PHPUnit_Framework_MockObject_MockObject | IUserProvider
+	 */
+	private $userProvider;
+
 	public function setUp()
 	{
 		$this->host = 'localhost';
 		$this->userId = 'john';
 		$this->userManager = $this->getMockBuilder('OCP\IUserManager')->disableOriginalConstructor()->getMock();
 		$this->config = $this->getMockBuilder('OCP\IConfig')->disableOriginalConstructor()->getMock();
-		$this->iq = new IQ($this->userId, $this->host, $this->userManager, $this->config);
+		$this->userProvider = $this->getMockBuilder('OCA\OJSXC\IUserProvider')->disableOriginalConstructor()->getMock();
+		$this->iq = new IQ($this->userId, $this->host, $this->userManager, $this->config, $this->userProvider);
 	}
 
 	public function iqRosterProvider()
 	{
-		$user1 = $this->getMockBuilder('OCP\IUser')->disableOriginalConstructor()->getMock();
+		$user1 = $this->getMockBuilder(User::class)->disableOriginalConstructor()->getMock();
 		$user1->expects($this->any())
 			->method('getUID')
 			->will($this->returnValue('john'));
 
 		$user1->expects($this->any())
-			->method('getDisplayName')
+			->method('getFullName')
 			->will($this->returnValue('John'));
 
-		$user1->expects($this->any())
-			->method('isEnabled')
-			->will($this->returnValue(true));
+//		$user1->expects($this->any())
+//			->method('isEnabled')
+//			->will($this->returnValue(true));
+// TOOD
 
-		$user2 = $this->getMockBuilder('OCP\IUser')->disableOriginalConstructor()->getMock();
+		$user2 = $this->getMockBuilder(User::class)->disableOriginalConstructor()->getMock();
 		$user2->expects($this->any())
 			->method('getUID')
 			->will($this->returnValue('richard'));
 
 		$user2->expects($this->any())
-			->method('getDisplayName')
+			->method(getFullName) // TODO
 			->will($this->returnValue('Richard'));
 
 		$user2->expects($this->any())
@@ -167,9 +178,8 @@ class IQTest extends TestCase
 			->with('debug')
 			->will($this->returnValue(false));
 
-		$this->userManager->expects($searchCount)
-			->method('search')
-			->with('')
+		$this->userProvider->expects($searchCount)
+			->method('getAllUsers')
 			->will($this->returnValue($users));
 
 		$result = $this->iq->handle($stanza);

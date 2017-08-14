@@ -41,6 +41,47 @@ class PresenceMapperTest extends MapperTestUtility
 		$this->setValueOfPrivateProperty($this->mapper, 'connectedUsers', []);
 		$this->newContentContainer = $this->container->query('NewContentContainer');
 		$this->setValueOfPrivateProperty($this->newContentContainer, 'stanzas', []);
+		foreach (\OC::$server->getUserManager()->search('') as $user) {
+			$user->delete();
+		}
+	}
+
+	protected function tearDown() {
+		foreach (\OC::$server->getUserManager()->search('') as $user) {
+			$user->delete();
+		}
+
+	}
+
+	/**
+	 * @before
+	 * TODO explciclty call this function
+	 */
+	public function setupContactsStoreAPI() {
+		foreach (\OC::$server->getUserManager()->search('') as $user) {
+			$user->delete();
+		}
+
+		$users[] = \OC::$server->getUserManager()->createUser('admin', 'admin');
+		$users[] = \OC::$server->getUserManager()->createUser('derp', 'derp');
+		$users[] = \OC::$server->getUserManager()->createUser('derpina', 'derpina');
+		$users[] = \OC::$server->getUserManager()->createUser('herp', 'herp');
+		$users[] = \OC::$server->getUserManager()->createUser('foo', 'foo');
+
+		\OC_App::loadApp('dav');
+		$currentUser = \OC::$server->getUserManager()->createUser('autotest', 'autotest');
+		\OC::$server->getUserSession()->setUser($currentUser);
+		/** @var \OCA\DAV\CardDAV\SyncService $syncService */
+		$syncService = \OC::$server->query('CardDAVSyncService');
+		$syncService->getLocalSystemAddressBook();
+		$syncService->updateUser($currentUser);
+
+		foreach ($users as $user) {
+			$syncService->updateUser($user);
+		}
+
+		\OC::$server->getDatabaseConnection()->executeQuery("DELETE FROM *PREFIX*ojsxc_stanzas");
+
 	}
 
 	/**

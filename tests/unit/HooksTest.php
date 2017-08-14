@@ -44,6 +44,11 @@ class HooksTest extends TestCase
 	 */
 	private $stanzaMapper;
 
+	/**
+	 * @var PHPUnit_Framework_MockObject_MockObject | \OCP\IGroupManager
+	 */
+	private $groupManager;
+
 	public function setUp()
 	{
 		$this->userManager = $this->getMockBuilder('OCP\IUserManager')->setMethods(['listen', 'registerBackend', 'getBackends', 'removeBackend', 'clearBackends', 'get', 'userExists', 'checkPassword', 'search', 'searchDisplayName', 'createUser', 'createUserFromBackend', 'countUsers', 'callForAllUsers', 'countDisabledUsers', 'countSeenUsers', 'callForSeenUsers', 'getByEmail'])->getMock();
@@ -57,12 +62,15 @@ class HooksTest extends TestCase
 
 		$this->stanzaMapper = $this->getMockBuilder('OCA\OJSXC\Db\StanzaMapper')->disableOriginalConstructor()->getMock();
 
+		$this->groupManager = $this->getMockBuilder('OCP\IGroupManager')->disableOriginalConstructor()->setMethods(['listen', 'isBackendUsed', 'addBackend', 'clearBackends', 'get', 'groupExists', 'createGroup', 'search', 'getUserGroups', 'getUserGroupIds', 'displayNamesInGroup', 'isAdmin', 'isInGroup'])->getMock();
+
 		$this->hooks = new Hooks(
 			$this->userManager,
 			$this->userSession,
 			$this->rosterPush,
 			$this->presenceMapper,
-			$this->stanzaMapper
+			$this->stanzaMapper,
+			$this->groupManager
 		);
 	}
 
