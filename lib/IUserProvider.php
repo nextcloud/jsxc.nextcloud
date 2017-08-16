@@ -3,9 +3,6 @@
 
 namespace OCA\OJSXC;
 
-use OCA\OJSXC\Exceptions\Exception;
-use OCP\IUserManager;
-
 interface IUserProvider {
 
 	/**
