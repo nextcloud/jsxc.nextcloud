@@ -73,19 +73,19 @@ class ExternalApiController extends SignatureProtectedApiController
 	* @PublicPage
 	* @NoCSRFRequired
 	*/
-	public function checkPassword($username = '', $password = '', $domain = '')
+	public function checkPassword($uid = '', $password = '', $domain = '')
 	{
 		$currentUser = null;
 
-		$this->logger->info('ExAPI: Check password for user: '.$username.'@'.$domain);
+		$this->logger->info('ExAPI: Check password for user: '.$uid.'@'.$domain);
 
-		if (!empty($password) && !empty($username)) {
+		if (!empty($password) && !empty($uid)) {
 			$loggedIn = false;
-			if (!empty($domain)) {
-				$loggedIn = $this->userSession->login($username . '@' . $domain, $password);
+			if (!empty($domain) && $this->userManager->userExists($uid . '@' . $domain)) {
+				$loggedIn = $this->userSession->login($uid . '@' . $domain, $password);
 			}
-			if (!$loggedIn) {
-				$loggedIn = $this->userSession->login($username, $password);
+			if (!$loggedIn && $this->userManager->userExists($uid)) {
+				$loggedIn = $this->userSession->login($uid, $password);
 			}
 
 			if ($loggedIn === true) {
@@ -112,18 +112,18 @@ class ExternalApiController extends SignatureProtectedApiController
 	* @PublicPage
 	* @NoCSRFRequired
 	*/
-	public function isUser($username = '', $domain = '')
+	public function isUser($uid = '', $domain = '')
 	{
-		$this->logger->info('ExAPI: Check if "'.$username.'@'.$domain.'" exists');
+		$this->logger->info('ExAPI: Check if "'.$uid.'@'.$domain.'" exists');
 
 		$isUser = false;
 
-		if (!empty($username)) {
+		if (!empty($uid)) {
 			if (!empty($domain)) {
-				$isUser = $this->userManager->userExists($username . '@' . $domain);
+				$isUser = $this->userManager->userExists($uid . '@' . $domain);
 			}
 			if (!$isUser) {
-				$isUser = $this->userManager->userExists($username);
+				$isUser = $this->userManager->userExists($uid);
 			}
 		}
 
@@ -139,15 +139,15 @@ class ExternalApiController extends SignatureProtectedApiController
 	* @PublicPage
 	* @NoCSRFRequired
 	*/
-	public function sharedRoster($username = '', $domain = '')
+	public function sharedRoster($uid = '', $domain = '')
 	{
 		$currentUser = null;
-		if (!empty($username)) {
-			if (!empty($domain)) {
-				$currentUser = $this->userManager->get($username . '@' . $domain);
+		if (!empty($uid)) {
+			if (!empty($domain) && $this->userManager->userExists($uid . '@' . $domain)) {
+				$currentUser = $this->userManager->get($uid . '@' . $domain);
 			}
-			if (!$currentUser) {
-				$currentUser = $this->userManager->get($username);
+			if (!$currentUser && $this->userManager->userExists($uid)) {
+				$currentUser = $this->userManager->get($uid);
 			}
 		}
 
@@ -161,16 +161,16 @@ class ExternalApiController extends SignatureProtectedApiController
 
 		foreach ($userGroups as $userGroup) {
 			foreach ($userGroup->getUsers() as $user) {
-				$uid = $user->getUID();
+				$uidMember = $user->getUID();
 
-				if (!array_key_exists($uid, $roster)) {
-					$roster[$uid] = [
+				if (!array_key_exists($uidMember, $roster)) {
+					$roster[$uidMember] = [
 				  'name' => $user->getDisplayName(),
 				  'groups' => []
 			   ];
 				}
 
-				$roster[$uid]['groups'][] = $userGroup->getDisplayName();
+				$roster[$uidMember]['groups'][] = $userGroup->getDisplayName();
 			}
 		}
 

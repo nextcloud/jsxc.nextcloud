@@ -151,6 +151,11 @@ class ExternalApiControllerTest extends TestCase
 
 	public function testCheckPasswordWithInvalidParams()
 	{
+		$this->userManager
+			->expects($this->once())
+			->method('userExists')
+			->with('foo')
+			->willReturn(true);
 		$this->userSession
 			   ->expects($this->once())
 			   ->method('login')
@@ -164,6 +169,14 @@ class ExternalApiControllerTest extends TestCase
 
 	public function testCheckPasswordWithInvalidParamsAndDomain()
 	{
+		$this->userManager
+			->expects($this->exactly(2))
+			->method('userExists')
+			->will($this->returnValueMap([
+			  ['foo@localhost', true],
+			  ['foo', true]
+			]));
+
 		$this->userSession
 			   ->expects($this->exactly(2))
 			   ->method('login')
@@ -180,6 +193,11 @@ class ExternalApiControllerTest extends TestCase
 	public function testCheckPasswordWithValidParams()
 	{
 		$uid = 'foo';
+		$this->userManager
+			->expects($this->once())
+			->method('userExists')
+			->with($uid)
+			->willReturn(true);
 		$this->user
 			   ->expects($this->once())
 			   ->method('getUID')
@@ -203,6 +221,11 @@ class ExternalApiControllerTest extends TestCase
 	public function testCheckPasswordWithValidParamsAndDomain()
 	{
 		$uid = 'foo';
+		$this->userManager
+			->expects($this->once())
+			->method('userExists')
+			->with('foo@localhost')
+			->willReturn(true);
 		$this->user
 			   ->expects($this->once())
 			   ->method('getUID')
@@ -295,6 +318,12 @@ class ExternalApiControllerTest extends TestCase
 
 		$this->userManager
 			   ->expects($this->once())
+			   ->method('userExists')
+			   ->with($user->getUID())
+			   ->willReturn(true);
+
+		$this->userManager
+			   ->expects($this->once())
 			   ->method('get')
 			   ->with($user->getUID())
 			   ->willReturn($user);
@@ -314,6 +343,12 @@ class ExternalApiControllerTest extends TestCase
 	public function testSharedRosterMultipleDistinctGroups()
 	{
 		$user = $this->createUserMock('foobar');
+
+		$this->userManager
+			   ->expects($this->once())
+			   ->method('userExists')
+			   ->with($user->getUID())
+			   ->willReturn(true);
 
 		$this->userManager
 			   ->expects($this->once())
@@ -369,6 +404,12 @@ class ExternalApiControllerTest extends TestCase
 	public function testSharedRosterMultipleOverlapGroups()
 	{
 		$user = $this->createUserMock('foobar');
+
+		$this->userManager
+			   ->expects($this->once())
+			   ->method('userExists')
+			   ->with($user->getUID())
+			   ->willReturn(true);
 
 		$this->userManager
 			   ->expects($this->once())
