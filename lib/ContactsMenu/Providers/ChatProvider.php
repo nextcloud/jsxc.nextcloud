@@ -50,6 +50,8 @@ class ChatProvider implements IProvider
 			// internal user
 
 			$config = \OC::$server->getConfig();
+			$xmppPreferMail = $config->getAppValue('ojsxc', 'xmppPreferMail', false);
+			$xmppPreferMail = $xmppPreferMail === true || $xmppPreferMail === 'true';
 			$serverType = $config->getAppValue('ojsxc', 'serverType', 'external');
 
 			if ($serverType === 'internal') {
@@ -58,8 +60,15 @@ class ChatProvider implements IProvider
 				$domain = trim($config->getAppValue('ojsxc', 'xmppDomain'));
 			}
 
-			if ($domain !== "") {
+			$localIm = null;
+
+			if ($xmppPreferMail) {
+				$localIm = $config->getUserValue($uid, 'settings', 'email');
+			} elseif (!empty($domain)) {
 				$localIm = $uid.'@'.$domain;
+			}
+
+			if (!empty($localIm)) {
 				$chatUrl = 'xmpp:'.$localIm;
 
 				$action = $this->actionFactory->newLinkAction($iconUrl, $localIm, $chatUrl);
