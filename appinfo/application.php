@@ -75,8 +75,8 @@ class Application extends App {
 			return new SettingsController(
 				$c->query('AppName'),
 				$c->query('Request'),
-				$c->query('Config'),
-				$c->query('UserManager'),
+				$c->query('OCP\IConfig'),
+				$c->query('OCP\IUserManager'),
 				\OC::$server->getUserSession()
 			);
 		});
@@ -85,10 +85,10 @@ class Application extends App {
 			return new ExternalApiController(
 				$c->query('AppName'),
 				$c->query('Request'),
-				$c->query('UserManager'),
-				\OC::$server->getUserSession(),
-				$c->query('GroupManager'),
-				$c->query('Logger')
+				$c->query('OCP\IUserManager'),
+				$c->query('OCP\IUserSession'),
+				$c->query('OCP\IGroupManager'),
+				$c->query('OCP\ILogger')
 			);
 		});
 
@@ -96,12 +96,12 @@ class Application extends App {
 			return new ManagedServerController(
 				$c->query('AppName'),
 				$c->query('Request'),
-				$c->query('URLGenerator'),
-				\OC::$server->getConfig(),
-				\OC::$server->getUserSession(),
-				$c->query('Logger'),
+				$c->query('OCP\IURLGenerator'),
+				$c->query('OCP\IConfig'),
+				$c->query('OCP\IUserSession'),
+				$c->query('OCP\ILogger'),
 				$c->query('DataRetriever'),
-				$c->query('SecureRandom'),
+				$c->query('OCP\Security\ISecureRandom'),
 				'https://xmpp.jsxc.ch/registration'
 			);
 		});
