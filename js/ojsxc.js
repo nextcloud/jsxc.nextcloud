@@ -310,6 +310,11 @@
             return;
         }
 
+        if (typeof oc_config === 'undefined' || typeof oc_appswebroots === 'undefined' || typeof OC === 'undefined') {
+           // abort if a dependency is missing
+           return;
+        }
+
         if (OC.generateUrl('login/flow') === window.location.pathname) {
            // abort on login flow
            return;
