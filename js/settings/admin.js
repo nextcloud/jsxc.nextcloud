@@ -283,4 +283,8 @@ $(document).ready(function() {
 
       $('.ojsxc-managed-registration').show();
    });
+
+   $('#ojsxc-legal').on('change', function() {
+      $('#ojsxc-register').prop('disabled', !$(this).prop('checked'));
+   })
 });
