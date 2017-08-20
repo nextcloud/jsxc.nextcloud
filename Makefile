@@ -1,10 +1,8 @@
 .PHONY: all install
-all: install .github.json
+all: install
 	grunt build
 install:
-	git submodule update --init
+	git submodule update --init --recursive --remote
+	(cd js/jsxc/ && npm install)
+	(cd js/jsxc/ && bower install)
 	npm install
-	bower install
-# Does not exist on normal machines, create dummy
-.github.json:
-	echo '{}' > .github.json
