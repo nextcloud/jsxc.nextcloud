@@ -115,7 +115,7 @@ class SettingsControllerTest extends TestCase
 	public function testGetIceServersGeneratedToken()
 	{
 		$ttl = 12345;
-		$this->setUpGetIceServers('turn:localhost', ''.$ttl, '', 'password', 'secret');
+		$this->setUpGetIceServers('turn:localhost', ''.$ttl, '', '', 'secret');
 
 		$this->userSession
 		 ->expects($this->once())
