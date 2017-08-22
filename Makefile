@@ -1,3 +1,4 @@
+.PHONY: all install
 all: install
 	grunt build
 install:
