@@ -16,6 +16,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - [#37](https://github.com/nextcloud/jsxc.nextcloud/issues/37) add registration form for managed server service (beta)
 - [#38](https://github.com/nextcloud/jsxc.nextcloud/issues/38) allow authentication with app passwords via external api
 - add pre-commit hook template
+- roster install repair step (internal)
+- [#50](https://github.com/nextcloud/jsxc.nextcloud/issues/50) add icon to personal settings
+- [#50](https://github.com/nextcloud/jsxc.nextcloud/issues/50) add personal section
 
 ### Fixed
 - [#24](https://github.com/nextcloud/jsxc.nextcloud/issues/24) fix prefer mail address to login
@@ -26,6 +29,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - [#35](https://github.com/nextcloud/jsxc.nextcloud/issues/35) fix message exchange (internal)
 - fix multiple php warnings
 - use system value to determine jsxc environment
+- refresh-roster command (internal)
+- [#55](https://github.com/nextcloud/jsxc.nextcloud/issues/55) fix query for predefined core services
 
 ### Changed
 - update jsxc to v3.3.0 ([change log](https://github.com/jsxc/jsxc/blob/master/CHANGELOG.md))
@@ -37,6 +42,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - update npm dependencies
 - use codecov
 - [#46](https://github.com/nextcloud/jsxc.nextcloud/issues/46) use php-cs-fixer to be PSR-2 compliant
+- [#54](https://github.com/nextcloud/jsxc.nextcloud/pull/54) allow plain usernames without domain for sharedRoster
+- [jsxc/jsxc#519](https://github.com/jsxc/jsxc/issues/519) consider preferMail option in contact menu
+- abort if a NC dependency is missing
+- use minified js in production environment
+- reduce number of login attempts for external api
+- support multiple ice urls
 
 ## 3.2.1 - 2017-06-01
 ### Fixed
