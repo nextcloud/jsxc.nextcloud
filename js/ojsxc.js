@@ -257,7 +257,7 @@
             url: OC.generateUrl('apps/ojsxc/settings/user'),
             data: data,
             success: function(data) {
-                cb(data.trim() === 'true');
+                cb(data && data.status === 'success');
             },
             error: function() {
                 cb(false);
