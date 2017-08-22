@@ -116,7 +116,10 @@ if (function_exists('script')) {
 						</div>
 					</div>
 					<div class="form-col-offset">
-						<input id="ojsxc-register" type="button" value="Register" data-toggle-value="Processing registration" />
+						<label><input id="ojsxc-legal" type="checkbox" /> Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor</label>
+					</div>
+					<div class="form-col-offset">
+						<input id="ojsxc-register" type="button" value="Register" data-toggle-value="Processing registration" disabled="disabled" />
 					</div>
 				</div>
 			</div>
