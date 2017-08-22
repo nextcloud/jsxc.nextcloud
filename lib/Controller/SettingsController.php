@@ -134,7 +134,6 @@ class SettingsController extends Controller
 		$this->setAppValue('iceUrl', $this->getTrimParam('iceUrl'));
 		$this->setAppValue('iceUsername', $this->getTrimParam('iceUsername'));
 		$this->setAppValue('iceCredential', $this->getParam('iceCredential'));
-		$this->setAppValue('iceSecret', $this->getParam('iceSecret'));
 		$this->setAppValue('iceTtl', $this->getParam('iceTtl'));
 
 		$this->setAppValue('timeLimitedToken', $this->getCheckboxParam('timeLimitedToken'));
@@ -181,29 +180,36 @@ class SettingsController extends Controller
 	*/
 	public function getIceServers()
 	{
-		$secret = $this->getAppValue('iceSecret');
+		$secret = $this->getAppValue('iceSecret', '');
 		$ttl = $this->getAppValue('iceTtl', 3600 * 24); // one day (according to TURN-REST-API)
 		$url = $this->getAppValue('iceUrl');
 		$username = $this->getAppValue('iceUsername', '');
-		$credential = $this->getAppValue('iceCredential', '');
+		$credential = $this->getAppValue('iceCredential', $secret);
 
-		$url = preg_match('/^(turn|stun):/', $url) || empty($url) ? $url : "turn:$url";
-
-		if (!empty($secret) && (empty($username) || empty($credential))) {
+		$urls = array();
+		foreach (preg_split('/[\s,]+/', $url) as $u) {
+			if (preg_match('/^(turn|stun)s?:/', $u)) {
+				$urls[] = $u;
+			} elseif (!empty($url)) {
+				$urls[] = "turn:$u";
+			}
+		}
+		if (empty($username)) {
 			$uid = $this->userSession->getUser()->getUID();
-
+		}
+		if (!empty($credential) && $ttl > 0) {
 			$accessData = TimeLimitedToken::generateTURN($uid, $secret, $ttl);
 
 			$username = $accessData[0];
 			$credential = $accessData[1];
 		}
 
-		if (!empty($url)) {
+		if (!empty($urls)) {
 			$data = [
 		   'ttl' => $ttl,
 		   'iceServers' => [
 			  [
-				 'urls' => [$url],
+				 'urls' => $urls,
 				 'credential' => $credential,
 				 'username' => $username,
 			  ],
