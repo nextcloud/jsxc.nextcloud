@@ -1,5 +1,5 @@
 /*!
- * ojsxc v3.3.0-beta.1 - 2017-07-28
+ * ojsxc v3.3.0-beta.2 - 2017-08-22
  * 
  * Copyright (c) 2017 Klaus Herberth <klaus@jsxc.org> <br>
  * Released under the MIT license
@@ -7,7 +7,7 @@
  * Please see http://www.jsxc.org/
  * 
  * @author Klaus Herberth <klaus@jsxc.org>
- * @version 3.3.0-beta.1
+ * @version 3.3.0-beta.2
  * @license MIT
  */
 
@@ -267,10 +267,10 @@
     function saveSettinsPermanent(data, cb) {
         $.ajax({
             type: 'POST',
-            url: OC.filePath('ojsxc', 'ajax', 'setUserSettings.php'),
+            url: OC.generateUrl('apps/ojsxc/settings/user'),
             data: data,
             success: function(data) {
-                cb(data.trim() === 'true');
+                cb(data && data.status === 'success');
             },
             error: function() {
                 cb(false);
@@ -321,6 +321,11 @@
         if (typeof jsxc === 'undefined' || typeof emojione === 'undefined') {
             // abort if core or dependencies threw an error
             return;
+        }
+
+        if (typeof oc_config === 'undefined' || typeof oc_appswebroots === 'undefined' || typeof OC === 'undefined') {
+           // abort if a dependency is missing
+           return;
         }
 
         if (OC.generateUrl('login/flow') === window.location.pathname) {

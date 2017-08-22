@@ -13,6 +13,7 @@ use OCA\OJSXC\Db\MessageMapper;
 use OCA\OJSXC\Db\PresenceMapper;
 use OCA\OJSXC\Db\Stanza;
 use OCA\OJSXC\Db\StanzaMapper;
+use OCA\OJSXC\Migration\RefreshRoster as RefreshRosterMigration;
 use OCA\OJSXC\NewContentContainer;
 use OCA\OJSXC\RosterPush;
 use OCA\OJSXC\StanzaHandlers\IQ;
@@ -74,8 +75,8 @@ class Application extends App {
 			return new SettingsController(
 				$c->query('AppName'),
 				$c->query('Request'),
-				$c->query('Config'),
-				$c->query('UserManager'),
+				$c->query('OCP\IConfig'),
+				$c->query('OCP\IUserManager'),
 				\OC::$server->getUserSession()
 			);
 		});
@@ -84,10 +85,10 @@ class Application extends App {
 			return new ExternalApiController(
 				$c->query('AppName'),
 				$c->query('Request'),
-				$c->query('UserManager'),
-				\OC::$server->getUserSession(),
-				$c->query('GroupManager'),
-				$c->query('Logger')
+				$c->query('OCP\IUserManager'),
+				$c->query('OCP\IUserSession'),
+				$c->query('OCP\IGroupManager'),
+				$c->query('OCP\ILogger')
 			);
 		});
 
@@ -95,12 +96,12 @@ class Application extends App {
 			return new ManagedServerController(
 				$c->query('AppName'),
 				$c->query('Request'),
-				$c->query('URLGenerator'),
-				\OC::$server->getConfig(),
-				\OC::$server->getUserSession(),
-				$c->query('Logger'),
+				$c->query('OCP\IURLGenerator'),
+				$c->query('OCP\IConfig'),
+				$c->query('OCP\IUserSession'),
+				$c->query('OCP\ILogger'),
 				$c->query('DataRetriever'),
-				$c->query('SecureRandom'),
+				$c->query('OCP\Security\ISecureRandom'),
 				'https://xmpp.jsxc.ch/registration'
 			);
 		});
@@ -164,7 +165,8 @@ class Application extends App {
 			return new IQ(
 				$c->query('OJSXC_UserId'),
 				$c->query('Host'),
-				$c->query('OCP\IUserManager')
+				$c->query('OCP\IUserManager'),
+				$c->query('OCP\IConfig')
 			);
 		});
 
@@ -211,7 +213,8 @@ class Application extends App {
 				$c->query('ServerContainer')->getUserManager(),
 				$c->query('ServerContainer')->getUserSession(),
 				$c->query('Host'),
-				$c->query('IQRosterPushMapper')
+				$c->query('IQRosterPushMapper'),
+				$c->query('ServerContainer')->getDatabaseConnection()
 			);
 		});
 
@@ -243,15 +246,23 @@ class Application extends App {
 		/**
 		 * Raw request body
 		 */
-		 $container->registerService('RawRequest', function($c) {
+		$container->registerService('RawRequest', function($c) {
 			return new RawRequest();
 		});
 
 		/**
 		 * Data retriever
 		 */
-		 $container->registerService('DataRetriever', function($c) {
+		$container->registerService('DataRetriever', function($c) {
 			return new DataRetriever();
+		});
+
+		$container->registerService('OCA\OJSXC\Migration\RefreshRoster', function(IContainer $c) {
+			return new RefreshRosterMigration(
+				$c->query('RosterPush'),
+				$c->query('OCP\IConfig'),
+				$c->query('OCP\ILogger')
+			);
 		});
 
 	}

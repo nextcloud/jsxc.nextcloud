@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * This is required until NC 13.
+ */
+
 OCP\User::checkLoggedIn();
 
 OCP\Util::addScript('ojsxc', 'settings/personal');
