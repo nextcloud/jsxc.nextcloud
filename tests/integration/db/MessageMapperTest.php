@@ -95,19 +95,57 @@ class MessageMapperTest extends MapperTestUtility
 		$this->mapper->findByTo('test');
 	}
 
-	public function testFindByToFound()
+	public function testFindByToFoundWithoutAtSign()
 	{
+		// when the username doesn't contain a @ the domain is removed and stored as such in the DB
+		// the resulting stanza then contains the full JID
 		$stanza1 = new Message();
-		$stanza1->setFrom('jan@localhost');
-		$stanza1->setTo('john@localhost');
+		$stanza1->setFrom('jan');
+		$stanza1->setTo('john');
+		$stanza1->setType('test');
+		$stanza1->setValue('Messageabc');
+		$this->mapper->insert($stanza1);
+
+		$stanza2 = new Message();
+		$stanza2->setFrom('thomas');
+		$stanza2->setTo('jan');
+		$stanza2->setType('test2');
+		$stanza2->setValue('Message');
+		$this->mapper->insert($stanza2);
+
+
+		// check if two elements are inserted
+		$result = $this->fetchAll();
+		$this->assertCount(2, $result);
+
+		// check findByTo
+		$result = $this->mapper->findByTo('john');
+		$this->assertCount(1, $result);
+		$this->assertEquals('<message to="john@localhost/internal" from="jan@localhost/internal" type="test" xmlns="jabber:client" id="4-msg">Messageabc</message>', $result[0]->getStanza());
+
+		// check if element is deleted
+		$result = $this->fetchAll();
+		$this->assertCount(1, $result);
+		$this->assertEquals($stanza2->getFrom(), $result[0]->getFrom());
+		$this->assertEquals($stanza2->getTo(), $result[0]->getTo());
+		$this->assertEquals('<message to="jan" from="thomas" type="test2" xmlns="jabber:client" id="4-msg">Message</message>', $result[0]->getStanza()); // notice that the username isn't replaced by the JID since this tis the task of hte findByTo method
+	}
+
+	public function testFindByToFoundWithAtSign()
+	{
+		// when the username does contain a @ the domain is removed and stored as such in the DB, but with the @ still
+		// in the username, the resulting stanza then contains the full JID
+		$stanza1 = new Message();
+		$stanza1->setFrom('jan@localhost.com');
+		$stanza1->setTo('john@localhost.com');
 		$stanza1->setStanza('abcd1');
 		$stanza1->setType('test');
 		$stanza1->setValue('Messageabc');
 		$this->mapper->insert($stanza1);
 
 		$stanza2 = new Message();
-		$stanza2->setFrom('thomas@localhost');
-		$stanza2->setTo('jan@localhost');
+		$stanza2->setFrom('thomas@localhost.com');
+		$stanza2->setTo('jan@localhost.com');
 		$stanza2->setStanza('abcd2');
 		$stanza2->setType('test2');
 		$stanza2->setValue('Message');
@@ -119,15 +157,16 @@ class MessageMapperTest extends MapperTestUtility
 		$this->assertCount(2, $result);
 
 		// check findByTo
-		$result = $this->mapper->findByTo('john@localhost');
+		$result = $this->mapper->findByTo('john@localhost.com');
 		$this->assertCount(1, $result);
-		$this->assertEquals('<message to="john@localhost" from="jan@localhost" type="test" xmlns="jabber:client" id="4-msg">Messageabc</message>', $result[0]->getStanza());
+		$this->assertEquals('<message to="john@localhost.com@localhost/internal" from="jan@localhost.com@localhost/internal" type="test" xmlns="jabber:client" id="4-msg">Messageabc</message>', $result[0]->getStanza());
 
 		// check if element is deleted
 		$result = $this->fetchAll();
 		$this->assertCount(1, $result);
 		$this->assertEquals($stanza2->getFrom(), $result[0]->getFrom());
 		$this->assertEquals($stanza2->getTo(), $result[0]->getTo());
-		$this->assertEquals('<message to="jan@localhost" from="thomas@localhost" type="test2" xmlns="jabber:client" id="4-msg">Message</message>', $result[0]->getStanza());
+		$this->assertEquals('<message to="jan@localhost.com" from="thomas@localhost.com" type="test2" xmlns="jabber:client" id="4-msg">Message</message>', $result[0]->getStanza());
 	}
+
 }
