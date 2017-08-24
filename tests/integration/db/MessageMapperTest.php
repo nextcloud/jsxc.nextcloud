@@ -168,5 +168,4 @@ class MessageMapperTest extends MapperTestUtility
 		$this->assertEquals($stanza2->getTo(), $result[0]->getTo());
 		$this->assertEquals('<message to="jan@localhost.com" from="thomas@localhost.com" type="test2" xmlns="jabber:client" id="4-msg">Message</message>', $result[0]->getStanza());
 	}
-
 }
