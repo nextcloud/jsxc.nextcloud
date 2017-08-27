@@ -54,7 +54,7 @@ class Message extends StanzaHandler
 	public function handle(array $stanza)
 	{
 		$to = $this->getAttribute($stanza, 'to');
-		$pos = strpos($to, '@');
+		$pos = strrpos($to, '@');
 		$this->to = substr($to, 0, $pos);
 		foreach ($stanza['value'] as $keyRaw => $value) {
 			// remove namespace from key as it is unneeded and cause problems
