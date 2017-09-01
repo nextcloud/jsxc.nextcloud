@@ -46,7 +46,7 @@ script:
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
-  - npm install bower
+  - npm install -g bower
   - make nightly
   - eval "$(ssh-agent -s)" #start the ssh agent
   - chmod 600 .travis/github-deploy-key
