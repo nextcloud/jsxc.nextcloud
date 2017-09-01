@@ -46,3 +46,17 @@ script:
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
+  - make nightly
+  - eval "$(ssh-agent -s)" #start the ssh agent
+  - chmod 600 .travis/github-deploy-key
+  - ssh-add .travis/github-deploy-key
+  - git clone git@github.com:jsxc/nightly-builds.git
+  - mv archives/ojsxc-nightly-latest.tar.gz nightly-builds/
+  - cd nightly-builds/
+  - git add .
+  - git commit -m "build nextcloud/jsxc.nextcloud@$TRAVIS_COMMIT"
+  - git push
+
+before_install:
+  - openssl aes-256-cbc -K $encrypted_2fb4f9166ccf_key -iv $encrypted_2fb4f9166ccf_iv
+  -in .travis/github-deploy-key.enc -out .travis/github-deploy-key -d

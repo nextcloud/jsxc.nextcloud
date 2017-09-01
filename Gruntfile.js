@@ -1,9 +1,12 @@
 /* global module:false */
 module.exports = function(grunt) {
 
+   var app = grunt.file.readJSON('package.json');
+
    // Project configuration.
    grunt.initConfig({
-      app: grunt.file.readJSON('package.json'),
+      app: app,
+      version: grunt.option('ver') || app.version,
       meta: {
          banner: grunt.file.read('js/jsxc/banner.js')
       },
@@ -56,7 +59,7 @@ module.exports = function(grunt) {
             overwrite: true,
             replacements: [ {
                from: /<version>[^<]+<\/version>/,
-               to: "<version><%= app.version %></version>"
+               to: "<version><%= version %></version>"
             } ]
          },
          version: {
@@ -64,7 +67,7 @@ module.exports = function(grunt) {
             overwrite: true,
             replacements: [ {
                from: /.+/,
-               to: "<%= app.version %>"
+               to: "<%= version %>"
             } ]
          },
          imageUrl: {
@@ -94,7 +97,7 @@ module.exports = function(grunt) {
                src: [ 'CHANGELOG.md' ]
             },
             options: {
-               searchString: "## <%= app.version %>",
+               searchString: "## <%= version %>",
                logFormat: 'console',
                onComplete: function(m) {
                   if (m.numMatches === 0) {
@@ -121,7 +124,7 @@ module.exports = function(grunt) {
       compress: {
          main: {
             options: {
-               archive: 'archives/ojsxc-<%= app.version %>.tar.gz',
+               archive: 'archives/ojsxc-<%= version %>.tar.gz',
                mode: 'tgz'
             },
             files: [ {
@@ -136,8 +139,8 @@ module.exports = function(grunt) {
         signRelease: {
           command: 'openssl dgst -sha512 -sign ' +
             '~/.nextcloud/certificates/ojsxc.key ' +
-            'archives/ojsxc-<%= app.version %>.tar.gz | openssl base64 > ' +
-            'archives/ojsxc-<%= app.version %>.tar.gz.sig'
+            'archives/ojsxc-<%= version %>.tar.gz | openssl base64 > ' +
+            'archives/ojsxc-<%= version %>.tar.gz.sig'
         }
       },
       autoprefixer: {
