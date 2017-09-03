@@ -206,7 +206,7 @@
                     cb(d.data);
                 } else if (d.data && d.data.serverType === 'internal') {
                     // fake successful connection
-                    // jsxc.storage.setItem('serverType', 'internal');
+                    jsxc.storage.setItem('serverType', 'internal');
                     jsxc.gui.showLoginBox = function(){};
                     jsxc.bid = username.toLowerCase() + '@' + window.location.host;
 
