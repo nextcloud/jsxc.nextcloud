@@ -138,7 +138,8 @@ class SettingsControllerTest extends TestCase
 	}
 
 
-	public function testServerType() {
+	public function testServerType()
+	{
 		$this->config
 			->expects($this->at(0))
 			->method('getAppValue')
