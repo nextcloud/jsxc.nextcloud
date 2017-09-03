@@ -137,6 +137,33 @@ class SettingsControllerTest extends TestCase
 		$this->assertFalse(empty($return['iceServers'][0]['credential']));
 	}
 
+
+	public function testServerType() {
+		$this->config
+			->expects($this->at(0))
+			->method('getAppValue')
+			->with('ojsxc', 'serverType', 'internal')
+			->willReturn('internal'); // default value
+
+		$this->assertEquals($this->settingsController->getServerType(), ["serverType" => "internal"]);
+
+		$this->config
+			->expects($this->at(0))
+			->method('getAppValue')
+			->with('ojsxc', 'serverType', 'internal')
+			->willReturn('external');
+
+		$this->assertEquals($this->settingsController->getServerType(), ["serverType" => "external"]);
+
+		$this->config
+			->expects($this->at(0))
+			->method('getAppValue')
+			->with('ojsxc', 'serverType', 'internal')
+			->willReturn('');
+
+		$this->assertEquals($this->settingsController->getServerType(), ["serverType" => "internal"]);
+	}
+
 	private function expectsInternalServerSettings($serverType)
 	{
 		$mapGetAppValue = [
