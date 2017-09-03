@@ -396,12 +396,10 @@
         }
     });
 
-    $(document).on('ready.roster.jsxc', function(event, state) { // TODO this may be removed
-        $(document).on( "click", '#jsxc_roster p', function() {
-            if (jsxc.storage.getItem('serverType') === 'internal') {
-               startInternalBackend();
-           }
-        });
+    $(document).on( "click", '#jsxc_roster p', function() {
+        if (jsxc.storage.getItem('serverType') === 'internal') {
+           startInternalBackend();
+        }
     });
 
     function startInternalBackend() {
@@ -431,7 +429,7 @@
         if (state === jsxc.CONST.STATE.SUSPEND) {
             /**
              * The first time we go into suspend mode we check if we are using the internal backend.
-             * If this is the case and the user dexplicitlylicity press the "login_without_chat" button when logging
+             * If this is the case and the user explicitly press the "login_without_chat" button when logging
              * into Nextcloud we know we are using another authentication mechanism (like SAML/SSO) and thus have
              * to manually start the connection.
              */
@@ -451,6 +449,9 @@
                 jsxc.gui.showLoginBox = function(){};
                 startInternalBackend();
             }
+        } else if (state === jsxc.CONST.STATE.READY) {
+            // if JSXC is ready this means we successfully connected and thus don't have to listen to the suspend state
+            $(document).off('stateChange.jsxc', _handler);
         }
     });
 }(jQuery));
