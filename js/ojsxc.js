@@ -202,10 +202,12 @@
                 password: password
             },
             success: function(d) {
-                if (d.result === 'success' && d.data && d.data.serverType !== 'internal' && d.data.xmpp.url !== '' && d.data.xmpp.url !== null) {
+                if (d.result === 'success' && d.data && d.data.serverType !== 'internal' && d.data.xmpp.url !== '' && d.data.xmpp.url !== null) {                       jsxc.storage.setItem('serverType', d.data.serverType);
                     cb(d.data);
                 } else if (d.data && d.data.serverType === 'internal') {
                     // fake successful connection
+                    // jsxc.storage.setItem('serverType', 'internal');
+                    jsxc.gui.showLoginBox = function(){};
                     jsxc.bid = username.toLowerCase() + '@' + window.location.host;
 
                     jsxc.storage.setItem('jid', jsxc.bid + '/internal');
@@ -323,6 +325,9 @@
         $(document).on('connected.jsxc', function() {
             // reset default avatar cache
             jsxc.storage.removeUserItem('defaultAvatars');
+            // when we are connected it doesn't matter anymore whether we logged in without chat since the user
+            // must have manually logged in
+            jsxc.storage.setItem('login_without_chat', false);
         });
 
         $(document).on('status.contacts.count status.contact.updated', function() {
@@ -370,6 +375,7 @@
         if (jsxc.el_exists(jsxc.options.loginForm.form) && jsxc.el_exists(jsxc.options.loginForm.jid) && jsxc.el_exists(jsxc.options.loginForm.pass)) {
 
             var link = $('<a/>').text($.t('Log_in_without_chat')).attr('href', '#').click(function() {
+                jsxc.storage.setItem('login_without_chat', true);
                 jsxc.submitLoginForm();
             });
 
@@ -387,6 +393,64 @@
 
         if ($('#contactsmenu').length > 0) {
             observeContactsMenu();
+        }
+    });
+
+    $(document).on('ready.roster.jsxc', function(event, state) { // TODO this may be removed
+        $(document).on( "click", '#jsxc_roster p', function() {
+            if (jsxc.storage.getItem('serverType') === 'internal') {
+               startInternalBackend();
+           }
+        });
+    });
+
+    function startInternalBackend() {
+       jsxc.bid = OC.currentUser.toLowerCase() + '@' + window.location.host;
+
+        jsxc.storage.setItem('jid', jsxc.bid + '/internal');
+        jsxc.storage.setItem('sid', 'internal');
+        jsxc.storage.setItem('rid', '123456');
+
+        jsxc.options.set('xmpp', {
+            url: OC.generateUrl('apps/ojsxc/http-bind')
+        });
+
+        jsxc.start(jsxc.bid + '/internal', 'internal', '123456');
+        jsxc.gui.restore();
+        jsxc.gui.roster.toggle(jsxc.CONST.SHOWN);
+        $(document).trigger('attached.jsxc');
+    }
+
+    if (jsxc.storage.getItem('serverType') === 'internal') {
+        // when the page is (re) loaded and we already know we are using the internal backend we must override
+        // the show loginBox method so that the form isn't shown when clicking the relogin link
+        jsxc.gui.showLoginBox = function () {};
+    }
+
+    $(document).on('stateChange.jsxc', function _handler(event, state) {
+        if (state === jsxc.CONST.STATE.SUSPEND) {
+            /**
+             * The first time we go into suspend mode we check if we are using the internal backend.
+             * If this is the case and the user dexplicitlylicity press the "login_without_chat" button when logging
+             * into Nextcloud we know we are using another authentication mechanism (like SAML/SSO) and thus have
+             * to manually start the connection.
+             */
+            $(document).off('stateChange.jsxc', _handler);
+            if (jsxc.storage.getItem('serverType') === null) {
+                $.ajax({
+                    url: OC.generateUrl('apps/ojsxc/settings/servertype'),
+                    success: function (data) {
+                        jsxc.storage.setItem('serverType', data.serverType);
+                        jsxc.gui.showLoginBox = function(){};
+                        if (data.serverType === 'internal' && jsxc.storage.getItem('login_without_chat') !== true) {
+                            startInternalBackend();
+                        }
+                    }
+                });
+            } else if (jsxc.storage.getItem('serverType') === 'internal' && jsxc.storage.getItem('login_without_chat') !== true) {
+                jsxc.gui.showLoginBox = function(){};
+                startInternalBackend();
+            }
         }
     });
 }(jQuery));
