@@ -102,11 +102,8 @@
             jsxc.gui.roster.toggle();
         });
 
-        if ($('#contactsmenu').length > 0) {
-            $('#contactsmenu').before(div);
-        } else {
-            $('#settings').after(div);
-        }
+        $('form.searchbox').after(div);
+
     }
 
     function onRosterToggle(ev, state, duration) {
