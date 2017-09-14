@@ -102,7 +102,7 @@
             jsxc.gui.roster.toggle();
         });
 
-        $('form.searchbox').after(div);
+        $('#header form.searchbox').after(div);
 
     }
 
