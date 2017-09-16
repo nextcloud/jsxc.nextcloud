@@ -5,6 +5,13 @@
 (function($) {
     "use strict";
 
+
+    var serverTypes = {
+        INTERNAL: 0,
+        EXTERNAL: 1,
+        MANAGED: 2
+    };
+
     function observeContactsMenu() {
         var target = document.getElementById('contactsmenu');
 
@@ -202,11 +209,12 @@
                 password: password
             },
             success: function(d) {
-                if (d.result === 'success' && d.data && d.data.serverType !== 'internal' && d.data.xmpp.url !== '' && d.data.xmpp.url !== null) {                       jsxc.storage.setItem('serverType', d.data.serverType);
+                if (d.result === 'success' && d.data && d.data.serverType !== 'internal' && d.data.xmpp.url !== '' && d.data.xmpp.url !== null) {
+                    jsxc.storage.setItem('serverType', serverTypes[d.data.serverType.toUpperCase()]);
                     cb(d.data);
                 } else if (d.data && d.data.serverType === 'internal') {
                     // fake successful connection
-                    jsxc.storage.setItem('serverType', 'internal');
+                    jsxc.storage.setItem('serverType', serverTypes.INTERNAL);
                     jsxc.gui.showLoginBox = function(){};
                     jsxc.bid = username.toLowerCase() + '@' + window.location.host;
 
@@ -397,7 +405,7 @@
     });
 
     $(document).on( "click", '#jsxc_roster p', function() {
-        if (jsxc.storage.getItem('serverType') === 'internal') {
+        if (jsxc.storage.getItem('serverType') === serverTypes.INTERNAL) {
            startInternalBackend();
         }
     });
@@ -419,7 +427,7 @@
         $(document).trigger('attached.jsxc');
     }
 
-    if (jsxc.storage.getItem('serverType') === 'internal') {
+    if (jsxc.storage.getItem('serverType') === serverTypes.INTERNAL) {
         // when the page is (re) loaded and we already know we are using the internal backend we must override
         // the show loginBox method so that the form isn't shown when clicking the relogin link
         jsxc.gui.showLoginBox = function () {};
@@ -438,14 +446,16 @@
                 $.ajax({
                     url: OC.generateUrl('apps/ojsxc/settings/servertype'),
                     success: function (data) {
-                        jsxc.storage.setItem('serverType', data.serverType);
-                        jsxc.gui.showLoginBox = function(){};
+                        jsxc.storage.setItem('serverType', serverTypes[data.serverType.toUpperCase()]);
+                        if (data.serverType === 'internal') {
+                            jsxc.gui.showLoginBox = function(){};
+                        }
                         if (data.serverType === 'internal' && jsxc.storage.getItem('login_without_chat') !== true) {
                             startInternalBackend();
                         }
                     }
                 });
-            } else if (jsxc.storage.getItem('serverType') === 'internal' && jsxc.storage.getItem('login_without_chat') !== true) {
+            } else if (jsxc.storage.getItem('serverType') === serverTypes.INTERNAL && jsxc.storage.getItem('login_without_chat') !== true) {
                 jsxc.gui.showLoginBox = function(){};
                 startInternalBackend();
             }
