@@ -2,6 +2,7 @@
 
 namespace OCA\OJSXC\Db;
 
+use OCA\OJSXC\AppInfo\Application;
 use OCA\OJSXC\Db\Presence as PresenceEntity;
 use OCA\OJSXC\NewContentContainer;
 use OCA\OJSXC\Utility\MapperTestUtility;
@@ -56,34 +57,37 @@ class PresenceMapperTest extends MapperTestUtility
 
 	public function setupContactsStoreAPI()
 	{
-		foreach (\OC::$server->getUserManager()->search('') as $user) {
-			$user->delete();
+		if (Application::contactsStoreApiSupporetd()) {
+
+			foreach (\OC::$server->getUserManager()->search('') as $user) {
+				$user->delete();
+			}
+
+			$users[] = \OC::$server->getUserManager()->createUser('admin', 'admin');
+			$users[] = \OC::$server->getUserManager()->createUser('derp', 'derp');
+			$users[] = \OC::$server->getUserManager()->createUser('derpina', 'derpina');
+			$users[] = \OC::$server->getUserManager()->createUser('herp', 'herp');
+			$users[] = \OC::$server->getUserManager()->createUser('foo', 'foo');
+
+			$currentUser = \OC::$server->getUserManager()->createUser('autotest', 'autotest');
+			\OC::$server->getUserSession()->setUser($currentUser);
+			/** @var \OCA\DAV\CardDAV\SyncService $syncService */
+			$syncService = \OC::$server->query('CardDAVSyncService');
+			$syncService->getLocalSystemAddressBook();
+			$syncService->updateUser($currentUser);
+
+			foreach ($users as $user) {
+				$syncService->updateUser($user);
+			}
+
+			$cm = \OC::$server->getContactsManager();
+			$davApp = new DavApp();
+			$davApp->setupSystemContactsProvider($cm);
+
+			\OC_User::setIncognitoMode(false);
+
+			\OC::$server->getDatabaseConnection()->executeQuery("DELETE FROM *PREFIX*ojsxc_stanzas");
 		}
-
-		$users[] = \OC::$server->getUserManager()->createUser('admin', 'admin');
-		$users[] = \OC::$server->getUserManager()->createUser('derp', 'derp');
-		$users[] = \OC::$server->getUserManager()->createUser('derpina', 'derpina');
-		$users[] = \OC::$server->getUserManager()->createUser('herp', 'herp');
-		$users[] = \OC::$server->getUserManager()->createUser('foo', 'foo');
-
-		$currentUser = \OC::$server->getUserManager()->createUser('autotest', 'autotest');
-		\OC::$server->getUserSession()->setUser($currentUser);
-		/** @var \OCA\DAV\CardDAV\SyncService $syncService */
-		$syncService = \OC::$server->query('CardDAVSyncService');
-		$syncService->getLocalSystemAddressBook();
-		$syncService->updateUser($currentUser);
-
-		foreach ($users as $user) {
-			$syncService->updateUser($user);
-		}
-
-		$cm = \OC::$server->getContactsManager();
-		$davApp = new DavApp();
-		$davApp->setupSystemContactsProvider($cm);
-
-		\OC_User::setIncognitoMode(false);
-
-		\OC::$server->getDatabaseConnection()->executeQuery("DELETE FROM *PREFIX*ojsxc_stanzas");
 	}
 
 	/**
