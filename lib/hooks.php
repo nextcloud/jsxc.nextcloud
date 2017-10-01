@@ -138,5 +138,4 @@ class Hooks
 	{
 		$this->rosterPush->removeRosterItemForUsersInGroup($group, $user->getUID());
 	}
-
 }

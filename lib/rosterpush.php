@@ -160,7 +160,8 @@ class RosterPush
 		return $stats;
 	}
 
-	public function removeRosterItemForUsersInGroup(IGroup $group, $userId) {
+	public function removeRosterItemForUsersInGroup(IGroup $group, $userId)
+	{
 		$iq = new IQRosterPush();
 		$iq->setJid($userId);
 		$iq->setSubscription('remove');
@@ -173,7 +174,5 @@ class RosterPush
 				$this->iqRosterPushMapper->insert($iq);
 			}
 		}
-
 	}
-
 }

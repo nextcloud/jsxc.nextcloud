@@ -3,7 +3,8 @@
 
 namespace OCA\OJSXC;
 
-interface IUserProvider {
+interface IUserProvider
+{
 
 	/**
 	 * @brief Search all users for which the current users has access to.
@@ -54,5 +55,4 @@ interface IUserProvider {
 	 * @return bool
 	 */
 	public function hasUserForUserByUID($uid1, $uid2);
-
 }

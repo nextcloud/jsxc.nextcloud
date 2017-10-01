@@ -46,18 +46,19 @@ class PresenceMapperTest extends MapperTestUtility
 		}
 	}
 
-	protected function tearDown() {
+	protected function tearDown()
+	{
 		foreach (\OC::$server->getUserManager()->search('') as $user) {
 			$user->delete();
 		}
-
 	}
 
 	/**
 	 * @before
 	 * TODO explciclty call this function
 	 */
-	public function setupContactsStoreAPI() {
+	public function setupContactsStoreAPI()
+	{
 		foreach (\OC::$server->getUserManager()->search('') as $user) {
 			$user->delete();
 		}
@@ -83,7 +84,6 @@ class PresenceMapperTest extends MapperTestUtility
 		\OC_User::setIncognitoMode(false);
 
 		\OC::$server->getDatabaseConnection()->executeQuery("DELETE FROM *PREFIX*ojsxc_stanzas");
-
 	}
 
 	/**

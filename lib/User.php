@@ -4,7 +4,8 @@ namespace OCA\OJSXC;
 
 use OCP\IUser;
 
-class User {
+class User
+{
 
 	/**
 	 * @var string
@@ -27,7 +28,8 @@ class User {
 	 * @param string $uid UID of the user
 	 * @param string $fullName Fullname of the user
 	 */
-	public function __construct($uid, $fullName, $origin) {
+	public function __construct($uid, $fullName, $origin)
+	{
 		$this->uid = $uid;
 		$this->fullName = $fullName;
 		$this->origin = $origin;
@@ -36,30 +38,32 @@ class User {
 	/**
 	 * @return string
 	 */
-	public function getUid() {
+	public function getUid()
+	{
 		return $this->uid;
 	}
 
 	/**
 	 * @param string $uid
 	 */
-	public function setUid($uid) {
+	public function setUid($uid)
+	{
 		$this->uid = $uid;
 	}
 
 	/**
 	 * @return string
 	 */
-	public function getFullName() {
+	public function getFullName()
+	{
 		return $this->fullName;
 	}
 
 	/**
 	 * @param string $fullName
 	 */
-	public function setFullName($fullName) {
+	public function setFullName($fullName)
+	{
 		$this->fullName = $fullName;
 	}
-
-
 }

@@ -244,7 +244,7 @@ class Application extends App {
 
 		$container->registerService('UserProvider', function(IContainer $c) {
 			$version = \OCP\Util::getVersion();
-			if ($version[0] == 13) {
+			if ($version[0] === 13) {
 				return new ContactsStoreUserProvider(
 					$c->query('OCP\Contacts\ContactsMenu\IContactsStore'),
 					$c->query('ServerContainer')->getUserSession(),
