@@ -57,20 +57,20 @@ class PresenceMapperTest extends MapperTestUtility
 
 	public function setupContactsStoreAPI()
 	{
+		foreach (\OC::$server->getUserManager()->search('') as $user) {
+			$user->delete();
+		}
+
+		$users[] = \OC::$server->getUserManager()->createUser('admin', 'admin');
+		$users[] = \OC::$server->getUserManager()->createUser('derp', 'derp');
+		$users[] = \OC::$server->getUserManager()->createUser('derpina', 'derpina');
+		$users[] = \OC::$server->getUserManager()->createUser('herp', 'herp');
+		$users[] = \OC::$server->getUserManager()->createUser('foo', 'foo');
+
+		$currentUser = \OC::$server->getUserManager()->createUser('autotest', 'autotest');
+		\OC::$server->getUserSession()->setUser($currentUser);
+
 		if (Application::contactsStoreApiSupporetd()) {
-
-			foreach (\OC::$server->getUserManager()->search('') as $user) {
-				$user->delete();
-			}
-
-			$users[] = \OC::$server->getUserManager()->createUser('admin', 'admin');
-			$users[] = \OC::$server->getUserManager()->createUser('derp', 'derp');
-			$users[] = \OC::$server->getUserManager()->createUser('derpina', 'derpina');
-			$users[] = \OC::$server->getUserManager()->createUser('herp', 'herp');
-			$users[] = \OC::$server->getUserManager()->createUser('foo', 'foo');
-
-			$currentUser = \OC::$server->getUserManager()->createUser('autotest', 'autotest');
-			\OC::$server->getUserSession()->setUser($currentUser);
 			/** @var \OCA\DAV\CardDAV\SyncService $syncService */
 			$syncService = \OC::$server->query('CardDAVSyncService');
 			$syncService->getLocalSystemAddressBook();
@@ -83,11 +83,9 @@ class PresenceMapperTest extends MapperTestUtility
 			$cm = \OC::$server->getContactsManager();
 			$davApp = new DavApp();
 			$davApp->setupSystemContactsProvider($cm);
-
-			\OC_User::setIncognitoMode(false);
-
-			\OC::$server->getDatabaseConnection()->executeQuery("DELETE FROM *PREFIX*ojsxc_stanzas");
 		}
+		\OC_User::setIncognitoMode(false);
+		\OC::$server->getDatabaseConnection()->executeQuery("DELETE FROM *PREFIX*ojsxc_stanzas");
 	}
 
 	/**
@@ -432,6 +430,7 @@ class PresenceMapperTest extends MapperTestUtility
 	 */
 	public function testUpdatePresence($inputs, $expInput, $expConnectedUsers, $expNewContent, $expNewContentCount, $expStanzasToSend)
 	{
+		$this->setupContactsStoreAPI();
 		global $time;
 		$time = 1000;
 		foreach ($inputs as $input) {
