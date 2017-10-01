@@ -80,6 +80,8 @@ class PresenceMapperTest extends MapperTestUtility
 			$syncService->updateUser($user);
 		}
 
+		\OC_User::setIncognitoMode(false);
+
 		\OC::$server->getDatabaseConnection()->executeQuery("DELETE FROM *PREFIX*ojsxc_stanzas");
 
 	}
