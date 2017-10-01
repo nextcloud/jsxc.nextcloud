@@ -160,6 +160,12 @@ class RosterPush
 		return $stats;
 	}
 
+	/**
+	 * When a user is removed from a group, the roster items for the $userId must be removed for all users in the $group
+	 *
+	 * @param IGroup $group
+	 * @param string $userId the user which is removed
+	 */
 	public function removeRosterItemForUsersInGroup(IGroup $group, $userId)
 	{
 		$iq = new IQRosterPush();
@@ -173,6 +179,44 @@ class RosterPush
 				$iq->setTo($recipient->getUID());
 				$this->iqRosterPushMapper->insert($iq);
 			}
+		}
+	}
+
+	/**
+	 * When a user is added to a group, this user should get a rosterPush for all users in this group
+	 *
+	 * @param IUser $receiver
+	 * @param IGroup $group
+	 */
+	public function addUserToGroup(IUser $receiver, IGroup $group)
+	{
+		$iq = new IQRosterPush();
+		$iq->setSubscription('both');
+		$iq->setFrom('');
+		$iq->setTo($receiver->getUID());
+		foreach ($group->getUsers() as $user) {
+			$iq->setJid($user->getUID());
+			$iq->setName($user->getDisplayName());
+			$this->iqRosterPushMapper->insert($iq);
+		}
+	}
+
+	/**
+	 * When a user is removed from a group, this user should get a rosterPush for all users in this group
+	 *
+	 * @param IUser $receiver
+	 * @param IGroup $group
+	 */
+	public function removeUserFromGroup(IUser $receiver, IGroup $group)
+	{
+		$iq = new IQRosterPush();
+		$iq->setSubscription('remove');
+		$iq->setFrom('');
+		$iq->setTo($receiver->getUID());
+		foreach ($group->getUsers() as $user) {
+			$iq->setJid($user->getUID());
+			$iq->setName($user->getDisplayName());
+			$this->iqRosterPushMapper->insert($iq);
 		}
 	}
 }

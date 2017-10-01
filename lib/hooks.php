@@ -132,10 +132,12 @@ class Hooks
 	public function onAddUserToGroup(IGroup $group, IUser $user)
 	{
 		$this->rosterPush->createOrUpdateRosterItem($user);
+		$this->rosterPush->addUserToGroup($user, $group);
 	}
 
 	public function onRemoveUserFromGroup(IGroup $group, IUser $user)
 	{
 		$this->rosterPush->removeRosterItemForUsersInGroup($group, $user->getUID());
+		$this->rosterPush->removeUserFromGroup($user, $group);
 	}
 }
