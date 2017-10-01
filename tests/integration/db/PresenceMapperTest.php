@@ -5,6 +5,7 @@ namespace OCA\OJSXC\Db;
 use OCA\OJSXC\Db\Presence as PresenceEntity;
 use OCA\OJSXC\NewContentContainer;
 use OCA\OJSXC\Utility\MapperTestUtility;
+use OCA\DAV\AppInfo\Application as DavApp;
 
 $time = 0;
 
@@ -53,10 +54,6 @@ class PresenceMapperTest extends MapperTestUtility
 		}
 	}
 
-	/**
-	 * @before
-	 * TODO explciclty call this function
-	 */
 	public function setupContactsStoreAPI()
 	{
 		foreach (\OC::$server->getUserManager()->search('') as $user) {
@@ -69,7 +66,6 @@ class PresenceMapperTest extends MapperTestUtility
 		$users[] = \OC::$server->getUserManager()->createUser('herp', 'herp');
 		$users[] = \OC::$server->getUserManager()->createUser('foo', 'foo');
 
-		\OC_App::loadApp('dav');
 		$currentUser = \OC::$server->getUserManager()->createUser('autotest', 'autotest');
 		\OC::$server->getUserSession()->setUser($currentUser);
 		/** @var \OCA\DAV\CardDAV\SyncService $syncService */
@@ -80,6 +76,10 @@ class PresenceMapperTest extends MapperTestUtility
 		foreach ($users as $user) {
 			$syncService->updateUser($user);
 		}
+
+		$cm = \OC::$server->getContactsManager();
+		$davApp = new DavApp();
+		$davApp->setupSystemContactsProvider($cm);
 
 		\OC_User::setIncognitoMode(false);
 
@@ -328,6 +328,7 @@ class PresenceMapperTest extends MapperTestUtility
 	 */
 	public function testGetConnectedUsers($inputs, $expected)
 	{
+		$this->setupContactsStoreAPI();
 		foreach ($inputs as $input) {
 			$this->mapper->setPresence($input);
 		}
