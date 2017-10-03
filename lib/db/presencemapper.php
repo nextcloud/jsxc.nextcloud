@@ -59,7 +59,7 @@ class PresenceMapper extends Mapper
 	/**
 	 * @var null|string the userId of the current user
 	 */
-	private $userId;
+	private $userIdPresenceMapperPresenceMapperPresenceMapper;
 
 
 	/**

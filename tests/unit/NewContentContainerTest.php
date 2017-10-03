@@ -20,7 +20,7 @@ class NewContentContainerTest extends TestCase
 		$this->newContentContainer = new NewContentContainer();
 	}
 
-	public function testProvider()
+	public function datatestProvider()
 	{
 		$stanza1 = new Stanza();
 		$stanza1->setFrom('test@own.dev');
@@ -40,7 +40,7 @@ class NewContentContainerTest extends TestCase
 	}
 
 	/**
-	 * @dataProvider testProvider
+	 * @dataProvider datatestProvider
 	 */
 	public function test($stanzas, $count)
 	{

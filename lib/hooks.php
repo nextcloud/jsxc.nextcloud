@@ -2,6 +2,7 @@
 
 namespace OCA\OJSXC;
 
+use OCA\OJSXC\AppInfo\Application;
 use OCA\OJSXC\Db\PresenceMapper;
 use OCA\OJSXC\Db\StanzaMapper;
 use OCP\IGroup;
@@ -137,7 +138,9 @@ class Hooks
 
 	public function onRemoveUserFromGroup(IGroup $group, IUser $user)
 	{
-		$this->rosterPush->removeRosterItemForUsersInGroup($group, $user->getUID());
+		if (Application::contactsStoreApiSupported()) {
+			$this->rosterPush->removeRosterItemForUsersInGroup($group, $user->getUID());
+		}
 		$this->rosterPush->removeUserFromGroup($user, $group);
 	}
 }

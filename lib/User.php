@@ -2,6 +2,7 @@
 
 namespace OCA\OJSXC;
 
+use OCA\OJSXC\AppInfo\Application;
 use OCP\IUser;
 
 class User
@@ -30,7 +31,7 @@ class User
 	 */
 	public function __construct($uid, $fullName, $origin)
 	{
-		$this->uid = $uid;
+		$this->uid = Application::santizeUserId($uid);
 		$this->fullName = $fullName;
 		$this->origin = $origin;
 	}
@@ -48,7 +49,7 @@ class User
 	 */
 	public function setUid($uid)
 	{
-		$this->uid = $uid;
+		$this->uid = Application::santizeUserId($uid);
 	}
 
 	/**

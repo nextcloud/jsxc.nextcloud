@@ -2,6 +2,9 @@
 
 namespace OCA\OJSXC;
 
+use OCP\IConfig;
+use OCP\IGroup;
+use OCP\IGroupManager;
 use OCP\IUserManager;
 use OCP\IUserSession;
 
@@ -28,11 +31,23 @@ class ContactsStoreUserProvider implements IUserProvider
 	 */
 	private $userManager;
 
-	public function __construct($contactsStore, IUserSession $userSession, IUserManager $userManager)
+	/**
+	 * @var IGroupManager
+	 */
+	private $groupManager;
+
+	/**
+	 * @var IConfig
+	 */
+	private $config;
+
+	public function __construct($contactsStore, IUserSession $userSession, IUserManager $userManager, IGroupManager $groupManager, IConfig $config)
 	{
 		$this->contactsStore = $contactsStore;
 		$this->userSession = $userSession;
 		$this->userManager = $userManager;
+		$this->groupManager = $groupManager;
+		$this->config = $config;
 	}
 
 	public function getAllUsers()
@@ -40,9 +55,13 @@ class ContactsStoreUserProvider implements IUserProvider
 		if (is_null(self::$cache)) {
 			$result = [];
 			$contacts = $this->contactsStore->getContacts($this->userSession->getUser(), '');
+			// TODO check if contact is disabled
 			foreach ($contacts as $contact) {
-				if ($contact->getProperty('isLocalSystemBook')) {
-					$result[] = new User($contact->getProperty('UID'), $contact->getFullName(), $contact);
+				$uid = $contact->getProperty('UID');
+				if ($contact->getProperty('isLocalSystemBook')
+					&& !$this->isUserExcluded($uid)
+					&& $this->userManager->get($uid)->isEnabled()) {
+					$result[] = new User($uid, $contact->getFullName(), $contact);
 				}
 			}
 			self::$cache = $result;
@@ -86,5 +105,22 @@ class ContactsStoreUserProvider implements IUserProvider
 	public function hasUserForUserByUID($uid1, $uid2)
 	{
 		return !is_null($this->contactsStore->findOne($this->userManager->get($uid1), 0, $uid2));
+	}
+
+	public function isUserExcluded($userId)
+	{
+		if ($this->config->getAppValue('core', 'shareapi_exclude_groups', 'no') === 'yes') {
+			$user = $this->userManager->get($userId);
+			$user_groups = $this->groupManager->getUserGroupIds($user);
+			$excludedGroups = $this->config->getAppValue('core', 'shareapi_exclude_groups_list', '');
+			$decodedExcludeGroups = json_decode($excludedGroups, true);
+			$excludeGroupsList = ($decodedExcludeGroups !== null) ? $decodedExcludeGroups :  [];
+
+			if (count(array_intersect($excludeGroupsList, $user_groups)) !== 0) {
+				// a group of the current user is excluded -> filter all local users
+				return true;
+			}
+		}
+		return false;
 	}
 }

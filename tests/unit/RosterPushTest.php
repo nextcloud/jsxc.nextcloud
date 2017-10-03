@@ -5,6 +5,7 @@ namespace OCA\OJSXC;
 use OCA\OJSXC\Db\IQRosterPush;
 use OCA\OJSXC\Db\IQRosterPushMapper;
 use OCP\IDBConnection;
+use OCP\IGroup;
 use OCP\IUserManager;
 use OCP\IUserSession;
 use PHPUnit\Framework\TestCase;
@@ -264,4 +265,6 @@ class RosterPushTest extends TestCase
 
 		$this->rosterPush->createOrUpdateRosterItem($user1);
 	}
+
+	// removeRosterItemForUsersInGroup, addUserToGroup and removeUserFromGroup covered by integration tests
 }

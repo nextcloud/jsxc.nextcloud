@@ -243,11 +243,13 @@ class Application extends App {
 		});
 
 		$container->registerService('UserProvider', function(IContainer $c) {
-			if (self::contactsStoreApiSupporetd()) {
+			if (self::contactsStoreApiSupported()) {
 				return new ContactsStoreUserProvider(
 					$c->query('OCP\Contacts\ContactsMenu\IContactsStore'),
 					$c->query('ServerContainer')->getUserSession(),
-					$c->query('ServerContainer')->getUserManager()
+					$c->query('ServerContainer')->getUserManager(),
+					$c->query('OCP\IGroupManager'),
+					$c->query('OCP\IConfig')
 				);
 			} else {
 				return new UserManagerUserProvider(
@@ -343,12 +345,11 @@ class Application extends App {
 	}
 
 	/**
-	 * @brief whether the ContactsStore API is enabled
-	 * @return bool
+	 * @return bool whether the ContactsStore API is enabled
 	 */
-	public static function contactsStoreApiSupporetd() {
+	public static function contactsStoreApiSupported() {
 		$version = \OCP\Util::getVersion();
-		 return $version[0] === 13;
+		return $version[0] >= 13;
 	}
 
 }

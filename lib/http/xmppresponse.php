@@ -60,4 +60,17 @@ class XMPPResponse extends Response
 		$this->writer->endElement();
 		return $this->writer->outputMemory();
 	}
+
+	/**
+	 * Terminates the Chat connection with the `x-nc-not_allowed_to_chat` condition.
+	 */
+	public function terminate()
+	{
+		$this->writer = new Writer();
+		$this->writer->openMemory();
+		$this->writer->startElement('body');
+		$this->writer->writeAttribute('xmlns', 'http://jabber.org/protocol/httpbind');
+		$this->writer->writeAttribute('type', 'terminate');
+		$this->writer->writeAttribute('condition', 'x-nc-not_allowed_to_chat');
+	}
 }

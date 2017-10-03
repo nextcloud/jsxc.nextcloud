@@ -3,6 +3,7 @@
 namespace OCA\OJSXC\StanzaHandlers;
 
 use OCA\OJSXC\Db\IQRoster;
+use OCA\OJSXC\Exceptions\TerminateException;
 use OCA\OJSXC\IUserProvider;
 use OCA\OJSXC\User;
 use OCP\IConfig;
@@ -66,11 +67,6 @@ class IQTest extends TestCase
 			->method('getFullName')
 			->will($this->returnValue('John'));
 
-//		$user1->expects($this->any())
-//			->method('isEnabled')
-//			->will($this->returnValue(true));
-// TOOD
-
 		$user2 = $this->getMockBuilder(User::class)->disableOriginalConstructor()->getMock();
 		$user2->expects($this->any())
 			->method('getUID')
@@ -79,11 +75,6 @@ class IQTest extends TestCase
 		$user2->expects($this->any())
 			->method('getFullName')
 			->will($this->returnValue('Richard'));
-
-		$user2->expects($this->any())
-			->method('isEnabled')
-			->will($this->returnValue(true));
-
 
 		$expected1 = new IQRoster();
 		$expected1->setType('result');
@@ -197,76 +188,46 @@ class IQTest extends TestCase
 		}
 	}
 
-	public function testIqRosterWithDisabledUsers()
+	public function testTerminateExceptionDiscoItems()
 	{
-		$user1 = $this->getMockBuilder('OCP\IUser')->disableOriginalConstructor()->getMock();
-		$user1->expects($this->any())
-			->method('getUID')
-			->will($this->returnValue('jan'));
+		$stanza = ['name' => '{jabber:client}iq',
+			'value' => [0 => [
+				'name' => '{http://jabber.org/protocol/disco#items}query',
+				'value' => null,
+				'attributes' => [
+					'node' => 'undefined#undefined',
+				],
+			]],
+		];
 
-		$user1->expects($this->any())
-			->method('getDisplayName')
-			->will($this->returnValue('Jan'));
-
-		$user1->expects($this->any())
-			->method('isEnabled')
+		$this->userProvider->expects($this->once())
+			->method('isUserExcluded')
+			->with('john')
 			->will($this->returnValue(true));
 
-		$user2 = $this->getMockBuilder('OCP\IUser')->disableOriginalConstructor()->getMock();
-		$user2->expects($this->any())
-			->method('getUID')
-			->will($this->returnValue('richard'));
+		$this->expectException(TerminateException::class);
+		$this->iq->handle($stanza);
+	}
 
-		$user2->expects($this->any())
-			->method('getDisplayName')
-			->will($this->returnValue('Richard'));
+	public function testTerminateExceptionDiscoInfo()
+	{
+		$stanza = ['name' => '{jabber:client}iq',
+			'value' => [0 => [
+				'name' => '{http://jabber.org/protocol/disco#info}query',
+				'value' => null,
+				'attributes' => [
+					'node' => 'undefined#undefined',
+				],
+			]],
+		];
 
-		$user2->expects($this->any())
-			->method('isEnabled')
-			->will($this->returnValue(false));
 
-		$expected = new IQRoster();
-		$expected->setType('result');
-		$expected->setTo('john');
-		$expected->setQid('f9a26583-3c59-4f09-89be-964ce265fbfd:sendIQ');
-		$expected->addItem('jan@localhost', 'Jan');
+		$this->userProvider->expects($this->once())
+			->method('isUserExcluded')
+			->with('john')
+			->will($this->returnValue(true));
 
-		$this->config->expects($this->once())
-			->method('getSystemValue')
-			->with('debug')
-			->will($this->returnValue(false));
-
-		$this->userManager->expects($this->once())
-			->method('search')
-			->with('')
-			->will($this->returnValue([$user1, $user2]));
-
-		$result = $this->iq->handle(
-			[
-				'name' => '{jabber:client}iq',
-				'value' =>
-					[
-						0 =>
-							[
-								'name' => '{jabber:iq:roster}query',
-								'value' => null,
-								'attributes' => []
-							]
-					],
-				'attributes' =>
-					[
-						'type' => 'get',
-						'id' => 'f9a26583-3c59-4f09-89be-964ce265fbfd:sendIQ',
-					],
-			]
-		);
-
-		$this->assertEquals($expected->getFrom(), $result->getFrom());
-		$this->assertEquals($expected->getId(), $result->getId());
-		$this->assertEquals($expected->getItems(), $result->getItems());
-		$this->assertEquals($expected->getQid(), $result->getQid());
-		$this->assertEquals($expected->getTo(), $result->getTo());
-		$this->assertEquals($expected->getType(), $result->getType());
-		$this->assertEquals($expected->getStanza(), $result->getStanza());
+		$this->expectException(TerminateException::class);
+		$this->iq->handle($stanza);
 	}
 }

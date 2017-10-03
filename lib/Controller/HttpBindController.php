@@ -5,6 +5,7 @@ namespace OCA\OJSXC\Controller;
 use OCA\OJSXC\Db\Presence;
 use OCA\OJSXC\Db\PresenceMapper;
 use OCA\OJSXC\Db\StanzaMapper;
+use OCA\OJSXC\Exceptions\TerminateException;
 use OCA\OJSXC\Http\XMPPResponse;
 use OCA\OJSXC\ILock;
 use OCA\OJSXC\NewContentContainer;
@@ -162,50 +163,55 @@ class HttpBindController extends Controller
 		$input = $this->body;
 		$longpoll = true; // set to false when the response should directly be returned and no polling should be done
 		$longpollStart = true; // start the first long poll cycle
-		if (!empty($input)) {
-			// replace invalid XML by valid XML one
-			$input = str_replace("<vCard xmlns='vcard-temp'/>", "<vCard xmlns='jabber:vcard-temp'/>", $input);
-			$reader = new Reader();
-			$reader->xml($input);
-			$reader->elementMap = [
-				'{jabber:client}message' => 'Sabre\Xml\Element\KeyValue',
-				'{jabber:client}presence' => function (Reader $reader) {
-					return Presence::createFromXml($reader, $this->userId);
+		try {
+			if (!empty($input)) {
+				// replace invalid XML by valid XML one
+				$input = str_replace("<vCard xmlns='vcard-temp'/>", "<vCard xmlns='jabber:vcard-temp'/>", $input);
+				$reader = new Reader();
+				$reader->xml($input);
+				$reader->elementMap = [
+					'{jabber:client}message' => 'Sabre\Xml\Element\KeyValue',
+					'{jabber:client}presence' => function (Reader $reader) {
+						return Presence::createFromXml($reader, $this->userId);
+					}
+				];
+				$parsedInput = null;
+				try {
+					$parsedInput = $reader->parse();
+				} catch (LibXMLException $e) {
 				}
-			];
-			$parsedInput = null;
-			try {
-				$parsedInput = $reader->parse();
-			} catch (LibXMLException $e) {
-			}
-			if (!is_null($parsedInput)
-				&& is_array($parsedInput['value'])
-				&& count($parsedInput['value']) > 0) {
-				$this->stanzaLogger->logRaw($input, StanzaLogger::RECEIVING);
+				if (!is_null($parsedInput)
+					&& is_array($parsedInput['value'])
+					&& count($parsedInput['value']) > 0) {
+					$this->stanzaLogger->logRaw($input, StanzaLogger::RECEIVING);
 
-				$stanzas = $parsedInput['value'];
-				foreach ($stanzas as $stanza) {
-					$stanzaType = $this->getStanzaType($stanza);
-					if ($stanzaType === self::MESSAGE) {
-						$this->messageHandler->handle($stanza);
-					} elseif ($stanzaType === self::IQ) {
-						$result = $this->iqHandler->handle($stanza);
-						if (!is_null($result)) {
-							$longpoll = false;
-							$this->response->write($result);
-						}
-					} elseif ($stanza['value'] instanceof Presence) {
-						$results = $this->presenceHandler->handle($stanza['value']);
-						if (!is_null($results) && is_array($results)) {
-							$longpoll = false;
-							$longpollStart = false;
-							foreach ($results as $r) {
-								$this->response->write($r);
+					$stanzas = $parsedInput['value'];
+					foreach ($stanzas as $stanza) {
+						$stanzaType = $this->getStanzaType($stanza);
+						if ($stanzaType === self::MESSAGE) {
+							$this->messageHandler->handle($stanza);
+						} elseif ($stanzaType === self::IQ) {
+							$result = $this->iqHandler->handle($stanza);
+							if (!is_null($result)) {
+								$longpoll = false;
+								$this->response->write($result);
+							}
+						} elseif ($stanza['value'] instanceof Presence) {
+							$results = $this->presenceHandler->handle($stanza['value']);
+							if (!is_null($results) && is_array($results)) {
+								$longpoll = false;
+								$longpollStart = false;
+								foreach ($results as $r) {
+									$this->response->write($r);
+								}
 							}
 						}
 					}
 				}
 			}
+		} catch (TerminateException $e) {
+			$this->response->terminate();
+			return $this->response;
 		}
 
 		// Start long polling

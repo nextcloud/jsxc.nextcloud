@@ -1,12 +1,11 @@
 <?php
+
 namespace OCA\OJSXC\Controller;
 
-use OCA\OJSXC\Db\Message;
 use OCA\OJSXC\Db\Presence;
 use OCA\OJSXC\Db\Stanza;
-use OCA\OJSXC\Db\StanzaMapper;
+use OCA\OJSXC\Exceptions\TerminateException;
 use OCA\OJSXC\Http\XMPPResponse;
-use OCA\OJSXC\StanzaHandlers\IQ;
 use OCA\OJSXC\StanzaLogger;
 use OCP\AppFramework\Db\DoesNotExistException;
 use PHPUnit\Framework\TestCase;
@@ -566,6 +565,32 @@ XML;
 			->with('john');
 
 		$response = $this->controller->index();
+		$this->assertEquals($expResponse, $response);
+		$this->assertEquals($expResponse->render(), $response->render());
+	}
+
+
+	public function testTerminateException()
+	{
+		$ex = new TerminateException();
+
+		$body = '<body rid=\'897878985\' xmlns=\'http://jabber.org/protocol/httpbind\' sid=\'7862\'><iq from=\'test@test.local/internal\' to=\'test.local\' type=\'get\'
+		xmlns=\'jabber:client\' id=\'3b300f7c-1a38-4c1b-b66a-582895d12e47:sendIQ\'>
+		<query xmlns=\'http://jabber.org/protocol/disco#info\'
+			   node=\'undefined#undefined\'/>
+	</iq></body>';
+		$this->setUpController($body);
+		$this->mockLock();
+
+		$this->iqHandler->expects($this->once())
+			->method('handle')
+			->will($this->throwException($ex));
+
+		$expResponse = new XMPPResponse($this->stanzaLogger);
+		$expResponse->terminate();
+
+		$response = $this->controller->index();
+
 		$this->assertEquals($expResponse, $response);
 		$this->assertEquals($expResponse->render(), $response->render());
 	}

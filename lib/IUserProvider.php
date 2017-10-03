@@ -55,4 +55,10 @@ interface IUserProvider
 	 * @return bool
 	 */
 	public function hasUserForUserByUID($uid1, $uid2);
+
+	/**
+	 * @param string $userId
+	 * @return bool whether $userId is excluded from chatting
+	 */
+	public function isUserExcluded($userId);
 }

@@ -70,7 +70,7 @@ class PresenceMapperTest extends MapperTestUtility
 		$currentUser = \OC::$server->getUserManager()->createUser('autotest', 'autotest');
 		\OC::$server->getUserSession()->setUser($currentUser);
 
-		if (Application::contactsStoreApiSupporetd()) {
+		if (Application::contactsStoreApiSupported()) {
 			/** @var \OCA\DAV\CardDAV\SyncService $syncService */
 			$syncService = \OC::$server->query('CardDAVSyncService');
 			$syncService->getLocalSystemAddressBook();
@@ -268,7 +268,7 @@ class PresenceMapperTest extends MapperTestUtility
 			]
 		];
 	}
-	
+
 	/**
 	 * @dataProvider getPresenceProvider
 	 * @param $inputs
@@ -341,6 +341,55 @@ class PresenceMapperTest extends MapperTestUtility
 		sort($expected);
 		sort($result);
 		$this->assertEquals($expected, $result);
+	}
+
+	public function testGetConnectedUsersIfUserHasNot()
+	{
+		$this->setValueOfPrivateProperty($this->mapper, 'connectedUsers', []);
+		$this->setupContactsStoreAPI();
+		if (!Application::contactsStoreApiSupported()) {
+			$this->markTestSkipped();
+		}
+
+		$group = \OC::$server->getGroupManager()->createGroup('group1');
+		$group->addUser(\OC::$server->getUserManager()->get('derp'));
+
+		$group2 = \OC::$server->getGroupManager()->createGroup('group2');
+		$group2->addUser(\OC::$server->getUserManager()->get('autotest'));
+		$group2->addUser(\OC::$server->getUserManager()->get('foo'));
+		$group2->addUser(\OC::$server->getUserManager()->get('admin'));
+
+		\OC::$server->getConfig()->setAppValue('core', 'shareapi_only_share_with_group_members', 'yes');
+
+		$input1 = new PresenceEntity();
+		$input1->setPresence('online');
+		$input1->setUserid('foo');
+		$input1->setLastActive(23434475);
+
+		$input2 = new PresenceEntity();
+		$input2->setPresence('online');
+		$input2->setUserid('derp');
+		$input2->setLastActive(23434475);
+
+		$this->mapper->setPresence($input1);
+		$this->mapper->setPresence($input2);
+
+		$expected = ['foo'];
+
+		$result = $this->mapper->getConnectedUsers();
+
+		$this->assertCount(count($expected), $result);
+		sort($expected);
+		sort($result);
+		$this->assertEquals($expected, $result);
+
+		\OC::$server->getConfig()->setAppValue('core', 'shareapi_only_share_with_group_members', 'no');
+
+		$group->removeUser(\OC::$server->getUserManager()->get('derp'));
+		$group->delete();
+		$group2->removeUser(\OC::$server->getUserManager()->get('autotest'));
+		$group2->removeUser(\OC::$server->getUserManager()->get('admin'));
+		$group2->delete();
 	}
 
 	public function updatePresenceProvider()

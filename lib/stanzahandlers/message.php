@@ -4,8 +4,7 @@ namespace OCA\OJSXC\StanzaHandlers;
 
 use OCA\OJSXC\Db\MessageMapper;
 use OCA\OJSXC\IUserProvider;
-use Sabre\Xml\Reader;
-use Sabre\Xml\Writer;
+use OCP\ILogger;
 use OCA\OJSXC\Db\Message as MessageEntity;
 
 /**
@@ -42,6 +41,11 @@ class Message extends StanzaHandler
 	private $msgId;
 
 	/**
+	 * @var ILogger $logger
+	 */
+	private $logger;
+
+	/**
 	 * Message constructor.
 	 *
 	 * @param string $userId
@@ -49,11 +53,12 @@ class Message extends StanzaHandler
 	 * @param MessageMapper $messageMapper
 	 * @param IUserProvider $userProvider
 	 */
-	public function __construct($userId, $host, MessageMapper $messageMapper, IUserProvider $userProvider)
+	public function __construct($userId, $host, MessageMapper $messageMapper, IUserProvider $userProvider, ILogger $logger)
 	{
 		parent::__construct($userId, $host);
 		$this->messageMapper = $messageMapper;
 		$this->userProvider = $userProvider;
+		$this->logger = $logger;
 	}
 
 	/**
@@ -66,7 +71,7 @@ class Message extends StanzaHandler
 		$this->to = substr($to, 0, $pos);
 
 		if (!$this->userProvider->hasUserByUID($this->to)) {
-			\OC::$server->getLogger()->warning('User ' . $this->userId . ' is trying to send a message to ' . $this->to . ' but this isn\'t allowed');
+			$this->logger->warning('User ' . $this->userId . ' is trying to send a message to ' . $this->to . ' but this isn\'t allowed');
 			return;
 		}
 

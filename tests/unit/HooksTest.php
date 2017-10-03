@@ -3,9 +3,12 @@
 
 namespace OCA\OJSXC;
 
+use OCA\OJSXC\AppInfo\Application;
 use OCA\OJSXC\Db\Presence;
 use OCA\OJSXC\Db\PresenceMapper;
 use OCA\OJSXC\Db\StanzaMapper;
+use OCP\IGroup;
+use OCP\IUser;
 use OCP\IUserManager;
 use OCP\IUserSession;
 use PHPUnit_Framework_MockObject_MockObject;
@@ -62,7 +65,7 @@ class HooksTest extends TestCase
 
 		$this->stanzaMapper = $this->getMockBuilder('OCA\OJSXC\Db\StanzaMapper')->disableOriginalConstructor()->getMock();
 
-		$this->groupManager = $this->getMockBuilder('OCP\IGroupManager')->disableOriginalConstructor()->setMethods(['listen', 'isBackendUsed', 'addBackend', 'clearBackends', 'get', 'groupExists', 'createGroup', 'search', 'getUserGroups', 'getUserGroupIds', 'displayNamesInGroup', 'isAdmin', 'isInGroup'])->getMock();
+		$this->groupManager = $this->getMockBuilder('OCP\IGroupManager')->disableOriginalConstructor()->setMethods(['listen', 'isBackendUsed', 'addBackend', 'clearBackends', 'get', 'groupExists', 'createGroup', 'search', 'getUserGroups', 'getUserGroupIds', 'displayNamesInGroup', 'isAdmin', 'isInGroup', 'getBackends'])->getMock();
 
 		$this->hooks = new Hooks(
 			$this->userManager,
@@ -164,5 +167,31 @@ class HooksTest extends TestCase
 			->with($user);
 
 		$hooks->onChangeUser($user, 'displayName', 'abc');
+	}
+
+	public function testOnAddUserToGroup()
+	{
+		$user = $this->getMockBuilder(IUser::class)->disableOriginalConstructor()->getMock();
+		$group = $this->getMockBuilder(IGroup::class)->disableOriginalConstructor()->getMock();
+
+		$this->rosterPush->expects($this->once())->method('createOrUpdateRosterItem')->with($user);
+		$this->rosterPush->expects($this->once())->method('addUserToGroup')->with($user, $group);
+
+		$this->hooks->onAddUserToGroup($group, $user);
+	}
+
+	public function testOnRemoveUserFromGroup()
+	{
+		$user = $this->getMockBuilder(IUser::class)->disableOriginalConstructor()->getMock();
+		$group = $this->getMockBuilder(IGroup::class)->disableOriginalConstructor()->getMock();
+
+		if (Application::contactsStoreApiSupported()) {
+			$user->expects($this->once())->method('getUID')->willReturn('uid1');
+			$this->rosterPush->expects($this->once())->method('removeRosterItemForUsersInGroup')->with($group, 'uid1');
+		}
+
+		$this->rosterPush->expects($this->once())->method('removeUserFromGroup')->with($user, $group);
+
+		$this->hooks->onRemoveUserFromGroup($group, $user);
 	}
 }

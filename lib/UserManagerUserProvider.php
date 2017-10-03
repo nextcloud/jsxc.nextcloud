@@ -4,6 +4,12 @@ namespace OCA\OJSXC;
 
 use OCP\IUserManager;
 
+/**
+ * Class UserManagerUserProvider
+ *
+ * @package OCA\OJSXC
+ * @codeCoverageIgnore
+ */
 class UserManagerUserProvider implements IUserProvider
 {
 
@@ -27,7 +33,9 @@ class UserManagerUserProvider implements IUserProvider
 		if (is_null(self::$cache)) {
 			$result = [];
 			foreach ($this->userManager->search('') as $user) {
-				$result[] = new User($user->getUID(), $user->getDisplayName(), $user);
+				if ($user->isEnabled()) {
+					$result[] = new User($user->getUID(), $user->getDisplayName(), $user);
+				}
 			}
 
 			self::$cache = $result;
@@ -67,5 +75,11 @@ class UserManagerUserProvider implements IUserProvider
 	{
 		// since we don't have access to the ContactsStore, we don't apply the enhancement privacy rules.
 		$this->hasUserByUID($uid2);
+	}
+
+	public function isUserExcluded($userId)
+	{
+		// to limit inconsistency we only support the settings in NC > 13.0.0
+		return false;
 	}
 }
