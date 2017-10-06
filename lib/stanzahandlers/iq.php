@@ -60,7 +60,7 @@ class IQ extends StanzaHandler
 			$iqRoster->setTo($this->from);
 			$iqRoster->setQid($id);
 			foreach ($this->userManager->search('') as $user) {
-				if ($debugMode || (strtolower($user->getUID()) !== $this->userId)) {
+				if ($debugMode || (strtolower($user->getUID()) !== $this->userId && $user->isEnabled())) {
 					$iqRoster->addItem($user->getUID() . '@' . $this->host, $user->getDisplayName());
 				}
 			}
