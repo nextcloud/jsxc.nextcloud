@@ -1,9 +1,6 @@
 dist: trusty
 sudo: false
 
-git:
-  submodules: false
-
 language: php
 php:
   - 5.6
