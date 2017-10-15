@@ -2,6 +2,7 @@
 
 namespace OCA\OJSXC\Db;
 
+use OCA\OJSXC\AppInfo\Application;
 use \OCP\AppFramework\Db\Entity;
 use Sabre\Xml\Reader;
 use Sabre\Xml\Writer;
@@ -43,14 +44,45 @@ class Stanza extends Entity implements XmlSerializable
 		return $this->to;
 	}
 
-	public function setTo($userId)
+	/**
+	 * Sets the to user as a `user`.
+	 *
+	 * @see setFullTo
+	 * @param $userId
+	 * @param null $host_and_or_resource
+	 */
+	public function setTo($userId, $host_and_or_resource = null)
 	{
-		$this->to = strtolower($userId);
+		if (is_array($userId)) {
+			// support mapFromRow
+			$host_and_or_resource = $userId[1];
+			$userId = $userId[0];
+		}
+
+		$this->to = Application::santizeUserId($userId);
+		if (!is_null($host_and_or_resource)) {
+			$this->to .= '@' . $host_and_or_resource;
+		}
 	}
 
-	public function setFrom($userId)
+	/**
+	 * Sets the from user as a `user`.
+	 *
+	 * @see setFullFrom
+	 * @param $userId
+	 * @param null $host_and_or_resource
+	 */
+	public function setFrom($userId, $host_and_or_resource = null)
 	{
-		$this->from = strtolower($userId);
+		if (is_array($userId)) {
+			// support mapFromRow
+			$host_and_or_resource = $userId[1];
+			$userId = $userId[0];
+		}
+		$this->from = Application::santizeUserId($userId);
+		if (!is_null($host_and_or_resource)) {
+			$this->from .= '@' . $host_and_or_resource;
+		}
 	}
 
 	public function getFrom()

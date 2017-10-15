@@ -88,12 +88,42 @@ class PresenceTest extends TestCase
 	public function serializeProvider()
 	{
 		return [
-			$this->generateSerializeData('admin@own.dev', 'derp@own.dev', 'chat', '<body xmlns="http://jabber.org/protocol/httpbind"><presence from="derp@own.dev" to="admin@own.dev" xmlns="jabber:client"><show>chat</show></presence></body>'),
-			$this->generateSerializeData('admin@own.dev', 'derp@own.dev', 'online', '<body xmlns="http://jabber.org/protocol/httpbind"><presence from="derp@own.dev" to="admin@own.dev" xmlns="jabber:client" /></body>'),
-			$this->generateSerializeData('admin@own.dev', 'derp@own.dev', 'away', '<body xmlns="http://jabber.org/protocol/httpbind"><presence from="derp@own.dev" to="admin@own.dev" xmlns="jabber:client"><show>away</show></presence></body>'),
-			$this->generateSerializeData('admin@own.dev', 'derp@own.dev', 'unavailable', '<body xmlns="http://jabber.org/protocol/httpbind"><presence from="derp@own.dev" to="admin@own.dev" xmlns="jabber:client" type="unavailable"/></body>'),
-			$this->generateSerializeData('admin@own.dev', 'derp@own.dev', 'ea', '<body xmlns="http://jabber.org/protocol/httpbind"><presence from="derp@own.dev" to="admin@own.dev" xmlns="jabber:client"><show>ea</show></presence></body>'),
-			$this->generateSerializeData('admin@own.dev', 'derp@own.dev', 'dnd', '<body xmlns="http://jabber.org/protocol/httpbind"><presence from="derp@own.dev" to="admin@own.dev" xmlns="jabber:client"><show>dnd</show></presence></body>'),
+			$this->generateSerializeData(
+				'admin',
+				'derp',
+				'chat',
+				'<body xmlns="http://jabber.org/protocol/httpbind"><presence from="derp" to="admin" xmlns="jabber:client"><show>chat</show></presence></body>'
+			),
+			$this->generateSerializeData(
+				'admin',
+				'derp',
+				'online',
+				'<body xmlns="http://jabber.org/protocol/httpbind"><presence from="derp" to="admin" xmlns="jabber:client" /></body>'
+			),
+			$this->generateSerializeData(
+				'admin',
+				'derp',
+				'away',
+				'<body xmlns="http://jabber.org/protocol/httpbind"><presence from="derp" to="admin" xmlns="jabber:client"><show>away</show></presence></body>'
+			),
+			$this->generateSerializeData(
+				'admin',
+				'derp',
+				'unavailable',
+				'<body xmlns="http://jabber.org/protocol/httpbind"><presence from="derp" to="admin" xmlns="jabber:client" type="unavailable"/></body>'
+			),
+			$this->generateSerializeData(
+				'admin',
+				'derp',
+				'ea',
+				'<body xmlns="http://jabber.org/protocol/httpbind"><presence from="derp" to="admin" xmlns="jabber:client"><show>ea</show></presence></body>'
+			),
+			$this->generateSerializeData(
+				'admin',
+				'derp',
+				'dnd',
+				'<body xmlns="http://jabber.org/protocol/httpbind"><presence from="derp" to="admin" xmlns="jabber:client"><show>dnd</show></presence></body>'
+			),
 
 		];
 	}

@@ -16,15 +16,15 @@ class IqRosterPushTest extends TestCase
 		$writer->writeAttribute('xmlns', 'http://jabber.org/protocol/httpbind');
 
 		$iqRosterPush = new IQRosterPush();
-		$iqRosterPush->setJid('john@localhost');
-		$iqRosterPush->setTo('jan@localhost');
+		$iqRosterPush->setJid('john', 'localhost');
+		$iqRosterPush->setTo('jan', 'localhost');
 		$iqRosterPush->setName('john');
 		$iqRosterPush->setSubscription('both');
 
-		$this->assertEquals($iqRosterPush->getJid(), 'john@localhost');
-		$this->assertEquals($iqRosterPush->getTo(), 'jan@localhost');
-		$this->assertEquals($iqRosterPush->getName(), 'john');
-		$this->assertEquals($iqRosterPush->getSubscription(), 'both');
+		$this->assertEquals('john@localhost', $iqRosterPush->getJid());
+		$this->assertEquals('jan@localhost', $iqRosterPush->getTo());
+		$this->assertEquals('john', $iqRosterPush->getName());
+		$this->assertEquals('both', $iqRosterPush->getSubscription());
 
 		$writer->write($iqRosterPush); // needed to test the xmlSerialize function
 

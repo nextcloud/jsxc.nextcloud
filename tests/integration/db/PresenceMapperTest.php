@@ -207,15 +207,15 @@ class PresenceMapperTest extends MapperTestUtility
 		$expected1->setUserid('derp');
 		$expected1->setPresence('online');
 		$expected1->setLastActive(23434353);
-		$expected1->setTo('admin@localhost/internal');
-		$expected1->setFrom('derp@localhost/internal');
+		$expected1->setTo('admin', 'localhost/internal');
+		$expected1->setFrom('derp', 'localhost/internal');
 
 		$expected2 = new PresenceEntity();
 		$expected2->setUserid('derpina');
 		$expected2->setPresence('chat');
 		$expected2->setLastActive(23445645634);
-		$expected2->setTo('admin@localhost/internal');
-		$expected2->setFrom('derpina@localhost/internal');
+		$expected2->setTo('admin', 'localhost/internal');
+		$expected2->setFrom('derpina', 'localhost/internal');
 		return [
 			[
 				[$input1, $input2, $input3, $input4, $input5],
@@ -321,13 +321,13 @@ class PresenceMapperTest extends MapperTestUtility
 
 		$expStanza1 = new PresenceEntity();
 		$expStanza1->setPresence('unavailable');
-		$expStanza1->setFrom('derp' . '@localhost/internal');
-		$expStanza1->setTo('admin' . '@localhost/internal');
+		$expStanza1->setFrom('derp', 'localhost/internal');
+		$expStanza1->setTo('admin', 'localhost/internal');
 
 		$expStanza2 = new PresenceEntity();
 		$expStanza2->setPresence('unavailable');
-		$expStanza2->setFrom('derpina' . '@localhost/internal');
-		$expStanza2->setTo('admin' . '@localhost/internal');
+		$expStanza2->setFrom('derpina', 'localhost/internal');
+		$expStanza2->setTo('admin', 'localhost/internal');
 
 		return [
 			[

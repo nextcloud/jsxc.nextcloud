@@ -17,15 +17,15 @@ class IqRosterTest extends TestCase
 
 		$iqRoster = new IQRoster();
 		$iqRoster->setType('result');
-		$iqRoster->setTo('john@localhost');
+		$iqRoster->setTo('john', 'localhost');
 		$iqRoster->setQid(4434);
 		$iqRoster->addItem('test@test.be', 'Test Test');
 		$iqRoster->addItem('test2@test.be', 'Test2 Test');
 
-		$this->assertEquals($iqRoster->getType(), 'result');
-		$this->assertEquals($iqRoster->getTo(), 'john@localhost');
-		$this->assertEquals($iqRoster->getQid(), 4434);
-		$this->assertEquals($iqRoster->getItems(), [
+		$this->assertEquals('result', $iqRoster->getType());
+		$this->assertEquals('john@localhost', $iqRoster->getTo());
+		$this->assertEquals(4434, $iqRoster->getQid());
+		$this->assertEquals([
 			[
 				"name" => "item",
 				"attributes" => [
@@ -44,7 +44,7 @@ class IqRosterTest extends TestCase
 				],
 				"value" => ''
 			],
-		]);
+		], $iqRoster->getItems());
 
 		$writer->write($iqRoster); // needed to test the xmlSerialize function
 
