@@ -213,18 +213,10 @@
                     jsxc.storage.setItem('serverType', serverTypes[d.data.serverType.toUpperCase()]);
                     cb(d.data);
                 } else if (d.data && d.data.serverType === 'internal') {
-                    // fake successful connection
                     jsxc.storage.setItem('serverType', serverTypes.INTERNAL);
-                    jsxc.gui.showLoginBox = function(){};
-                    jsxc.bid = username.toLowerCase() + '@' + window.location.host;
 
-                    jsxc.storage.setItem('jid', jsxc.bid + '/internal');
-                    jsxc.storage.setItem('sid', 'internal');
-                    jsxc.storage.setItem('rid', '123456');
-
-                    jsxc.options.set('xmpp', {
-                        url: OC.generateUrl('apps/ojsxc/http-bind')
-                    });
+                    var node = username || OC.currentUser;
+                    jsxc.bid = node.toLowerCase() + '@' + window.location.host;
 
                     jsxc.options.set('adminSettings', d.data.adminSettings);
 
@@ -404,7 +396,7 @@
         }
     });
 
-    $(document).on( "click", '#jsxc_roster p', function() {
+    $(document).on('click', '#jsxc_roster p', function() {
         if (jsxc.storage.getItem('serverType') === serverTypes.INTERNAL) {
            startInternalBackend();
         }
@@ -413,24 +405,21 @@
     function startInternalBackend() {
        jsxc.bid = OC.currentUser.toLowerCase() + '@' + window.location.host;
 
-        jsxc.storage.setItem('jid', jsxc.bid + '/internal');
-        jsxc.storage.setItem('sid', 'internal');
-        jsxc.storage.setItem('rid', '123456');
-
         jsxc.options.set('xmpp', {
             url: OC.generateUrl('apps/ojsxc/http-bind')
         });
 
+        $(document).one('attached.jsxc', function() {
+           if (jsxc.options.get('loginForm').startMinimized !== true) {
+             jsxc.gui.roster.toggle(jsxc.CONST.SHOWN);
+           }
+        });
+
         jsxc.start(jsxc.bid + '/internal', 'internal', '123456');
-        jsxc.gui.restore();
-        jsxc.gui.roster.toggle(jsxc.CONST.SHOWN);
-        $(document).trigger('attached.jsxc');
     }
 
     if (jsxc.storage.getItem('serverType') === serverTypes.INTERNAL) {
-        // when the page is (re) loaded and we already know we are using the internal backend we must override
-        // the show loginBox method so that the form isn't shown when clicking the relogin link
-        jsxc.gui.showLoginBox = function () {};
+        jsxc.gui.showLoginBox = function(){};
     }
 
     $(document).on('stateChange.jsxc', function _handler(event, state) {
@@ -441,21 +430,21 @@
              * into Nextcloud we know we are using another authentication mechanism (like SAML/SSO) and thus have
              * to manually start the connection.
              */
+            var chatDisabledByUser = jsxc.storage.getUserItem('forcedLogout') || jsxc.storage.getItem('login_without_chat');
             $(document).off('stateChange.jsxc', _handler);
             if (jsxc.storage.getItem('serverType') === null) {
                 $.ajax({
                     url: OC.generateUrl('apps/ojsxc/settings/servertype'),
                     success: function (data) {
                         jsxc.storage.setItem('serverType', serverTypes[data.serverType.toUpperCase()]);
-                        if (data.serverType === 'internal') {
+
+                        if (data.serverType === 'internal' && !chatDisabledByUser) {
                             jsxc.gui.showLoginBox = function(){};
-                        }
-                        if (data.serverType === 'internal' && jsxc.storage.getItem('login_without_chat') !== true) {
                             startInternalBackend();
                         }
                     }
                 });
-            } else if (jsxc.storage.getItem('serverType') === serverTypes.INTERNAL && jsxc.storage.getItem('login_without_chat') !== true) {
+            } else if (jsxc.storage.getItem('serverType') === serverTypes.INTERNAL && !chatDisabledByUser) {
                 jsxc.gui.showLoginBox = function(){};
                 startInternalBackend();
             }
