@@ -254,6 +254,14 @@ class SettingsController extends Controller
 		return $response;
 	}
 
+	/**
+	 * @NoAdminRequired
+	 */
+	public function getServerType()
+	{
+		return ["serverType" => $this->getAppValue('serverType', 'internal')];
+	}
+
 	private function getCurrentUser()
 	{
 		$currentUser = false;
