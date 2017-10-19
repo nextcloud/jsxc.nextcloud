@@ -12,7 +12,7 @@ if (function_exists('script')) {
 	<div id="ojsxc-settings">
 		<label>
 			<input type="checkbox" name="loginFormEnable" value="true" <?php if($_[ 'loginFormEnable']==='true' || $_[ 'loginFormEnable']===true) echo "checked"; ?> />
-			If this option is enabled, the chat will start on login.
+			Launches chat upon login.
 		</label>
 	</div>
 </div>
