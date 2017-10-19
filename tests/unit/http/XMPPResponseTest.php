@@ -19,12 +19,12 @@ namespace OCA\OJSXC\Http {
 		public function writingProvider()
 		{
 			$stanza1 = new Stanza();
-			$stanza1->setFrom('test@test.be');
+			$stanza1->setFrom('test', 'test.be');
 			$stanza1->setTo('test.be');
 			$stanza1->setStanza('abc');
 
 			$stanza2 = new Message();
-			$stanza2->setFrom('test@test.be');
+			$stanza2->setFrom('test', 'test.be');
 			$stanza2->setTo('test.be');
 			$stanza2->setStanza('abc');
 			$stanza2->setType('testtype');

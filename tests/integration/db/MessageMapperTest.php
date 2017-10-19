@@ -2,6 +2,7 @@
 
 namespace OCA\OJSXC\Db;
 
+use OCA\OJSXC\AppInfo\Application;
 use OCA\OJSXC\Utility\MapperTestUtility;
 use OCP\AppFramework\Db\DoesNotExistException;
 
@@ -33,12 +34,13 @@ class MessageMapperTest extends MapperTestUtility
 	{
 		return [
 			[
-				'john@localhost',
-				'thomas@localhost',
+				['john', 'localhost'],
+				['thomas', 'localhost'],
 				'abcd',
 				'test',
 				'Test Message',
-				'<message to="thomas@localhost" from="john@localhost" type="test" xmlns="jabber:client" id="4-msg">Test Message</message>'
+				// save stanza without host or resource
+				'<message to="thomas" from="john" type="test" xmlns="jabber:client" id="4-msg">Test Message</message>'
 			]
 		];
 	}
@@ -49,14 +51,14 @@ class MessageMapperTest extends MapperTestUtility
 	public function testInsert($from, $to, $data, $type, $msg, $expectedStanza)
 	{
 		$stanza = new Message();
-		$stanza->setFrom($from);
-		$stanza->setTo($to);
+		$stanza->setFrom($from[0]);
+		$stanza->setTo($to[0]);
 		$stanza->setStanza($data);
 		$stanza->setType($type);
 		$stanza->setValue($msg);
 
-		$this->assertEquals($stanza->getFrom(), $from);
-		$this->assertEquals($stanza->getTo(), $to);
+		$this->assertEquals($stanza->getFrom(), $from[0]);
+		$this->assertEquals($stanza->getTo(), $to[0]);
 		$this->assertEquals($stanza->getStanza(), $data);
 		$this->assertEquals($stanza->getType(), $type);
 
@@ -85,8 +87,8 @@ class MessageMapperTest extends MapperTestUtility
 	public function testFindByToNotFound2()
 	{
 		$stanza = new Message();
-		$stanza->setFrom('john@localhost');
-		$stanza->setTo('john@localhost');
+		$stanza->setFrom('john', 'localhost');
+		$stanza->setTo('john', 'localhost');
 		$stanza->setStanza('abcd');
 		$stanza->setType('test');
 		$stanza->setValue('message abc');
@@ -157,15 +159,15 @@ class MessageMapperTest extends MapperTestUtility
 		$this->assertCount(2, $result);
 
 		// check findByTo
-		$result = $this->mapper->findByTo('john@localhost.com');
+		$result = $this->mapper->findByTo(Application::santizeUserId('john@localhost.com'));
 		$this->assertCount(1, $result);
-		$this->assertEquals('<message to="john@localhost.com@localhost/internal" from="jan@localhost.com@localhost/internal" type="test" xmlns="jabber:client" id="4-msg">Messageabc</message>', $result[0]->getStanza());
+		$this->assertEquals('<message to="john_ojsxc_esc_at_localhost.com@localhost/internal" from="jan_ojsxc_esc_at_localhost.com@localhost/internal" type="test" xmlns="jabber:client" id="4-msg">Messageabc</message>', $result[0]->getStanza());
 
 		// check if element is deleted
 		$result = $this->fetchAll();
 		$this->assertCount(1, $result);
 		$this->assertEquals($stanza2->getFrom(), $result[0]->getFrom());
 		$this->assertEquals($stanza2->getTo(), $result[0]->getTo());
-		$this->assertEquals('<message to="jan@localhost.com" from="thomas@localhost.com" type="test2" xmlns="jabber:client" id="4-msg">Message</message>', $result[0]->getStanza());
+		$this->assertEquals('<message to="jan_ojsxc_esc_at_localhost.com" from="thomas_ojsxc_esc_at_localhost.com" type="test2" xmlns="jabber:client" id="4-msg">Message</message>', $result[0]->getStanza());
 	}
 }

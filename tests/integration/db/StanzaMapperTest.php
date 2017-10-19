@@ -27,8 +27,8 @@ class StanzaMapperTest extends MapperTestUtility
 	{
 		return [
 			[
-				'john@localhost',
-				'thomas@localhost',
+				'john',
+				'thomas',
 				'abcd'
 			]
 		];
@@ -83,14 +83,14 @@ class StanzaMapperTest extends MapperTestUtility
 	public function testFindByToFound()
 	{
 		$stanza1 = new Stanza();
-		$stanza1->setFrom('jan@localhost');
-		$stanza1->setTo('john@localhost');
+		$stanza1->setFrom('jan');
+		$stanza1->setTo('john');
 		$stanza1->setStanza('abcd1');
 		$this->mapper->insert($stanza1);
 
 		$stanza2 = new Stanza();
-		$stanza2->setFrom('thomas@localhost');
-		$stanza2->setTo('jan@localhost');
+		$stanza2->setFrom('thomas');
+		$stanza2->setTo('jan');
 		$stanza2->setStanza('abcd2');
 		$this->mapper->insert($stanza2);
 
@@ -100,7 +100,7 @@ class StanzaMapperTest extends MapperTestUtility
 		$this->assertCount(2, $result);
 
 		// check findByTo
-		$result = $this->mapper->findByTo('john@localhost');
+		$result = $this->mapper->findByTo('john');
 		$this->assertCount(1, $result);
 		$this->assertEquals($stanza1->getStanza(), $result[0]->getStanza());
 
@@ -116,30 +116,30 @@ class StanzaMapperTest extends MapperTestUtility
 	public function testDeleteByTo()
 	{
 		$stanza1 = new Stanza();
-		$stanza1->setFrom('jan@localhost');
-		$stanza1->setTo('john@localhost');
+		$stanza1->setFrom('jan');
+		$stanza1->setTo('john');
 		$stanza1->setStanza('abcd1');
 		$this->mapper->insert($stanza1);
 
 		$stanza2 = new Stanza();
-		$stanza2->setFrom('thomas@localhost');
-		$stanza2->setTo('jan@localhost');
+		$stanza2->setFrom('thomas');
+		$stanza2->setTo('jan');
 		$stanza2->setStanza('abcd2');
 		$this->mapper->insert($stanza2);
 
 		// check if two elements are inserted
 		$result = $this->fetchAllAsArray();
 		$this->assertArrayDbResultsEqual([
-			['from' => 'jan@localhost', 'to' => 'john@localhost', 'stanza' => 'abcd1'],
-			['from' => 'thomas@localhost', 'to' => 'jan@localhost', 'stanza' => 'abcd2']
+			['from' => 'jan', 'to' => 'john', 'stanza' => 'abcd1'],
+			['from' => 'thomas', 'to' => 'jan', 'stanza' => 'abcd2']
 		], $result, ['from', 'to', 'stanza']);
 
 
-		$this->mapper->deleteByTo('jan@localhost');
+		$this->mapper->deleteByTo('jan');
 
 		$result = $this->fetchAllAsArray();
 		$this->assertArrayDbResultsEqual([
-			['from' => 'jan@localhost', 'to' => 'john@localhost', 'stanza' => 'abcd1']
+			['from' => 'jan', 'to' => 'john', 'stanza' => 'abcd1']
 		], $result, ['from', 'to', 'stanza']);
 	}
 }

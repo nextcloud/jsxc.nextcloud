@@ -2,6 +2,7 @@
 
 namespace OCA\OJSXC\Db;
 
+use OCA\OJSXC\AppInfo\Application;
 use Sabre\Xml\Reader;
 use Sabre\Xml\Writer;
 use Sabre\Xml\XmlDeserializable;
@@ -13,7 +14,6 @@ use Sabre\Xml\XmlSerializable;
  * Class IQRosterPush
  *
  * @package OCA\OJSXC\Db
- * @method void setJid($jid)
  * @method void setName($name)
  * @method void setSubscription($subscription)
  * @method string getJid()
@@ -38,6 +38,21 @@ class IQRosterPush extends Stanza implements XmlSerializable
 	 * @var string subscription type. Both and remove are used.
 	 */
 	public $subscription;
+
+	/**
+	 * Sets the to user as a `user`.
+	 *
+	 * @see setFullJid
+	 * @param $userId
+	 * @param null $host_and_or_resource
+	 */
+	public function setJid($userId, $host_and_or_resource = null)
+	{
+		$this->jid = Application::santizeUserId($userId);
+		if (!is_null($host_and_or_resource)) {
+			$this->jid .= '@' . $host_and_or_resource;
+		}
+	}
 
 	public function xmlSerialize(Writer $writer)
 	{

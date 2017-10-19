@@ -109,8 +109,8 @@ class PresenceMapper extends Mapper
 		$stmt = $this->execute("SELECT * FROM `*PREFIX*ojsxc_presence` WHERE `userid` != ?", [$this->userId]);
 		$results = [];
 		while ($row = $stmt->fetch()) {
-			$row['from'] = $row['userid'] . '@' . $this->host . '/internal';
-			$row['to'] = $this->userId . '@' . $this->host . '/internal';
+			$row['from'] = [$row['userid'], $this->host . '/internal'];
+			$row['to'] = [$this->userId, $this->host . '/internal'];
 			$results[] = $this->mapRowToEntity($row);
 		}
 		$stmt->closeCursor();
@@ -196,11 +196,13 @@ class PresenceMapper extends Mapper
 				$presenceToSend->setPresence('unavailable');
 				$presenceToSend->setFrom($inactiveUser);
 				foreach ($onlineUsers as $user) {
+					// send to every online user (except the user who initiated the update)
 					$presenceToSend->setTo($user);
 					$this->messageMapper->insert($presenceToSend);
 				}
-				$presenceToSend->setTo($this->userId . '@' . $this->host . '/internal');
-				$presenceToSend->setFrom($inactiveUser . '@' . $this->host . '/internal');
+				// and now send it to the user who initiated the update
+				$presenceToSend->setTo($this->userId, $this->host . '/internal');
+				$presenceToSend->setFrom($inactiveUser, $this->host . '/internal');
 				$this->newContentContainer->addStanza($presenceToSend);
 			}
 		}

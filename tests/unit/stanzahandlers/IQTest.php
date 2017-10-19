@@ -50,17 +50,27 @@ class IQTest extends PHPUnit_Framework_TestCase
 		$user1->expects($this->any())
 			->method('getUID')
 			->will($this->returnValue('john'));
+
 		$user1->expects($this->any())
 			->method('getDisplayName')
 			->will($this->returnValue('John'));
+
+		$user1->expects($this->any())
+			->method('isEnabled')
+			->will($this->returnValue(true));
 
 		$user2 = $this->getMockBuilder('OCP\IUser')->disableOriginalConstructor()->getMock();
 		$user2->expects($this->any())
 			->method('getUID')
 			->will($this->returnValue('richard'));
+
 		$user2->expects($this->any())
 			->method('getDisplayName')
 			->will($this->returnValue('Richard'));
+
+		$user2->expects($this->any())
+			->method('isEnabled')
+			->will($this->returnValue(true));
 
 
 		$expected1 = new IQRoster();
@@ -174,5 +184,78 @@ class IQTest extends PHPUnit_Framework_TestCase
 		} else {
 			$this->assertEquals($expected, $result);
 		}
+	}
+
+	public function testIqRosterWithDisabledUsers()
+	{
+		$user1 = $this->getMockBuilder('OCP\IUser')->disableOriginalConstructor()->getMock();
+		$user1->expects($this->any())
+			->method('getUID')
+			->will($this->returnValue('jan'));
+
+		$user1->expects($this->any())
+			->method('getDisplayName')
+			->will($this->returnValue('Jan'));
+
+		$user1->expects($this->any())
+			->method('isEnabled')
+			->will($this->returnValue(true));
+
+		$user2 = $this->getMockBuilder('OCP\IUser')->disableOriginalConstructor()->getMock();
+		$user2->expects($this->any())
+			->method('getUID')
+			->will($this->returnValue('richard'));
+
+		$user2->expects($this->any())
+			->method('getDisplayName')
+			->will($this->returnValue('Richard'));
+
+		$user2->expects($this->any())
+			->method('isEnabled')
+			->will($this->returnValue(false));
+
+		$expected = new IQRoster();
+		$expected->setType('result');
+		$expected->setTo('john');
+		$expected->setQid('f9a26583-3c59-4f09-89be-964ce265fbfd:sendIQ');
+		$expected->addItem('jan@localhost', 'Jan');
+
+		$this->config->expects($this->once())
+			->method('getSystemValue')
+			->with('debug')
+			->will($this->returnValue(false));
+
+		$this->userManager->expects($this->once())
+			->method('search')
+			->with('')
+			->will($this->returnValue([$user1, $user2]));
+
+		$result = $this->iq->handle(
+			[
+				'name' => '{jabber:client}iq',
+				'value' =>
+					[
+						0 =>
+							[
+								'name' => '{jabber:iq:roster}query',
+								'value' => null,
+								'attributes' => []
+							]
+					],
+				'attributes' =>
+					[
+						'type' => 'get',
+						'id' => 'f9a26583-3c59-4f09-89be-964ce265fbfd:sendIQ',
+					],
+			]
+		);
+
+		$this->assertEquals($expected->getFrom(), $result->getFrom());
+		$this->assertEquals($expected->getId(), $result->getId());
+		$this->assertEquals($expected->getItems(), $result->getItems());
+		$this->assertEquals($expected->getQid(), $result->getQid());
+		$this->assertEquals($expected->getTo(), $result->getTo());
+		$this->assertEquals($expected->getType(), $result->getType());
+		$this->assertEquals($expected->getStanza(), $result->getStanza());
 	}
 }
