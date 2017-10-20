@@ -15,3 +15,12 @@ The following mappers are used:
  - MessageMapper -> used to store Message entities inside the longpolling table.
  - PresenceMapper -> used to save, update and fetch presences of the users
  - IQRoster doesn't have a mapper since this won't be saved in the DB.
+
+
+# Important note on userids and jid's
+
+When users and Stanza's containing users are stored inside the database this must be done using the Nextcloud userid
+and not using a jid! So at all times the user 'admin' must be stored as 'admin' and not as 'admin@localhost/internal' even
+in the `to` and `from` parameters of raw xml stanzas. This to support multiple domain Nextcloud instances.
+The userId's are escaped using the `OCA\OJSXC\AppInfo\Appplication::sanitizeUserId` function to support the XMPP standards.
+When the userId is available inside the class the `OJSXC_UserId` paramter of `OCA\OJSXC\AppInfo\Appplication` must be used.

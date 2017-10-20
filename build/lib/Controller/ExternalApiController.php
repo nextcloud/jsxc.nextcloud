@@ -160,6 +160,12 @@ class ExternalApiController extends SignatureProtectedApiController
 		$userGroups = $this->groupManager->getUserGroups($currentUser);
 
 		foreach ($userGroups as $userGroup) {
+			if (method_exists($userGroup, 'getDisplayName')) {
+				$groupName = $userGroup->getDisplayName();
+			} else {
+				$groupName = $userGroup->getGID();
+			}
+
 			foreach ($userGroup->getUsers() as $user) {
 				$uidMember = $user->getUID();
 
@@ -170,7 +176,7 @@ class ExternalApiController extends SignatureProtectedApiController
 			   ];
 				}
 
-				$roster[$uidMember]['groups'][] = $userGroup->getDisplayName();
+				$roster[$uidMember]['groups'][] = $groupName;
 			}
 		}
 

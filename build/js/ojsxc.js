@@ -1,5 +1,5 @@
 /*!
- * ojsxc v3.3.0 - 2017-08-25
+ * ojsxc v3.3.1 - 2017-10-20
  * 
  * Copyright (c) 2017 Klaus Herberth <klaus@jsxc.org> <br>
  * Released under the MIT license
@@ -7,7 +7,7 @@
  * Please see http://www.jsxc.org/
  * 
  * @author Klaus Herberth <klaus@jsxc.org>
- * @version 3.3.0
+ * @version 3.3.1
  * @license MIT
  */
 
@@ -17,6 +17,13 @@
 
 (function($) {
     "use strict";
+
+
+    var serverTypes = {
+        INTERNAL: 0,
+        EXTERNAL: 1,
+        MANAGED: 2
+    };
 
     function observeContactsMenu() {
         var target = document.getElementById('contactsmenu');
@@ -115,11 +122,8 @@
             jsxc.gui.roster.toggle();
         });
 
-        if ($('#contactsmenu').length > 0) {
-            $('#contactsmenu').before(div);
-        } else {
-            $('#settings').after(div);
-        }
+        $('#header form.searchbox').after(div);
+
     }
 
     function onRosterToggle(ev, state, duration) {
@@ -219,18 +223,13 @@
             },
             success: function(d) {
                 if (d.result === 'success' && d.data && d.data.serverType !== 'internal' && d.data.xmpp.url !== '' && d.data.xmpp.url !== null) {
+                    jsxc.storage.setItem('serverType', serverTypes[d.data.serverType.toUpperCase()]);
                     cb(d.data);
                 } else if (d.data && d.data.serverType === 'internal') {
-                    // fake successful connection
-                    jsxc.bid = username.toLowerCase() + '@' + window.location.host;
+                    jsxc.storage.setItem('serverType', serverTypes.INTERNAL);
 
-                    jsxc.storage.setItem('jid', jsxc.bid + '/internal');
-                    jsxc.storage.setItem('sid', 'internal');
-                    jsxc.storage.setItem('rid', '123456');
-
-                    jsxc.options.set('xmpp', {
-                        url: OC.generateUrl('apps/ojsxc/http-bind')
-                    });
+                    var node = username || OC.currentUser;
+                    jsxc.bid = node.toLowerCase() + '@' + window.location.host;
 
                     jsxc.options.set('adminSettings', d.data.adminSettings);
 
@@ -339,6 +338,9 @@
         $(document).on('connected.jsxc', function() {
             // reset default avatar cache
             jsxc.storage.removeUserItem('defaultAvatars');
+            // when we are connected it doesn't matter anymore whether we logged in without chat since the user
+            // must have manually logged in
+            jsxc.storage.setItem('login_without_chat', false);
         });
 
         $(document).on('status.contacts.count status.contact.updated', function() {
@@ -386,6 +388,7 @@
         if (jsxc.el_exists(jsxc.options.loginForm.form) && jsxc.el_exists(jsxc.options.loginForm.jid) && jsxc.el_exists(jsxc.options.loginForm.pass)) {
 
             var link = $('<a/>').text($.t('Log_in_without_chat')).attr('href', '#').click(function() {
+                jsxc.storage.setItem('login_without_chat', true);
                 jsxc.submitLoginForm();
             });
 
@@ -403,6 +406,64 @@
 
         if ($('#contactsmenu').length > 0) {
             observeContactsMenu();
+        }
+    });
+
+    $(document).on('click', '#jsxc_roster p', function() {
+        if (jsxc.storage.getItem('serverType') === serverTypes.INTERNAL) {
+           startInternalBackend();
+        }
+    });
+
+    function startInternalBackend() {
+       jsxc.bid = OC.currentUser.toLowerCase() + '@' + window.location.host;
+
+        jsxc.options.set('xmpp', {
+            url: OC.generateUrl('apps/ojsxc/http-bind')
+        });
+
+        $(document).one('attached.jsxc', function() {
+           if (jsxc.options.get('loginForm').startMinimized !== true) {
+             jsxc.gui.roster.toggle(jsxc.CONST.SHOWN);
+           }
+        });
+
+        jsxc.start(jsxc.bid + '/internal', 'internal', '123456');
+    }
+
+    if (jsxc.storage.getItem('serverType') === serverTypes.INTERNAL) {
+        jsxc.gui.showLoginBox = function(){};
+    }
+
+    $(document).on('stateChange.jsxc', function _handler(event, state) {
+        if (state === jsxc.CONST.STATE.SUSPEND) {
+            /**
+             * The first time we go into suspend mode we check if we are using the internal backend.
+             * If this is the case and the user explicitly press the "login_without_chat" button when logging
+             * into Nextcloud we know we are using another authentication mechanism (like SAML/SSO) and thus have
+             * to manually start the connection.
+             */
+            var chatDisabledByUser = jsxc.storage.getUserItem('forcedLogout') || jsxc.storage.getItem('login_without_chat');
+            $(document).off('stateChange.jsxc', _handler);
+            if (jsxc.storage.getItem('serverType') === null) {
+                $.ajax({
+                    url: OC.generateUrl('apps/ojsxc/settings/servertype'),
+                    success: function (data) {
+                        jsxc.storage.setItem('serverType', serverTypes[data.serverType.toUpperCase()]);
+
+                        if (data.serverType === 'internal' && !chatDisabledByUser) {
+                            jsxc.gui.showLoginBox = function(){};
+                            startInternalBackend();
+                        }
+                    }
+                });
+            } else if (jsxc.storage.getItem('serverType') === serverTypes.INTERNAL && !chatDisabledByUser) {
+                jsxc.gui.showLoginBox = function(){};
+                startInternalBackend();
+            }
+        } else if (state === jsxc.CONST.STATE.READY) {
+            // if JSXC is ready this means we successfully connected and thus don't have to listen to the suspend state
+            $(document).off('stateChange.jsxc', _handler);
         }
     });
 }(jQuery));

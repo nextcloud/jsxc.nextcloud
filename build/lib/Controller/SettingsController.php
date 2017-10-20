@@ -254,6 +254,14 @@ class SettingsController extends Controller
 		return $response;
 	}
 
+	/**
+	 * @NoAdminRequired
+	 */
+	public function getServerType()
+	{
+		return ["serverType" => $this->getAppValue('serverType', 'internal')];
+	}
+
 	private function getCurrentUser()
 	{
 		$currentUser = false;
@@ -322,8 +330,7 @@ class SettingsController extends Controller
 	private function isPasswordConfirmationRequired()
 	{
 		$version = \OCP\Util::getVersion();
-		preg_match('/^([0-9]+)\.', $version, $versionMatches);
-		$majorVersion = intval($versionMatches[1]);
+		$majorVersion = intval($version[0]);
 
 		// copied from owncloud/settings/ajax/installapp.php
 		$lastConfirm = (int) \OC::$server->getSession()->get('last-password-confirm');

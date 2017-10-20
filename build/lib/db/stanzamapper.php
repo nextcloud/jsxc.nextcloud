@@ -66,9 +66,9 @@ class StanzaMapper extends Mapper
 		$stmt = $this->execute("SELECT stanza, id FROM *PREFIX*ojsxc_stanzas WHERE `to`=?", [$to]);
 		$results = [];
 		while ($row = $stmt->fetch()) {
-			$row['stanza'] = preg_replace('/to="([^"@]*)"/', "to=\"$1@" .$this->host ."/internal\"", $row['stanza']);
-			$row['stanza'] = preg_replace('/from="([^"@]*)"/', "from=\"$1@" .$this->host ."/internal\"", $row['stanza']);
-			$row['stanza'] = preg_replace('/jid="([^"@]*)"/', "jid=\"$1@" .$this->host ."/internal\"", $row['stanza']);
+			$row['stanza'] = preg_replace('/to="([^"]*)"/', "to=\"$1@" .$this->host ."/internal\"", $row['stanza']);
+			$row['stanza'] = preg_replace('/from="([^"]*)"/', "from=\"$1@" .$this->host ."/internal\"", $row['stanza']);
+			$row['stanza'] = preg_replace('/jid="([^"]*)"/', "jid=\"$1@" .$this->host ."\"", $row['stanza']);
 			$results[] = $this->mapRowToEntity($row);
 		}
 		$stmt->closeCursor();

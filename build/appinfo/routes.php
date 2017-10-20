@@ -15,6 +15,7 @@ $application->registerRoutes($this, array(
 		array('name' => 'settings#setUser', 'url' => '/settings/user', 'verb' => 'POST'),
 		array('name' => 'settings#getIceServers', 'url' => '/settings/iceServers', 'verb' => 'GET'),
 		array('name' => 'settings#getUsers', 'url' => '/settings/users', 'verb' => 'GET'),
+		array('name' => 'settings#getServerType', 'url' => '/settings/servertype', 'verb' => 'GET'),
 
 		array('name' => 'externalApi#index', 'url' => '/ajax/externalApi.php', 'verb' => 'POST'),
 		// array('name' => 'externalApi#check_password', 'url' => '/api/v2/checkPassword', 'verb' => 'POST'),

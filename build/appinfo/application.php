@@ -240,7 +240,7 @@ class Application extends App {
 		 * This is automatically made lowercase.
 		 */
 		$container->registerService('OJSXC_UserId', function(IContainer $c) {
-			return strtolower($c->query('UserId'));
+			return self::santizeUserId($c->query('UserId'));
 		});
 
 		/**
@@ -294,6 +294,14 @@ class Application extends App {
 			$c->query('OCP\IConfig'),
 			$c->getServer()->getDatabaseConnection()
 		);
+	}
 
+
+	static public function santizeUserId($userId) {
+		return str_replace([" ", "'", "@"], ["_ojsxc_esc_space_", "_ojsxc_squote_space_", "_ojsxc_esc_at_"],
+			strtolower(
+				$userId
+			)
+		);
 	}
 }

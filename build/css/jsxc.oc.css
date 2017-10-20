@@ -1,5 +1,5 @@
 /*!
- * ojsxc v3.3.0 - 2017-08-25
+ * ojsxc v3.3.1 - 2017-10-20
  * 
  * Copyright (c) 2017 Klaus Herberth <klaus@jsxc.org> <br>
  * Released under the MIT license
@@ -7,7 +7,7 @@
  * Please see http://www.jsxc.org/
  * 
  * @author Klaus Herberth <klaus@jsxc.org>
- * @version 3.3.0
+ * @version 3.3.1
  * @license MIT
  */
 
@@ -2940,14 +2940,13 @@ fieldset[disabled]
       z-index: 80;
       line-height: 42px;
       opacity: 0;
-      transition: opacity 0.5s, top 0.5s; }
+      transition: opacity 0.5s, top 0.5s;
+      background-image: linear-gradient(#c1c1c1, transparent); }
       .jsxc_window .jsxc_fade .jsxc_mam-load-more.jsxc_show {
         top: 0;
         opacity: 0.7; }
         .jsxc_window .jsxc_fade .jsxc_mam-load-more.jsxc_show:hover {
           opacity: 1; }
-    .jsxc_window .jsxc_fade.jsxc_mam-enable .jsxc_textarea {
-      padding-top: 42px; }
     .jsxc_window .jsxc_fade.jsxc_mam-enable .jsxc_mam-load-more {
       display: block; }
   .jsxc_window .jsxc_avatar {

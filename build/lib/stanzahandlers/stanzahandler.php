@@ -37,7 +37,6 @@ class StanzaHandler
 	{
 		$this->userId = $userId;
 		$this->host = $host;
-		$this->from = $this->userId;
 	}
 
 	/**

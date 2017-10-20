@@ -7,6 +7,7 @@ use OCP\IConfig;
 use OCP\IUserManager;
 use Sabre\Xml\Reader;
 use Sabre\Xml\Writer;
+use OCA\OJSXC\AppInfo\Application;
 
 /**
  * Class IQ
@@ -57,11 +58,12 @@ class IQ extends StanzaHandler
 			$id = $stanza['attributes']['id'];
 			$iqRoster = new IQRoster();
 			$iqRoster->setType('result');
-			$iqRoster->setTo($this->from);
+			$iqRoster->setTo($this->userId);
 			$iqRoster->setQid($id);
 			foreach ($this->userManager->search('') as $user) {
-				if ($debugMode || (strtolower($user->getUID()) !== $this->userId)) {
-					$iqRoster->addItem($user->getUID() . '@' . $this->host, $user->getDisplayName());
+				$userId = Application::santizeUserId($user->getUID());
+				if ($debugMode || ($userId !== $this->userId && $user->isEnabled())) {
+					$iqRoster->addItem($userId . '@' . $this->host, $user->getDisplayName());
 				}
 			}
 			return $iqRoster;
