@@ -9,11 +9,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - fix shared roster retrieval in NC<12
 - fix position of chat icon
 - [#72](https://github.com/nextcloud/jsxc.nextcloud/issues/72) fix password confirmation
-- allow @ in usernames (internal)
+- allow `@` in usernames (internal)
 - fix roster push (internal)
 - omit disabled users from roster (internal)
 - escape usernames (internal)
 - fix relogin (internal)
+
+### Changed
+- update JSXC to v3.3.1 ([change log](https://github.com/jsxc/jsxc/blob/master/CHANGELOG.md))
 
 ## 3.3.0 - 2017-08-25
 ### Added
