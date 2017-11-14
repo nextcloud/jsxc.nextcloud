@@ -403,7 +403,13 @@
     });
 
     function startInternalBackend() {
-       jsxc.bid = OC.currentUser.toLowerCase() + '@' + window.location.host;
+       var currentUser = OC.currentUser;
+
+       if (!currentUser) {
+          return;
+       }
+
+       jsxc.bid = currentUser.toLowerCase() + '@' + window.location.host;
 
         jsxc.options.set('xmpp', {
             url: OC.generateUrl('apps/ojsxc/http-bind')
