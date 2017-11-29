@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 3.3.2 - 2017-11-29
+### Fixed
+- [jsxc/jsxc#640](https://github.com/jsxc/jsxc/issues/640) fix type error related to internal backend
+
+### Changed
+- update JSXC to v3.3.2 ([change log](https://github.com/jsxc/jsxc/blob/master/CHANGELOG.md))
+
 ## 3.3.1 - 2017-10-20
 ### Fixed
 - fix shared roster retrieval in NC<12
