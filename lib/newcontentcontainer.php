@@ -17,7 +17,7 @@ class NewContentContainer
 	/**
 	 * @var Stanza[]
 	 */
-	private static $stanzas;
+	private static $stanzas = [];
 
 	public function addStanza(Stanza $stanza)
 	{

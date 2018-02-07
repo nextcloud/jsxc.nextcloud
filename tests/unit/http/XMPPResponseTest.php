@@ -51,8 +51,8 @@ namespace OCA\OJSXC\Http {
 		}
 
 		/**
-	     * @dataProvider writingProvider
-	     */
+		 * @dataProvider writingProvider
+		 */
 		public function testWriting($stanzas, $expected)
 		{
 			$stanzaLogger = $this->getMockBuilder('OCA\OJSXC\StanzaLogger')->disableOriginalConstructor()->getMock();
