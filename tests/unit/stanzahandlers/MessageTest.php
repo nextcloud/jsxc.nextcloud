@@ -3,10 +3,11 @@
 namespace OCA\OJSXC\StanzaHandlers;
 
 use OCA\OJSXC\Db\Message as MessageEntity;
+use PHPUnit\Framework\TestCase;
 use PHPUnit_Framework_TestCase;
 use PHPUnit_Framework_MockObject_MockObject;
 
-class MessageTest extends PHPUnit_Framework_TestCase
+class MessageTest extends TestCase
 {
 
 	/**

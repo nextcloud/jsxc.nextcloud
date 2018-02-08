@@ -9,9 +9,9 @@ use OCA\OJSXC\Db\StanzaMapper;
 use OCP\IUserManager;
 use OCP\IUserSession;
 use PHPUnit_Framework_MockObject_MockObject;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class HooksTest extends PHPUnit_Framework_TestCase
+class HooksTest extends TestCase
 {
 
 	/**

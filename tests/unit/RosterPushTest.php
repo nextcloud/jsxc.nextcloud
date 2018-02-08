@@ -7,9 +7,9 @@ use OCA\OJSXC\Db\IQRosterPushMapper;
 use OCP\IDBConnection;
 use OCP\IUserManager;
 use OCP\IUserSession;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class RosterPushTest extends PHPUnit_Framework_TestCase
+class RosterPushTest extends TestCase
 {
 
 	/**
