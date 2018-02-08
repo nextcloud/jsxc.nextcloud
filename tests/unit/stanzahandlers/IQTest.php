@@ -4,10 +4,11 @@ namespace OCA\OJSXC\StanzaHandlers;
 
 use OCA\OJSXC\Db\IQRoster;
 use OCP\IConfig;
+use PHPUnit\Framework\TestCase;
 use PHPUnit_Framework_MockObject_MockObject;
 use PHPUnit_Framework_TestCase;
 
-class IQTest extends PHPUnit_Framework_TestCase
+class IQTest extends TestCase
 {
 
 	/**

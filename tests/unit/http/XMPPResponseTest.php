@@ -12,9 +12,10 @@ namespace OCA\OJSXC\Http {
 
 	use OCA\OJSXC\Db\Message;
 	use OCA\OJSXC\Db\Stanza;
+	use PHPUnit\Framework\TestCase;
 	use PHPUnit_Framework_TestCase;
 
-	class XMPPResponseTest extends PHPUnit_Framework_TestCase
+	class XMPPResponseTest extends TestCase
 	{
 		public function writingProvider()
 		{
@@ -51,8 +52,8 @@ namespace OCA\OJSXC\Http {
 		}
 
 		/**
-	     * @dataProvider writingProvider
-	     */
+		 * @dataProvider writingProvider
+		 */
 		public function testWriting($stanzas, $expected)
 		{
 			$stanzaLogger = $this->getMockBuilder('OCA\OJSXC\StanzaLogger')->disableOriginalConstructor()->getMock();

@@ -9,11 +9,11 @@ use OCA\OJSXC\Http\XMPPResponse;
 use OCA\OJSXC\StanzaHandlers\IQ;
 use OCA\OJSXC\StanzaLogger;
 use OCP\AppFramework\Db\DoesNotExistException;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Sabre\Xml\Writer;
 use PHPUnit_Framework_MockObject_MockObject;
 
-class HttpBindControllerTest extends PHPUnit_Framework_TestCase
+class HttpBindControllerTest extends TestCase
 {
 
 	/**

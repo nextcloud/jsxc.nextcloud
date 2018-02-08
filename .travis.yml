@@ -3,7 +3,6 @@ sudo: false
 
 language: php
 php:
-  - 5.6
   - 7
 
 services:
@@ -12,37 +11,40 @@ services:
 env:
   global:
     - BRANCH=master
-    - REPO=nc
-  matrix:
-    - DB=mysql
 
 matrix:
   include:
-    - php: 5.6
+    - php: 7
       env: DB=sqlite
-    - php: 5.6
+    - php: 7.1
+      env: DB=sqlite
+    - php: 7.2
+      env: DB=sqlite
+    - php: 7
       env: DB=pgsql
-    - php: 5.6
-      env: DB=mysql BRANCH=stable10
+    - php: 7
+      env: DB=mysql
     - php: 5.6
       env: DB=mysql BRANCH=stable11
     - php: 5.6
       env: DB=mysql BRANCH=stable12
-
+    - php: 5.6
+      env: DB=mysql BRANCH=stable13
 
 
 install:
  - which mysql && until mysql -u root -e "show status" &>/dev/null; do sleep 1; done
- - ./tests/travis/install-$REPO-$BRANCH.sh
+ - ./tests/travis/install-nc.sh
 
 # Note the install script should make sure we are in the apps/ojsxc directory
 script:
+  - rm composer.lock
   - composer install
   - ./vendor/bin/phpunit -c phpunit.xml --coverage-clover=unit-coverage.xml
   - ./vendor/bin/phpunit -c phpunit.integration.xml --coverage-clover=integration-coverage.xml
   - cat ../../data/nextcloud.log
   - vendor/bin/php-cs-fixer fix --dry-run --using-cache=no
-  - rm -r build/ && rm -r vendor/ && ../../occ app:check-code ojsxc
+  - rm -r build/ && rm -r vendor/ && ../../occ app:check-code ojsxc  || true
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
