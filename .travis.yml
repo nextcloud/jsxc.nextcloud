@@ -38,6 +38,7 @@ install:
 
 # Note the install script should make sure we are in the apps/ojsxc directory
 script:
+  - rm composer.lock
   - composer install
   - ./vendor/bin/phpunit -c phpunit.xml --coverage-clover=unit-coverage.xml
   - ./vendor/bin/phpunit -c phpunit.integration.xml --coverage-clover=integration-coverage.xml
