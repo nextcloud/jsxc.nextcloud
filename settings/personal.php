@@ -19,7 +19,7 @@ if ($options !== null) {
 
 	if (is_array($options)) {
 		$loginFormEnable = true;
-		if (is_array($options['loginForm']) && isset($options['loginForm']['enable'])) {
+		if (isset($options['loginForm']) && is_array($options['loginForm']) && isset($options['loginForm']['enable'])) {
 			$loginFormEnable = $options['loginForm']['enable'];
 		}
 		$tmpl->assign('loginFormEnable', $loginFormEnable);

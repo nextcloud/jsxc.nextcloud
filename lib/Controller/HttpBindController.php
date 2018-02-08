@@ -173,35 +173,34 @@ class HttpBindController extends Controller
 					return Presence::createFromXml($reader, $this->userId);
 				}
 			];
-			$stanzas = null;
+			$parsedInput = null;
 			try {
-				$stanzas = $reader->parse();
+				$parsedInput = $reader->parse();
 			} catch (LibXMLException $e) {
 			}
-			if (!is_null($stanzas) && count($stanzas['value']) > 0) {
+			if (!is_null($parsedInput)
+				&& is_array($parsedInput['value'])
+				&& count($parsedInput['value']) > 0) {
 				$this->stanzaLogger->logRaw($input, StanzaLogger::RECEIVING);
-			}
-			if (!is_null($stanzas)) {
-				$stanzas = $stanzas['value'];
-				if (is_array($stanzas)) {
-					foreach ($stanzas as $stanza) {
-						$stanzaType = $this->getStanzaType($stanza);
-						if ($stanzaType === self::MESSAGE) {
-							$this->messageHandler->handle($stanza);
-						} elseif ($stanzaType === self::IQ) {
-							$result = $this->iqHandler->handle($stanza);
-							if (!is_null($result)) {
-								$longpoll = false;
-								$this->response->write($result);
-							}
-						} elseif ($stanza['value'] instanceof Presence) {
-							$results = $this->presenceHandler->handle($stanza['value']);
-							if (!is_null($results) && is_array($results)) {
-								$longpoll = false;
-								$longpollStart = false;
-								foreach ($results as $r) {
-									$this->response->write($r);
-								}
+
+				$stanzas = $parsedInput['value'];
+				foreach ($stanzas as $stanza) {
+					$stanzaType = $this->getStanzaType($stanza);
+					if ($stanzaType === self::MESSAGE) {
+						$this->messageHandler->handle($stanza);
+					} elseif ($stanzaType === self::IQ) {
+						$result = $this->iqHandler->handle($stanza);
+						if (!is_null($result)) {
+							$longpoll = false;
+							$this->response->write($result);
+						}
+					} elseif ($stanza['value'] instanceof Presence) {
+						$results = $this->presenceHandler->handle($stanza['value']);
+						if (!is_null($results) && is_array($results)) {
+							$longpoll = false;
+							$longpollStart = false;
+							foreach ($results as $r) {
+								$this->response->write($r);
 							}
 						}
 					}

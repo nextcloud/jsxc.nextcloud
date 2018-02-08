@@ -110,11 +110,11 @@ class RosterPush
 		}
 
 		/**
-	     * Here we look into the addressbookchanges table for deletions
-	     * of "contacts" in the system addressbook. This are actual users of the
-	     * Nextcloud instance. Because this is a private API of Nextcloud it's
-	     * encapsulated in a try/catch block.
-	     */
+		 * Here we look into the addressbookchanges table for deletions
+		 * of "contacts" in the system addressbook. This are actual users of the
+		 * Nextcloud instance. Because this is a private API of Nextcloud it's
+		 * encapsulated in a try/catch block.
+		 */
 		try {
 			$query = "SELECT `id` FROM `*PREFIX*addressbooks` WHERE `principaluri`='principals/system/system' LIMIT 1";
 			$addressbooks = $this->db->executeQuery($query)->fetchAll();
