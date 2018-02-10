@@ -192,7 +192,8 @@ class Application extends App {
 				$c->query('OJSXC_UserId'),
 				$c->query('Host'),
 				$c->query('MessageMapper'),
-				$c->query('UserProvider')
+				$c->query('UserProvider'),
+				$c->query('OCP\ILogger')
 			);
 		});
 
