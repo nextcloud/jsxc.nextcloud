@@ -22,11 +22,14 @@ use OCA\OJSXC\StanzaHandlers\Presence;
 use OCA\OJSXC\StanzaLogger;
 use OCA\OJSXC\RawRequest;
 use OCA\OJSXC\DataRetriever;
-use OCP\AppFramework\App;
+use OCA\OJSXC\UserProvider;
 use OCA\OJSXC\ILock;
 use OCA\OJSXC\DbLock;
 use OCA\OJSXC\MemLock;
 use OCA\OJSXC\Hooks;
+use OCA\OJSXC\UserManagerUserProvider;
+use OCA\OJSXC\ContactsStoreUserProvider;
+use OCP\AppFramework\App;
 use OCP\IContainer;
 use OCP\IRequest;
 
@@ -50,6 +53,9 @@ class Application extends App {
 			['locking' => false]);
 
 
+		/**
+		 * Controllers
+		 */
 		$container->registerService('HttpBindController', function(IContainer $c) {
 			return new HttpBindController(
 				$c->query('AppName'),
@@ -153,7 +159,8 @@ class Application extends App {
 				$c->query('OJSXC_UserId'),
 				$c->query('MessageMapper'),
 				$c->query('NewContentContainer'),
-				self::$config['polling']['timeout']
+				self::$config['polling']['timeout'],
+				$c->query('UserProvider')
 			);
 		});
 
@@ -166,7 +173,8 @@ class Application extends App {
 				$c->query('OJSXC_UserId'),
 				$c->query('Host'),
 				$c->query('OCP\IUserManager'),
-				$c->query('OCP\IConfig')
+				$c->query('OCP\IConfig'),
+				$c->query('UserProvider')
 			);
 		});
 
@@ -183,7 +191,9 @@ class Application extends App {
 			return new Message(
 				$c->query('OJSXC_UserId'),
 				$c->query('Host'),
-				$c->query('MessageMapper')
+				$c->query('MessageMapper'),
+				$c->query('UserProvider'),
+				$c->query('OCP\ILogger')
 			);
 		});
 
@@ -196,6 +206,9 @@ class Application extends App {
 			return $request->getServerHost();
 		});
 
+		/**
+		 * Helpers
+		 */
 		$container->registerService('NewContentContainer', function() {
 			return new NewContentContainer();
 		});
@@ -214,7 +227,8 @@ class Application extends App {
 				$c->query('ServerContainer')->getUserSession(),
 				$c->query('Host'),
 				$c->query('IQRosterPushMapper'),
-				$c->query('ServerContainer')->getDatabaseConnection()
+				$c->query('ServerContainer')->getDatabaseConnection(),
+				$c->query('UserProvider')
 			);
 		});
 
@@ -224,14 +238,36 @@ class Application extends App {
 				$c->query('ServerContainer')->getUserSession(),
 				$c->query('RosterPush'),
 				$c->query('PresenceMapper'),
-				$c->query('StanzaMapper')
+				$c->query('StanzaMapper'),
+				$c->query('ServerContainer')->query('GroupManager')
 			);
 		});
 
+		$container->registerService('UserProvider', function(IContainer $c) {
+			if (self::contactsStoreApiSupported()) {
+				return new ContactsStoreUserProvider(
+					$c->query('OCP\Contacts\ContactsMenu\IContactsStore'),
+					$c->query('ServerContainer')->getUserSession(),
+					$c->query('ServerContainer')->getUserManager(),
+					$c->query('OCP\IGroupManager'),
+					$c->query('OCP\IConfig')
+				);
+			} else {
+				return new UserManagerUserProvider(
+					$c->query('ServerContainer')->getUserManager()
+				);
+			}
+		});
+
+
+		/**
+		 * Commands
+		 */
 		$container->registerService('RefreshRosterCommand', function($c) {
 			return new RefreshRoster(
 				$c->query('ServerContainer')->getUserManager(),
-				$c->query('RosterPush')
+				$c->query('RosterPush'),
+				$c->query('PresenceMapper')
 			);
 		});
 
@@ -257,6 +293,10 @@ class Application extends App {
 			return new DataRetriever();
 		});
 
+
+		/**
+		 * Migrations
+		 */
 		$container->registerService('OCA\OJSXC\Migration\RefreshRoster', function(IContainer $c) {
 			return new RefreshRosterMigration(
 				$c->query('RosterPush'),
@@ -304,4 +344,13 @@ class Application extends App {
 			)
 		);
 	}
+
+	/**
+	 * @return bool whether the ContactsStore API is enabled
+	 */
+	public static function contactsStoreApiSupported() {
+		$version = \OCP\Util::getVersion();
+		return $version[0] >= 13;
+	}
+
 }

@@ -2,9 +2,11 @@
 
 namespace OCA\OJSXC\Db;
 
+use OCA\OJSXC\AppInfo\Application;
 use OCA\OJSXC\Db\Presence as PresenceEntity;
 use OCA\OJSXC\NewContentContainer;
 use OCA\OJSXC\Utility\MapperTestUtility;
+use OCA\DAV\AppInfo\Application as DavApp;
 
 $time = 0;
 
@@ -41,6 +43,49 @@ class PresenceMapperTest extends MapperTestUtility
 		$this->setValueOfPrivateProperty($this->mapper, 'connectedUsers', []);
 		$this->newContentContainer = $this->container->query('NewContentContainer');
 		$this->setValueOfPrivateProperty($this->newContentContainer, 'stanzas', []);
+		foreach (\OC::$server->getUserManager()->search('') as $user) {
+			$user->delete();
+		}
+	}
+
+	protected function tearDown()
+	{
+		foreach (\OC::$server->getUserManager()->search('') as $user) {
+			$user->delete();
+		}
+	}
+
+	public function setupContactsStoreAPI()
+	{
+		foreach (\OC::$server->getUserManager()->search('') as $user) {
+			$user->delete();
+		}
+
+		$users[] = \OC::$server->getUserManager()->createUser('admin', 'admin');
+		$users[] = \OC::$server->getUserManager()->createUser('derp', 'derp');
+		$users[] = \OC::$server->getUserManager()->createUser('derpina', 'derpina');
+		$users[] = \OC::$server->getUserManager()->createUser('herp', 'herp');
+		$users[] = \OC::$server->getUserManager()->createUser('foo', 'foo');
+
+		$currentUser = \OC::$server->getUserManager()->createUser('autotest', 'autotest');
+		\OC::$server->getUserSession()->setUser($currentUser);
+
+		if (Application::contactsStoreApiSupported()) {
+			/** @var \OCA\DAV\CardDAV\SyncService $syncService */
+			$syncService = \OC::$server->query('CardDAVSyncService');
+			$syncService->getLocalSystemAddressBook();
+			$syncService->updateUser($currentUser);
+
+			foreach ($users as $user) {
+				$syncService->updateUser($user);
+			}
+
+			$cm = \OC::$server->getContactsManager();
+			$davApp = new DavApp();
+			$davApp->setupSystemContactsProvider($cm);
+		}
+		\OC_User::setIncognitoMode(false);
+		\OC::$server->getDatabaseConnection()->executeQuery("DELETE FROM *PREFIX*ojsxc_stanzas");
 	}
 
 	/**
@@ -223,7 +268,7 @@ class PresenceMapperTest extends MapperTestUtility
 			]
 		];
 	}
-	
+
 	/**
 	 * @dataProvider getPresenceProvider
 	 * @param $inputs
@@ -285,6 +330,7 @@ class PresenceMapperTest extends MapperTestUtility
 	 */
 	public function testGetConnectedUsers($inputs, $expected)
 	{
+		$this->setupContactsStoreAPI();
 		foreach ($inputs as $input) {
 			$this->mapper->setPresence($input);
 		}
@@ -295,6 +341,55 @@ class PresenceMapperTest extends MapperTestUtility
 		sort($expected);
 		sort($result);
 		$this->assertEquals($expected, $result);
+	}
+
+	public function testGetConnectedUsersIfUserHasNot()
+	{
+		$this->setValueOfPrivateProperty($this->mapper, 'connectedUsers', []);
+		$this->setupContactsStoreAPI();
+		if (!Application::contactsStoreApiSupported()) {
+			$this->markTestSkipped();
+		}
+
+		$group = \OC::$server->getGroupManager()->createGroup('group1');
+		$group->addUser(\OC::$server->getUserManager()->get('derp'));
+
+		$group2 = \OC::$server->getGroupManager()->createGroup('group2');
+		$group2->addUser(\OC::$server->getUserManager()->get('autotest'));
+		$group2->addUser(\OC::$server->getUserManager()->get('foo'));
+		$group2->addUser(\OC::$server->getUserManager()->get('admin'));
+
+		\OC::$server->getConfig()->setAppValue('core', 'shareapi_only_share_with_group_members', 'yes');
+
+		$input1 = new PresenceEntity();
+		$input1->setPresence('online');
+		$input1->setUserid('foo');
+		$input1->setLastActive(23434475);
+
+		$input2 = new PresenceEntity();
+		$input2->setPresence('online');
+		$input2->setUserid('derp');
+		$input2->setLastActive(23434475);
+
+		$this->mapper->setPresence($input1);
+		$this->mapper->setPresence($input2);
+
+		$expected = ['foo'];
+
+		$result = $this->mapper->getConnectedUsers();
+
+		$this->assertCount(count($expected), $result);
+		sort($expected);
+		sort($result);
+		$this->assertEquals($expected, $result);
+
+		\OC::$server->getConfig()->setAppValue('core', 'shareapi_only_share_with_group_members', 'no');
+
+		$group->removeUser(\OC::$server->getUserManager()->get('derp'));
+		$group->delete();
+		$group2->removeUser(\OC::$server->getUserManager()->get('autotest'));
+		$group2->removeUser(\OC::$server->getUserManager()->get('admin'));
+		$group2->delete();
 	}
 
 	public function updatePresenceProvider()
@@ -384,6 +479,7 @@ class PresenceMapperTest extends MapperTestUtility
 	 */
 	public function testUpdatePresence($inputs, $expInput, $expConnectedUsers, $expNewContent, $expNewContentCount, $expStanzasToSend)
 	{
+		$this->setupContactsStoreAPI();
 		global $time;
 		$time = 1000;
 		foreach ($inputs as $input) {

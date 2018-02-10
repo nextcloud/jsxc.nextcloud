@@ -3,8 +3,8 @@
 namespace OCA\OJSXC\StanzaHandlers;
 
 use OCA\OJSXC\Db\MessageMapper;
-use Sabre\Xml\Reader;
-use Sabre\Xml\Writer;
+use OCA\OJSXC\IUserProvider;
+use OCP\ILogger;
 use OCA\OJSXC\Db\Message as MessageEntity;
 
 /**
@@ -19,6 +19,11 @@ class Message extends StanzaHandler
 	 * @var MessageMapper $messageMapper
 	 */
 	private $messageMapper;
+
+	/**
+	 * @var IUserProvider $userProvider
+	 */
+	private $userProvider;
 
 	/**
 	 * @var string $type
@@ -36,16 +41,24 @@ class Message extends StanzaHandler
 	private $msgId;
 
 	/**
+	 * @var ILogger $logger
+	 */
+	private $logger;
+
+	/**
 	 * Message constructor.
 	 *
 	 * @param string $userId
 	 * @param string $host
 	 * @param MessageMapper $messageMapper
+	 * @param IUserProvider $userProvider
 	 */
-	public function __construct($userId, $host, MessageMapper $messageMapper)
+	public function __construct($userId, $host, MessageMapper $messageMapper, IUserProvider $userProvider, ILogger $logger)
 	{
 		parent::__construct($userId, $host);
 		$this->messageMapper = $messageMapper;
+		$this->userProvider = $userProvider;
+		$this->logger = $logger;
 	}
 
 	/**
@@ -56,10 +69,16 @@ class Message extends StanzaHandler
 		$to = $this->getAttribute($stanza, 'to');
 		$pos = strrpos($to, '@');
 		$this->to = substr($to, 0, $pos);
+
+		if (!$this->userProvider->hasUserByUID($this->to)) {
+			$this->logger->warning('User ' . $this->userId . ' is trying to send a message to ' . $this->to . ' but this isn\'t allowed');
+			return;
+		}
+
 		foreach ($stanza['value'] as $keyRaw => $value) {
 			// remove namespace from key as it is unneeded and cause problems
 			$key = substr($keyRaw, strpos($keyRaw, '}') + 1, strlen($keyRaw));
-			// fetch namespace from key to readd it
+			// fetch namespace from key to read it
 			$ns = substr($keyRaw, 1, strpos($keyRaw, '}') - 1);
 
 			$this->values[] = [

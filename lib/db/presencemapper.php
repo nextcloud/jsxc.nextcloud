@@ -3,6 +3,7 @@
 namespace OCA\OJSXC\Db;
 
 use OCA\OJSXC\Db\Presence as PresenceEntity;
+use OCA\OJSXC\IUserProvider;
 use OCA\OJSXC\NewContentContainer;
 use OCP\AppFramework\Db\Mapper;
 use OCP\IDBConnection;
@@ -58,7 +59,13 @@ class PresenceMapper extends Mapper
 	/**
 	 * @var null|string the userId of the current user
 	 */
-	private $userId;
+	private $userIdPresenceMapperPresenceMapperPresenceMapper;
+
+
+	/**
+	 * @var IUserProvider
+	 */
+	private $userProvider;
 
 	/**
 	 * PresenceMapper constructor.
@@ -69,8 +76,9 @@ class PresenceMapper extends Mapper
 	 * @param MessageMapper $messageMapper
 	 * @param NewContentContainer $newContentContainer
 	 * @param int $timeout
+	 * @param IUserProvider $userProvider
 	 */
-	public function __construct(IDBConnection $db, $host, $userId, MessageMapper $messageMapper, NewContentContainer $newContentContainer, $timeout)
+	public function __construct(IDBConnection $db, $host, $userId, MessageMapper $messageMapper, NewContentContainer $newContentContainer, $timeout, IUserProvider $userProvider)
 	{
 		parent::__construct($db, 'ojsxc_presence');
 		$this->host = $host;
@@ -78,6 +86,7 @@ class PresenceMapper extends Mapper
 		$this->messageMapper = $messageMapper;
 		$this->newContentContainer = $newContentContainer;
 		$this->timeout = $timeout;
+		$this->userProvider = $userProvider;
 	}
 
 	/**
@@ -136,6 +145,9 @@ class PresenceMapper extends Mapper
 			$stmt = $this->execute("SELECT `userid` FROM `*PREFIX*ojsxc_presence` WHERE `presence` != 'unavailable' AND `userid` != ?", [$this->userId]);
 			$results = [];
 			while ($row = $stmt->fetch()) {
+				if (!$this->userProvider->hasUserByUID($row['userid'])) {
+					continue;
+				}
 				$results[] = $row['userid'];
 			}
 			$stmt->closeCursor();

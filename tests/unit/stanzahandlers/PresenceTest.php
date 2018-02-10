@@ -6,7 +6,6 @@ use OCA\OJSXC\StanzaHandlers\Presence;
 use OCA\OJSXC\Db\Presence as PresenceEntity;
 use PHPUnit\Framework\TestCase;
 use PHPUnit_Framework_MockObject_MockObject;
-use PHPUnit_Framework_TestCase;
 
 class PresenceTest extends TestCase
 {

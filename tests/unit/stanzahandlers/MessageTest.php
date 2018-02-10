@@ -4,6 +4,9 @@ namespace OCA\OJSXC\StanzaHandlers;
 
 use OCA\OJSXC\Db\Message as MessageEntity;
 use PHPUnit\Framework\TestCase;
+use OCA\OJSXC\Db\MessageMapper;
+use OCA\OJSXC\IUserProvider;
+use OCP\ILogger;
 use PHPUnit_Framework_TestCase;
 use PHPUnit_Framework_MockObject_MockObject;
 
@@ -16,7 +19,7 @@ class MessageTest extends TestCase
 	private $message;
 
 	/**
-	 * @var PHPUnit_Framework_MockObject_MockObject
+	 * @var PHPUnit_Framework_MockObject_MockObject | MessageMapper
 	 */
 	private $messageMapper;
 
@@ -26,16 +29,28 @@ class MessageTest extends TestCase
 	private $userId;
 
 	/**
-	 * @var string $host ;
+	 * @var string $host
 	 */
 	private $host;
+
+	/**
+	 * @var PHPUnit_Framework_MockObject_MockObject | IUserProvider
+	 */
+	private $userProvider;
+
+	/**
+	 * @var PHPUnit_Framework_MockObject_MockObject | ILogger
+	 */
+	private $logger;
 
 	public function setUp()
 	{
 		$this->host = 'localhost';
 		$this->userId = 'john';
 		$this->messageMapper = $this->getMockBuilder('OCA\OJSXC\Db\MessageMapper')->disableOriginalConstructor()->getMock();
-		$this->message = new Message($this->userId, $this->host, $this->messageMapper);
+		$this->userProvider = $this->getMockBuilder('OCA\OJSXC\IUserProvider')->disableOriginalConstructor()->getMock();
+		$this->logger = $this->getMockBuilder('OCP\ILogger')->disableOriginalConstructor()->getMock();
+		$this->message = new Message($this->userId, $this->host, $this->messageMapper, $this->userProvider, $this->logger);
 	}
 
 	public function messageProvider()
@@ -87,6 +102,38 @@ class MessageTest extends TestCase
 		$this->messageMapper->expects($this->once())
 			->method('insert')
 			->with($expected);
+
+		$this->userProvider->expects($this->once())
+			->method('hasUserByUID')
+			->with('derp')
+			->willReturn(true);
+
+		$this->message->handle($stanza);
+	}
+
+	public function testNotAllowedToChat()
+	{
+		$this->messageMapper->expects($this->never())
+			->method('insert');
+
+		$this->userProvider->expects($this->once())
+			->method('hasUserByUID')
+			->with('derp')
+			->willReturn(false);
+
+		$stanza = [
+			'name' => '{jabber:client}message',
+			'value' =>
+				[
+					'{jabber:client}body' => 'abcèé³e¹³€{ë',
+					'{urn:xmpp:receipts}request' => null,
+				],
+			'attributes' =>
+				[
+					'to' => 'derp@own.dev',
+					'type' => 'chat',
+				],
+		];
 
 		$this->message->handle($stanza);
 	}

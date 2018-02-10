@@ -4,6 +4,7 @@ namespace OCA\OJSXC\StanzaHandlers;
 
 use OCA\OJSXC\Db\MessageMapper;
 use OCA\OJSXC\Db\PresenceMapper;
+use OCA\OJSXC\Exceptions\TerminateException;
 use Sabre\Xml\Reader;
 use Sabre\Xml\Writer;
 use OCA\OJSXC\Db\Presence as PresenceEntity;
@@ -47,11 +48,14 @@ class Presence extends StanzaHandler
 	 *  - update the presence in the database
 	 *  - broadcast the presence
 	 *  - return the active presence if the type isn't equal to unavailable
+	 *
 	 * @param PresenceEntity $presence
 	 * @return PresenceEntity[]
+	 * @throws TerminateException
 	 */
 	public function handle(PresenceEntity $presence)
 	{
+
 		// update the presence
 		$this->presenceMapper->setPresence($presence);
 

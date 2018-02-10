@@ -2,8 +2,11 @@
 
 namespace OCA\OJSXC;
 
+use OCA\OJSXC\AppInfo\Application;
 use OCA\OJSXC\Db\PresenceMapper;
 use OCA\OJSXC\Db\StanzaMapper;
+use OCP\IGroup;
+use OCP\IGroupManager;
 use OCP\IUserManager;
 
 use OCP\IUser;
@@ -32,18 +35,30 @@ class Hooks
 	 */
 	private $stanzaMapper;
 
+	/**
+	 * @var RosterPush
+	 */
+	private $rosterPush;
+
+	/**
+	 * @var IGroupManager
+	 */
+	private $groupManager;
+
 	public function __construct(
 		IUserManager $userManager,
 								IUserSession $userSession,
 								RosterPush $rosterPush,
 								PresenceMapper $presenceMapper,
-								StanzaMapper $stanzaMapper
+								StanzaMapper $stanzaMapper,
+								IGroupManager $groupManager
 	) {
 		$this->userManager = $userManager;
 		$this->userSession = $userSession;
 		$this->rosterPush = $rosterPush;
 		$this->presenceMapper = $presenceMapper;
 		$this->stanzaMapper = $stanzaMapper;
+		$this->groupManager = $groupManager;
 	}
 
 	public function register()
@@ -51,6 +66,8 @@ class Hooks
 		$this->userManager->listen('\OC\User', 'postCreateUser', [$this, 'onCreateUser']);
 		$this->userManager->listen('\OC\User', 'postDelete', [$this, 'onDeleteUser']);
 		$this->userSession->listen('\OC\User', 'changeUser', [$this, 'onChangeUser']);
+		$this->groupManager->listen('\OC\Group', 'postAddUser', [$this, 'onAddUserToGroup']);
+		$this->groupManager->listen('\OC\Group', 'postRemoveUser', [$this, 'onRemoveUserFromGroup']);
 	}
 
 	/**
@@ -111,5 +128,19 @@ class Hooks
 			// if the user was changed, resend the whole roster item
 			$this->onCreateUser($user, '');
 		}
+	}
+
+	public function onAddUserToGroup(IGroup $group, IUser $user)
+	{
+		$this->rosterPush->createOrUpdateRosterItem($user);
+		$this->rosterPush->addUserToGroup($user, $group);
+	}
+
+	public function onRemoveUserFromGroup(IGroup $group, IUser $user)
+	{
+		if (Application::contactsStoreApiSupported()) {
+			$this->rosterPush->removeRosterItemForUsersInGroup($group, $user->getUID());
+		}
+		$this->rosterPush->removeUserFromGroup($user, $group);
 	}
 }

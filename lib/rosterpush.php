@@ -5,6 +5,7 @@ namespace OCA\OJSXC;
 use OCA\OJSXC\Db\IQRosterPush;
 use OCA\OJSXC\Db\IQRosterPushMapper;
 use OCP\IDBConnection;
+use OCP\IGroup;
 use OCP\IUserManager;
 
 use OCP\IUser;
@@ -35,18 +36,35 @@ class RosterPush
 	 */
 	private $db;
 
+	/**
+	 * @var IUserProvider
+	 */
+	private $userProvider;
+
+	/**
+	 * RosterPush constructor.
+	 *
+	 * @param IUserManager $userManager
+	 * @param IUserSession $userSession
+	 * @param string $host
+	 * @param IQRosterPushMapper $iqRosterPushMapper
+	 * @param IDBConnection $db
+	 * @param IUserProvider $userProvider
+	 */
 	public function __construct(
 		IUserManager $userManager,
 								IUserSession $userSession,
 		$host,
 								IQRosterPushMapper $iqRosterPushMapper,
-								IDbConnection $db
+								IDbConnection $db,
+								IUserProvider $userProvider
 	) {
 		$this->userManager = $userManager;
 		$this->userSession = $userSession;
 		$this->host = $host;
 		$this->iqRosterPushMapper = $iqRosterPushMapper;
 		$this->db = $db;
+		$this->userProvider = $userProvider;
 	}
 
 	/**
@@ -62,7 +80,7 @@ class RosterPush
 		$iq->setFrom('');
 
 
-		foreach ($this->userManager->search('') as $recipient) {
+		foreach ($this->userProvider->getAllUsersForUserByUID($user->getUID()) as $recipient) {
 			if ($recipient->getUID() !== $user->getUID()) {
 				$iq->setTo($recipient->getUID());
 				$this->iqRosterPushMapper->insert($iq);
@@ -138,5 +156,68 @@ class RosterPush
 		}
 
 		return $stats;
+	}
+
+	/**
+	 * When a user is removed from a group, the roster items for the $userId must be removed for all users in the $group
+	 * but only if $userId isn't accessible anymore for a user in $group.
+	 *
+	 * @param IGroup $group
+	 * @param string $userId the user which is removed
+	 */
+	public function removeRosterItemForUsersInGroup(IGroup $group, $userId)
+	{
+		$iq = new IQRosterPush();
+		$iq->setJid($userId);
+		$iq->setSubscription('remove');
+		$iq->setFrom('');
+
+
+		foreach ($group->getUsers() as $recipient) {
+			// check if $recipient can still chat with $userId
+			// if not -> remove $userId from $recipient's roster.
+			if ($recipient->getUID() !== $userId && !$this->userProvider->hasUserForUserByUID($recipient->getUID(), $userId)) {
+				$iq->setTo($recipient->getUID());
+				$this->iqRosterPushMapper->insert($iq);
+			}
+		}
+	}
+
+	/**
+	 * When a user is added to a group, this user should get a rosterPush for all users in this group
+	 *
+	 * @param IUser $receiver
+	 * @param IGroup $group
+	 */
+	public function addUserToGroup(IUser $receiver, IGroup $group)
+	{
+		$iq = new IQRosterPush();
+		$iq->setSubscription('both');
+		$iq->setFrom('');
+		$iq->setTo($receiver->getUID());
+		foreach ($group->getUsers() as $user) {
+			$iq->setJid($user->getUID());
+			$iq->setName($user->getDisplayName());
+			$this->iqRosterPushMapper->insert($iq);
+		}
+	}
+
+	/**
+	 * When a user is removed from a group, this user should get a rosterPush for all users in this group
+	 *
+	 * @param IUser $receiver
+	 * @param IGroup $group
+	 */
+	public function removeUserFromGroup(IUser $receiver, IGroup $group)
+	{
+		$iq = new IQRosterPush();
+		$iq->setSubscription('remove');
+		$iq->setFrom('');
+		$iq->setTo($receiver->getUID());
+		foreach ($group->getUsers() as $user) {
+			$iq->setJid($user->getUID());
+			$iq->setName($user->getDisplayName());
+			$this->iqRosterPushMapper->insert($iq);
+		}
 	}
 }

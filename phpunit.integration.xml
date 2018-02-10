@@ -13,6 +13,10 @@
             <directory suffix=".php">lib/db</directory>
             <file>lib/dblock.php</file>
             <file>lib/memlock.php</file>
+            <file>lib/User.php</file>
+            <file>lib/ContactsStoreUserProvider.php</file>
+            <file>lib/UserManagerUserProvider.php</file>
+            <file>lib/rosterpush.php</file>
         </whitelist>
     </filter>
 </phpunit>
