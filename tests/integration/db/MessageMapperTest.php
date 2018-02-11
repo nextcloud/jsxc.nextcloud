@@ -159,7 +159,7 @@ class MessageMapperTest extends MapperTestUtility
 		$this->assertCount(2, $result);
 
 		// check findByTo
-		$result = $this->mapper->findByTo(Application::santizeUserId('john@localhost.com'));
+		$result = $this->mapper->findByTo(Application::sanitizeUserId('john@localhost.com'));
 		$this->assertCount(1, $result);
 		$this->assertEquals('<message to="john_ojsxc_esc_at_localhost.com@localhost/internal" from="jan_ojsxc_esc_at_localhost.com@localhost/internal" type="test" xmlns="jabber:client" id="4-msg">Messageabc</message>', $result[0]->getStanza());
 
