@@ -275,9 +275,9 @@ class Application extends App {
 		 * A modified userID for use in OJSXC.
 		 * This is automatically made lowercase.
 		 */
-		$container->registerService('OJSXC_UserId', function(IContainer $c) {
-			return self::sanitizeUserId(self::convertToRealUID($c->query('UserId')));
-		});
+		$container->registerParameter('OJSXC_UserId',
+			 self::sanitizeUserId(self::convertToRealUID($container->query('UserId')))
+		);
 
 		/**
 		 * Raw request body

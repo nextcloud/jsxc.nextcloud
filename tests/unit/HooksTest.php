@@ -77,24 +77,6 @@ class HooksTest extends TestCase
 		);
 	}
 
-
-	public function testRegister()
-	{
-		$this->userManager->expects($this->at(0))
-			->method('listen')
-			->with('\OC\User', 'postCreateUser', [$this->hooks, 'onCreateUser']);
-
-		$this->userManager->expects($this->at(1))
-			->method('listen')
-			->with('\OC\User', 'postDelete', [$this->hooks, 'onDeleteUser']);
-
-		$this->userSession->expects($this->once())
-			->method('listen')
-			->with('\OC\User', 'changeUser', [$this->hooks, 'onChangeUser']);
-
-		$this->hooks->register();
-	}
-
 	public function testOnCreateUser()
 	{
 		$user = $this->getMockBuilder('OCP\IUser')->disableOriginalConstructor()->getMock();
