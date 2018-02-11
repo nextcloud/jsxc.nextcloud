@@ -62,32 +62,32 @@ class Hooks
 		$this->groupManager = $groupManager;
 	}
 
-	public static function getInstance() {
+	public static function getInstance()
+	{
 		$app = new Application();
 		return $app->getContainer()->query('UserHooks');
 	}
 
 	public static function register()
 	{
-		\OC::$server->getUserManager()->listen('\OC\User', 'postCreateUser', function(IUser $user, $password) {
+		\OC::$server->getUserManager()->listen('\OC\User', 'postCreateUser', function (IUser $user, $password) {
 			self::getInstance()->onCreateUser($user, $password);
 		});
 
-		\OC::$server->getUserManager()->listen('\OC\User', 'postDelete', function(IUser $user) {
+		\OC::$server->getUserManager()->listen('\OC\User', 'postDelete', function (IUser $user) {
 			self::getInstance()->onDeleteUser($user);
 		});
 
-		\OC::$server->getUserSession()->listen('\OC\User', 'changeUser', function(IUser $user, $feature, $value) {
+		\OC::$server->getUserSession()->listen('\OC\User', 'changeUser', function (IUser $user, $feature, $value) {
 			self::getInstance()->onChangeUser($user, $feature, $value);
 		});
 
-		\OC::$server->getGroupManager()->listen('\OC\Group', 'postAddUser', function(IGroup $group, IUser $user) {
+		\OC::$server->getGroupManager()->listen('\OC\Group', 'postAddUser', function (IGroup $group, IUser $user) {
 			self::getInstance()->onAddUserToGroup($group, $user);
 		});
 
-		\OC::$server->getGroupManager()->listen('\OC\Group', 'postRemoveUser', function(IGroup $group, IUser $user) {
+		\OC::$server->getGroupManager()->listen('\OC\Group', 'postRemoveUser', function (IGroup $group, IUser $user) {
 			self::getInstance()->onRemoveUserFromGroup($group, $user);
-
 		});
 	}
 
