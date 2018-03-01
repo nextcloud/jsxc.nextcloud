@@ -63,7 +63,10 @@ if(!$apiSecret) {
 }
 
 $app = new Application();
-$app->getContainer()->query('UserHooks')->register();
+
+if ($config->getAppValue('ojsxc', 'serverType') === 'internal') {
+	$app->getContainer()->query('UserHooks')->register();
+}
 
 if (!class_exists("\\Sabre\\Xml\\Version")) {
     require_once __DIR__ . "/../vendor/autoload.php";
