@@ -208,7 +208,7 @@
 }
 
 @media (min-width: 768px) {
-  #content-wrapper, #filestable > thead {
+  #content-wrapper, #filestable > thead, #controls {
     padding-right: 0;
     transition: padding-right 0.5s;
   }
@@ -218,13 +218,29 @@
     transition: right 0.5s;
   }
 
+  .app-mail .submit-message-wrapper {
+    transition: right 0.5s;
+
+    .submit-message {
+      transition: right 0.5s;
+    }
+  }
+
   .jsxc-roster-shown {
-    #content-wrapper, #filestable > thead {
+    #content-wrapper, #filestable > thead, #controls {
       padding-right: 210px;
     }
 
     #mainContainer, #odf-toolbar, #app-sidebar {
       right: 210px;
+    }
+
+    .app-mail .submit-message-wrapper {
+      right: 225px;
+
+      .submit-message {
+         right: 225px;
+      }
     }
 
     #app-content.with-app-sidebar {
