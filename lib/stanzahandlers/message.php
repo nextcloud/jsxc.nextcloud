@@ -2,6 +2,7 @@
 
 namespace OCA\OJSXC\StanzaHandlers;
 
+use OCA\OJSXC\AppInfo\Application;
 use OCA\OJSXC\Db\MessageMapper;
 use OCA\OJSXC\IUserProvider;
 use OCP\ILogger;
@@ -68,7 +69,10 @@ class Message extends StanzaHandler
 	{
 		$to = $this->getAttribute($stanza, 'to');
 		$pos = strrpos($to, '@');
+
 		$this->to = substr($to, 0, $pos);
+
+		$this->to = Application::convertToRealUID(Application::deSanitize($this->to));
 
 		if (!$this->userProvider->hasUserByUID($this->to)) {
 			$this->logger->warning('User ' . $this->userId . ' is trying to send a message to ' . $this->to . ' but this isn\'t allowed');

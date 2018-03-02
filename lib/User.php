@@ -31,7 +31,7 @@ class User
 	 */
 	public function __construct($uid, $fullName, $origin)
 	{
-		$this->uid = Application::santizeUserId($uid);
+		$this->uid = Application::sanitizeUserId($uid);
 		$this->fullName = $fullName;
 		$this->origin = $origin;
 	}
@@ -49,7 +49,7 @@ class User
 	 */
 	public function setUid($uid)
 	{
-		$this->uid = Application::santizeUserId($uid);
+		$this->uid = Application::sanitizeUserId($uid);
 	}
 
 	/**

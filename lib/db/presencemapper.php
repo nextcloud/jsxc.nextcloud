@@ -2,6 +2,7 @@
 
 namespace OCA\OJSXC\Db;
 
+use OCA\OJSXC\AppInfo\Application;
 use OCA\OJSXC\Db\Presence as PresenceEntity;
 use OCA\OJSXC\IUserProvider;
 use OCA\OJSXC\NewContentContainer;
@@ -59,7 +60,7 @@ class PresenceMapper extends Mapper
 	/**
 	 * @var null|string the userId of the current user
 	 */
-	private $userIdPresenceMapperPresenceMapperPresenceMapper;
+	private $userId;
 
 
 	/**
@@ -145,7 +146,7 @@ class PresenceMapper extends Mapper
 			$stmt = $this->execute("SELECT `userid` FROM `*PREFIX*ojsxc_presence` WHERE `presence` != 'unavailable' AND `userid` != ?", [$this->userId]);
 			$results = [];
 			while ($row = $stmt->fetch()) {
-				if (!$this->userProvider->hasUserByUID($row['userid'])) {
+				if (!$this->userProvider->hasUserByUID(Application::deSanitize($row['userid']))) {
 					continue;
 				}
 				$results[] = $row['userid'];

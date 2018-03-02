@@ -59,7 +59,7 @@ class Stanza extends Entity implements XmlSerializable
 			$userId = $userId[0];
 		}
 
-		$this->to = Application::santizeUserId($userId);
+		$this->to = Application::sanitizeUserId($userId);
 		if (!is_null($host_and_or_resource)) {
 			$this->to .= '@' . $host_and_or_resource;
 		}
@@ -79,7 +79,7 @@ class Stanza extends Entity implements XmlSerializable
 			$host_and_or_resource = $userId[1];
 			$userId = $userId[0];
 		}
-		$this->from = Application::santizeUserId($userId);
+		$this->from = Application::sanitizeUserId($userId);
 		if (!is_null($host_and_or_resource)) {
 			$this->from .= '@' . $host_and_or_resource;
 		}

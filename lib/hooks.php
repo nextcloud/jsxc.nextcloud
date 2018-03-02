@@ -2,6 +2,7 @@
 
 namespace OCA\OJSXC;
 
+use function foo\func;
 use OCA\OJSXC\AppInfo\Application;
 use OCA\OJSXC\Db\PresenceMapper;
 use OCA\OJSXC\Db\StanzaMapper;
@@ -61,13 +62,33 @@ class Hooks
 		$this->groupManager = $groupManager;
 	}
 
-	public function register()
+	public static function getInstance()
 	{
-		$this->userManager->listen('\OC\User', 'postCreateUser', [$this, 'onCreateUser']);
-		$this->userManager->listen('\OC\User', 'postDelete', [$this, 'onDeleteUser']);
-		$this->userSession->listen('\OC\User', 'changeUser', [$this, 'onChangeUser']);
-		$this->groupManager->listen('\OC\Group', 'postAddUser', [$this, 'onAddUserToGroup']);
-		$this->groupManager->listen('\OC\Group', 'postRemoveUser', [$this, 'onRemoveUserFromGroup']);
+		$app = new Application();
+		return $app->getContainer()->query('UserHooks');
+	}
+
+	public static function register()
+	{
+		\OC::$server->getUserManager()->listen('\OC\User', 'postCreateUser', function (IUser $user, $password) {
+			self::getInstance()->onCreateUser($user, $password);
+		});
+
+		\OC::$server->getUserManager()->listen('\OC\User', 'postDelete', function (IUser $user) {
+			self::getInstance()->onDeleteUser($user);
+		});
+
+		\OC::$server->getUserSession()->listen('\OC\User', 'changeUser', function (IUser $user, $feature, $value) {
+			self::getInstance()->onChangeUser($user, $feature, $value);
+		});
+
+		\OC::$server->getGroupManager()->listen('\OC\Group', 'postAddUser', function (IGroup $group, IUser $user) {
+			self::getInstance()->onAddUserToGroup($group, $user);
+		});
+
+		\OC::$server->getGroupManager()->listen('\OC\Group', 'postRemoveUser', function (IGroup $group, IUser $user) {
+			self::getInstance()->onRemoveUserFromGroup($group, $user);
+		});
 	}
 
 	/**
