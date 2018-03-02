@@ -41,6 +41,7 @@ class PresenceMapperTest extends MapperTestUtility
 		$this->setValueOfPrivateProperty($this->mapper, 'updatedPresence', false);
 		$this->setValueOfPrivateProperty($this->mapper, 'fetchedConnectedUsers', false);
 		$this->setValueOfPrivateProperty($this->mapper, 'connectedUsers', []);
+		$this->setValueOfPrivateProperty($this->mapper, 'userId', 'admin');
 		$this->newContentContainer = $this->container->query('NewContentContainer');
 		$this->setValueOfPrivateProperty($this->newContentContainer, 'stanzas', []);
 		foreach (\OC::$server->getUserManager()->search('') as $user) {

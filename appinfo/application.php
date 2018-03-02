@@ -22,7 +22,6 @@ use OCA\OJSXC\StanzaHandlers\Presence;
 use OCA\OJSXC\StanzaLogger;
 use OCA\OJSXC\RawRequest;
 use OCA\OJSXC\DataRetriever;
-use OCA\OJSXC\UserProvider;
 use OCA\OJSXC\ILock;
 use OCA\OJSXC\DbLock;
 use OCA\OJSXC\MemLock;
@@ -32,6 +31,7 @@ use OCA\OJSXC\ContactsStoreUserProvider;
 use OCP\AppFramework\App;
 use OCP\IContainer;
 use OCP\IRequest;
+use OCP\IUserBackend;
 
 class Application extends App {
 
@@ -275,9 +275,9 @@ class Application extends App {
 		 * A modified userID for use in OJSXC.
 		 * This is automatically made lowercase.
 		 */
-		$container->registerService('OJSXC_UserId', function(IContainer $c) {
-			return self::santizeUserId($c->query('UserId'));
-		});
+		$container->registerParameter('OJSXC_UserId',
+			 self::sanitizeUserId(self::convertToRealUID($container->query('UserId')))
+		);
 
 		/**
 		 * Raw request body
@@ -337,12 +337,38 @@ class Application extends App {
 	}
 
 
-	static public function santizeUserId($userId) {
+	public static function sanitizeUserId($providedUid) {
 		return str_replace([" ", "'", "@"], ["_ojsxc_esc_space_", "_ojsxc_squote_space_", "_ojsxc_esc_at_"],
-			strtolower(
-				$userId
-			)
+			$providedUid
 		);
+	}
+
+	public static function deSanitize($providedUid) {
+		return str_replace(["_ojsxc_esc_space_", "_ojsxc_squote_space_", "_ojsxc_esc_at_"], [" ", "'", "@"],
+			$providedUid
+		);
+	}
+
+
+	public static function convertToRealUID($providedUid) {
+		$user = \OC::$server->getUserManager()->get($providedUid);
+		if (is_null($user)) {
+			return $providedUid;
+		}
+
+		$backends = \OC::$server->getUserManager()->getBackends();
+		foreach ($backends as $backend) {
+			if ($backend->getBackendName() === $user->getBackendClassName()) {
+				if (method_exists($backend, 'loginName2UserName')) {
+					$uid = $backend->loginName2UserName($providedUid);
+					if ($uid !== false) {
+						return $uid;
+					}
+				}
+			}
+		}
+
+		return $providedUid;
 	}
 
 	/**
@@ -352,5 +378,7 @@ class Application extends App {
 		$version = \OCP\Util::getVersion();
 		return $version[0] >= 13;
 	}
+
+
 
 }

@@ -48,7 +48,7 @@ class IQRosterPush extends Stanza implements XmlSerializable
 	 */
 	public function setJid($userId, $host_and_or_resource = null)
 	{
-		$this->jid = Application::santizeUserId($userId);
+		$this->jid = Application::sanitizeUserId($userId);
 		if (!is_null($host_and_or_resource)) {
 			$this->jid .= '@' . $host_and_or_resource;
 		}
