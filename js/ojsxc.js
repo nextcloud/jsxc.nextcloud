@@ -173,7 +173,7 @@
             } else if (typeof cache[key] === 'undefined' || cache[key] === null) {
                 if (data.status === 0) {
                     // don't query avatar for offline users
-                    $div.imageplaceholder(user);
+                    $div.imageplaceholder(user, data.name);
 
                     return;
                 }
