@@ -35,6 +35,10 @@ use OCP\IUserBackend;
 
 class Application extends App {
 
+	const INTERNAL = 'internal';
+	const EXTERNAL = 'external';
+	const MANAGED = 'managed';
+
 	private static $config = [];
 
 	public function __construct(array $urlParams=array()){
@@ -377,6 +381,10 @@ class Application extends App {
 	public static function contactsStoreApiSupported() {
 		$version = \OCP\Util::getVersion();
 		return $version[0] >= 13;
+	}
+
+	public static function getServerType() {
+		return \OC::$server->getConfig()->getAppValue('ojsxc', 'serverType', self::INTERNAL);
 	}
 
 

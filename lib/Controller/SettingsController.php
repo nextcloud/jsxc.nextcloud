@@ -8,6 +8,7 @@ use OCP\IRequest;
 use OCP\IUserManager;
 use OCP\IUserSession;
 use OCA\OJSXC\TimeLimitedToken;
+use OCA\OJSXC\AppInfo\Application;
 
 class SettingsController extends Controller
 {
@@ -50,13 +51,13 @@ class SettingsController extends Controller
 		$serverType = $this->getAppValue('serverType');
 
 		$data = [
-		 'serverType' => (!empty($serverType))? $serverType : 'internal',
+		 'serverType' => (!empty($serverType))? $serverType : Application::INTERNAL,
 		 'loginForm' => [
 			'startMinimized' => $this->getBooleanAppValue('xmppStartMinimized')
 			]
 		 ];
 
-		if ($data ['serverType'] === 'internal') {
+		if ($data ['serverType'] === Application::INTERNAL) {
 			$data['adminSettings']['xmppDomain'] = $this->request->getServerHost();
 
 			return [
@@ -259,7 +260,7 @@ class SettingsController extends Controller
 	 */
 	public function getServerType()
 	{
-		return ["serverType" => $this->getAppValue('serverType', 'internal')];
+		return ["serverType" => $this->getAppValue('serverType', Application::INTERNAL)];
 	}
 
 	private function getCurrentUser()

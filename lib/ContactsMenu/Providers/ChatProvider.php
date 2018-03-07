@@ -2,6 +2,7 @@
 
 namespace OCA\OJSXC\ContactsMenu\Providers;
 
+use OCA\OJSXC\AppInfo\Application;
 use OCP\Contacts\ContactsMenu\IActionFactory;
 use OCP\Contacts\ContactsMenu\IEntry;
 use OCP\Contacts\ContactsMenu\IProvider;
@@ -52,9 +53,9 @@ class ChatProvider implements IProvider
 			$config = \OC::$server->getConfig();
 			$xmppPreferMail = $config->getAppValue('ojsxc', 'xmppPreferMail', false);
 			$xmppPreferMail = $xmppPreferMail === true || $xmppPreferMail === 'true';
-			$serverType = $config->getAppValue('ojsxc', 'serverType', 'external');
+			$serverType = Application::getServerType();
 
-			if ($serverType === 'internal') {
+			if ($serverType === Application::INTERNAL) {
 				$domain = \OC::$server->getRequest()->getServerHost();
 			} else {
 				$domain = trim($config->getAppValue('ojsxc', 'xmppDomain'));

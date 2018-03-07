@@ -1,5 +1,6 @@
 <?php
 
+use OCA\OJSXC\AppInfo\Application;
 use OCA\OJSXC\Hooks;
 
 \OCP\App::registerPersonal('ojsxc', 'settings/personal');
@@ -62,7 +63,9 @@ if(!$apiSecret) {
    $config->setAppValue('ojsxc', 'apiSecret', $apiSecret);
 }
 
-Hooks::register();
+if (Application::getServerType() === 'internal') {
+	Hooks::register();
+}
 
 if (!class_exists("\\Sabre\\Xml\\Version")) {
     require_once __DIR__ . "/../vendor/autoload.php";
