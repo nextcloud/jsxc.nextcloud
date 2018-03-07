@@ -55,7 +55,7 @@ class ChatProvider implements IProvider
 			$xmppPreferMail = $xmppPreferMail === true || $xmppPreferMail === 'true';
 			$serverType = Application::getServerType();
 
-			if ($serverType === 'internal') {
+			if ($serverType === Application::INTERNAL) {
 				$domain = \OC::$server->getRequest()->getServerHost();
 			} else {
 				$domain = trim($config->getAppValue('ojsxc', 'xmppDomain'));

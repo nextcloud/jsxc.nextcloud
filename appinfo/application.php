@@ -35,6 +35,10 @@ use OCP\IUserBackend;
 
 class Application extends App {
 
+	public const INTERNAL = 'internal';
+	public const EXTERNAL = 'external';
+	public const MANAGED = 'managed';
+
 	private static $config = [];
 
 	public function __construct(array $urlParams=array()){
@@ -380,7 +384,7 @@ class Application extends App {
 	}
 
 	public static function getServerType() {
-		return \OC::$server->getConfig()->getAppValue('ojsxc', 'serverType', 'internal');
+		return \OC::$server->getConfig()->getAppValue('ojsxc', 'serverType', self::INTERNAL);
 	}
 
 
