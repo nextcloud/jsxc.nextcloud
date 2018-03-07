@@ -2,16 +2,17 @@
 
 namespace OCA\OJSXC\AppInfo;
 
+use OCA\DAV\Server;
 use OCA\OJSXC\Controller\ManagedServerController;
 use OCA\OJSXC\Controller\SettingsController;
 use OCA\OJSXC\Controller\ExternalApiController;
 use OCA\OJSXC\Middleware\ExternalApiMiddleware;
 use OCA\OJSXC\Command\RefreshRoster;
+use OCA\OJSXC\Command\ServerSharing;
 use OCA\OJSXC\Controller\HttpBindController;
 use OCA\OJSXC\Db\IQRosterPushMapper;
 use OCA\OJSXC\Db\MessageMapper;
 use OCA\OJSXC\Db\PresenceMapper;
-use OCA\OJSXC\Db\Stanza;
 use OCA\OJSXC\Db\StanzaMapper;
 use OCA\OJSXC\Migration\RefreshRoster as RefreshRosterMigration;
 use OCA\OJSXC\NewContentContainer;
@@ -31,7 +32,6 @@ use OCA\OJSXC\ContactsStoreUserProvider;
 use OCP\AppFramework\App;
 use OCP\IContainer;
 use OCP\IRequest;
-use OCP\IUserBackend;
 
 class Application extends App {
 
@@ -276,6 +276,12 @@ class Application extends App {
 			);
 		});
 
+		$container->registerService('ServerSharingCommand', function($c) {
+			return new ServerSharing(
+				$c->query('OCP\IConfig')
+			);
+		});
+
 		/**
 		 * A modified userID for use in OJSXC.
 		 * This is automatically made lowercase.
@@ -386,7 +392,11 @@ class Application extends App {
 	 */
 	public static function contactsStoreApiSupported() {
 		$version = \OCP\Util::getVersion();
-		return $version[0] >= 13;
+		if ($version[0] >= 13 && \OC::$server->getConfig()->getAppValue('ojsxc', 'use_server_sharing_settings', 'no') === 'yes') {
+			// ContactsStore API is supported and feature is enabled
+			return true;
+		}
+		return false;
 	}
 
 	public static function getServerType() {
