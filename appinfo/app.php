@@ -1,5 +1,6 @@
 <?php
 
+use OCA\OJSXC\AppInfo\Application;
 use OCA\OJSXC\Hooks;
 
 \OCP\App::registerPersonal('ojsxc', 'settings/personal');
@@ -62,7 +63,7 @@ if(!$apiSecret) {
    $config->setAppValue('ojsxc', 'apiSecret', $apiSecret);
 }
 
-if ($config->getAppValue('ojsxc', 'serverType') === 'internal') {
+if (Application::getServerType() === 'internal') {
 	Hooks::register();
 }
 

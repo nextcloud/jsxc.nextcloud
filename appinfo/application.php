@@ -379,6 +379,10 @@ class Application extends App {
 		return $version[0] >= 13;
 	}
 
+	public static function getServerType() {
+		return \OC::$server->getConfig()->getAppValue('ojsxc', 'serverType', 'internal');
+	}
+
 
 
 }
