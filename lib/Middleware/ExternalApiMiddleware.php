@@ -37,7 +37,7 @@ class ExternalApiMiddleware extends Middleware
 		$jsxcSignatureHeader = $this->request->getHeader('X-JSXC-SIGNATURE');
 
 		// check if we have a signature
-		if (! isset($jsxcSignatureHeader)) {
+		if (empty($jsxcSignatureHeader)) {
 			throw new SecurityException('HTTP header "X-JSXC-Signature" is missing.');
 		} elseif (! extension_loaded('hash')) {
 			throw new SecurityException('Missing "hash" extension to check the secret code validity.');

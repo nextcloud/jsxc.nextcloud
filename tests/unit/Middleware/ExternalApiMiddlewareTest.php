@@ -49,7 +49,7 @@ class ExternalApiMiddlewareTest extends TestCase
 			   ->expects($this->once())
 			   ->method('getHeader')
 			   ->with('X-JSXC-SIGNATURE')
-			   ->willReturn(null);
+			   ->willReturn('');
 
 		$this->expectException(SecurityException::class);
 		$this->expectExceptionMessage('HTTP header "X-JSXC-Signature" is missing.');
