@@ -35,9 +35,9 @@ use OCP\IUserBackend;
 
 class Application extends App {
 
-	public const INTERNAL = 'internal';
-	public const EXTERNAL = 'external';
-	public const MANAGED = 'managed';
+	const INTERNAL = 'internal';
+	const EXTERNAL = 'external';
+	const MANAGED = 'managed';
 
 	private static $config = [];
 
