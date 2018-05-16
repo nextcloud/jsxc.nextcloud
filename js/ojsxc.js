@@ -5,7 +5,6 @@
 (function($) {
     "use strict";
 
-
     var serverTypes = {
         INTERNAL: 0,
         EXTERNAL: 1,
@@ -292,6 +291,38 @@
         };
     }
 
+    function addChatSubmitButton() {
+        var submitWrapperElement = $('#submit-wrapper');
+        var jsxcSubmitWrapperElement = $('<div>');
+        jsxcSubmitWrapperElement.attr('id', 'jsxc_submit_wrapper');
+
+        var submitElement = $('<input>');
+        submitElement.attr({
+            type: 'button',
+            id: 'jsxc_submit',
+        });
+        submitElement.addClass('login primary');
+        submitElement.val($.t('Log_in_without_chat'));
+        submitElement.click(function() {
+            jsxc.storage.setItem('login_without_chat', true);
+            jsxc.submitLoginForm();
+        });
+
+        jsxcSubmitWrapperElement.append(submitElement);
+        $('.login-additional').prepend(jsxcSubmitWrapperElement);
+
+        $('#lost-password').mouseup(function(ev) {
+            ev.preventDefault();
+
+            jsxcSubmitWrapperElement.slideUp().fadeOut();
+        });
+        $('#lost-password-back').mouseup(function(ev) {
+            ev.preventDefault();
+
+            jsxcSubmitWrapperElement.slideDown().fadeIn();
+        });
+    }
+
     // initialization
     $(function() {
         if (location.pathname.substring(location.pathname.lastIndexOf("/") + 1) === 'public.php') {
@@ -384,13 +415,7 @@
         // Add submit link without chat functionality
         if (jsxc.el_exists(jsxc.options.loginForm.form) && jsxc.el_exists(jsxc.options.loginForm.jid) && jsxc.el_exists(jsxc.options.loginForm.pass)) {
 
-            var link = $('<a/>').text($.t('Log_in_without_chat')).attr('href', '#').click(function() {
-                jsxc.storage.setItem('login_without_chat', true);
-                jsxc.submitLoginForm();
-            });
-
-            var alt = $('<p id="jsxc_alt"/>').append(link);
-            $('#body-login form:eq(0) fieldset').append(alt);
+            addChatSubmitButton();
 
             Strophe.log = function(level, msg) {
                 if (level === 3 && /^request id/.test(msg)) {
