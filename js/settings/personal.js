@@ -3,8 +3,8 @@
 (function($) {
    "use strict";
 
-   $(function(){
-      $('#ojsxc-settings [name="loginFormEnable"]').change(function(){
+   $(function() {
+      $('#ojsxc-settings [name="loginFormEnable"]').change(function() {
          var loginFormData = {
             enable: $(this).prop('checked')
          };
@@ -20,7 +20,7 @@
             data: {
                loginForm: loginFormData
             },
-            success: function(data){
+            success: function(data) {
                if (data && data.status === 'success') {
                   console.log('loginFormEnable saved.');
                }

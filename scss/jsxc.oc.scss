@@ -1,5 +1,5 @@
-@import 'js/jsxc/scss/colors';
-@import 'js/jsxc/scss/dep';
+@import "js/jsxc/scss/colors";
+@import "js/jsxc/scss/dep";
 
 //fonts
 $font_sans: Arial, sans-serif;
@@ -9,15 +9,15 @@ $window_bar_bg: #0082c9;
 $window_bar_color: #c0dff1;
 $window_bar_color_hover: #fff;
 
-@import 'js/jsxc/scss/modules',
-        'js/jsxc/scss/buddylist',
-        'js/jsxc/scss/state',
-        'js/jsxc/scss/emoticons',
-        'js/jsxc/scss/roster',
-        'js/jsxc/scss/window',
-        'js/jsxc/scss/muc';
+@import "js/jsxc/scss/modules";
+@import "js/jsxc/scss/buddylist";
+@import "js/jsxc/scss/state";
+@import "js/jsxc/scss/emoticons";
+@import "js/jsxc/scss/roster";
+@import "js/jsxc/scss/window";
+@import "js/jsxc/scss/muc";
 
-@import 'js/jsxc/scss/_jsxc.scss';
-@import 'js/jsxc/scss/webrtc';
+@import "js/jsxc/scss/_jsxc.scss";
+@import "js/jsxc/scss/webrtc";
 
-@import '_oc';
+@import "_oc";

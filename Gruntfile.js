@@ -17,31 +17,31 @@ module.exports = function(grunt) {
          gruntfile: {
             src: 'Gruntfile.js'
          },
-         files: [ 'js/ojsxc.js' ]
+         files: ['js/ojsxc.js']
       },
       copy: {
          build: {
-            files: [ {
+            files: [{
                expand: true,
-               src: [ 'js/*.js', 'js/settings/**', 'css/*', 'appinfo/*', 'ajax/*', 'img/**', 'templates/**', 'sound/*', 'lib/**', 'settings/**', 'LICENSE' ],
+               src: ['js/*.js', 'js/settings/**', 'css/*', 'appinfo/*', 'ajax/*', 'img/**', 'templates/**', 'sound/*', 'lib/**', 'settings/**', 'LICENSE'],
                dest: 'build/'
             }, {
                expand: true,
                cwd: 'js/jsxc/build/',
-               src: [ '**' ],
+               src: ['**'],
                dest: 'build/js/jsxc/'
-            } ]
+            }]
          },
          css: {
-            files: [ {
+            files: [{
                expand: true,
                cwd: 'js/jsxc/lib/',
                src: ['*.css'],
                dest: 'css/'
-            } ]
+            }]
          }
       },
-      clean: [ 'build/' ],
+      clean: ['build/'],
       usebanner: {
          dist: {
             options: {
@@ -49,42 +49,64 @@ module.exports = function(grunt) {
                banner: '<%= meta.banner %>'
             },
             files: {
-               src: [ 'build/js/*.js', 'build/css/jsxc.oc.css' ]
+               src: ['build/js/*.js', 'build/css/jsxc.oc.css']
             }
+         }
+      },
+      jsbeautifier: {
+         'default': {
+            src: ['Gruntfile.js', 'js/*.js', 'js/settings/*.js'],
+            options: {
+               config: '.jsbeautifyrc'
+            }
+         },
+         'pre-commit': {
+            src: ['Gruntfile.js', 'js/*.js', 'js/settings/*.js'],
+            options: {
+               config: '.jsbeautifyrc',
+               mode: 'VERIFY_ONLY'
+            }
+         }
+      },
+      prettysass: {
+         options: {
+            alphabetize: false,
+            indent: 4
+         },
+         core: {
+            src: ['scss/*.scss']
          }
       },
       replace: {
          info: {
-            src: [ 'build/appinfo/info.xml', 'appinfo/info.xml' ],
+            src: ['build/appinfo/info.xml', 'appinfo/info.xml'],
             overwrite: true,
-            replacements: [ {
+            replacements: [{
                from: /<version>[^<]+<\/version>/,
                to: "<version><%= version %></version>"
-            } ]
+            }]
          },
          version: {
-            src: [ 'build/appinfo/version', 'appinfo/version' ],
+            src: ['build/appinfo/version', 'appinfo/version'],
             overwrite: true,
-            replacements: [ {
+            replacements: [{
                from: /.+/,
                to: "<%= version %>"
-            } ]
+            }]
          },
          imageUrl: {
             src: ['css/*.css'],
             overwrite: true,
-            replacements: [
-               {
-                  from: /image-url\(["'](.+)["']\)/g,
-                  to: 'url(\'../js/jsxc/img/$1\')'
-               }
-            ]
+            replacements: [{
+               from: /image-url\(["'](.+)["']\)/g,
+               to: 'url(\'../js/jsxc/img/$1\')'
+            }]
          }
       },
       search: {
          console: {
             files: {
-               src: [ 'js/*.js' ]
+               src: ['js/*.js']
             },
             options: {
                searchString: /console\.log\((?!'[<>]|msg)/g,
@@ -94,7 +116,7 @@ module.exports = function(grunt) {
          },
          changelog: {
             files: {
-               src: [ 'CHANGELOG.md' ]
+               src: ['CHANGELOG.md']
             },
             options: {
                searchString: "## <%= version %>",
@@ -108,7 +130,7 @@ module.exports = function(grunt) {
          },
          changelogNightly: {
             files: {
-               src: [ 'CHANGELOG.md' ]
+               src: ['CHANGELOG.md']
             },
             options: {
                searchString: "^## [Unreleased]",
@@ -127,52 +149,52 @@ module.exports = function(grunt) {
                archive: 'archives/ojsxc-<%= version %>.tar.gz',
                mode: 'tgz'
             },
-            files: [ {
-               src: [ '**' ],
+            files: [{
+               src: ['**'],
                expand: true,
                dest: 'ojsxc/',
                cwd: 'build/'
-            } ]
+            }]
          }
       },
       exec: {
-        signRelease: {
-          command: 'openssl dgst -sha512 -sign ' +
-            '~/.nextcloud/certificates/ojsxc.key ' +
-            'archives/ojsxc-<%= version %>.tar.gz | openssl base64 > ' +
-            'archives/ojsxc-<%= version %>.tar.gz.sig'
-        }
+         signRelease: {
+            command: 'openssl dgst -sha512 -sign ' +
+               '~/.nextcloud/certificates/ojsxc.key ' +
+               'archives/ojsxc-<%= version %>.tar.gz | openssl base64 > ' +
+               'archives/ojsxc-<%= version %>.tar.gz.sig'
+         }
       },
       autoprefixer: {
          no_dest: {
-             src: 'css/*.css'
+            src: 'css/*.css'
          }
       },
       sass: {
          dist: {
-             files: {
-                'css/jsxc.oc.css': 'scss/jsxc.oc.scss'
-             }
+            files: {
+               'css/jsxc.oc.css': 'scss/jsxc.oc.scss'
+            }
          }
-       },
-       dataUri: {
-          dist: {
+      },
+      dataUri: {
+         dist: {
             src: 'css/jsxc.oc.css',
             dest: 'build/css/',
             options: {
-              target: ['img/*.*', 'js/jsxc/img/*.*', 'js/jsxc/img/**/*.*'],
-              /*fixDirLevel: true,
-              baseDir: './',*/
-              maxBytes: 1 //2048
+               target: ['img/*.*', 'js/jsxc/img/*.*', 'js/jsxc/img/**/*.*'],
+               /*fixDirLevel: true,
+               baseDir: './',*/
+               maxBytes: 1 //2048
             }
-          }
-        },
-        watch: {
-            css: {
-                files: ['js/jsxc/scss/*', 'scss/*'],
-                tasks: ['sass', 'autoprefixer', 'replace:imageUrl']
-            }
-        }
+         }
+      },
+      watch: {
+         css: {
+            files: ['js/jsxc/scss/*', 'scss/*'],
+            tasks: ['sass', 'autoprefixer', 'replace:imageUrl']
+         }
+      }
    });
 
    // These plugins provide necessary tasks.
@@ -188,14 +210,18 @@ module.exports = function(grunt) {
    grunt.loadNpmTasks('grunt-data-uri');
    grunt.loadNpmTasks('grunt-contrib-watch');
    grunt.loadNpmTasks('grunt-exec');
+   grunt.loadNpmTasks('grunt-jsbeautifier');
+   grunt.loadNpmTasks('grunt-prettysass');
 
-   grunt.registerTask('default', [ 'build', 'watch' ]);
+   grunt.registerTask('default', ['build', 'watch']);
 
    grunt.registerTask('build', ['copy:css', 'sass', 'replace:imageUrl', 'autoprefixer']);
 
-   grunt.registerTask('build:prerelease', [ 'jshint', 'search:console', 'clean', 'build', 'copy:build', 'dataUri', 'usebanner', 'replace', 'compress' ]);
+   grunt.registerTask('build:prerelease', ['jshint', 'search:console', 'clean', 'build', 'copy:build', 'dataUri', 'usebanner', 'replace', 'compress']);
 
-   grunt.registerTask('build:release', [ 'search:changelog', 'build:prerelease' ]);
+   grunt.registerTask('build:release', ['search:changelog', 'build:prerelease']);
 
-   grunt.registerTask('sign:release', [ 'exec:signRelease' ]);
+   grunt.registerTask('sign:release', ['exec:signRelease']);
+
+   grunt.registerTask('beautify', ['jsbeautifier', 'prettysass']);
 };

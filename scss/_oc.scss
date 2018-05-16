@@ -1,280 +1,288 @@
 @keyframes jsxc-left-to-right {
-  0% {background-position-x: 0%}
-  50% {background-position-x: 100%}
-  100% {background-position-x: 0%}
+    0% {
+        background-position-x: 0%;
+    }
+
+    50% {
+        background-position-x: 100%;
+    }
+
+    100% {
+        background-position-x: 0%;
+    }
 }
 
 #jsxc_roster {
-  top: 45px;
-  z-index: 1500;
+    top: 45px;
+    z-index: 1500;
 }
 
 #jsxc_toggleRoster {
-  width: 8px;
+    width: 8px;
 }
 
 #jsxc_windowList, #jsxc_windowListSB {
-  z-index: 1500;
+    z-index: 1500;
 }
 
 #jsxc {
-  padding: 20px;
+    padding: 20px;
 
-  h1 {
-    margin: 15px 0 5px;
-    font-size: 1.5em;
-  }
-
-  a {
-    color: blue;
-    text-decoration: underline;
-
-    &:hover {
-      text-decoration: none;
+    h1 {
+        margin: 15px 0 5px;
+        font-size: 1.5em;
     }
-  }
+
+    a {
+        color: blue;
+        text-decoration: underline;
+
+        &:hover {
+            text-decoration: none;
+        }
+    }
 }
 
 #jsxc_submit {
-  font-size: 15px;
-  padding: 3px 5px;
-  opacity: 1;
-  font-weight: normal;
+    font-size: 15px;
+    padding: 3px 5px;
+    opacity: 1;
+    font-weight: normal;
 
-  &:hover {
-    opacity: 0.7;
-  }
+    &:hover {
+        opacity: 0.7;
+    }
 }
 
 #ojsxc {
-  .form-group {
-    overflow: hidden;
+    .form-group {
+        overflow: hidden;
 
-    > label, > .form-col {
-      float: left;
+        > label, > .form-col {
+            float: left;
+        }
     }
-  }
 
-  label {
-    box-sizing: border-box;
-    padding: 6px 15px 6px 0;
-    width: 100%;
-    margin: 3px 0;
+    label {
+        box-sizing: border-box;
+        padding: 6px 15px 6px 0;
+        width: 100%;
+        margin: 3px 0;
 
-    @media (min-width: 768px) {
-      width: 33%;
-      text-align: right;
+        @media (min-width: 768px) {
+            width: 33%;
+            text-align: right;
+        }
     }
-  }
 
-  .form-no-padding {
-    padding: 0;
-  }
+    .form-no-padding {
+        padding: 0;
+    }
 
-  .form-col {
-    width: 100%;
-    overflow: hidden;
+    .form-col {
+        width: 100%;
+        overflow: hidden;
 
-    @media (min-width: 768px) {
-      width: 66%;
+        @media (min-width: 768px) {
+            width: 66%;
+        }
+
+        input {
+            display: block;
+        }
+    }
+
+    .form-col-offset {
+        @media (min-width: 768px) {
+            padding-left: 33%;
+        }
     }
 
     input {
-      display: block;
-    }
-  }
+        box-sizing: border-box;
+        padding-right: 15px;
+        width: 100%;
 
-  .form-col-offset {
-    @media (min-width: 768px) {
-      padding-left: 33%;
-    }
-  }
+        &[type='checkbox'] {
+            margin: 13px 0;
+            width: auto;
+            min-height: auto;
+            height: auto;
+        }
 
-  input {
-    box-sizing: border-box;
-    padding-right: 15px;
-    width: 100%;
+        &[type='radio'] {
+            width: auto;
+            min-height: auto;
+            height: auto;
+        }
 
-    &[type='checkbox'] {
-      margin: 13px 0;
-      width: auto;
-      min-height: auto;
-      height: auto;
-    }
+        &[readonly] {
+            background-color: #f1f1f1;
+        }
 
-    &[type='radio'] {
-      width: auto;
-      min-height: auto;
-      height: auto;
-    }
+        &:invalid {
+            border: 1px solid red;
+            position: relative;
+        }
 
-    &[readonly] {
-      background-color: #f1f1f1;
-    }
-
-    &:invalid {
-      border: 1px solid red;
-      position: relative;
+        &.jsxc-loading {
+            background-image: linear-gradient(to right, #fff, #fff);
+            background-position-x: 10%;
+            background-size: 30px 100%;
+            background-repeat: no-repeat;
+            animation: jsxc-left-to-right 5s linear infinite;
+        }
     }
 
-    &.jsxc-loading {
-      background-image: linear-gradient(to right, #fff, #fff);
-      background-position-x: 10%;
-      background-size: 30px 100%;
-      background-repeat: no-repeat;
-      animation: jsxc-left-to-right 5s linear infinite;
-   }
-  }
-
-  em, .boshUrl-msg {
-    display: block;
-    clear: left;
-    margin-bottom: 0.8em;
-  }
-
-  .text-left {
-    text-align: left;
-  }
-
-  h3 {
-    width: 100%;
-
-    @media (min-width: 768px) {
-      width: 33%;
-      border-bottom: 1px solid #e1e1e1;
+    em, .boshUrl-msg {
+        display: block;
+        clear: left;
+        margin-bottom: 0.8em;
     }
-  }
 
-  .text {
-     margin-bottom: 10px;
-  }
+    .text-left {
+        text-align: left;
+    }
+
+    h3 {
+        width: 100%;
+
+        @media (min-width: 768px) {
+            width: 33%;
+            border-bottom: 1px solid #e1e1e1;
+        }
+    }
+
+    .text {
+        margin-bottom: 10px;
+    }
 }
 
 %msg {
-  border: 1px solid #fff;
-  color: #030;
-  padding: 11px;
-  padding-left: 38px;
-  background-position: 12px center;
-  background-repeat: no-repeat;
-  background-color: #f1f1f1;
-  margin: 3px;
+    border: 1px solid #fff;
+    color: #030;
+    padding: 11px;
+    padding-left: 38px;
+    background-position: 12px center;
+    background-repeat: no-repeat;
+    background-color: #f1f1f1;
+    margin: 3px;
 }
 
 .jsxc_success {
-  @extend %msg;
+    @extend %msg;
 
-  background-image: url("../img/checkmark-green.svg");
+    background-image: url("../img/checkmark-green.svg");
 }
 
 .jsxc_fail {
-  @extend %msg;
+    @extend %msg;
 
-  background-image: url("../img/cross-red.svg");
-  background-position: 12px 5px;
+    background-image: url("../img/cross-red.svg");
+    background-position: 12px 5px;
 }
 
 .jsxc_log {
-  width: 500px;
+    width: 500px;
 }
 
 #mainContainer, #odf-toolbar {
-  right: 0;
-  left: 0;
-  width: auto !important;
-  z-index: 70 !important;
+    right: 0;
+    left: 0;
+    width: auto !important;
+    z-index: 70 !important;
 }
 
 #header .jsxc_chatIcon {
-  width: 45px;
-  height: 45px;
-  float: right;
-  background-image: url("../img/chat-icon-white.svg");
-  background-size: 20px;
-  background-repeat: no-repeat;
-  background-position: center;
-  opacity: 0.7;
-  cursor: pointer;
+    width: 45px;
+    height: 45px;
+    float: right;
+    background-image: url("../img/chat-icon-white.svg");
+    background-size: 20px;
+    background-repeat: no-repeat;
+    background-position: center;
+    opacity: 0.7;
+    cursor: pointer;
 
-  &:hover {
-    opacity: 1;
-  }
+    &:hover {
+        opacity: 1;
+    }
 }
 
 @media (min-width: 768px) {
-  #content-wrapper, #filestable > thead, #controls {
-    padding-right: 0;
-    transition: padding-right 0.5s;
-  }
-
-  #mainContainer, #odf-toolbar, #app-sidebar {
-    right: 0;
-    transition: right 0.5s;
-  }
-
-  .app-mail .submit-message-wrapper {
-    transition: right 0.5s;
-
-    .submit-message {
-      transition: right 0.5s;
-    }
-  }
-
-  .jsxc-roster-shown {
     #content-wrapper, #filestable > thead, #controls {
-      padding-right: 210px;
+        padding-right: 0;
+        transition: padding-right 0.5s;
     }
 
     #mainContainer, #odf-toolbar, #app-sidebar {
-      right: 210px;
+        right: 0;
+        transition: right 0.5s;
     }
 
     .app-mail .submit-message-wrapper {
-      right: 225px;
+        transition: right 0.5s;
 
-      .submit-message {
-         right: 225px;
-      }
+        .submit-message {
+            transition: right 0.5s;
+        }
     }
 
-    #app-content.with-app-sidebar {
-      padding-right: 50px;
+    .jsxc-roster-shown {
+        #content-wrapper, #filestable > thead, #controls {
+            padding-right: 210px;
+        }
+
+        #mainContainer, #odf-toolbar, #app-sidebar {
+            right: 210px;
+        }
+
+        .app-mail .submit-message-wrapper {
+            right: 225px;
+
+            .submit-message {
+                right: 225px;
+            }
+        }
+
+        #app-content.with-app-sidebar {
+            padding-right: 50px;
+        }
     }
-  }
 }
 
 #body-login {
-  #jsxc_windowList, #jsxc_roster {
-    display: none;
-  }
+    #jsxc_windowList, #jsxc_roster {
+        display: none;
+    }
 }
 
 #contactsmenu-contacts {
-   .jsxc_statusIndicator {
-      position: relative;
+    .jsxc_statusIndicator {
+        position: relative;
 
-       &:before {
-         width: 6px;
-         height: 6px;
-         right: 13px;
-         top: 13px;
-         position: absolute;
-       }
+        &:before {
+            width: 6px;
+            height: 6px;
+            right: 13px;
+            top: 13px;
+            position: absolute;
+        }
     }
 
-   .contact {
-      &:before {
+    .contact {
+        &:before {
             position: absolute;
             top: 7px;
             left: 7px;
-      }
+        }
 
-      .avatar {
-         cursor: pointer;
-      }
-   }
+        .avatar {
+            cursor: pointer;
+        }
+    }
 }
 
 .nav-icon-javascript-xmpp-client {
-   background-image: url("../img/app-black.svg");
+    background-image: url("../img/app-black.svg");
 }

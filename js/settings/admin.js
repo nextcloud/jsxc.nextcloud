@@ -273,7 +273,7 @@ $(document).ready(function() {
       });
    });
 
-   $('.ojsxc-refresh-registration').click(function(ev){
+   $('.ojsxc-refresh-registration').click(function(ev) {
       ev.preventDefault();
 
       var msgEl = $(this).parents('.msg');

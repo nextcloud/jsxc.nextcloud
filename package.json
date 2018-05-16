@@ -22,6 +22,8 @@
     "grunt-contrib-watch": "^1.0.0",
     "grunt-data-uri": "^0.3.0",
     "grunt-exec": "^2.0.0",
+    "grunt-jsbeautifier": "^0.2.13",
+    "grunt-prettysass": "^0.2.3",
     "grunt-sass": "2.0.0",
     "grunt-search": "^0.1.6",
     "grunt-text-replace": "~0.4.0",
