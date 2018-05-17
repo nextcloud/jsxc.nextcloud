@@ -76,6 +76,11 @@ if (function_exists('script')) {
 				<div class="form-col">
 					<input type="checkbox" name="xmppStartMinimized" id="xmppStartMinimized" value="true" <?php if($_[ 'xmppStartMinimized']==='true' || $_[ 'xmppStartMinimized']===true) echo "checked"; ?> />
 				</div>
+
+				<label for="loginFormEnable">Enable chat on log in</label>
+				<div class="form-col">
+					<input type="checkbox" name="loginFormEnable" id="loginFormEnable" value="true" <?php if($_[ 'loginFormEnable']==='true' || $_[ 'loginFormEnable']===true) echo "checked"; ?> />
+				</div>
 			</div>
 		</fieldset>
 

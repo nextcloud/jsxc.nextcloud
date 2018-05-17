@@ -1,4 +1,4 @@
-/* global jsxc, oc_appswebroots, OC, oc_requesttoken, dijit, oc_config */
+/* global jsxc, oc_appswebroots, OC, oc_requesttoken, dijit, oc_config, OJSXC_CONFIG */
 /* jshint latedef: nofunc */
 
 
@@ -302,7 +302,6 @@
 
    function addChatSubmitButton() {
       var defaultEnable = OJSXC_CONFIG.defaultLoginFormEnable;
-      var submitWrapperElement = $('#submit-wrapper');
       var jsxcSubmitWrapperElement = $('<div>');
       jsxcSubmitWrapperElement.attr('id', 'jsxc_submit_wrapper');
 

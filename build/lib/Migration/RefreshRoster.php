@@ -2,6 +2,7 @@
 
 namespace OCA\OJSXC\Migration;
 
+use OCA\OJSXC\AppInfo\Application;
 use OCA\OJSXC\RosterPush;
 use OCP\IConfig;
 use OCP\ILogger;
@@ -60,11 +61,11 @@ class RefreshRoster implements IRepairStep
 	public function run(IOutput $output)
 	{
 		/**
-	     * We want only to refresh the rosters if this app was installed before,
-	     * since only then the rosters can be outdated.
-	     */
+		 * We want only to refresh the rosters if this app was installed before,
+		 * since only then the rosters can be outdated.
+		 */
 		if ($this->config->getAppValue('ojsxc', 'installed_version', null) !== null
-			&& $this->config->getAppValue('ojsxc', 'serverType', 'internal') === 'internal') {
+			&& Application::getServerType() === Application::INTERNAL) {
 			$stats = $this->rosterPush->refreshRoster();
 			$output->info("Updated " . $stats["updated"] . " roster items");
 			$this->logger->info("Updated " . $stats["updated"] . " roster items", ["app" => "OJSXC"]);

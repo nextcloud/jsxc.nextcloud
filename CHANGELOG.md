@@ -4,6 +4,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [Unreleased]
+### Added
+- option to show only group members in the roster (internal)
+- [jsxc/jsxc#477](https://github.com/jsxc/jsxc/issues/477) add admin setting to change log in behavior
+
+### Fixed
+- fix undefined index error
+- fix sanitization of uid to jid (internal)
+- [jsxc/jsxc#659](https://github.com/jsxc/jsxc/issues/659) layout adjustments for mail app and control bar
+- [#91](https://github.com/nextcloud/jsxc.nextcloud/issues/91) enable user hooks only for internal backend
+
+### Changed
+- [jsxc/jsxc#678](https://github.com/jsxc/jsxc/issues/678) use first letter of displayname for all avatars
+- set internal backend as default
+- bump min NC version to 12
+- beautify 'log in without chat' button
+
 ## 3.3.2 - 2017-11-29
 ### Fixed
 - [jsxc/jsxc#640](https://github.com/jsxc/jsxc/issues/640) fix type error related to internal backend

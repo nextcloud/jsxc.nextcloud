@@ -2,6 +2,7 @@
 
 namespace OCA\OJSXC\Settings;
 
+use OCA\OJSXC\AppInfo\Application;
 use OCP\AppFramework\Http\TemplateResponse;
 use OCP\Settings\ISettings;
 use OCP\IConfig;
@@ -24,18 +25,19 @@ class Admin implements ISettings
 		$externalServices = $this->config->getAppValue('ojsxc', 'externalServices');
 		$externalServices = explode("|", $externalServices);
 
-		$serverType = $this->config->getAppValue('ojsxc', 'serverType');
+		$serverType = Application::getServerType();
 
 		$apiUrl = \OC::$server->getURLGenerator()->linkToRouteAbsolute('ojsxc.externalApi.index');
 
 		$parameters = [
-		   'serverType' => (!empty($serverType))? $serverType : 'internal',
+		   'serverType' => $serverType,
 		   'boshUrl' => $this->config->getAppValue('ojsxc', 'boshUrl'),
 		   'xmppDomain' => $this->config->getAppValue('ojsxc', 'xmppDomain'),
 		   'xmppPreferMail' => $this->config->getAppValue('ojsxc', 'xmppPreferMail'),
 		   'xmppResource' => $this->config->getAppValue('ojsxc', 'xmppResource'),
 		   'xmppOverwrite' => $this->config->getAppValue('ojsxc', 'xmppOverwrite'),
 		   'xmppStartMinimized' => $this->config->getAppValue('ojsxc', 'xmppStartMinimized'),
+		   'loginFormEnable' => $this->config->getAppValue('ojsxc', 'loginFormEnable', true),
 		   'iceUrl' => $this->config->getAppValue('ojsxc', 'iceUrl'),
 		   'iceUsername' => $this->config->getAppValue('ojsxc', 'iceUsername'),
 		   'iceCredential' => $this->config->getAppValue('ojsxc', 'iceCredential'),

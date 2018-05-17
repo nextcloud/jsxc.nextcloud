@@ -2,8 +2,12 @@
 
 namespace OCA\OJSXC;
 
+use function foo\func;
+use OCA\OJSXC\AppInfo\Application;
 use OCA\OJSXC\Db\PresenceMapper;
 use OCA\OJSXC\Db\StanzaMapper;
+use OCP\IGroup;
+use OCP\IGroupManager;
 use OCP\IUserManager;
 
 use OCP\IUser;
@@ -32,25 +36,59 @@ class Hooks
 	 */
 	private $stanzaMapper;
 
+	/**
+	 * @var RosterPush
+	 */
+	private $rosterPush;
+
+	/**
+	 * @var IGroupManager
+	 */
+	private $groupManager;
+
 	public function __construct(
 		IUserManager $userManager,
 								IUserSession $userSession,
 								RosterPush $rosterPush,
 								PresenceMapper $presenceMapper,
-								StanzaMapper $stanzaMapper
+								StanzaMapper $stanzaMapper,
+								IGroupManager $groupManager
 	) {
 		$this->userManager = $userManager;
 		$this->userSession = $userSession;
 		$this->rosterPush = $rosterPush;
 		$this->presenceMapper = $presenceMapper;
 		$this->stanzaMapper = $stanzaMapper;
+		$this->groupManager = $groupManager;
 	}
 
-	public function register()
+	public static function getInstance()
 	{
-		$this->userManager->listen('\OC\User', 'postCreateUser', [$this, 'onCreateUser']);
-		$this->userManager->listen('\OC\User', 'postDelete', [$this, 'onDeleteUser']);
-		$this->userSession->listen('\OC\User', 'changeUser', [$this, 'onChangeUser']);
+		$app = new Application();
+		return $app->getContainer()->query('UserHooks');
+	}
+
+	public static function register()
+	{
+		\OC::$server->getUserManager()->listen('\OC\User', 'postCreateUser', function (IUser $user, $password) {
+			self::getInstance()->onCreateUser($user, $password);
+		});
+
+		\OC::$server->getUserManager()->listen('\OC\User', 'postDelete', function (IUser $user) {
+			self::getInstance()->onDeleteUser($user);
+		});
+
+		\OC::$server->getUserSession()->listen('\OC\User', 'changeUser', function (IUser $user, $feature, $value) {
+			self::getInstance()->onChangeUser($user, $feature, $value);
+		});
+
+		\OC::$server->getGroupManager()->listen('\OC\Group', 'postAddUser', function (IGroup $group, IUser $user) {
+			self::getInstance()->onAddUserToGroup($group, $user);
+		});
+
+		\OC::$server->getGroupManager()->listen('\OC\Group', 'postRemoveUser', function (IGroup $group, IUser $user) {
+			self::getInstance()->onRemoveUserFromGroup($group, $user);
+		});
 	}
 
 	/**
@@ -111,5 +149,19 @@ class Hooks
 			// if the user was changed, resend the whole roster item
 			$this->onCreateUser($user, '');
 		}
+	}
+
+	public function onAddUserToGroup(IGroup $group, IUser $user)
+	{
+		$this->rosterPush->createOrUpdateRosterItem($user);
+		$this->rosterPush->addUserToGroup($user, $group);
+	}
+
+	public function onRemoveUserFromGroup(IGroup $group, IUser $user)
+	{
+		if (Application::contactsStoreApiSupported()) {
+			$this->rosterPush->removeRosterItemForUsersInGroup($group, $user->getUID());
+		}
+		$this->rosterPush->removeUserFromGroup($user, $group);
 	}
 }

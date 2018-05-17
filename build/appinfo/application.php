@@ -22,15 +22,22 @@ use OCA\OJSXC\StanzaHandlers\Presence;
 use OCA\OJSXC\StanzaLogger;
 use OCA\OJSXC\RawRequest;
 use OCA\OJSXC\DataRetriever;
-use OCP\AppFramework\App;
 use OCA\OJSXC\ILock;
 use OCA\OJSXC\DbLock;
 use OCA\OJSXC\MemLock;
 use OCA\OJSXC\Hooks;
+use OCA\OJSXC\UserManagerUserProvider;
+use OCA\OJSXC\ContactsStoreUserProvider;
+use OCP\AppFramework\App;
 use OCP\IContainer;
 use OCP\IRequest;
+use OCP\IUserBackend;
 
 class Application extends App {
+
+	const INTERNAL = 'internal';
+	const EXTERNAL = 'external';
+	const MANAGED = 'managed';
 
 	private static $config = [];
 
@@ -50,6 +57,9 @@ class Application extends App {
 			['locking' => false]);
 
 
+		/**
+		 * Controllers
+		 */
 		$container->registerService('HttpBindController', function(IContainer $c) {
 			return new HttpBindController(
 				$c->query('AppName'),
@@ -153,7 +163,8 @@ class Application extends App {
 				$c->query('OJSXC_UserId'),
 				$c->query('MessageMapper'),
 				$c->query('NewContentContainer'),
-				self::$config['polling']['timeout']
+				self::$config['polling']['timeout'],
+				$c->query('UserProvider')
 			);
 		});
 
@@ -166,7 +177,8 @@ class Application extends App {
 				$c->query('OJSXC_UserId'),
 				$c->query('Host'),
 				$c->query('OCP\IUserManager'),
-				$c->query('OCP\IConfig')
+				$c->query('OCP\IConfig'),
+				$c->query('UserProvider')
 			);
 		});
 
@@ -183,7 +195,9 @@ class Application extends App {
 			return new Message(
 				$c->query('OJSXC_UserId'),
 				$c->query('Host'),
-				$c->query('MessageMapper')
+				$c->query('MessageMapper'),
+				$c->query('UserProvider'),
+				$c->query('OCP\ILogger')
 			);
 		});
 
@@ -196,6 +210,9 @@ class Application extends App {
 			return $request->getServerHost();
 		});
 
+		/**
+		 * Helpers
+		 */
 		$container->registerService('NewContentContainer', function() {
 			return new NewContentContainer();
 		});
@@ -214,7 +231,8 @@ class Application extends App {
 				$c->query('ServerContainer')->getUserSession(),
 				$c->query('Host'),
 				$c->query('IQRosterPushMapper'),
-				$c->query('ServerContainer')->getDatabaseConnection()
+				$c->query('ServerContainer')->getDatabaseConnection(),
+				$c->query('UserProvider')
 			);
 		});
 
@@ -224,14 +242,36 @@ class Application extends App {
 				$c->query('ServerContainer')->getUserSession(),
 				$c->query('RosterPush'),
 				$c->query('PresenceMapper'),
-				$c->query('StanzaMapper')
+				$c->query('StanzaMapper'),
+				$c->query('ServerContainer')->query('GroupManager')
 			);
 		});
 
+		$container->registerService('UserProvider', function(IContainer $c) {
+			if (self::contactsStoreApiSupported()) {
+				return new ContactsStoreUserProvider(
+					$c->query('OCP\Contacts\ContactsMenu\IContactsStore'),
+					$c->query('ServerContainer')->getUserSession(),
+					$c->query('ServerContainer')->getUserManager(),
+					$c->query('OCP\IGroupManager'),
+					$c->query('OCP\IConfig')
+				);
+			} else {
+				return new UserManagerUserProvider(
+					$c->query('ServerContainer')->getUserManager()
+				);
+			}
+		});
+
+
+		/**
+		 * Commands
+		 */
 		$container->registerService('RefreshRosterCommand', function($c) {
 			return new RefreshRoster(
 				$c->query('ServerContainer')->getUserManager(),
-				$c->query('RosterPush')
+				$c->query('RosterPush'),
+				$c->query('PresenceMapper')
 			);
 		});
 
@@ -239,9 +279,9 @@ class Application extends App {
 		 * A modified userID for use in OJSXC.
 		 * This is automatically made lowercase.
 		 */
-		$container->registerService('OJSXC_UserId', function(IContainer $c) {
-			return self::santizeUserId($c->query('UserId'));
-		});
+		$container->registerParameter('OJSXC_UserId',
+			 self::sanitizeUserId(self::convertToRealUID($container->query('UserId')))
+		);
 
 		/**
 		 * Raw request body
@@ -257,6 +297,10 @@ class Application extends App {
 			return new DataRetriever();
 		});
 
+
+		/**
+		 * Migrations
+		 */
 		$container->registerService('OCA\OJSXC\Migration\RefreshRoster', function(IContainer $c) {
 			return new RefreshRosterMigration(
 				$c->query('RosterPush'),
@@ -297,11 +341,52 @@ class Application extends App {
 	}
 
 
-	static public function santizeUserId($userId) {
+	public static function sanitizeUserId($providedUid) {
 		return str_replace([" ", "'", "@"], ["_ojsxc_esc_space_", "_ojsxc_squote_space_", "_ojsxc_esc_at_"],
-			strtolower(
-				$userId
-			)
+			$providedUid
 		);
 	}
+
+	public static function deSanitize($providedUid) {
+		return str_replace(["_ojsxc_esc_space_", "_ojsxc_squote_space_", "_ojsxc_esc_at_"], [" ", "'", "@"],
+			$providedUid
+		);
+	}
+
+
+	public static function convertToRealUID($providedUid) {
+		$user = \OC::$server->getUserManager()->get($providedUid);
+		if (is_null($user)) {
+			return $providedUid;
+		}
+
+		$backends = \OC::$server->getUserManager()->getBackends();
+		foreach ($backends as $backend) {
+			if ($backend->getBackendName() === $user->getBackendClassName()) {
+				if (method_exists($backend, 'loginName2UserName')) {
+					$uid = $backend->loginName2UserName($providedUid);
+					if ($uid !== false) {
+						return $uid;
+					}
+				}
+			}
+		}
+
+		return $providedUid;
+	}
+
+	/**
+	 * @return bool whether the ContactsStore API is enabled
+	 */
+	public static function contactsStoreApiSupported() {
+		$version = \OCP\Util::getVersion();
+		return $version[0] >= 13;
+	}
+
+	public static function getServerType() {
+		return \OC::$server->getConfig()->getAppValue('ojsxc', 'serverType', self::INTERNAL);
+	}
+
+
+
 }

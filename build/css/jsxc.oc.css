@@ -1,13 +1,13 @@
 /*!
- * ojsxc v3.3.2 - 2017-11-29
+ * ojsxc v3.4.0-beta.1 - 2018-05-17
  * 
- * Copyright (c) 2017 Klaus Herberth <klaus@jsxc.org> <br>
+ * Copyright (c) 2018 Klaus Herberth <klaus@jsxc.org> <br>
  * Released under the MIT license
  * 
  * Please see http://www.jsxc.org/
  * 
  * @author Klaus Herberth <klaus@jsxc.org>
- * @version 3.3.2
+ * @version 3.4.0-beta.1
  * @license MIT
  */
 
@@ -182,7 +182,7 @@ button::-moz-focus-inner {
   padding: 0;
   width: 90px;
   height: 110px;
-  -webkit-tap-highlight-color: transparent; }
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0); }
   .mfp-arrow:active {
     margin-top: -54px; }
   .mfp-arrow:hover, .mfp-arrow:focus {
@@ -346,13 +346,10 @@ img.mfp-img {
 
 @media all and (max-width: 900px) {
   .mfp-arrow {
-    -webkit-transform: scale(0.75);
     transform: scale(0.75); }
   .mfp-arrow-left {
-    -webkit-transform-origin: 0;
     transform-origin: 0; }
   .mfp-arrow-right {
-    -webkit-transform-origin: 100%;
     transform-origin: 100%; }
   .mfp-container {
     padding-left: 6px;
@@ -376,12 +373,6 @@ img.emojione {
   width: auto; }
 
 @keyframes progress-bar-stripes {
-  from {
-    background-position: 40px 0; }
-  to {
-    background-position: 0 0; } }
-
-@-webkit-keyframes progress-bar-stripes {
   from {
     background-position: 40px 0; }
   to {
@@ -420,7 +411,6 @@ img.emojione {
 
 #jsxc_dialog .progress.active .progress-bar,
 #jsxc_dialog .progress-bar.active {
-  -webkit-animation: progress-bar-stripes 2s linear infinite;
   animation: progress-bar-stripes 2s linear infinite; }
 
 #jsxc_dialog .progress-bar-success {
@@ -2186,75 +2176,41 @@ fieldset[disabled]
 .mfp-content {
   text-align: center; }
 
-@-webkit-keyframes bounce {
+@keyframes bounce {
   0% {
     bottom: 0;
-    -webkit-animation-timing-function: ease-in;
-            animation-timing-function: ease-in; }
+    animation-timing-function: ease-in; }
   12% {
     bottom: 5px;
-    -webkit-animation-timing-function: ease-out;
-            animation-timing-function: ease-out; }
+    animation-timing-function: ease-out; }
   25% {
     bottom: 0;
-    -webkit-animation-timing-function: ease-in;
-            animation-timing-function: ease-in; }
+    animation-timing-function: ease-in; }
   37% {
     bottom: 5px;
-    -webkit-animation-timing-function: ease-out;
-            animation-timing-function: ease-out; }
+    animation-timing-function: ease-out; }
   50% {
     bottom: 0;
-    -webkit-animation-timing-function: ease-in;
-            animation-timing-function: ease-in; }
+    animation-timing-function: ease-in; }
   100% {
     bottom: 0; } }
 
 @keyframes bounce {
   0% {
     bottom: 0;
-    -webkit-animation-timing-function: ease-in;
-            animation-timing-function: ease-in; }
+    animation-timing-function: ease-in; }
   12% {
     bottom: 5px;
-    -webkit-animation-timing-function: ease-out;
-            animation-timing-function: ease-out; }
+    animation-timing-function: ease-out; }
   25% {
     bottom: 0;
-    -webkit-animation-timing-function: ease-in;
-            animation-timing-function: ease-in; }
+    animation-timing-function: ease-in; }
   37% {
     bottom: 5px;
-    -webkit-animation-timing-function: ease-out;
-            animation-timing-function: ease-out; }
+    animation-timing-function: ease-out; }
   50% {
     bottom: 0;
-    -webkit-animation-timing-function: ease-in;
-            animation-timing-function: ease-in; }
-  100% {
-    bottom: 0; } }
-
-@keyframes bounce {
-  0% {
-    bottom: 0;
-    -webkit-animation-timing-function: ease-in;
-            animation-timing-function: ease-in; }
-  12% {
-    bottom: 5px;
-    -webkit-animation-timing-function: ease-out;
-            animation-timing-function: ease-out; }
-  25% {
-    bottom: 0;
-    -webkit-animation-timing-function: ease-in;
-            animation-timing-function: ease-in; }
-  37% {
-    bottom: 5px;
-    -webkit-animation-timing-function: ease-out;
-            animation-timing-function: ease-out; }
-  50% {
-    bottom: 0;
-    -webkit-animation-timing-function: ease-in;
-            animation-timing-function: ease-in; }
+    animation-timing-function: ease-in; }
   100% {
     bottom: 0; } }
 
@@ -2492,8 +2448,7 @@ fieldset[disabled]
     right: -200px;
     transition: right 0.5s; }
     #jsxc_roster.jsxc_state_hidden #jsxc_toggleRoster:before {
-      -webkit-transform: rotate(0deg);
-              transform: rotate(0deg); }
+      transform: rotate(0deg); }
   #jsxc_roster.jsxc_state_shown {
     display: block;
     right: 0;
@@ -2569,8 +2524,7 @@ fieldset[disabled]
     border-style: solid;
     border-width: 6px 4px 6px 0;
     border-color: transparent whitesmoke;
-    -webkit-transform: rotate(180deg);
-            transform: rotate(180deg); }
+    transform: rotate(180deg); }
 
 .jsxc_rosteritem {
   padding: 0;
@@ -2703,8 +2657,7 @@ fieldset[disabled]
     font-size: 80%;
     padding: 2px;
     position: relative;
-    -webkit-animation: bounce 2s 1s infinite;
-            animation: bounce 2s 1s infinite; }
+    animation: bounce 2s 1s infinite; }
   #jsxc_notice > span:empty {
     display: none; }
 
@@ -3072,6 +3025,17 @@ fieldset[disabled]
     max-width: 100%; }
   .jsxc_chatmessage .jsxc_avatar {
     display: none; }
+  .jsxc_chatmessage .jsxc_location {
+    border-radius: 3px;
+    display: block;
+    background-color: #fff;
+    padding: 3px;
+    padding-left: 30px;
+    margin-bottom: 5px;
+    background-position: 3px center;
+    background-size: 25px 25px;
+    background-repeat: no-repeat;
+    background-image: url('../js/jsxc/img/location_icon.svg'); }
   .jsxc_chatmessage .jsxc_attachment {
     border-radius: 3px;
     background-color: #fff;
@@ -3802,34 +3766,15 @@ img.jsxc_vCard {
   height: 10px;
   box-sizing: border-box;
   background-color: #a1a1a1;
-  -webkit-animation-name: jsxc_establishing;
-          animation-name: jsxc_establishing;
-  -webkit-animation-duration: 2s;
-          animation-duration: 2s;
-  -webkit-animation-iteration-count: infinite;
-          animation-iteration-count: infinite;
+  animation-name: jsxc_establishing;
+  animation-duration: 2s;
+  animation-iteration-count: infinite;
   position: absolute;
   top: 50%;
   left: 50%;
   z-index: 20;
   margin-left: -20px;
   margin-top: -5px; }
-
-@-webkit-keyframes jsxc_establishing {
-  0% {
-    border-width: 0;
-    background-color: #a1a1a1;
-    width: 40px;
-    margin-left: -20px; }
-  50% {
-    background-color: #f1f1f1;
-    width: 80px;
-    margin-left: -40px; }
-  100% {
-    border-width: 0;
-    background-color: #a1a1a1;
-    width: 40px;
-    margin-left: -20px; } }
 
 @keyframes jsxc_establishing {
   0% {
@@ -3855,38 +3800,15 @@ img.jsxc_vCard {
   box-sizing: border-box;
   background-color: #98d48f;
   border-radius: 50%;
-  -webkit-animation-name: jsxc_ringing;
-          animation-name: jsxc_ringing;
-  -webkit-animation-duration: 2s;
-          animation-duration: 2s;
-  -webkit-animation-iteration-count: infinite;
-          animation-iteration-count: infinite;
+  animation-name: jsxc_ringing;
+  animation-duration: 2s;
+  animation-iteration-count: infinite;
   position: absolute;
   top: 50%;
   left: 50%;
   z-index: 20;
   margin-left: -10px;
   margin-top: -10px; }
-
-@-webkit-keyframes jsxc_ringing {
-  0% {
-    background-color: #98d48f;
-    width: 20px;
-    height: 20px;
-    margin-left: -10px;
-    margin-top: -10px; }
-  50% {
-    background-color: #76ba6c;
-    width: 80px;
-    height: 80px;
-    margin-left: -40px;
-    margin-top: -40px; }
-  100% {
-    background-color: #98d48f;
-    width: 20px;
-    height: 20px;
-    margin-left: -10px;
-    margin-top: -10px; } }
 
 @keyframes jsxc_ringing {
   0% {
@@ -3918,36 +3840,15 @@ img.jsxc_vCard {
   background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
-  -webkit-animation-name: jsxc_ringing;
-          animation-name: jsxc_ringing;
-  -webkit-animation-duration: 1.5s;
-          animation-duration: 1.5s;
-  -webkit-animation-iteration-count: infinite;
-          animation-iteration-count: infinite;
+  animation-name: jsxc_ringing;
+  animation-duration: 1.5s;
+  animation-iteration-count: infinite;
   position: absolute;
   top: 50%;
   left: 50%;
   z-index: 20;
   margin-left: -40px;
   margin-top: -40px; }
-
-@-webkit-keyframes jsxc_bell {
-  0% {
-    margin-left: -50px; }
-  5% {
-    margin-left: -30px; }
-  10% {
-    margin-left: -50px; }
-  15% {
-    margin-left: -30px; }
-  20% {
-    margin-left: -50px; }
-  25% {
-    margin-left: -30px; }
-  30% {
-    margin-left: -50px; }
-  35% {
-    margin-left: -40px; } }
 
 @keyframes jsxc_bell {
   0% {
@@ -4180,14 +4081,6 @@ div.jsxc_video {
 .jsxc_videoSuitable .jsxc_name {
   font-style: italic; }
 
-@-webkit-keyframes jsxc-left-to-right {
-  0% {
-    background-position-x: 0%; }
-  50% {
-    background-position-x: 100%; }
-  100% {
-    background-position-x: 0%; } }
-
 @keyframes jsxc-left-to-right {
   0% {
     background-position-x: 0%; }
@@ -4217,17 +4110,13 @@ div.jsxc_video {
     #jsxc a:hover {
       text-decoration: none; }
 
-#jsxc_alt {
-  text-align: right;
-  margin: 15px;
-  opacity: 0.5;
-  font-style: italic;
-  padding-top: 5px;
-  clear: both; }
-  #jsxc_alt:hover {
-    opacity: 1; }
-  #jsxc_alt a {
-    color: #fff; }
+#jsxc_submit {
+  font-size: 15px;
+  padding: 3px 5px;
+  opacity: 1;
+  font-weight: normal; }
+  #jsxc_submit:hover {
+    opacity: 0.7; }
 
 #ojsxc .form-group {
   overflow: hidden; }
@@ -4283,8 +4172,7 @@ div.jsxc_video {
     background-position-x: 10%;
     background-size: 30px 100%;
     background-repeat: no-repeat;
-    -webkit-animation: jsxc-left-to-right 5s linear infinite;
-            animation: jsxc-left-to-right 5s linear infinite; }
+    animation: jsxc-left-to-right 5s linear infinite; }
 
 #ojsxc em, #ojsxc .boshUrl-msg {
   display: block;
@@ -4344,16 +4232,24 @@ div.jsxc_video {
     opacity: 1; }
 
 @media (min-width: 768px) {
-  #content-wrapper, #filestable > thead {
+  #content-wrapper, #filestable > thead, #controls {
     padding-right: 0;
     transition: padding-right 0.5s; }
   #mainContainer, #odf-toolbar, #app-sidebar {
     right: 0;
     transition: right 0.5s; }
-  .jsxc-roster-shown #content-wrapper, .jsxc-roster-shown #filestable > thead {
+  .app-mail .submit-message-wrapper {
+    transition: right 0.5s; }
+    .app-mail .submit-message-wrapper .submit-message {
+      transition: right 0.5s; }
+  .jsxc-roster-shown #content-wrapper, .jsxc-roster-shown #filestable > thead, .jsxc-roster-shown #controls {
     padding-right: 210px; }
   .jsxc-roster-shown #mainContainer, .jsxc-roster-shown #odf-toolbar, .jsxc-roster-shown #app-sidebar {
     right: 210px; }
+  .jsxc-roster-shown .app-mail .submit-message-wrapper {
+    right: 225px; }
+    .jsxc-roster-shown .app-mail .submit-message-wrapper .submit-message {
+      right: 225px; }
   .jsxc-roster-shown #app-content.with-app-sidebar {
     padding-right: 50px; } }
 

@@ -30,11 +30,18 @@ class Personal implements ISettings
 			$options = (array) json_decode($options, true);
 
 			if (is_array($options)) {
-				$loginFormEnable = true;
+				$loginFormEnable = null;
 				if (is_array($options['loginForm']) && isset($options['loginForm']['enable'])) {
 					$loginFormEnable = $options['loginForm']['enable'];
 				}
-				$parameters['loginFormEnable'] = $loginFormEnable;
+
+				if ($loginFormEnable === true || $loginFormEnable === 'true') {
+					$parameters['loginForm'] = 'enable';
+				} elseif ($loginFormEnable === false || $loginFormEnable === 'false') {
+					$parameters['loginForm'] = 'disable';
+				} else {
+					$parameters['loginForm'] = 'default';
+				}
 			}
 		}
 

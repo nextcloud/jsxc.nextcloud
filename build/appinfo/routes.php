@@ -22,7 +22,9 @@ $application->registerRoutes($this, array(
 		// array('name' => 'externalApi#is_user', 'url' => '/api/v2/isUser', 'verb' => 'POST'),
 		// array('name' => 'externalApi#shared_roster', 'url' => '/api/v2/sharedRoster', 'verb' => 'POST'),
 
-		array('name' => 'managedServer#register', 'url' => '/managedServer/register', 'verb' => 'POST')
+		array('name' => 'managedServer#register', 'url' => '/managedServer/register', 'verb' => 'POST'),
+
+		array('name' => 'javascript#generalConfig', 'url' => '/js/config', 'verb' => 'GET'),
 	)
 ));
 ?>

@@ -1,12 +1,23 @@
 <?php
 
 use OCA\OJSXC\AppInfo\Application;
+use OCA\OJSXC\Hooks;
 
 \OCP\App::registerPersonal('ojsxc', 'settings/personal');
 
 $isDevEnv = \OC::$server->getConfig()->getSystemValue('jsxc.environment') === 'dev';
 $jsxc_root = ($isDevEnv)? 'jsxc/dev/' : 'jsxc/';
 $jsProdSuffix = (!$isDevEnv)? '.min' : '';
+
+$linkToGeneralConfig = \OC::$server->getURLGenerator()->linkToRoute('ojsxc.javascript.generalConfig');
+
+\OCP\Util::addHeader(
+	'script',
+	[
+		'src' => $linkToGeneralConfig,
+		'nonce' => \OC::$server->getContentSecurityPolicyNonceManager()->getNonce()
+	], ''
+);
 
 OCP\Util::addScript ( 'ojsxc', $jsxc_root.'lib/jquery.slimscroll' );
 OCP\Util::addScript ( 'ojsxc', $jsxc_root.'lib/jquery.fullscreen' );
@@ -62,8 +73,9 @@ if(!$apiSecret) {
    $config->setAppValue('ojsxc', 'apiSecret', $apiSecret);
 }
 
-$app = new Application();
-$app->getContainer()->query('UserHooks')->register();
+if (Application::getServerType() === 'internal') {
+	Hooks::register();
+}
 
 if (!class_exists("\\Sabre\\Xml\\Version")) {
     require_once __DIR__ . "/../vendor/autoload.php";

@@ -2,6 +2,7 @@
 
 namespace OCA\OJSXC\Command;
 
+use OCA\OJSXC\Db\PresenceMapper;
 use OCA\OJSXC\RosterPush;
 use OCP\IUserManager;
 use Symfony\Component\Console\Command\Command;
@@ -22,13 +23,20 @@ class RefreshRoster extends Command
 	 */
 	private $rosterPush;
 
+	/**
+	 * @var PresenceMapper
+	 */
+	private $presenceMapper;
+
 	public function __construct(
 		IUserManager $userManager,
-								RosterPush $rosterPush
+								RosterPush $rosterPush,
+	PresenceMapper $presenceMapper
 	) {
 		parent::__construct();
 		$this->userManager = $userManager;
 		$this->rosterPush = $rosterPush;
+		$this->presenceMapper = $presenceMapper;
 	}
 
 	protected function configure()

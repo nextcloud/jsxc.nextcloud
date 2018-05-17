@@ -1,61 +1,62 @@
 /*!
- * ojsxc v3.3.2 - 2017-11-29
+ * ojsxc v3.4.0-beta.1 - 2018-05-17
  * 
- * Copyright (c) 2017 Klaus Herberth <klaus@jsxc.org> <br>
+ * Copyright (c) 2018 Klaus Herberth <klaus@jsxc.org> <br>
  * Released under the MIT license
  * 
  * Please see http://www.jsxc.org/
  * 
  * @author Klaus Herberth <klaus@jsxc.org>
- * @version 3.3.2
+ * @version 3.4.0-beta.1
  * @license MIT
  */
 
-/* global jsxc, oc_appswebroots, OC, oc_requesttoken, dijit, oc_config */
+/* global jsxc, oc_appswebroots, OC, oc_requesttoken, dijit, oc_config, OJSXC_CONFIG */
 /* jshint latedef: nofunc */
 
 
 (function($) {
-    "use strict";
+   "use strict";
 
+   var serverTypes = {
+      INTERNAL: 0,
+      EXTERNAL: 1,
+      MANAGED: 2
+   };
 
-    var serverTypes = {
-        INTERNAL: 0,
-        EXTERNAL: 1,
-        MANAGED: 2
-    };
+   var forceLoginFormEnable;
 
-    function observeContactsMenu() {
-        var target = document.getElementById('contactsmenu');
+   function observeContactsMenu() {
+      var target = document.getElementById('contactsmenu');
 
-        var observer = new MutationObserver(function(mutations) {
-            mutations.forEach(function(mutation) {
-                if (mutation.target.id !== 'contactsmenu-contacts') {
-                    return;
-                }
+      var observer = new MutationObserver(function(mutations) {
+         mutations.forEach(function(mutation) {
+            if (mutation.target.id !== 'contactsmenu-contacts') {
+               return;
+            }
 
-                $(mutation.target).find('[href^="xmpp:"]').addClass('jsxc_statusIndicator');
+            $(mutation.target).find('[href^="xmpp:"]').addClass('jsxc_statusIndicator');
 
-                $(mutation.target).find('.contact').each(function(){
-                   updateContactItem($(this));
-                });
-
-                jsxc.gui.detectUriScheme(mutation.target);
+            $(mutation.target).find('.contact').each(function() {
+               updateContactItem($(this));
             });
-        });
 
-        var config = {
-            attributes: true,
-            childList: true,
-            characterData: true,
-            subtree: true
-        };
+            jsxc.gui.detectUriScheme(mutation.target);
+         });
+      });
 
-        observer.observe(target, config);
-    }
+      var config = {
+         attributes: true,
+         childList: true,
+         characterData: true,
+         subtree: true
+      };
 
-    function updateContactItem(contactElement) {
-      var xmppAddresses = contactElement.find('[href^="xmpp:"]').map(function(){
+      observer.observe(target, config);
+   }
+
+   function updateContactItem(contactElement) {
+      var xmppAddresses = contactElement.find('[href^="xmpp:"]').map(function() {
          return $(this).attr('href').replace(/^xmpp:/, '');
       });
 
@@ -67,7 +68,7 @@
       var highestPresent = jsxc.CONST.STATUS.indexOf('offline');
       var highestPresentBid = xmppAddresses.get(0);
 
-      xmppAddresses.each(function(index, bid){
+      xmppAddresses.each(function(index, bid) {
          var lastMsg = jsxc.getLastMsg(bid);
 
          if (lastMsg) {
@@ -82,8 +83,10 @@
          }
       });
 
-      var latestMsg = {date: 0};
-      $(lastMessages).each(function(index, msg){
+      var latestMsg = {
+         date: 0
+      };
+      $(lastMessages).each(function(index, msg) {
          if (msg.date > latestMsg.date) {
             latestMsg = msg;
          }
@@ -112,364 +115,412 @@
             jsxc.gui.queryActions.message(highestPresentBid);
          });
       }
-    }
+   }
 
-    function injectChatIcon() {
-        var div = $('<div/>');
+   function injectChatIcon() {
+      var div = $('<div/>');
 
-        div.addClass('jsxc_chatIcon');
-        div.click(function() {
-            jsxc.gui.roster.toggle();
-        });
+      div.addClass('jsxc_chatIcon');
+      div.click(function() {
+         jsxc.gui.roster.toggle();
+      });
 
-        $('#header form.searchbox').after(div);
+      $('#header form.searchbox').after(div);
 
-    }
+   }
 
-    function onRosterToggle(ev, state, duration) {
-        $('body').removeClass('jsxc-roster-hidden jsxc-roster-shown').addClass('jsxc-roster-' + state);
+   function onRosterToggle(ev, state, duration) {
+      $('body').removeClass('jsxc-roster-hidden jsxc-roster-shown').addClass('jsxc-roster-' + state);
 
-        // trigger nextcloud/owncloud triggers
-        setTimeout(function() {
-            $(window).resize();
-        }, duration + 50);
-    }
+      // trigger nextcloud/owncloud triggers
+      setTimeout(function() {
+         $(window).resize();
+      }, duration + 50);
+   }
 
-    function onRosterReady(ev, rosterState) {
-        injectChatIcon();
+   function onRosterReady(ev, rosterState) {
+      injectChatIcon();
 
-        $('body').removeClass('jsxc-roster-hidden jsxc-roster-shown').addClass('jsxc-roster-' + rosterState);
+      $('body').removeClass('jsxc-roster-hidden jsxc-roster-shown').addClass('jsxc-roster-' + rosterState);
 
-        // update webodf
-        $(window).on('hashchange', function() {
-            if (window.location.pathname.match(/\/documents\/$/)) {
-                var docNo = window.location.hash.replace(/^#/, '');
+      // update webodf
+      $(window).on('hashchange', function() {
+         if (window.location.pathname.match(/\/documents\/$/)) {
+            var docNo = window.location.hash.replace(/^#/, '');
 
-                if (docNo.match(/[0-9]+/) && typeof dijit !== 'undefined') {
-                    dijit.byId("mainContainer").resize();
-                }
+            if (docNo.match(/[0-9]+/) && typeof dijit !== 'undefined') {
+               dijit.byId("mainContainer").resize();
             }
-        });
-    }
+         }
+      });
+   }
 
-    function defaultAvatar(element, jid) {
-        var adminSettings = jsxc.options.get('adminSettings') || {};
-        var cache = jsxc.storage.getUserItem('defaultAvatars') || {};
-        var data = jsxc.storage.getUserItem('buddy', jsxc.jidToBid(jid)) || {};
+   function defaultAvatar(element, jid) {
+      var adminSettings = jsxc.options.get('adminSettings') || {};
+      var cache = jsxc.storage.getUserItem('defaultAvatars') || {};
+      var data = jsxc.storage.getUserItem('buddy', jsxc.jidToBid(jid)) || {};
 
-        var node = Strophe.getNodeFromJid(jid);
-        var domain = Strophe.getDomainFromJid(jid);
-        var user = Strophe.unescapeNode(node);
+      var node = Strophe.getNodeFromJid(jid);
+      var domain = Strophe.getDomainFromJid(jid);
+      var user = Strophe.unescapeNode(node);
 
-        $(element).each(function() {
+      $(element).each(function() {
 
-            var $div = $(this).find('.jsxc_avatar');
-            var size = $div.width();
-            var key = user + '@' + size;
+         var $div = $(this).find('.jsxc_avatar');
+         var size = $div.width();
+         var key = user + '@' + size;
 
-            var handleResponse = function(result) {
-                if (typeof(result) === 'object') {
-                    if (result.data && result.data.displayname) {
-                        $div.imageplaceholder(user, result.data.displayname);
-                    } else {
-                        $div.imageplaceholder(user);
-                    }
-                } else {
-                    $div.css('backgroundImage', 'url(' + result + ')');
-                    $div.text('');
-                }
-            };
-
-            if (domain !== adminSettings.xmppDomain) {
-                // probably external user, don't request avatar
-                $div.imageplaceholder(user);
-            } else if (typeof cache[key] === 'undefined' || cache[key] === null) {
-                if (data.status === 0) {
-                    // don't query avatar for offline users
-                    $div.imageplaceholder(user);
-
-                    return;
-                }
-
-                var url;
-
-                url = OC.generateUrl('/avatar/' + encodeURIComponent(user) + '/' + size + '?requesttoken={requesttoken}', {
-                    user: user,
-                    size: size,
-                    requesttoken: oc_requesttoken
-                });
-
-                $.get(url, function(result) {
-
-                    var val = (typeof result === 'object') ? result : url;
-                    handleResponse(val);
-
-                    jsxc.storage.updateItem('defaultAvatars', key, val, true);
-                });
-
+         var handleResponse = function(result) {
+            if (typeof(result) === 'object') {
+               if (result.data && result.data.displayname) {
+                  $div.imageplaceholder(user, result.data.displayname);
+               } else {
+                  $div.imageplaceholder(user);
+               }
             } else {
-                handleResponse(cache[key]);
+               $div.css('backgroundImage', 'url(' + result + ')');
+               $div.text('');
             }
-        });
-    }
+         };
 
-    function loadSettings(username, password, cb) {
-        $.ajax({
-            type: 'POST',
-            url: OC.generateUrl('apps/ojsxc/settings'),
-            data: {
-                username: username,
-                password: password
-            },
-            success: function(d) {
-                if (d.result === 'success' && d.data && d.data.serverType !== 'internal' && d.data.xmpp.url !== '' && d.data.xmpp.url !== null) {
-                    jsxc.storage.setItem('serverType', serverTypes[d.data.serverType.toUpperCase()]);
-                    cb(d.data);
-                } else if (d.data && d.data.serverType === 'internal') {
-                    jsxc.storage.setItem('serverType', serverTypes.INTERNAL);
+         if (domain !== adminSettings.xmppDomain) {
+            // probably external user, don't request avatar
+            $div.imageplaceholder(user);
+         } else if (typeof cache[key] === 'undefined' || cache[key] === null) {
+            if (data.status === 0) {
+               // don't query avatar for offline users
+               $div.imageplaceholder(user, data.name);
 
-                    var node = username || OC.currentUser;
-                    jsxc.bid = node.toLowerCase() + '@' + window.location.host;
-
-                    jsxc.options.set('adminSettings', d.data.adminSettings);
-
-                    if (d.data.loginForm) {
-                        jsxc.options.set('loginForm', {
-                            startMinimized: d.data.loginForm.startMinimized
-                        });
-                    }
-
-                    cb(false);
-                } else {
-                    cb(false);
-                }
-            },
-            error: function(xhr) {
-                jsxc.error('XHR error on getSettings.php');
-
-                if (xhr.responseJSON && xhr.responseJSON.message) {
-                   jsxc.debug('Error message: ' + xhr.responseJSON.message);
-                }
-
-                if (xhr.status === 412) {
-                   jsxc.debug('Refresh page to get a new CSRF token');
-
-                   window.location.href = window.location.href;
-                   return;
-                }
-
-                cb(false);
+               return;
             }
-        });
-    }
 
-    function saveSettinsPermanent(data, cb) {
-        $.ajax({
-            type: 'POST',
-            url: OC.generateUrl('apps/ojsxc/settings/user'),
-            data: data,
-            success: function(data) {
-                cb(data && data.status === 'success');
-            },
-            error: function() {
-                cb(false);
-            }
-        });
-    }
+            var url;
 
-    function getUsers(search, cb) {
-        $.ajax({
-            type: 'GET',
-            url: OC.generateUrl('apps/ojsxc/settings/users'),
-            data: {
-                search: search
-            },
-            success: cb,
-            error: function() {
-                jsxc.error('XHR error on getUsers.php');
-            }
-        });
-    }
-
-    function getViewportSize() {
-        var w = $(window).width() - $('#jsxc_windowListSB').width();
-        var h = $(window).height() - $('#header').height() - 10;
-
-        if (jsxc.storage.getUserItem('roster') === 'shown') {
-            w -= $('#jsxc_roster').outerWidth(true);
-        }
-
-        return {
-            width: w,
-            height: h
-        };
-    }
-
-    // initialization
-    $(function() {
-        if (location.pathname.substring(location.pathname.lastIndexOf("/") + 1) === 'public.php') {
-            // abort on shares
-            return;
-        }
-
-        if (window.parent && window !== window.parent) {
-            // abort if inside a frame
-            return;
-        }
-
-        if (typeof jsxc === 'undefined' || typeof emojione === 'undefined') {
-            // abort if core or dependencies threw an error
-            return;
-        }
-
-        if (typeof oc_config === 'undefined' || typeof oc_appswebroots === 'undefined' || typeof OC === 'undefined') {
-           // abort if a dependency is missing
-           return;
-        }
-
-        if (OC.generateUrl('login/flow') === window.location.pathname) {
-           // abort on login flow
-           return;
-        }
-
-        $(document).one('ready-roster-jsxc', onRosterReady);
-        $(document).on('toggle.roster.jsxc', onRosterToggle);
-
-        $(document).on('connected.jsxc', function() {
-            // reset default avatar cache
-            jsxc.storage.removeUserItem('defaultAvatars');
-            // when we are connected it doesn't matter anymore whether we logged in without chat since the user
-            // must have manually logged in
-            jsxc.storage.setItem('login_without_chat', false);
-        });
-
-        $(document).on('status.contacts.count status.contact.updated', function() {
-            if (jsxc.restoreCompleted) {
-                setTimeout(function() {
-                    jsxc.gui.detectEmail($('table#contactlist'));
-                }, 500);
-            } else {
-                $(document).on('restoreCompleted.jsxc', function() {
-                    jsxc.gui.detectEmail($('table#contactlist'));
-                });
-            }
-        });
-
-        jsxc.init({
-            app_name: 'Nextcloud',
-            loginForm: {
-                form: '#body-login form',
-                jid: '#user',
-                pass: '#password',
-                ifFound: 'force',
-                onConnecting: (oc_config.version.match(/^([8-9]|[0-9]{2,})+\./)) ? 'quiet' : 'dialog'
-            },
-            logoutElement: $('#logout'),
-            rosterAppend: 'body',
-            root: oc_appswebroots.ojsxc + '/js/jsxc',
-            RTCPeerConfig: {
-                url: OC.generateUrl('apps/ojsxc/settings/iceServers')
-            },
-            displayRosterMinimized: function() {
-                return OC.currentUser != null;
-            },
-            defaultAvatar: function(jid) {
-               defaultAvatar(this, jid);
-            },
-            loadSettings: loadSettings,
-            saveSettinsPermanent: saveSettinsPermanent,
-            getUsers: getUsers,
-            viewport: {
-                getSize: getViewportSize
-            }
-        });
-
-        // Add submit link without chat functionality
-        if (jsxc.el_exists(jsxc.options.loginForm.form) && jsxc.el_exists(jsxc.options.loginForm.jid) && jsxc.el_exists(jsxc.options.loginForm.pass)) {
-
-            var link = $('<a/>').text($.t('Log_in_without_chat')).attr('href', '#').click(function() {
-                jsxc.storage.setItem('login_without_chat', true);
-                jsxc.submitLoginForm();
+            url = OC.generateUrl('/avatar/' + encodeURIComponent(user) + '/' + size + '?requesttoken={requesttoken}', {
+               user: user,
+               size: size,
+               requesttoken: oc_requesttoken
             });
 
-            var alt = $('<p id="jsxc_alt"/>').append(link);
-            $('#body-login form:eq(0) fieldset').append(alt);
+            $.get(url, function(result) {
 
-            Strophe.log = function(level, msg) {
-                if (level === 3 && /^request id/.test(msg)) {
-                    console.warn('Something went wrong during BOSH connection establishment. Continue without chat.');
+               var val = (typeof result === 'object') ? result : url;
+               handleResponse(val);
 
-                    jsxc.submitLoginForm();
-                }
-            };
-        }
+               jsxc.storage.updateItem('defaultAvatars', key, val, true);
+            });
 
-        if ($('#contactsmenu').length > 0) {
-            observeContactsMenu();
-        }
-    });
+         } else {
+            handleResponse(cache[key]);
+         }
+      });
+   }
 
-    $(document).on('click', '#jsxc_roster p', function() {
-        if (jsxc.storage.getItem('serverType') === serverTypes.INTERNAL) {
-           startInternalBackend();
-        }
-    });
+   function loadSettings(username, password, cb) {
+      $.ajax({
+         type: 'POST',
+         url: OC.generateUrl('apps/ojsxc/settings'),
+         data: {
+            username: username,
+            password: password
+         },
+         success: function(d) {
+            if (d.result === 'success' && d.data && d.data.serverType !== 'internal' && d.data.xmpp.url !== '' && d.data.xmpp.url !== null) {
+               jsxc.storage.setItem('serverType', serverTypes[d.data.serverType.toUpperCase()]);
 
-    function startInternalBackend() {
-       var currentUser = OC.currentUser;
+               if (forceLoginFormEnable) {
+                  d.data.loginForm.enable = true;
+               }
 
-       if (!currentUser) {
-          return;
-       }
+               cb(d.data);
+            } else if (d.data && d.data.serverType === 'internal') {
+               jsxc.storage.setItem('serverType', serverTypes.INTERNAL);
 
-       jsxc.bid = currentUser.toLowerCase() + '@' + window.location.host;
+               var node = username || OC.currentUser;
+               jsxc.bid = node.toLowerCase() + '@' + window.location.host;
 
-        jsxc.options.set('xmpp', {
-            url: OC.generateUrl('apps/ojsxc/http-bind')
-        });
+               jsxc.options.set('adminSettings', d.data.adminSettings);
 
-        $(document).one('attached.jsxc', function() {
-           if (jsxc.options.get('loginForm').startMinimized !== true) {
-             jsxc.gui.roster.toggle(jsxc.CONST.SHOWN);
-           }
-        });
+               if (d.data.loginForm) {
+                  jsxc.options.set('loginForm', {
+                     startMinimized: d.data.loginForm.startMinimized
+                  });
+               }
 
-        jsxc.start(jsxc.bid + '/internal', 'internal', '123456');
-    }
-
-    if (jsxc.storage.getItem('serverType') === serverTypes.INTERNAL) {
-        jsxc.gui.showLoginBox = function(){};
-    }
-
-    $(document).on('stateChange.jsxc', function _handler(event, state) {
-        if (state === jsxc.CONST.STATE.SUSPEND) {
-            /**
-             * The first time we go into suspend mode we check if we are using the internal backend.
-             * If this is the case and the user explicitly press the "login_without_chat" button when logging
-             * into Nextcloud we know we are using another authentication mechanism (like SAML/SSO) and thus have
-             * to manually start the connection.
-             */
-            var chatDisabledByUser = jsxc.storage.getUserItem('forcedLogout') || jsxc.storage.getItem('login_without_chat');
-            $(document).off('stateChange.jsxc', _handler);
-            if (jsxc.storage.getItem('serverType') === null) {
-                $.ajax({
-                    url: OC.generateUrl('apps/ojsxc/settings/servertype'),
-                    success: function (data) {
-                        jsxc.storage.setItem('serverType', serverTypes[data.serverType.toUpperCase()]);
-
-                        if (data.serverType === 'internal' && !chatDisabledByUser) {
-                            jsxc.gui.showLoginBox = function(){};
-                            startInternalBackend();
-                        }
-                    }
-                });
-            } else if (jsxc.storage.getItem('serverType') === serverTypes.INTERNAL && !chatDisabledByUser) {
-                jsxc.gui.showLoginBox = function(){};
-                startInternalBackend();
+               cb(false);
+            } else {
+               cb(false);
             }
-        } else if (state === jsxc.CONST.STATE.READY) {
-            // if JSXC is ready this means we successfully connected and thus don't have to listen to the suspend state
-            $(document).off('stateChange.jsxc', _handler);
-        }
-    });
+         },
+         error: function(xhr) {
+            jsxc.error('XHR error on getSettings.php');
+
+            if (xhr.responseJSON && xhr.responseJSON.message) {
+               jsxc.debug('Error message: ' + xhr.responseJSON.message);
+            }
+
+            if (xhr.status === 412) {
+               jsxc.debug('Refresh page to get a new CSRF token');
+
+               window.location.href = window.location.href;
+               return;
+            }
+
+            cb(false);
+         }
+      });
+   }
+
+   function saveSettinsPermanent(data, cb) {
+      $.ajax({
+         type: 'POST',
+         url: OC.generateUrl('apps/ojsxc/settings/user'),
+         data: data,
+         success: function(data) {
+            cb(data && data.status === 'success');
+         },
+         error: function() {
+            cb(false);
+         }
+      });
+   }
+
+   function getUsers(search, cb) {
+      $.ajax({
+         type: 'GET',
+         url: OC.generateUrl('apps/ojsxc/settings/users'),
+         data: {
+            search: search
+         },
+         success: cb,
+         error: function() {
+            jsxc.error('XHR error on getUsers.php');
+         }
+      });
+   }
+
+   function getViewportSize() {
+      var w = $(window).width() - $('#jsxc_windowListSB').width();
+      var h = $(window).height() - $('#header').height() - 10;
+
+      if (jsxc.storage.getUserItem('roster') === 'shown') {
+         w -= $('#jsxc_roster').outerWidth(true);
+      }
+
+      return {
+         width: w,
+         height: h
+      };
+   }
+
+   function addChatSubmitButton() {
+      var defaultEnable = OJSXC_CONFIG.defaultLoginFormEnable;
+      var jsxcSubmitWrapperElement = $('<div>');
+      jsxcSubmitWrapperElement.attr('id', 'jsxc_submit_wrapper');
+
+      var submitElement = $('<input>');
+      submitElement.attr({
+         type: 'button',
+         id: 'jsxc_submit',
+      });
+      submitElement.addClass('login primary');
+      submitElement.val(defaultEnable ? $.t('Log_in_without_chat') : $.t('Log_in_with_chat'));
+      submitElement.click(function() {
+         jsxc.storage.setItem('login_without_chat', defaultEnable);
+
+         if (defaultEnable) { // log in without chat
+            jsxc.submitLoginForm();
+         } else { // log in with chat
+            forceLoginFormEnable = true;
+            $(jsxc.options.loginForm.form).submit();
+         }
+      });
+
+      jsxcSubmitWrapperElement.append(submitElement);
+      $('.login-additional').prepend(jsxcSubmitWrapperElement);
+
+      $('#lost-password').mouseup(function(ev) {
+         ev.preventDefault();
+
+         jsxcSubmitWrapperElement.slideUp().fadeOut();
+      });
+      $('#lost-password-back').mouseup(function(ev) {
+         ev.preventDefault();
+
+         jsxcSubmitWrapperElement.slideDown().fadeIn();
+      });
+   }
+
+   // initialization
+   $(function() {
+      if (location.pathname.substring(location.pathname.lastIndexOf("/") + 1) === 'public.php') {
+         // abort on shares
+         return;
+      }
+
+      if (window.parent && window !== window.parent) {
+         // abort if inside a frame
+         return;
+      }
+
+      if (typeof jsxc === 'undefined' || typeof emojione === 'undefined') {
+         // abort if core or dependencies threw an error
+         return;
+      }
+
+      if (typeof oc_config === 'undefined' || typeof oc_appswebroots === 'undefined' || typeof OC === 'undefined') {
+         // abort if a dependency is missing
+         return;
+      }
+
+      if (OC.generateUrl('login/flow') === window.location.pathname) {
+         // abort on login flow
+         return;
+      }
+
+      $(document).one('ready-roster-jsxc', onRosterReady);
+      $(document).on('toggle.roster.jsxc', onRosterToggle);
+
+      $(document).on('connected.jsxc', function() {
+         // reset default avatar cache
+         jsxc.storage.removeUserItem('defaultAvatars');
+         // when we are connected it doesn't matter anymore whether we logged in without chat since the user
+         // must have manually logged in
+         jsxc.storage.setItem('login_without_chat', false);
+      });
+
+      $(document).on('connfail.jsxc', function(ev, condition) {
+         if (condition === 'x-nc-not_allowed_to_chat') {
+            jsxc.gui.roster.toggle(jsxc.CONST.HIDDEN);
+            $('.jsxc_chatIcon').remove();
+            jsxc.storage.removeItem('jid');
+            jsxc.storage.removeItem('sid');
+            jsxc.storage.removeItem('rid');
+         }
+      });
+
+      $(document).on('status.contacts.count status.contact.updated', function() {
+         if (jsxc.restoreCompleted) {
+            setTimeout(function() {
+               jsxc.gui.detectEmail($('table#contactlist'));
+            }, 500);
+         } else {
+            $(document).on('restoreCompleted.jsxc', function() {
+               jsxc.gui.detectEmail($('table#contactlist'));
+            });
+         }
+      });
+
+      jsxc.init({
+         app_name: 'Nextcloud',
+         loginForm: {
+            form: '#body-login form',
+            jid: '#user',
+            pass: '#password',
+            ifFound: 'force',
+            onConnecting: (oc_config.version.match(/^([8-9]|[0-9]{2,})+\./)) ? 'quiet' : 'dialog'
+         },
+         logoutElement: $('#logout'),
+         rosterAppend: 'body',
+         root: oc_appswebroots.ojsxc + '/js/jsxc',
+         RTCPeerConfig: {
+            url: OC.generateUrl('apps/ojsxc/settings/iceServers')
+         },
+         displayRosterMinimized: function() {
+            return OC.currentUser != null;
+         },
+         defaultAvatar: function(jid) {
+            defaultAvatar(this, jid);
+         },
+         loadSettings: loadSettings,
+         saveSettinsPermanent: saveSettinsPermanent,
+         getUsers: getUsers,
+         viewport: {
+            getSize: getViewportSize
+         }
+      });
+
+      // Add submit link without chat functionality
+      if (jsxc.el_exists(jsxc.options.loginForm.form) && jsxc.el_exists(jsxc.options.loginForm.jid) && jsxc.el_exists(jsxc.options.loginForm.pass)) {
+
+         addChatSubmitButton();
+
+         Strophe.log = function(level, msg) {
+            if (level === 3 && /^request id/.test(msg)) {
+               console.warn('Something went wrong during BOSH connection establishment. Continue without chat.');
+
+               jsxc.submitLoginForm();
+            }
+         };
+      }
+
+      if ($('#contactsmenu').length > 0) {
+         observeContactsMenu();
+      }
+
+   });
+
+   $(document).on('click', '#jsxc_roster p', function() {
+      if (jsxc.storage.getItem('serverType') === serverTypes.INTERNAL) {
+         startInternalBackend();
+      }
+   });
+
+   function startInternalBackend() {
+      var currentUser = OC.currentUser;
+
+      if (!currentUser) {
+         return;
+      }
+
+      jsxc.bid = currentUser.toLowerCase() + '@' + window.location.host;
+
+      jsxc.options.set('xmpp', {
+         url: OC.generateUrl('apps/ojsxc/http-bind')
+      });
+
+      $(document).one('attached.jsxc', function() {
+         if (jsxc.options.get('loginForm').startMinimized !== true) {
+            jsxc.gui.roster.toggle(jsxc.CONST.SHOWN);
+         }
+      });
+
+      jsxc.start(jsxc.bid + '/internal', 'internal', '123456');
+   }
+
+   if (jsxc.storage.getItem('serverType') === serverTypes.INTERNAL) {
+      jsxc.gui.showLoginBox = function() {};
+   }
+
+   $(document).on('stateChange.jsxc', function _handler(event, state) {
+      if (state === jsxc.CONST.STATE.SUSPEND) {
+         /**
+          * The first time we go into suspend mode we check if we are using the internal backend.
+          * If this is the case and the user explicitly press the "login_without_chat" button when logging
+          * into Nextcloud we know we are using another authentication mechanism (like SAML/SSO) and thus have
+          * to manually start the connection.
+          */
+         var chatDisabledByUser = jsxc.storage.getUserItem('forcedLogout') || jsxc.storage.getItem('login_without_chat');
+         $(document).off('stateChange.jsxc', _handler);
+         if (jsxc.storage.getItem('serverType') === null) {
+            $.ajax({
+               url: OC.generateUrl('apps/ojsxc/settings/servertype'),
+               success: function(data) {
+                  jsxc.storage.setItem('serverType', serverTypes[data.serverType.toUpperCase()]);
+
+                  if (data.serverType === 'internal' && !chatDisabledByUser) {
+                     jsxc.gui.showLoginBox = function() {};
+                     startInternalBackend();
+                  }
+               }
+            });
+         } else if (jsxc.storage.getItem('serverType') === serverTypes.INTERNAL && !chatDisabledByUser) {
+            jsxc.gui.showLoginBox = function() {};
+            startInternalBackend();
+         }
+      } else if (state === jsxc.CONST.STATE.READY) {
+         // if JSXC is ready this means we successfully connected and thus don't have to listen to the suspend state
+         $(document).off('stateChange.jsxc', _handler);
+      }
+   });
 }(jQuery));

@@ -12,6 +12,7 @@ use OCP\AppFramework\Http\JSONResponse;
 use OCP\AppFramework\Http;
 use OCA\OJSXC\Exceptions\Exception;
 use OCA\OJSXC\IDataRetriever;
+use OCA\OJSXC\AppInfo\Application;
 use OCP\Security\ISecureRandom;
 
 class ManagedServerController extends Controller
@@ -121,7 +122,7 @@ class ManagedServerController extends Controller
 			throw new Exception('Got a bad domain');
 		}
 
-		$this->config->setAppValue('ojsxc', 'serverType', 'managed');
+		$this->config->setAppValue('ojsxc', 'serverType', Application::MANAGED);
 		$this->config->setAppValue('ojsxc', 'boshUrl', $responseJSON->boshUrl);
 		$this->config->setAppValue('ojsxc', 'xmppDomain', $responseJSON->domain);
 		$this->config->setAppValue('ojsxc', 'timeLimitedToken', 'true');
