@@ -11,6 +11,8 @@
       MANAGED: 2
    };
 
+   var forceLoginFormEnable;
+
    function observeContactsMenu() {
       var target = document.getElementById('contactsmenu');
 
@@ -212,6 +214,11 @@
          success: function(d) {
             if (d.result === 'success' && d.data && d.data.serverType !== 'internal' && d.data.xmpp.url !== '' && d.data.xmpp.url !== null) {
                jsxc.storage.setItem('serverType', serverTypes[d.data.serverType.toUpperCase()]);
+
+               if (forceLoginFormEnable) {
+                  d.data.loginForm.enable = true;
+               }
+
                cb(d.data);
             } else if (d.data && d.data.serverType === 'internal') {
                jsxc.storage.setItem('serverType', serverTypes.INTERNAL);
@@ -294,6 +301,7 @@
    }
 
    function addChatSubmitButton() {
+      var defaultEnable = OJSXC_CONFIG.defaultLoginFormEnable;
       var submitWrapperElement = $('#submit-wrapper');
       var jsxcSubmitWrapperElement = $('<div>');
       jsxcSubmitWrapperElement.attr('id', 'jsxc_submit_wrapper');
@@ -304,10 +312,16 @@
          id: 'jsxc_submit',
       });
       submitElement.addClass('login primary');
-      submitElement.val($.t('Log_in_without_chat'));
+      submitElement.val(defaultEnable ? $.t('Log_in_without_chat') : $.t('Log_in_with_chat'));
       submitElement.click(function() {
-         jsxc.storage.setItem('login_without_chat', true);
-         jsxc.submitLoginForm();
+         jsxc.storage.setItem('login_without_chat', defaultEnable);
+
+         if (defaultEnable) { // log in without chat
+            jsxc.submitLoginForm();
+         } else { // log in with chat
+            forceLoginFormEnable = true;
+            $(jsxc.options.loginForm.form).submit();
+         }
       });
 
       jsxcSubmitWrapperElement.append(submitElement);

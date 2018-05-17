@@ -18,11 +18,18 @@ if ($options !== null) {
 	$options = (array) json_decode($options, true);
 
 	if (is_array($options)) {
-		$loginFormEnable = true;
+		$loginFormEnable = null;
 		if (isset($options['loginForm']) && is_array($options['loginForm']) && isset($options['loginForm']['enable'])) {
 			$loginFormEnable = $options['loginForm']['enable'];
 		}
-		$tmpl->assign('loginFormEnable', $loginFormEnable);
+
+		if ($loginFormEnable === true || $loginFormEnable === 'true') {
+			$tmpl->assign('loginForm', 'enable');
+		} elseif ($loginFormEnable === false || $loginFormEnable === 'false') {
+			$tmpl->assign('loginForm', 'disable');
+		} else {
+			$tmpl->assign('loginForm', 'default');
+		}
 	}
 }
 

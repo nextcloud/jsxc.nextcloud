@@ -53,7 +53,8 @@ class SettingsController extends Controller
 		$data = [
 		 'serverType' => (!empty($serverType))? $serverType : Application::INTERNAL,
 		 'loginForm' => [
-			'startMinimized' => $this->getBooleanAppValue('xmppStartMinimized')
+			 'enable' => $this->getBooleanAppValue('loginFormEnable', true),
+			 'startMinimized' => $this->getBooleanAppValue('xmppStartMinimized')
 			]
 		 ];
 
@@ -132,6 +133,8 @@ class SettingsController extends Controller
 		$this->setAppValue('xmppStartMinimized', $this->getCheckboxParam('xmppStartMinimized'));
 		$this->setAppValue('xmppPreferMail', $this->getCheckboxParam('xmppPreferMail'));
 
+		$this->setAppValue('loginFormEnable', $this->getCheckboxParam('loginFormEnable'));
+
 		$this->setAppValue('iceUrl', $this->getTrimParam('iceUrl'));
 		$this->setAppValue('iceUsername', $this->getTrimParam('iceUsername'));
 		$this->setAppValue('iceCredential', $this->getParam('iceCredential'));
@@ -167,6 +170,12 @@ class SettingsController extends Controller
 		$options = json_decode($options, true);
 
 		foreach ($_POST as $key => $val) {
+			if ($val === 'true') {
+				$val = true;
+			} elseif ($val === 'false') {
+				$val = false;
+			}
+
 			$options[$key] = $val;
 		}
 
@@ -306,9 +315,9 @@ class SettingsController extends Controller
 		return $data;
 	}
 
-	private function getBooleanAppValue($key)
+	private function getBooleanAppValue($key, $default = null)
 	{
-		return $this->validateBoolean($this->getAppValue($key));
+		return $this->validateBoolean($this->getAppValue($key, $default));
 	}
 
 	private function getAppValue($key, $default = null)

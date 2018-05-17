@@ -9,6 +9,16 @@ $isDevEnv = \OC::$server->getConfig()->getSystemValue('jsxc.environment') === 'd
 $jsxc_root = ($isDevEnv)? 'jsxc/dev/' : 'jsxc/';
 $jsProdSuffix = (!$isDevEnv)? '.min' : '';
 
+$linkToGeneralConfig = \OC::$server->getURLGenerator()->linkToRoute('ojsxc.javascript.generalConfig');
+
+\OCP\Util::addHeader(
+	'script',
+	[
+		'src' => $linkToGeneralConfig,
+		'nonce' => \OC::$server->getContentSecurityPolicyNonceManager()->getNonce()
+	], ''
+);
+
 OCP\Util::addScript ( 'ojsxc', $jsxc_root.'lib/jquery.slimscroll' );
 OCP\Util::addScript ( 'ojsxc', $jsxc_root.'lib/jquery.fullscreen' );
 OCP\Util::addScript ( 'ojsxc', $jsxc_root.'lib/jsxc.dep'.$jsProdSuffix );
