@@ -190,6 +190,7 @@ class ManagedServerControllerTest extends TestCase
 			  'apiSecret' => $this->apiSecret,
 			  'apiVersion' => 1,
 			  'userId' => $this->userId,
+			  'appVersion' => '3.4.0',
 			  'promotionCode' => $expectedPromotionCode
 		 ])
 		 ->willReturn([
