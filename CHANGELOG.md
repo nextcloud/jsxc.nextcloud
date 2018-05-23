@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [Unreleased]
+## 3.4.0 - 2018-05-23
 ### Added
 - option to show only group members in the roster (internal)
 - [jsxc/jsxc#477](https://github.com/jsxc/jsxc/issues/477) add admin setting to change log in behavior

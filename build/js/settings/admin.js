@@ -284,7 +284,7 @@ $(document).ready(function() {
       $('.ojsxc-managed-registration').show();
    });
 
-   $('#ojsxc-legal').on('change', function() {
-      $('#ojsxc-register').prop('disabled', !$(this).prop('checked'));
+   $('#ojsxc-legal, #ojsxc-dp').on('change', function() {
+      $('#ojsxc-register').prop('disabled', !$('#ojsxc-legal').prop('checked') || !$('#ojsxc-dp').prop('checked'));
    })
 });

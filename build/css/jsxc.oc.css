@@ -1,5 +1,5 @@
 /*!
- * ojsxc v3.4.0-beta.1 - 2018-05-17
+ * ojsxc v3.4.0 - 2018-05-23
  * 
  * Copyright (c) 2018 Klaus Herberth <klaus@jsxc.org> <br>
  * Released under the MIT license
@@ -7,7 +7,7 @@
  * Please see http://www.jsxc.org/
  * 
  * @author Klaus Herberth <klaus@jsxc.org>
- * @version 3.4.0-beta.1
+ * @version 3.4.0
  * @license MIT
  */
 
@@ -4232,7 +4232,7 @@ div.jsxc_video {
     opacity: 1; }
 
 @media (min-width: 768px) {
-  #content-wrapper, #filestable > thead, #controls {
+  #content-wrapper, #filestable > thead {
     padding-right: 0;
     transition: padding-right 0.5s; }
   #mainContainer, #odf-toolbar, #app-sidebar {
@@ -4242,7 +4242,7 @@ div.jsxc_video {
     transition: right 0.5s; }
     .app-mail .submit-message-wrapper .submit-message {
       transition: right 0.5s; }
-  .jsxc-roster-shown #content-wrapper, .jsxc-roster-shown #filestable > thead, .jsxc-roster-shown #controls {
+  .jsxc-roster-shown #content-wrapper, .jsxc-roster-shown #filestable > thead {
     padding-right: 210px; }
   .jsxc-roster-shown #mainContainer, .jsxc-roster-shown #odf-toolbar, .jsxc-roster-shown #app-sidebar {
     right: 210px; }

@@ -121,7 +121,10 @@ if (function_exists('script')) {
 						</div>
 					</div>
 					<div class="form-col-offset">
-						<label><input id="ojsxc-legal" type="checkbox" /> I acknowledge that this is a beta service offered by the <a href="https://jsxc.ch/federated-communication-association">Federated Communication Association</a> without any warranty whatsoever.</label>
+						<label><input id="ojsxc-legal" type="checkbox" /> I acknowledge that this is a beta service offered by the <a target="_blank" href="https://jsxc.ch/federated-communication-association">Federated Communication Association</a> without any warranty whatsoever.</label>
+					</div>
+					<div class="form-col-offset">
+						<label><input id="ojsxc-dp" type="checkbox" /> I have read and accept the <a target="_blank" href="https://jsxc.ch/privacy-policy">privacy policy</a>.</label>
 					</div>
 					<div class="form-col-offset">
 						<input id="ojsxc-register" type="button" value="Register" data-toggle-value="Processing registration" disabled="disabled" />
