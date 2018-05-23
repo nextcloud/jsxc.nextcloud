@@ -13,6 +13,7 @@ use OCP\AppFramework\Http;
 use OCA\OJSXC\Exceptions\Exception;
 use OCA\OJSXC\IDataRetriever;
 use OCP\Security\ISecureRandom;
+use OCP\App\IAppManager;
 use PHPUnit\Framework\TestCase;
 
 class ManagedServerControllerTest extends TestCase
@@ -43,6 +44,7 @@ class ManagedServerControllerTest extends TestCase
 		$this->logger = $this->createMock(ILogger::class);
 		$this->dataRetriever = $this->createMock(IDataRetriever::class);
 		$this->random = $this->createMock(ISecureRandom::class);
+		$this->appManager = $this->createMock(IAppManager::class);
 		$this->registrationUrl = '';
 
 		$this->apiUrl = 'https://localhost/api';
@@ -77,6 +79,7 @@ class ManagedServerControllerTest extends TestCase
 		 $this->logger,
 		 $this->dataRetriever,
 		 $this->random,
+		 $this->appManager,
 		 $this->registrationUrl
 	  );
 	}

@@ -14,6 +14,7 @@ use OCA\OJSXC\Exceptions\Exception;
 use OCA\OJSXC\IDataRetriever;
 use OCA\OJSXC\AppInfo\Application;
 use OCP\Security\ISecureRandom;
+use OCP\App\IAppManager;
 
 class ManagedServerController extends Controller
 {
@@ -34,6 +35,7 @@ class ManagedServerController extends Controller
 								 ILogger $logger,
 								 IDataRetriever $dataRetriever,
 								 ISecureRandom $random,
+								 IAppManager $appManager,
 								 $registrationUrl
    ) {
 		parent::__construct($appName, $request);
@@ -44,6 +46,7 @@ class ManagedServerController extends Controller
 		$this->logger = $logger;
 		$this->dataRetriever = $dataRetriever;
 		$this->random = $random;
+		$this->appManager = $appManager;
 		$this->registrationUrl = $registrationUrl;
 	}
 
@@ -83,14 +86,16 @@ class ManagedServerController extends Controller
 		$apiUrl = $this->urlGenerator->linkToRouteAbsolute('ojsxc.externalApi.index');
 		$apiSecret = $this->config->getAppValue('ojsxc', 'apiSecret');
 		$userId = $this->userSession->getUser()->getUID();
+		$appVersion = '3.4.0'; //$this->appManager->getAppVersion('ojsxc'); from NC 14
 
 		$data = [
 		  'apiUrl' => $apiUrl,
 		  'apiSecret' => $apiSecret,
 		  'apiVersion' => 1,
 		  'userId' => $userId,
+		  'appVersion' => $appVersion,
 		  'promotionCode' => $promotionCode
-	  ];
+		];
 
 		$response = $this->dataRetriever->fetchUrl($this->registrationUrl.'?rid='.$requestId, $data);
 

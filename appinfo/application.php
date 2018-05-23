@@ -112,6 +112,7 @@ class Application extends App {
 				$c->query('OCP\ILogger'),
 				$c->query('DataRetriever'),
 				$c->query('OCP\Security\ISecureRandom'),
+				$c->query('OCP\App\IAppManager'),
 				'https://xmpp.jsxc.ch/registration'
 			);
 		});
