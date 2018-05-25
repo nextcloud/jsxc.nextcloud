@@ -363,7 +363,12 @@ class Application extends App {
 
 		$backends = \OC::$server->getUserManager()->getBackends();
 		foreach ($backends as $backend) {
-			if ($backend->getBackendName() === $user->getBackendClassName()) {
+			if ($backend instanceof IUserBackend) {
+				$backendName = $backend->getBackendName();
+			} else {
+				$backendName = get_class($backend);
+			}
+			if ($backendName === $user->getBackendClassName()) {
 				if (method_exists($backend, 'loginName2UserName')) {
 					$uid = $backend->loginName2UserName($providedUid);
 					if ($uid !== false) {
