@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 3.4.1 - 2018-07-05
+### Fixed
+- [#104](https://github.com/nextcloud/jsxc.nextcloud/issues/104) fix call to undefined method
+
 ## 3.4.0 - 2018-05-23
 ### Added
 - option to show only group members in the roster (internal)
