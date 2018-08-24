@@ -40,7 +40,11 @@
       <nextcloud min-version="12" max-version="14"/>
    </dependencies>
 
-   <ocsid>162257</ocsid>
+   <repair-steps>
+      <install>
+         <step>OCA\OJSXC\Migration\RefreshRoster</step>
+      </install>
+   </repair-steps>
 
    <settings>
       <admin>OCA\OJSXC\Settings\Admin</admin>
@@ -52,11 +56,5 @@
    <contactsmenu>
       <provider>OCA\OJSXC\ContactsMenu\Providers\ChatProvider</provider>
    </contactsmenu>
-
-   <repair-steps>
-      <install>
-         <step>OCA\OJSXC\Migration\RefreshRoster</step>
-      </install>
-   </repair-steps>
 
 </info>
