@@ -4,9 +4,9 @@ namespace OCA\OJSXC\Settings;
 
 use OCP\IL10N;
 use OCP\IURLGenerator;
-use OCP\Settings\ISection;
+use OCP\Settings\IIconSection;
 
-class SectionBase implements ISection
+class Section implements IIconSection
 {
 	/** @var IL10N */
 	private $l;
@@ -14,7 +14,7 @@ class SectionBase implements ISection
 	/** @var IURLGenerator */
 	private $url;
 
-	public function __construct(IL10N $l, IURLGenerator $url)
+	public function __construct(IURLGenerator $url, IL10N $l)
 	{
 		$this->l = $l;
 		$this->url = $url;
@@ -60,16 +60,5 @@ class SectionBase implements ISection
 	public function getIcon()
 	{
 		return $this->url->imagePath('ojsxc', 'app-black.svg');
-	}
-}
-
-$version = \OCP\Util::getVersion();
-if ($version[0] >= 12) {
-	class Section extends SectionBase implements \OCP\Settings\IIconSection
-	{
-	}
-} else {
-	class Section extends SectionBase
-	{
 	}
 }
