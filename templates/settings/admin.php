@@ -88,7 +88,11 @@ if (function_exists('script')) {
 			<div class="ojsxc-managed hidden">
 				<h3>Registration</h3>
 				<?php if($_['managedServer'] === 'registered'): ?>
-					<div class="msg jsxc_success">Congratulations! You use our managed server. <a href="#" class="ojsxc-refresh-registration">Redo registration</a>.</div>
+					<div class="msg jsxc_success">
+						<p>Congratulations! You use our managed server. If you like to connect with a different client,
+						use <strong><?php p($_['xmppDomain']); ?></strong> as your XMPP domain.
+						You can also <a href="#" class="ojsxc-refresh-registration">redo the registration</a> if you like.</p>
+					</div>
 				<?php else: ?>
 					<div class="msg"></div>
 				<?php endif; ?>
