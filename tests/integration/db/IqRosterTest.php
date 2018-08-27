@@ -23,7 +23,7 @@ class IqRosterTest extends TestCase
 		$iqRoster->addItem('test2@test.be', 'Test2 Test');
 
 		$this->assertEquals('result', $iqRoster->getType());
-		$this->assertEquals('john@localhost', $iqRoster->getTo());
+		$this->assertEquals('john@localhost', $iqRoster->getUnSanitizedTo());
 		$this->assertEquals(4434, $iqRoster->getQid());
 		$this->assertEquals([
 			[

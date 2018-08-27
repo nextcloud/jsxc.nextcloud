@@ -67,11 +67,10 @@ class Message extends StanzaHandler
 	 */
 	public function handle(array $stanza)
 	{
+		// Parse the username from the XML stanza to a NC userid
 		$to = $this->getAttribute($stanza, 'to');
 		$pos = strrpos($to, '@');
-
 		$this->to = substr($to, 0, $pos);
-
 		$this->to = Application::convertToRealUID(Application::deSanitize($this->to));
 
 		if (!$this->userProvider->hasUserByUID($this->to)) {

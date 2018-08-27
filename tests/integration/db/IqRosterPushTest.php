@@ -22,7 +22,7 @@ class IqRosterPushTest extends TestCase
 		$iqRosterPush->setSubscription('both');
 
 		$this->assertEquals('john@localhost', $iqRosterPush->getJid());
-		$this->assertEquals('jan@localhost', $iqRosterPush->getTo());
+		$this->assertEquals('jan@localhost', $iqRosterPush->getUnSanitizedTo());
 		$this->assertEquals('john', $iqRosterPush->getName());
 		$this->assertEquals('both', $iqRosterPush->getSubscription());
 

@@ -44,8 +44,8 @@ class StanzaMapperTest extends MapperTestUtility
 		$stanza->setTo($to);
 		$stanza->setStanza($data);
 
-		$this->assertEquals($stanza->getFrom(), $from);
-		$this->assertEquals($stanza->getTo(), $to);
+		$this->assertEquals($stanza->getUnSanitizedFrom(), $from);
+		$this->assertEquals($stanza->getUnSanitizedTo(), $to);
 		$this->assertEquals($stanza->getStanza(), $data);
 
 		$this->mapper->insert($stanza);
@@ -53,8 +53,8 @@ class StanzaMapperTest extends MapperTestUtility
 		$result = $this->fetchAll();
 
 		$this->assertCount(1, $result);
-		$this->assertEquals($stanza->getFrom(), $result[0]->getFrom());
-		$this->assertEquals($stanza->getTo(), $result[0]->getTo());
+		$this->assertEquals($stanza->getUnSanitizedFrom(), $result[0]->getFrom());
+		$this->assertEquals($stanza->getUnSanitizedTo(), $result[0]->getTo());
 		$this->assertEquals($stanza->getStanza(), $result[0]->getStanza());
 	}
 
@@ -107,8 +107,8 @@ class StanzaMapperTest extends MapperTestUtility
 		// check if element is deleted
 		$result = $this->fetchAll();
 		$this->assertCount(1, $result);
-		$this->assertEquals($stanza2->getFrom(), $result[0]->getFrom());
-		$this->assertEquals($stanza2->getTo(), $result[0]->getTo());
+		$this->assertEquals($stanza2->getUnSanitizedFrom(), $result[0]->getFrom());
+		$this->assertEquals($stanza2->getUnSanitizedTo(), $result[0]->getTo());
 		$this->assertEquals($stanza2->getStanza(), $result[0]->getStanza());
 	}
 
