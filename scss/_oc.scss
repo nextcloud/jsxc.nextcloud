@@ -287,3 +287,15 @@
 .nav-icon-javascript-xmpp-client {
     background-image: url("../img/app-black.svg");
 }
+
+.jsxc-internal-server {
+    #jsxc_buddylist .jsxc_more {
+        display: none;
+    }
+
+    #jsxc_menu {
+        .jsxc_joinChat, .jsxc_addBuddy {
+            display: none;
+        }
+    }
+}

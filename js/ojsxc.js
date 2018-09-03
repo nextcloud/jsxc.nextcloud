@@ -338,6 +338,14 @@
       });
    }
 
+   function addServerTypetoBodyTag() {
+       let type = parseInt(jsxc.storage.getItem('serverType'));
+
+       if (parseInt(type) === serverTypes.INTERNAL) {
+            $('body').addClass('jsxc-internal-server');
+       }
+   }
+
    // initialization
    $(function() {
       if (location.pathname.substring(location.pathname.lastIndexOf("/") + 1) === 'public.php') {
@@ -364,6 +372,8 @@
          // abort on login flow
          return;
       }
+
+      addServerTypetoBodyTag();
 
       $(document).one('ready-roster-jsxc', onRosterReady);
       $(document).on('toggle.roster.jsxc', onRosterToggle);
