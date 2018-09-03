@@ -36,5 +36,36 @@
             }
          });
       });
+
+      function savePersonalSettings() {
+        if (OC.PasswordConfirmation && OC.PasswordConfirmation.requiresPasswordConfirmation()) {
+            OC.PasswordConfirmation.requirePasswordConfirmation(savePersonalSettings);
+            return;
+         }
+
+         var post = $('#ojsxc').serialize();
+
+         $('#ojsxc .msg').html('<div>');
+         var status = $('#ojsxc .msg div');
+         status.html('<img src="' + jsxc.options.root + '/img/loading.gif" alt="wait" width="16px" height="16px" /> Saving...');
+
+         $.post(OC.generateUrl('apps/ojsxc/settings/user'), post, function(data) {
+            if (data && data.status === 'success') {
+               status.addClass('jsxc_success').text('Settings saved. Please log out and in again.');
+            } else {
+               status.addClass('jsxc_fail').text('Error!');
+            }
+
+            setTimeout(function() {
+               status.hide('slow');
+            }, 3000);
+         });
+      }
+
+      $('#ojsxc').submit(function(ev) {
+         ev.preventDefault()
+
+         savePersonalSettings();
+      })
    });
 }(jQuery));
