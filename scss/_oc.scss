@@ -13,6 +13,7 @@
 }
 
 #jsxc_roster {
+    padding-top: 5px; // NC >= 14
     top: 45px;
     z-index: 1500;
 }
@@ -210,7 +211,7 @@
 }
 
 @media (min-width: 768px) {
-    #content-wrapper, #filestable > thead {
+    #content, #content-wrapper, #filestable > thead {
         padding-right: 0;
         transition: padding-right 0.5s;
     }
@@ -229,7 +230,7 @@
     }
 
     .jsxc-roster-shown {
-        #content-wrapper, #filestable > thead {
+        #content, #content-wrapper, #filestable > thead {
             padding-right: 210px;
         }
 
