@@ -33,6 +33,6 @@ class NewContentContainer
 
 	public function getCount()
 	{
-		return count(self::$stanzas);
+		return is_array(self::$stanzas)? count(self::$stanzas) : 0;
 	}
 }
