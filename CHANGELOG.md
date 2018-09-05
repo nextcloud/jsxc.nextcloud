@@ -4,6 +4,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 3.4.2 - 2018-08-05
+### Fixed
+- [jsxc/jsxc#686](https://github.com/jsxc/jsxc/issues/686) fix countable error
+- [#84](https://github.com/nextcloud/jsxc.nextcloud/issues/84) hide some buttons if internal backend is used
+- adapt style for NC 11
+- fix info.xml scheme
+
+### Changed
+- update JSXC to v3.4.2 ([change log](https://github.com/jsxc/jsxc/blob/master/CHANGELOG.md))
+- show XMPP domain of used managed XMPP server
+- allow to change XMPP connection options in personal settings
+- remove deprecated code from settings section
+
 ## 3.4.1 - 2018-07-05
 ### Fixed
 - [#104](https://github.com/nextcloud/jsxc.nextcloud/issues/104) fix call to undefined method
