@@ -339,7 +339,7 @@
    }
 
    function addServerTypetoBodyTag() {
-       let type = parseInt(jsxc.storage.getItem('serverType'));
+       var type = parseInt(jsxc.storage.getItem('serverType'));
 
        if (parseInt(type) === serverTypes.INTERNAL) {
             $('body').addClass('jsxc-internal-server');

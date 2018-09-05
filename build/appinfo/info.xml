@@ -5,7 +5,7 @@
    <name>JavaScript XMPP Chat</name>
    <summary>Facebook-like chat</summary>
    <description>Facebook-like chat with end-to-end encrypted conversation, video calls, multi-user rooms, XMPP and internal server backend.</description>
-   <version>3.4.1</version>
+   <version>3.4.2</version>
    <licence>agpl</licence>
    <author mail="klaus@jsxc.org">Klaus Herberth</author>
    <author>Tobia De Koninck</author>
@@ -40,7 +40,11 @@
       <nextcloud min-version="12" max-version="14"/>
    </dependencies>
 
-   <ocsid>162257</ocsid>
+   <repair-steps>
+      <install>
+         <step>OCA\OJSXC\Migration\RefreshRoster</step>
+      </install>
+   </repair-steps>
 
    <settings>
       <admin>OCA\OJSXC\Settings\Admin</admin>
@@ -52,11 +56,5 @@
    <contactsmenu>
       <provider>OCA\OJSXC\ContactsMenu\Providers\ChatProvider</provider>
    </contactsmenu>
-
-   <repair-steps>
-      <install>
-         <step>OCA\OJSXC\Migration\RefreshRoster</step>
-      </install>
-   </repair-steps>
 
 </info>

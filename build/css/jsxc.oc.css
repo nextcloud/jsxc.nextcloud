@@ -1,5 +1,5 @@
 /*!
- * ojsxc v3.4.1 - 2018-07-05
+ * ojsxc v3.4.2 - 2018-09-05
  * 
  * Copyright (c) 2018 Klaus Herberth <klaus@jsxc.org> <br>
  * Released under the MIT license
@@ -7,7 +7,7 @@
  * Please see http://www.jsxc.org/
  * 
  * @author Klaus Herberth <klaus@jsxc.org>
- * @version 3.4.1
+ * @version 3.4.2
  * @license MIT
  */
 
@@ -4090,6 +4090,7 @@ div.jsxc_video {
     background-position-x: 0%; } }
 
 #jsxc_roster {
+  padding-top: 5px;
   top: 45px;
   z-index: 1500; }
 
@@ -4232,7 +4233,7 @@ div.jsxc_video {
     opacity: 1; }
 
 @media (min-width: 768px) {
-  #content-wrapper, #filestable > thead {
+  #content, #content-wrapper, #filestable > thead {
     padding-right: 0;
     transition: padding-right 0.5s; }
   #mainContainer, #odf-toolbar, #app-sidebar {
@@ -4242,7 +4243,7 @@ div.jsxc_video {
     transition: right 0.5s; }
     .app-mail .submit-message-wrapper .submit-message {
       transition: right 0.5s; }
-  .jsxc-roster-shown #content-wrapper, .jsxc-roster-shown #filestable > thead {
+  .jsxc-roster-shown #content, .jsxc-roster-shown #content-wrapper, .jsxc-roster-shown #filestable > thead {
     padding-right: 210px; }
   .jsxc-roster-shown #mainContainer, .jsxc-roster-shown #odf-toolbar, .jsxc-roster-shown #app-sidebar {
     right: 210px; }
@@ -4275,3 +4276,9 @@ div.jsxc_video {
 
 .nav-icon-javascript-xmpp-client {
   background-image: url("../img/app-black.svg"); }
+
+.jsxc-internal-server #jsxc_buddylist .jsxc_more {
+  display: none; }
+
+.jsxc-internal-server #jsxc_menu .jsxc_joinChat, .jsxc-internal-server #jsxc_menu .jsxc_addBuddy {
+  display: none; }
