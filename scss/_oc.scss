@@ -12,7 +12,7 @@
     }
 }
 
-#jsxc_roster {
+#jsxc-roster {
     padding-top: 5px; // NC >= 14
     top: 45px;
     z-index: 1500;
@@ -22,8 +22,12 @@
     width: 8px;
 }
 
-#jsxc_windowList, #jsxc_windowListSB {
+#jsxc-window-list, #jsxc_windowListSB {
     z-index: 1500;
+}
+
+.jsxc-dialog-wrapper {
+    z-index: 1600;
 }
 
 #jsxc {

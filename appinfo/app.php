@@ -5,10 +5,6 @@ use OCA\OJSXC\Hooks;
 
 \OCP\App::registerPersonal('ojsxc', 'settings/personal');
 
-$isDevEnv = \OC::$server->getConfig()->getSystemValue('jsxc.environment') === 'dev';
-$jsxc_root = ($isDevEnv)? 'jsxc/dev/' : 'jsxc/';
-$jsProdSuffix = (!$isDevEnv)? '.min' : '';
-
 $linkToGeneralConfig = \OC::$server->getURLGenerator()->linkToRoute('ojsxc.javascript.generalConfig');
 
 \OCP\Util::addHeader(
@@ -19,14 +15,11 @@ $linkToGeneralConfig = \OC::$server->getURLGenerator()->linkToRoute('ojsxc.javas
 	], ''
 );
 
-OCP\Util::addScript ( 'ojsxc', $jsxc_root.'lib/jquery.slimscroll' );
-OCP\Util::addScript ( 'ojsxc', $jsxc_root.'lib/jquery.fullscreen' );
-OCP\Util::addScript ( 'ojsxc', $jsxc_root.'lib/jsxc.dep'.$jsProdSuffix );
-OCP\Util::addScript ( 'ojsxc', $jsxc_root.'jsxc'.$jsProdSuffix );
-OCP\Util::addScript ( 'ojsxc', 'ojsxc');
+OCP\Util::addScript ( 'ojsxc', 'jsxc/jsxc.bundle' );
+OCP\Util::addScript ( 'ojsxc', 'bundle');
 
-// ############# CSS #############
-OCP\Util::addStyle ( 'ojsxc', 'jsxc.oc' );
+OCP\Util::addStyle ( 'ojsxc', '../js/jsxc/styles/jsxc.bundle' );
+OCP\Util::addStyle ( 'ojsxc', 'bundle' );
 
 if(class_exists('\\OCP\\AppFramework\\Http\\EmptyContentSecurityPolicy')) {
 	$manager = \OC::$server->getContentSecurityPolicyManager();

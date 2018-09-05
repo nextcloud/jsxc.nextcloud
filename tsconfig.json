@@ -1,0 +1,19 @@
+{
+   "include": [
+      "./ts/**/*.ts",
+      "./*.d.ts"
+   ],
+
+   "compilerOptions": {
+      /* Basic Options */
+      "moduleResolution": "node",
+      "module": "commonjs",
+      "outDir": "./dist",
+      "target": "es5",
+      "lib": ["dom", "es2015", "es2015.promise", "es5"]
+   }
+
+   // "references": [
+   //   { "path": "./node_modules/jsxc" }
+   // ]
+}
