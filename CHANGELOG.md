@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 - [jsxc/jsxc#686](https://github.com/jsxc/jsxc/issues/686) fix countable error
 - [#84](https://github.com/nextcloud/jsxc.nextcloud/issues/84) hide some buttons if internal backend is used
-- adapt style for NC 11
+- adapt style for NC 14
 - fix info.xml scheme
 
 ### Changed
