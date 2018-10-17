@@ -15,6 +15,7 @@ $linkToGeneralConfig = \OC::$server->getURLGenerator()->linkToRoute('ojsxc.javas
 	], ''
 );
 
+OCP\Util::addScript ( 'ojsxc', 'libsignal/libsignal-protocol' );
 OCP\Util::addScript ( 'ojsxc', 'jsxc/jsxc.bundle' );
 OCP\Util::addScript ( 'ojsxc', 'bundle');
 

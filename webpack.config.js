@@ -103,6 +103,9 @@ module.exports = {
          from: 'node_modules/jsxc/dist/',
          to: 'js/jsxc/'
       }, {
+         from: 'node_modules/libsignal-protocol/dist/',
+         to: 'js/libsignal/'
+      }, {
          from: 'appinfo/',
          to: 'appinfo/'
       }, {
