@@ -13,3 +13,6 @@ charset = utf-8
 indent_style = space
 indent_size = 3
 quote_type = single
+
+[scss/**.scss]
+indent_size = 2

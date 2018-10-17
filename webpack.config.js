@@ -16,7 +16,7 @@ const fileLoader = {
 };
 
 module.exports = {
-   entry: ['./scss/jsxc.oc.scss', './ts/index.ts'],
+   entry: ['./scss/index.scss', './ts/index.ts'],
    output: {
       filename: 'js/bundle.js',
       path: path.resolve(__dirname, DESTINATION_DIR),

@@ -2,7 +2,7 @@
 export default function injectChatIcon() {
    var div = $('<div/>');
 
-   div.addClass('jsxc_chatIcon');
+   div.addClass('ojsxc-chat-icon');
    div.click(function() {
       jsxc.toggleRoster();
    });
