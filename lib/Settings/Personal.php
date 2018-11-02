@@ -35,7 +35,7 @@ class Personal implements ISettings
 
 			if (is_array($options)) {
 				$loginFormEnable = null;
-				if (is_array($options['loginForm']) && isset($options['loginForm']['enable'])) {
+				if (isset($options['loginForm']) && is_array($options['loginForm']) && isset($options['loginForm']['enable'])) {
 					$loginFormEnable = $options['loginForm']['enable'];
 				}
 
@@ -47,7 +47,7 @@ class Personal implements ISettings
 					$parameters['loginForm'] = 'default';
 				}
 
-				if (is_array($options['xmpp'])) {
+				if (isset($options['xmpp']) && is_array($options['xmpp'])) {
 					if (!empty($options['xmpp']['username'])) {
 						$node = $options['xmpp']['username'];
 						$parameters['xmppUsername'] = $options['xmpp']['username'];
@@ -68,7 +68,7 @@ class Personal implements ISettings
 		$xmppOverwrite = $this->config->getAppValue('ojsxc', 'xmppOverwrite');
 
 		$parameters['xmppUrl'] = $this->config->getAppValue('ojsxc', 'boshUrl');
-		$parameters['externalConnectable'] = Application::getServerType() !== Application.INTERNAL;
+		$parameters['externalConnectable'] = Application::getServerType() !== Application::INTERNAL;
 		$parameters['allowToOverwriteXMPPConfig'] = $xmppOverwrite === 'true';
 		$parameters['jid'] = $node . '@' . $domain;
 
