@@ -29,7 +29,7 @@ if(class_exists('\\OCP\\AppFramework\\Http\\EmptyContentSecurityPolicy')) {
 	$policy->addAllowedStyleDomain('\'self\'');
 	$policy->addAllowedStyleDomain('\'unsafe-inline\'');
 
-	$policy->addAllowedScriptDomain('\'self\'');
+	$policy->addAllowedScriptDomain('\'self\' \'unsafe-eval\'');
 
 	$policy->addAllowedImageDomain('\'self\'');
 	$policy->addAllowedImageDomain('data:');
