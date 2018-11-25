@@ -38,10 +38,10 @@ class StanzaMapper extends Mapper
 	}
 
 	/**
-	 * @param Entity $entity
+	 * @param Stanza $entity
 	 * @return void
 	 */
-	public function insert(Entity $entity)
+	public function insert(Stanza $entity)
 	{
 		$writer = new Writer();
 		$writer->openMemory();
@@ -52,7 +52,7 @@ class StanzaMapper extends Mapper
 
 		$sql = "INSERT INTO `*PREFIX*ojsxc_stanzas` (`to`, `from`, `stanza`) VALUES(?,?,?)";
 		$q = $this->db->prepare($sql);
-		$q->execute([$entity->getTo(), $entity->getFrom(), $xml]);
+		$q->execute([$entity->getUnSanitizedTo(), $entity->getUnSanitizedFrom(), $xml]);
 	}
 
 

@@ -25,23 +25,33 @@ class Stanza extends Entity implements XmlSerializable
 	}
 
 	/**
-	 * @var string $to
+	 * @var string $to The sanitized userId of the recipient of this stanza.
 	 */
 	public $to;
 
 	/**
-	 * @var string $to
+	 * @var string $from The sanitized userId of the sender of this stanza.
 	 */
 	public $from;
+
+	/**
+	 * @var string $to The userId (as stored in NC) of the recipient of this stanza.
+	 */
+	public $unSanitizedTo;
+
+	/**
+	 * @var string $from The userId (as stored in NC) of the sender of this stanza.
+	 */
+	public $unSanitizedFrom;
 
 	/**
 	 * @var string $stanza
 	 */
 	public $stanza;
 
-	public function getTo()
+	public function getUnSanitizedTo()
 	{
-		return $this->to;
+		return $this->unSanitizedTo;
 	}
 
 	/**
@@ -59,6 +69,7 @@ class Stanza extends Entity implements XmlSerializable
 			$userId = $userId[0];
 		}
 
+		$this->unSanitizedTo = $userId;
 		$this->to = Application::sanitizeUserId($userId);
 		if (!is_null($host_and_or_resource)) {
 			$this->to .= '@' . $host_and_or_resource;
@@ -79,15 +90,17 @@ class Stanza extends Entity implements XmlSerializable
 			$host_and_or_resource = $userId[1];
 			$userId = $userId[0];
 		}
+
+		$this->unSanitizedFrom = $userId;
 		$this->from = Application::sanitizeUserId($userId);
 		if (!is_null($host_and_or_resource)) {
 			$this->from .= '@' . $host_and_or_resource;
 		}
 	}
 
-	public function getFrom()
+	public function getUnSanitizedFrom()
 	{
-		return $this->from;
+		return $this->unSanitizedFrom;
 	}
 
 	public function xmlSerialize(Writer $writer)
