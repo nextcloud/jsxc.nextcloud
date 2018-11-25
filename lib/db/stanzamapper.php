@@ -38,10 +38,10 @@ class StanzaMapper extends Mapper
 	}
 
 	/**
-	 * @param Stanza $entity
+	 * @param Entity $entity
 	 * @return void
 	 */
-	public function insert(Stanza $entity)
+	public function insert(Entity $entity)
 	{
 		$writer = new Writer();
 		$writer->openMemory();

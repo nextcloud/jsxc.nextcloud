@@ -10,7 +10,9 @@ services:
 
 env:
   global:
-    - BRANCH=stable14
+      # test with different DB's and PHP versions against NC master version.
+      # Test minimum PHP version against NC stable branches.
+    - BRANCH=master
 
 matrix:
   include:
@@ -25,9 +27,11 @@ matrix:
     - php: 7
       env: DB=mysql
     - php: 5.6
-      env: DB=mysql BRANCH=stable12
-    - php: 5.6
       env: DB=mysql BRANCH=stable13
+    - php: 7
+      env: DB=mysql BRANCH=stable14
+    - php: 7
+      env: DB=mysql BRANCH=stable15
 
 
 install:
