@@ -104,7 +104,8 @@
       }
    }
 
-   function injectChatIcon() {
+   function injectChatIcon(trial) {
+      trial = typeof trial !== 'number' ? 0 : trial;
       var div = $('<div/>');
 
       div.addClass('jsxc_chatIcon');
@@ -112,8 +113,15 @@
          jsxc.gui.roster.toggle();
       });
 
-      $('#header form.searchbox').after(div);
-
+      if ($('#header form.searchbox').length) {
+         $('#header form.searchbox').after(div);
+      } else if ($('#fulltextsearch').length) {
+         $('#fulltextsearch').after(div);
+      } else if (trial < 3) {
+         setTimeout(function() {
+            injectChatIcon(trial + 1);
+         }, (trial + 1) * 400);
+      }
    }
 
    function onRosterToggle(ev, state, duration) {
@@ -339,11 +347,11 @@
    }
 
    function addServerTypetoBodyTag() {
-       var type = parseInt(jsxc.storage.getItem('serverType'));
+      var type = parseInt(jsxc.storage.getItem('serverType'));
 
-       if (parseInt(type) === serverTypes.INTERNAL) {
-            $('body').addClass('jsxc-internal-server');
-       }
+      if (parseInt(type) === serverTypes.INTERNAL) {
+         $('body').addClass('jsxc-internal-server');
+      }
    }
 
    // initialization
