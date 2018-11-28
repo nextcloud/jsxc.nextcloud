@@ -113,6 +113,10 @@
          jsxc.gui.roster.toggle();
       });
 
+      if (OCA.Theming && OCA.Theming.inverted) {
+         div.css('filter', 'invert(1)');
+      }
+
       if ($('#header form.searchbox').length) {
          $('#header form.searchbox').after(div);
       } else if ($('#fulltextsearch').length) {
