@@ -12,6 +12,10 @@
     }
 }
 
+.jsxc_avatar {
+    font-family: 'Nunito', 'Open Sans', Frutiger, Calibri, 'Myriad Pro', Myriad, sans-serif;;
+}
+
 #jsxc_roster {
     padding-top: 5px; // NC >= 14
     top: 45px;
@@ -44,8 +48,16 @@
     }
 }
 
+#jsxc_submit_wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
 #jsxc_submit {
     font-size: 15px;
+    height: auto;
     padding: 3px 5px;
     opacity: 1;
     font-weight: normal;
@@ -216,7 +228,7 @@
         transition: padding-right 0.5s;
     }
 
-    #mainContainer, #odf-toolbar, #app-sidebar {
+    #mainContainer, #odf-toolbar, #app-sidebar, #view-toggle {
         right: 0;
         transition: right 0.5s;
     }
@@ -234,7 +246,7 @@
             padding-right: 210px;
         }
 
-        #mainContainer, #odf-toolbar, #app-sidebar {
+        #mainContainer, #odf-toolbar, #app-sidebar, #view-toggle {
             right: 210px;
         }
 
