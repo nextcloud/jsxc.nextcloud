@@ -159,15 +159,15 @@ class MessageMapperTest extends MapperTestUtility
 		$this->assertCount(2, $result);
 
 		// check findByTo
-		$result = $this->mapper->findByTo(Application::sanitizeUserId('john@localhost.com'));
+		$result = $this->mapper->findByTo('john@localhost.com');
 		$this->assertCount(1, $result);
 		$this->assertEquals('<message to="john_ojsxc_esc_at_localhost.com@localhost/internal" from="jan_ojsxc_esc_at_localhost.com@localhost/internal" type="test" xmlns="jabber:client" id="4-msg">Messageabc</message>', $result[0]->getStanza());
 
 		// check if element is deleted
 		$result = $this->fetchAll();
 		$this->assertCount(1, $result);
-		$this->assertEquals($stanza2->getUnSanitizedFrom(), $result[0]->getFrom());
-		$this->assertEquals($stanza2->getUnSanitizedTo(), $result[0]->getTo());
+		$this->assertEquals($stanza2->getFrom(), $result[0]->getFrom());
+		$this->assertEquals($stanza2->getTo(), $result[0]->getTo());
 		$this->assertEquals('<message to="jan_ojsxc_esc_at_localhost.com" from="thomas_ojsxc_esc_at_localhost.com" type="test2" xmlns="jabber:client" id="4-msg">Message</message>', $result[0]->getStanza());
 	}
 }
