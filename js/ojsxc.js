@@ -380,7 +380,7 @@
          return;
       }
 
-      if (OC.generateUrl('login/flow') === window.location.pathname) {
+      if (OC.generateUrl('login/flow') === window.location.pathname || /login\/flow\/grant/.test(window.location)) {
          // abort on login flow
          return;
       }
