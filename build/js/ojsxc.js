@@ -1,5 +1,5 @@
 /*!
- * ojsxc v3.4.2 - 2018-09-05
+ * ojsxc v3.4.3 - 2018-12-05
  * 
  * Copyright (c) 2018 Klaus Herberth <klaus@jsxc.org> <br>
  * Released under the MIT license
@@ -7,11 +7,11 @@
  * Please see http://www.jsxc.org/
  * 
  * @author Klaus Herberth <klaus@jsxc.org>
- * @version 3.4.2
+ * @version 3.4.3
  * @license MIT
  */
 
-/* global jsxc, oc_appswebroots, OC, oc_requesttoken, dijit, oc_config, OJSXC_CONFIG */
+/* global jsxc, oc_appswebroots, OC, OCA, oc_requesttoken, dijit, oc_config, OJSXC_CONFIG */
 /* jshint latedef: nofunc */
 
 
@@ -117,7 +117,8 @@
       }
    }
 
-   function injectChatIcon() {
+   function injectChatIcon(trial) {
+      trial = typeof trial !== 'number' ? 0 : trial;
       var div = $('<div/>');
 
       div.addClass('jsxc_chatIcon');
@@ -125,8 +126,19 @@
          jsxc.gui.roster.toggle();
       });
 
-      $('#header form.searchbox').after(div);
+      if (OCA.Theming && OCA.Theming.inverted) {
+         div.css('filter', 'invert(1)');
+      }
 
+      if ($('#header form.searchbox').length) {
+         $('#header form.searchbox').after(div);
+      } else if ($('#fulltextsearch').length) {
+         $('#fulltextsearch').after(div);
+      } else if (trial < 3) {
+         setTimeout(function() {
+            injectChatIcon(trial + 1);
+         }, (trial + 1) * 400);
+      }
    }
 
    function onRosterToggle(ev, state, duration) {
@@ -352,11 +364,11 @@
    }
 
    function addServerTypetoBodyTag() {
-       var type = parseInt(jsxc.storage.getItem('serverType'));
+      var type = parseInt(jsxc.storage.getItem('serverType'));
 
-       if (parseInt(type) === serverTypes.INTERNAL) {
-            $('body').addClass('jsxc-internal-server');
-       }
+      if (parseInt(type) === serverTypes.INTERNAL) {
+         $('body').addClass('jsxc-internal-server');
+      }
    }
 
    // initialization
@@ -381,7 +393,7 @@
          return;
       }
 
-      if (OC.generateUrl('login/flow') === window.location.pathname) {
+      if (OC.generateUrl('login/flow') === window.location.pathname || /login\/flow\/grant/.test(window.location)) {
          // abort on login flow
          return;
       }

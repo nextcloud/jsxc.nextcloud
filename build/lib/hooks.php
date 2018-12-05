@@ -2,7 +2,6 @@
 
 namespace OCA\OJSXC;
 
-use function foo\func;
 use OCA\OJSXC\AppInfo\Application;
 use OCA\OJSXC\Db\PresenceMapper;
 use OCA\OJSXC\Db\StanzaMapper;

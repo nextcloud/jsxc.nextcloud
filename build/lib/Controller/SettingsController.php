@@ -301,6 +301,10 @@ class SettingsController extends Controller
 
 			if (is_array($options)) {
 				foreach ($options as $prop => $value) {
+					if (!is_array($value) && !is_object($value)) {
+						continue;
+					}
+
 					if ($prop !== 'xmpp' || $data ['xmpp'] ['overwrite']) {
 						foreach ($value as $key => $v) {
 							if ($v !== '' && $key !== 'url') {
