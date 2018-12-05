@@ -4,6 +4,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 3.4.3 - 2018-12-05
+### Fixed
+- make compatible with Nextcloud 15
+- fix support for long usernames (internal backend)
+- fix JSXC on login flow page
+- [jsxc/jsxc#726](https://github.com/jsxc/jsxc/issues/726) fix undefined index
+- [jsxc/jsxc#740](https://github.com/jsxc/jsxc/issues/740) ignore not iterable options
+- [#111](https://github.com/nextcloud/jsxc.nextcloud/issues/111) fix missing chat icon in combination with the search app
+- [#80](https://github.com/nextcloud/jsxc.nextcloud/issues/80) invert chat icon on light theme
+
+### Changed
+- update JSXC to v3.4.3 ([change log](https://github.com/jsxc/jsxc/blob/master/CHANGELOG.md))
+- use server sharing settings if enabled by admin to limit chatting scope (internal backend)
+
 ## 3.4.2 - 2018-08-05
 ### Fixed
 - [jsxc/jsxc#686](https://github.com/jsxc/jsxc/issues/686) fix countable error
