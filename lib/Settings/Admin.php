@@ -3,6 +3,7 @@
 namespace OCA\OJSXC\Settings;
 
 use OCA\OJSXC\AppInfo\Application;
+use OCA\OJSXC\Config;
 use OCP\AppFramework\Http\TemplateResponse;
 use OCP\Settings\ISettings;
 use OCP\IConfig;
@@ -22,7 +23,7 @@ class Admin implements ISettings
 	 */
 	public function getForm()
 	{
-		$externalServices = $this->config->getAppValue('ojsxc', 'externalServices');
+		$externalServices = $this->config->getAppValue('ojsxc', CONFIG::EXTERNAL_SERVICES);
 		$externalServices = explode("|", $externalServices);
 
 		$serverType = Application::getServerType();
@@ -30,27 +31,33 @@ class Admin implements ISettings
 		$apiUrl = \OC::$server->getURLGenerator()->linkToRouteAbsolute('ojsxc.externalApi.index');
 
 		$parameters = [
-		   'serverType' => $serverType,
-		   'boshUrl' => $this->config->getAppValue('ojsxc', 'boshUrl'),
-		   'xmppDomain' => $this->config->getAppValue('ojsxc', 'xmppDomain'),
-		   'xmppPreferMail' => $this->config->getAppValue('ojsxc', 'xmppPreferMail'),
-		   'xmppResource' => $this->config->getAppValue('ojsxc', 'xmppResource'),
-		   'xmppOverwrite' => $this->config->getAppValue('ojsxc', 'xmppOverwrite'),
-		   'xmppStartMinimized' => $this->config->getAppValue('ojsxc', 'xmppStartMinimized'),
-		   'loginFormEnable' => $this->config->getAppValue('ojsxc', 'loginFormEnable', true),
-		   'iceUrl' => $this->config->getAppValue('ojsxc', 'iceUrl'),
-		   'iceUsername' => $this->config->getAppValue('ojsxc', 'iceUsername'),
-		   'iceCredential' => $this->config->getAppValue('ojsxc', 'iceCredential'),
-		   'iceSecret' => $this->config->getAppValue('ojsxc', 'iceSecret'),
-		   'iceTtl' => $this->config->getAppValue('ojsxc', 'iceTtl'),
-		   'firefoxExtension' => $this->config->getAppValue('ojsxc', 'firefoxExtension'),
-		   'chromeExtension' => $this->config->getAppValue('ojsxc', 'chromeExtension'),
-		   'timeLimitedToken' => $this->config->getAppValue('ojsxc', 'timeLimitedToken'),
-		   'externalServices' => $externalServices,
+		   'serverType' => [
+			   'name' => CONFIG::XMPP_SERVER_TYPE,
+			   'value' => $serverType
+		   ],
+		   'boshUrl' => $this->getParam(CONFIG::XMPP_URL),
+		   'xmppDomain' => $this->getParam(CONFIG::XMPP_DOMAIN),
+		   'xmppPreferMail' => $this->getParam(CONFIG::XMPP_PREFER_MAIL),
+		   'xmppResource' => $this->getParam(CONFIG::XMPP_RESOURCE),
+		   'xmppOverwrite' => $this->getParam(CONFIG::XMPP_ALLOW_OVERWRITE),
+		   'xmppStartMinimized' => $this->getParam(CONFIG::XMPP_START_MINIMIZED),
+		   'loginFormEnable' => $this->getParam(CONFIG::XMPP_START_ON_LOGIN, true),
+		   'iceUrl' => $this->getParam(CONFIG::ICE_URL),
+		   'iceUsername' => $this->getParam(CONFIG::ICE_USERNAME),
+		   'iceCredential' => $this->getParam(CONFIG::ICE_CREDENTIAL),
+		   'iceSecret' => $this->getParam(CONFIG::ICE_SECRET),
+		   'iceTtl' => $this->getParam(CONFIG::ICE_TTL),
+		   'firefoxExtension' => $this->getParam(CONFIG::FIREFOX_EXTENSION),
+		   'chromeExtension' => $this->getParam(CONFIG::CHROME_EXTENSION),
+		   'timeLimitedToken' => $this->getParam(CONFIG::XMPP_USE_TIME_LIMITED_TOKEN),
+		   'externalServices' => [
+			   'name' => CONFIG::EXTERNAL_SERVICES . '[]',
+			   'value' => $externalServices
+		   ],
 		   'apiUrl' => $apiUrl,
-		   'apiSecret' => $this->config->getAppValue('ojsxc', 'apiSecret'),
+		   'apiSecret' => $this->getParam(CONFIG::API_SECRET),
 		   'userId' => \OC::$server->getUserSession()->getUser()->getUID(),
-		   'managedServer' => $this->config->getAppValue('ojsxc', 'managedServer')
+		   'managedServer' => $this->getParam('managedServer')
 		];
 
 		return new TemplateResponse('ojsxc', 'settings/admin', $parameters);
@@ -74,5 +81,12 @@ class Admin implements ISettings
 	public function getPriority()
 	{
 		return 50;
+	}
+
+	private function getParam($key, $default = NULL) {
+		return [
+			'name' => $key,
+			'value' => $this->config->getAppValue('ojsxc', $key, $default)
+		];
 	}
 }

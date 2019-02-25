@@ -5,6 +5,7 @@ namespace OCA\OJSXC\AppInfo;
 use OCA\OJSXC\Controller\ManagedServerController;
 use OCA\OJSXC\Controller\SettingsController;
 use OCA\OJSXC\Controller\ExternalApiController;
+use OCA\OJSXC\Controller\JavascriptController;
 use OCA\OJSXC\Middleware\ExternalApiMiddleware;
 use OCA\OJSXC\Command\RefreshRoster;
 use OCA\OJSXC\Controller\HttpBindController;
@@ -28,6 +29,7 @@ use OCA\OJSXC\MemLock;
 use OCA\OJSXC\Hooks;
 use OCA\OJSXC\UserManagerUserProvider;
 use OCA\OJSXC\ContactsStoreUserProvider;
+use OCA\OJSXC\Config;
 use OCP\AppFramework\App;
 use OCP\IContainer;
 use OCP\IRequest;
@@ -85,7 +87,7 @@ class Application extends App {
 			return new SettingsController(
 				$c->query('AppName'),
 				$c->query('Request'),
-				$c->query('OCP\IConfig'),
+				$c->query('Config'),
 				$c->query('OCP\IUserManager'),
 				\OC::$server->getUserSession()
 			);
@@ -114,6 +116,14 @@ class Application extends App {
 				$c->query('OCP\Security\ISecureRandom'),
 				$c->query('OCP\App\IAppManager'),
 				'https://xmpp.jsxc.ch/registration'
+			);
+		});
+
+		$container->registerService('JavascriptController', function(IContainer $c) {
+			return new JavascriptController(
+				$c->query('AppName'),
+				$c->query('Request'),
+				$c->query('Config')
 			);
 		});
 
@@ -214,6 +224,13 @@ class Application extends App {
 		/**
 		 * Helpers
 		 */
+		$container->registerService('Config', function(IContainer $c) {
+			return new Config(
+				$c->query('AppName'),
+				$c->query('OCP\IConfig')
+			);
+		});
+
 		$container->registerService('NewContentContainer', function() {
 			return new NewContentContainer();
 		});
@@ -390,7 +407,7 @@ class Application extends App {
 	}
 
 	public static function getServerType() {
-		return \OC::$server->getConfig()->getAppValue('ojsxc', 'serverType', self::INTERNAL);
+		return \OC::$server->getConfig()->getAppValue('ojsxc', Config::XMPP_SERVER_TYPE, self::INTERNAL);
 	}
 
 

@@ -2,16 +2,17 @@
 
 namespace OCA\OJSXC\Controller;
 
+use OCA\OJSXC\AppInfo\Application;
+use OCA\OJSXC\Config;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\DataDownloadResponse;
-use OCP\IConfig;
 use OCP\IRequest;
 
 class JavascriptController extends Controller
 {
 	private $config;
 
-	public function __construct($appName, IRequest $request, IConfig $config)
+	public function __construct($appName, IRequest $request, Config $config)
 	{
 		parent::__construct($appName, $request);
 
@@ -25,10 +26,14 @@ class JavascriptController extends Controller
 	 */
 	public function generalConfig()
 	{
-		$loginFormEnable = $this->config->getAppValue('ojsxc', 'loginFormEnable', true);
+		$serverType = $this->config->getAppValue(Config::XMPP_SERVER_TYPE, Application::INTERNAL);
+		$startMinimized = $this->config->getBooleanAppValue(Config::XMPP_START_MINIMIZED);
+		$loginFormEnable = $this->config->getBooleanAppValue(Config::XMPP_START_ON_LOGIN, true);
 
 		$settings = [
-			'defaultLoginFormEnable' => $loginFormEnable === 'true' || $loginFormEnable === true,
+			'serverType' => $serverType,
+			'startMinimized' => $startMinimized,
+			'defaultLoginFormEnable' => $loginFormEnable,
 		];
 
 		$code = 'var OJSXC_CONFIG = {}; try{OJSXC_CONFIG = JSON.parse(\''.json_encode($settings).'\');}catch(err){}';

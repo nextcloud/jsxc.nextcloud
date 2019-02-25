@@ -3,12 +3,14 @@
 namespace OCA\OJSXC\Controller;
 
 use OCP\AppFramework\Controller;
-use OCP\IConfig;
 use OCP\IRequest;
 use OCP\IUserManager;
 use OCP\IUserSession;
+use OCA\OJSXC\Config;
 use OCA\OJSXC\TimeLimitedToken;
 use OCA\OJSXC\AppInfo\Application;
+
+const SUCCESS = 'success';
 
 class SettingsController extends Controller
 {
@@ -20,10 +22,10 @@ class SettingsController extends Controller
 
 	public function __construct(
 		$appName,
-   IRequest $request,
-   IConfig $config,
-   IUserManager $userManager,
-   IUserSession $userSession
+		IRequest $request,
+		Config $config,
+		IUserManager $userManager,
+		IUserSession $userSession
 	) {
 		parent::__construct($appName, $request);
 
@@ -42,24 +44,28 @@ class SettingsController extends Controller
 
 		if (!$currentUser) {
 			return [
-			'result' => 'noauth',
-		 ];
+				'result' => 'noauth',
+			];
 		}
 
-		$currentUID = $currentUser->getUID();
 
-		$serverType = $this->getAppValue('serverType');
+		$currentUID = $currentUser->getUID();
+		$config = $this->config;
+
+		$serverType = $config->getAppValue(Config::XMPP_SERVER_TYPE, Application::INTERNAL);
 
 		$data = [
-		 'serverType' => (!empty($serverType))? $serverType : Application::INTERNAL,
-		 'loginForm' => [
-			 'enable' => $this->getBooleanAppValue('loginFormEnable', true),
-			 'startMinimized' => $this->getBooleanAppValue('xmppStartMinimized')
-			]
-		 ];
+			'disabled' => !$config->getAppValue(Config::XMPP_START_ON_LOGIN, true),
+		];
 
-		if ($data ['serverType'] === Application::INTERNAL) {
-			$data['adminSettings']['xmppDomain'] = $this->request->getServerHost();
+		if ($serverType === Application::INTERNAL) {
+			$data['xmpp'] = [
+				'defaultDomain' => $this->request->getServerHost(),
+				'url' => \OC::$server->getURLGenerator()->linkToRouteAbsolute('ojsxc.http_bind.index'),
+				'node' => $currentUID,
+				'domain' => $this->request->getServerHost(),
+				'resource' => 'internal'
+			];
 
 			return [
 			   'result' => 'success',
@@ -67,47 +73,44 @@ class SettingsController extends Controller
 			];
 		}
 
-		$data ['screenMediaExtension'] = [
-			'firefox' => trim($this->getAppValue('firefoxExtension')),
-			'chrome' => trim($this->getAppValue('chromeExtension'))
+		$data ['client']['screenMediaExtension'] = [
+			'firefox' => $config->getAppValue(Config::FIREFOX_EXTENSION),
+			'chrome' => $config->getAppValue(Config::CHROME_EXTENSION),
 		 ];
 
 		$data ['xmpp'] = [
-			'url' => trim($this->getAppValue('boshUrl')),
-			'domain' => trim($this->getAppValue('xmppDomain')),
-			'resource' => trim($this->getAppValue('xmppResource')),
-			'overwrite' => $this->getBooleanAppValue('xmppOverwrite'),
-			'onlogin' => null
+			'url' => $config->getAppValue(Config::XMPP_URL),
+			'domain' => $config->getAppValue(Config::XMPP_DOMAIN),
+			'resource' => $config->getAppValue(Config::XMPP_RESOURCE),
+			'defaultDomain' =>  $config->getAppValue(Config::XMPP_DOMAIN),
 		 ];
 
-		$data ['adminSettings'] = [
-			'xmppDomain' => trim($this->getAppValue('xmppDomain'))
-		 ];
-
-		if ($this->getBooleanAppValue('xmppPreferMail') && !$this->getBooleanAppValue('timeLimitedToken')) {
-			$mail = $this->config->getUserValue($currentUID, 'settings', 'email');
+		if ($config->getBooleanAppValue(Config::XMPP_PREFER_MAIL) && !$config->getBooleanAppValue(Config::XMPP_USE_TIME_LIMITED_TOKEN)) {
+			$mail = $config->getUserValue($currentUID, 'settings', 'email');
 
 			if ($mail !== null) {
 				list($u, $d) = explode("@", $mail, 2);
 				if ($d !== null && $d !== "") {
-					$data ['xmpp'] ['username'] = strtolower($u);
+					$data ['xmpp'] ['node'] = strtolower($u);
 					$data ['xmpp'] ['domain'] = strtolower($d);
 				}
 			}
 		}
 
-		if ($this->getBooleanAppValue('timeLimitedToken')) {
-			$data['xmpp']['username'] = strtolower($currentUID);
+		if ($config->getBooleanAppValue(Config::XMPP_USE_TIME_LIMITED_TOKEN)) {
+			$data['xmpp']['node'] = strtolower($currentUID);
 
-			$token = $this->generateTimeLimitedToken($data['xmpp']['username'], $data['xmpp']['domain']);
+			$token = $this->generateTimeLimitedToken($data['xmpp']['node'], $data['xmpp']['domain']);
 
 			$data['xmpp']['password'] = $token;
 		}
 
 		$data = $this->overwriteByUserDefined($currentUID, $data);
 
+		$data['firefox'] = $config->getAppValue(Config::FIREFOX_EXTENSION);
+
 		return [
-			'result' => 'success',
+			'result' => SUCCESS,
 			'data' => $data,
 		 ];
 	}
@@ -118,44 +121,59 @@ class SettingsController extends Controller
 			$l = \OC::$server->getL10N('core');
 
 			return [
-			'status' => 'error',
-			'data' => [
-			   'message' => $l->t('Password confirmation is required')
-			]
-		 ];
+				'status' => 'error',
+				'data' => [
+				'message' => $l->t('Password confirmation is required')
+				]
+			];
 		}
 
-		$this->setAppValue('serverType', $this->getParam('serverType'));
-		$this->setAppValue('boshUrl', $this->getTrimParam('boshUrl'));
-		$this->setAppValue('xmppDomain', $this->getTrimParam('xmppDomain'));
-		$this->setAppValue('xmppResource', $this->getTrimParam('xmppResource'));
-		$this->setAppValue('xmppOverwrite', $this->getCheckboxParam('xmppOverwrite'));
-		$this->setAppValue('xmppStartMinimized', $this->getCheckboxParam('xmppStartMinimized'));
-		$this->setAppValue('xmppPreferMail', $this->getCheckboxParam('xmppPreferMail'));
+		$textParameters = [
+			Config::XMPP_SERVER_TYPE,
+			Config::XMPP_URL,
+			Config::XMPP_DOMAIN,
+			Config::XMPP_RESOURCE,
+			Config::ICE_URL,
+			Config::ICE_USERNAME,
+			Config::ICE_CREDENTIAL,
+			Config::ICE_SECRET,
+			Config::ICE_TTL,
+			Config::FIREFOX_EXTENSION,
+			Config::CHROME_EXTENSION,
+		];
 
-		$this->setAppValue('loginFormEnable', $this->getCheckboxParam('loginFormEnable'));
+		$checkboxParameters = [
+			Config::XMPP_ALLOW_OVERWRITE,
+			Config::XMPP_ALLOW_OVERWRITE,
+			Config::XMPP_START_MINIMIZED,
+			Config::XMPP_START_ON_LOGIN,
+			Config::XMPP_PREFER_MAIL,
+			Config::XMPP_USE_TIME_LIMITED_TOKEN,
+		];
 
-		$this->setAppValue('iceUrl', $this->getTrimParam('iceUrl'));
-		$this->setAppValue('iceUsername', $this->getTrimParam('iceUsername'));
-		$this->setAppValue('iceCredential', $this->getParam('iceCredential'));
-		$this->setAppValue('iceSecret', $this->getParam('iceSecret'));
-		$this->setAppValue('iceTtl', $this->getParam('iceTtl'));
+		$params = [];
 
-		$this->setAppValue('timeLimitedToken', $this->getCheckboxParam('timeLimitedToken'));
+		foreach($textParameters as $param) {
+			$params[$param] = $this->getTrimParam($param);
+			$this->config->setAppValue($param, $this->getTrimParam($param));
+		}
 
-		$this->setAppValue('firefoxExtension', $this->getParam('firefoxExtension'));
-		$this->setAppValue('chromeExtension', $this->getParam('chromeExtension'));
+		foreach($checkboxParameters as $param) {
+			$params[$param] = $this->getCheckboxParam($param);
+			$this->config->setAppValue($param, $this->getCheckboxParam($param));
+		}
 
 		$externalServices = [];
-		foreach ($this->getParam('externalServices') as $es) {
+		foreach ($this->getParam(Config::EXTERNAL_SERVICES) as $es) {
 			if (preg_match('/^(https:\/\/)?([\w\d*][\w\d-]*)(\.[\w\d-]+)+(:[\d]+)?$/', $es)) {
 				$externalServices[] = $es;
 			}
 		}
-		$this->setAppValue('externalServices', implode('|', $externalServices));
+		$this->config->setAppValue(Config::EXTERNAL_SERVICES, implode('|', $externalServices));
 
 		return [
-		 'status' => 'success'
+		 'status' => SUCCESS,
+		 'params' => $params
 	  ];
 	}
 
@@ -182,7 +200,7 @@ class SettingsController extends Controller
 		$this->config->setUserValue($uid, 'ojsxc', 'options', json_encode($options));
 
 		return [
-		 'status' => 'success'
+		 'status' => SUCCESS
 	  ];
 	}
 
@@ -191,11 +209,11 @@ class SettingsController extends Controller
 	*/
 	public function getIceServers()
 	{
-		$secret = $this->getAppValue('iceSecret');
-		$ttl = $this->getAppValue('iceTtl', 3600 * 24); // one day (according to TURN-REST-API)
-		$urlString = $this->getAppValue('iceUrl');
-		$username = $this->getAppValue('iceUsername', '');
-		$credential = $this->getAppValue('iceCredential', '');
+		$secret = $this->getAppValue(Config::ICE_SECRET);
+		$ttl = $this->getAppValue(Config::ICE_TTL, 3600 * 24); // one day (according to TURN-REST-API)
+		$urlString = $this->getAppValue(Config::ICE_URL);
+		$username = $this->getAppValue(Config::ICE_USERNAME, '');
+		$credential = $this->getAppValue(Config::ICE_CREDENTIAL, '');
 
 		$urls = [];
 		foreach (preg_split('/[\s,]+/', $urlString) as $url) {
@@ -217,15 +235,15 @@ class SettingsController extends Controller
 
 		if (!empty($urls)) {
 			$data = [
-		   'ttl' => $ttl,
-		   'iceServers' => [
-			  [
-				 'urls' => $urls,
-				 'credential' => $credential,
-				 'username' => $username,
-			  ],
-		   ],
-		];
+				'ttl' => $ttl,
+				'iceServers' => [
+					[
+						'urls' => $urls,
+						'credential' => $credential,
+						'username' => $username,
+					],
+				],
+			];
 		} else {
 			$data = [];
 		}
@@ -241,7 +259,7 @@ class SettingsController extends Controller
 		$limit = 10;
 		$offset = 0;
 
-		$preferMail = $this->getBooleanAppValue('xmppPreferMail');
+		$preferMail = $this->config->getBooleanAppValue(Config::XMPP_PREFER_MAIL);
 
 		$users = $this->userManager->searchDisplayName($search, $limit, $offset);
 		$response = [];
@@ -269,7 +287,7 @@ class SettingsController extends Controller
 	 */
 	public function getServerType()
 	{
-		return ["serverType" => $this->getAppValue('serverType', Application::INTERNAL)];
+		return ["serverType" => $this->config->getAppValue(Config::XMPP_SERVER_TYPE, Application::INTERNAL)];
 	}
 
 	private function getCurrentUser()
@@ -287,7 +305,7 @@ class SettingsController extends Controller
 
 	private function generateTimeLimitedToken($node, $domain)
 	{
-		$secret = $this->getAppValue('apiSecret');
+		$secret = $this->config->getAppValue(Config::API_SECRET);
 
 		return TimeLimitedToken::generateUser($node, $domain, $secret);
 	}
@@ -296,40 +314,32 @@ class SettingsController extends Controller
 	{
 		$options = $this->config->getUserValue($currentUID, 'ojsxc', 'options');
 
-		if ($options !== null) {
-			$options = (array) json_decode($options, true);
+		if ($options === null) {
+			return $data;
+		}
 
-			if (is_array($options)) {
-				foreach ($options as $prop => $value) {
-					if ($prop !== 'xmpp' || $data ['xmpp'] ['overwrite']) {
-						foreach ($value as $key => $v) {
-							if ($v !== '' && $key !== 'url') {
-								$data [$prop] [$key] = ($v === 'false' || $v === 'true') ? $this->validateBoolean($v) : $v;
-							}
-						}
+		$options = (array) json_decode($options, true);
+
+		//@TODO only for debugging
+		$data['user'] = $options;
+
+		if (!is_array($options)) {
+			return $data;
+		}
+
+		$allowToOverwriteXMPPOptions = $this->config->getAppValue(Config::XMPP_ALLOW_OVERWRITE, false);
+
+		foreach ($options as $prop => $value) {
+			if ($prop !== 'xmpp' || $allowToOverwriteXMPPOptions) {
+				foreach ($value as $key => $v) {
+					if (!empty($v) && $key !== 'url') {
+						$data [$prop] [$key] = ($v === 'false' || $v === 'true') ? $this->validateBoolean($v) : $v;
 					}
 				}
 			}
 		}
 
 		return $data;
-	}
-
-	private function getBooleanAppValue($key, $default = null)
-	{
-		return $this->validateBoolean($this->getAppValue($key, $default));
-	}
-
-	private function getAppValue($key, $default = null)
-	{
-		$value = $this->config->getAppValue($this->appName, $key, $default);
-
-		return (empty($value)) ? $default : $value;
-	}
-
-	private function setAppValue($key, $value)
-	{
-		return $this->config->setAppValue($this->appName, $key, $value);
 	}
 
 	private function validateBoolean($val)
@@ -350,7 +360,7 @@ class SettingsController extends Controller
 
 	private function getCheckboxValue($var)
 	{
-		return (isset($var)) ? $var : 'false';
+		return (isset($var) && ($var === 'true' || $var === true || $var === '1' || $var === 1)) ? 1 : 0;
 	}
 
 	private function getParam($key)
