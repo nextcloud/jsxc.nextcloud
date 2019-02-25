@@ -116,7 +116,7 @@ class PresenceMapper extends Mapper
 	 */
 	public function getPresences()
 	{
-		$stmt = $this->execute("SELECT * FROM `*PREFIX*ojsxc_presence` WHERE `userid` != ?", [$this->userId]);
+		$stmt = $this->execute("SELECT * FROM `*PREFIX*ojsxc_presence`");
 		$results = [];
 		while ($row = $stmt->fetch()) {
 			$row['from'] = [$row['userid'], $this->host . '/internal'];
