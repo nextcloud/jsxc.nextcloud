@@ -1,6 +1,6 @@
 import Storage from './Storage'
 
-function addChatSubmitButton(formElement: JQuery<any>) {
+export function addChatSubmitButton(formElement: JQuery<any>) {
    let storage = Storage.get();
    let defaultEnable = OJSXC_CONFIG.defaultLoginFormEnable;
    let submitWrapperElement = $('<div>');
@@ -13,20 +13,23 @@ function addChatSubmitButton(formElement: JQuery<any>) {
    });
    submitElement.addClass('login primary');
    if (defaultEnable) {
-      submitElement.val('Log_in_without_chat'); //@TODO translate
+      submitElement.val(jsxc.translate('Log_in_without_chat'));
       submitElement.click(function() {
-         // submit form without login
+         storage.setItem('loginForm:disable', true);
+
+         formElement.submit();
       });
    } else {
-      submitElement.val('Log_in_with_chat');
+      submitElement.val(jsxc.translate('Log_in_with_chat'));
       submitElement.click(function() {
-         let forceLoginFormEnable = true;
+         storage.setItem('loginForm:disable', false);
+
          formElement.submit();
       });
    }
 
    submitWrapperElement.append(submitElement);
-   $('.login-additional').prepend(submitWrapperElement);
+   formElement.find('.login-additional').prepend(submitWrapperElement);
 
    $('#lost-password').mouseup(function(ev) {
       ev.preventDefault();
