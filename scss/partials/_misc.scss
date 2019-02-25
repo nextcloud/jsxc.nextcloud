@@ -1,5 +1,13 @@
-#jsxc_submit {
+#jsxc-submit-wrapper {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  position: relative;
+}
+
+#jsxc-submit {
   font-size: 15px;
+  height: auto;
   padding: 3px 5px;
   opacity: 1;
   font-weight: normal;
@@ -9,7 +17,7 @@
   }
 }
 
-#ojsxc {
+form.ojsxc {
   .form-group {
     overflow: hidden;
 

@@ -50,7 +50,8 @@
 
   #mainContainer,
   #odf-toolbar,
-  #app-sidebar {
+  #app-sidebar,
+  #view-toggle {
     right: 0;
     transition: right 0.5s;
   }
@@ -73,7 +74,8 @@
 
     #mainContainer,
     #odf-toolbar,
-    #app-sidebar {
+    #app-sidebar,
+    #view-toggle {
       right: 210px;
     }
 
