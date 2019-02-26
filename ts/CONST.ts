@@ -4,4 +4,4 @@ export const SERVER_TYPE = {
    MANAGED: 2
 };
 
-export const DEPENDENCIES = ['jsxc', 'oc_config', 'oc_appswebroots', 'OC'];
+export const DEPENDENCIES = ['JSXC', 'oc_config', 'oc_appswebroots', 'OC'];

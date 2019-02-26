@@ -4,7 +4,7 @@ declare var OC: {
 };
 declare var oc_requesttoken: string;
 declare var oc_current_user: string;
-declare var jsxc: any;
+declare var JSXC: any;
 declare var OJSXC_CONFIG: {
     defaultLoginFormEnable: boolean,
     startMinimized: boolean,

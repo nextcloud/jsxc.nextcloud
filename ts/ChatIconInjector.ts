@@ -1,10 +1,10 @@
 
-export default function injectChatIcon() {
+export default function injectChatIcon(toggleRoster: () => void) {
    var div = $('<div/>');
 
    div.addClass('ojsxc-chat-icon');
    div.click(function() {
-      jsxc.toggleRoster();
+      toggleRoster();
    });
 
    $('#header form.searchbox').after(div);

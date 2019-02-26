@@ -7,13 +7,15 @@ import defaultAvatar from './DefaultAvatar';
 import Storage from './Storage';
 
 export default class Bootstrap {
-   public static check() {
-      Bootstrap.checkDependencies();
-      Bootstrap.checkFrame();
-      Bootstrap.checkSpecialPage();
+   private jsxc;
+
+   public check() {
+      this.checkDependencies();
+      this.checkFrame();
+      this.checkSpecialPage();
    }
 
-   private static checkDependencies() {
+   private checkDependencies() {
       for (let dependency of DEPENDENCIES) {
          if (typeof (<any>window)[dependency] === 'undefined') {
             throw `Dependency "${dependency}" is missing.`;
@@ -21,13 +23,13 @@ export default class Bootstrap {
       }
    }
 
-   private static checkFrame() {
+   private checkFrame() {
       if (window.parent && window !== window.parent) {
          throw `Abort, because we are running inside a frame.`;
       }
    }
 
-   private static checkSpecialPage() {
+   private checkSpecialPage() {
       if (/^(\/index.php)?\/s\//.test(location.pathname)) {
          throw `Abort, because we dont want to start chat on public shares.`;
       }
@@ -37,22 +39,22 @@ export default class Bootstrap {
       }
    }
 
-   public static start() {
+   public start() {
       if (typeof OJSXC_CONFIG === 'undefined') {
-         setTimeout(Bootstrap.start, 100);
+         setTimeout(this.start.bind(this), 100);
 
          return;
       }
 
-      Bootstrap.initJSXC();
-      Bootstrap.addWatcher();
-      Bootstrap.addAlternativeLogin();
+      this.initJSXC();
+      this.addWatcher();
+      this.addAlternativeLogin();
 
-      injectChatIcon();
+      injectChatIcon(this.jsxc.toggleRoster);
    }
 
-   private static initJSXC() {
-      let numberOfCachedAccounts = jsxc.init({
+   private initJSXC() {
+      this.jsxc = new JSXC({
          appName: 'Nextcloud',
          rosterVisibility: OJSXC_CONFIG.startMinimized ? 'hidden' : 'shown',
          loadConnectionOptions: Settings.loadConnection,
@@ -61,11 +63,16 @@ export default class Bootstrap {
          avatarPlaceholder: (element: JQuery, name: string, color: string, jid: IJID) => {
             defaultAvatar(element, name, jid);
          },
-         onUserRequestsToGoOnline: Bootstrap.onUserRequestsToGoOnline,
+         onUserRequestsToGoOnline: this.onUserRequestsToGoOnline.bind(this),
       });
 
-      if (numberOfCachedAccounts === 0 && oc_current_user) {
-         jsxc.start();
+      //For debugging
+      (<any> window).ojsxc = {
+         jsxc: this.jsxc,
+      };
+
+      if (this.jsxc.numberOfCachedAccounts === 0 && oc_current_user) {
+         this.jsxc.start();
       }
 
       if (OJSXC_CONFIG.serverType === 'internal') {
@@ -74,7 +81,7 @@ export default class Bootstrap {
          let url = storage.getItem('internal:url');
 
          if (jid && url) {
-            jsxc.start(url, jid, 'sid', '1234');
+            this.jsxc.start(url, jid, 'sid', '1234');
 
             storage.removeItem('internal:jid');
             storage.removeItem('internal:url');
@@ -82,31 +89,31 @@ export default class Bootstrap {
       }
    }
 
-   private static addWatcher() {
+   private addWatcher() {
       let formElement = $('#body-login form[name="login"]');
       let usernameElement = $('#user');
       let passwordElement = $('#password');
 
       if (formElement.length && usernameElement.length && passwordElement.length) {
-         jsxc.watchForm(formElement, usernameElement, passwordElement);
+         this.jsxc.watchForm(formElement, usernameElement, passwordElement);
       }
 
       let logoutElement = $('[data-id="logout"] a');
 
       if (logoutElement.length) {
-         jsxc.watchLogoutClick(logoutElement);
+         this.jsxc.watchLogoutClick(logoutElement);
       }
    }
 
-   private static addAlternativeLogin() {
+   private addAlternativeLogin() {
       let formElement = $('#body-login form[name="login"]');
 
-      addChatSubmitButton(formElement);
+      addChatSubmitButton(formElement, this.jsxc.translate);
    }
 
-   private static async onUserRequestsToGoOnline() {
+   private async onUserRequestsToGoOnline() {
       if (!Storage.get().getItem('serverIsOmniscient') && OJSXC_CONFIG.serverType !== 'internal') {
-         jsxc.showLoginBox();
+         this.jsxc.showLoginBox();
 
          return;
       }
@@ -122,14 +129,14 @@ export default class Bootstrap {
          let jid = xmpp.node + '@' + xmpp.domain + '/' + xmpp.resource;
 
          if (OJSXC_CONFIG.serverType === 'internal') {
-            jsxc.start(xmpp.url, jid, 'sid', '1234');
+            this.jsxc.start(xmpp.url, jid, 'sid', '1234');
          } else {
-            jsxc.start(xmpp.url, jid, xmpp.password || '');
+            this.jsxc.start(xmpp.url, jid, xmpp.password || '');
          }
       } catch(err) {
          console.log('Error during log in', err);
 
-         jsxc.showLoginBox();
+         this.jsxc.showLoginBox();
       }
    }
 }

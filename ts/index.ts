@@ -3,13 +3,15 @@ import './settings/personal'
 import './settings/admin'
 
 (function() {
+   let bootstrap = new Bootstrap();
+
    try {
-      Bootstrap.check();
+      bootstrap.check();
    } catch (err) {
       console.warn('Abort JSXC', err);
 
       return;
    }
 
-   Bootstrap.start();
+   bootstrap.start();
 })();

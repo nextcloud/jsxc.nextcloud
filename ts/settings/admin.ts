@@ -94,7 +94,7 @@ class ConnectionParamter {
 
       // test only every 2 seconds
       ConnectionParamter.timeout = setTimeout(function () {
-         jsxc.testBOSHServer(url, domain).then(result => {
+         JSXC.testBOSHServer(url, domain).then(result => {
             statusElement.addClass('jsxc_success');
             statusElement.html(result);
          }).catch(err => {
