@@ -81,6 +81,8 @@ export default class Bootstrap {
          let url = storage.getItem('internal:url');
 
          if (jid && url) {
+            console.log('Start connection to internal XMPP server');
+
             this.jsxc.start(url, jid, 'sid', '1234');
 
             storage.removeItem('internal:jid');

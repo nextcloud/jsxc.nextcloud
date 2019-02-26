@@ -1,6 +1,6 @@
 import Storage from './Storage';
 
-const VALIDITY = 0;// 30000;
+const VALIDITY = 30000;
 
 export default class Settings {
    private static cache: any;
@@ -48,10 +48,15 @@ export default class Settings {
 
    public static load(username?: string, password?: string) {
       if (Settings.isCached()) {
-         console.log('cached settings', Settings.cache)
          return Promise.resolve(Settings.cache);
       }
 
+      return Settings.requestSettings(username, password)
+         .then(Settings.handleLoadResponse)
+         .catch(Settings.handleLoadError);
+   }
+
+   private static requestSettings(username?: string, password?: string) {
       return new Promise((resolve, reject) => {
          $.ajax({
             type: 'POST',
@@ -63,9 +68,7 @@ export default class Settings {
             success: (d) => resolve(d),
             error: xhr => reject(xhr),
          });
-      })
-         .then(Settings.handleLoadResponse)
-         .catch(Settings.handleLoadError);
+      });
    }
 
    public static async loadConnection(username: string, password: string) {
