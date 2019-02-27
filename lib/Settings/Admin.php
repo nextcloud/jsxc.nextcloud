@@ -57,7 +57,7 @@ class Admin implements ISettings
 		   'apiUrl' => $apiUrl,
 		   'apiSecret' => $this->getParam(CONFIG::API_SECRET),
 		   'userId' => \OC::$server->getUserSession()->getUser()->getUID(),
-		   'managedServer' => $this->getParam('managedServer')
+		   'managedServer' => $this->getParam(CONFIG::MANAGED_SERVER_STATUS)
 		];
 
 		return new TemplateResponse('ojsxc', 'settings/admin', $parameters);

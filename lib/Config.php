@@ -24,6 +24,7 @@ class Config
     const CHROME_EXTENSION = 'chromeExtension';
     const EXTERNAL_SERVICES = 'externalServices';
     const API_SECRET = 'apiSecret';
+    const MANAGED_SERVER_STATUS = 'managedServerStatus';
 
     private $appName;
     private $config;
@@ -61,6 +62,11 @@ class Config
     public function setAppValue($key, $value)
     {
         return $this->config->setAppValue($this->appName, $key, $value);
+    }
+
+    public function deleteAppValue($key)
+    {
+        return $this->config->deleteAppValue($this->appName, $key);
     }
 
     private function validateBoolean($val)

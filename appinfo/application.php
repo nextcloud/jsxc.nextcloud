@@ -34,6 +34,7 @@ use OCP\AppFramework\App;
 use OCP\IContainer;
 use OCP\IRequest;
 use OCP\IUserBackend;
+use OCA\OJSXC\Migration\MigrateConfig;
 
 class Application extends App {
 
@@ -324,6 +325,12 @@ class Application extends App {
 				$c->query('RosterPush'),
 				$c->query('OCP\IConfig'),
 				$c->query('OCP\ILogger')
+			);
+		});
+
+		$container->registerService('OCA\OJSXC\Migration\MigrateConfig', function(IContainer $c) {
+			return new MigrateConfig(
+				$c->query('Config')
 			);
 		});
 
