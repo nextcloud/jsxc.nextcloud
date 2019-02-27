@@ -8,13 +8,13 @@ interface IAvatar {
    url?: string;
 }
 
-export default async function defaultAvatar(elements: JQuery, name: string, jid: IJID) {
+export default async function defaultAvatar(elements: JQuery, name: string, jid?: IJID) {
    let storage = Storage.get();
 
    let defaultDomain = storage.getItem('defaultDomain');
-   let isExternalUser = jid.domain !== defaultDomain;
+   let isExternalUser = jid && jid.domain !== defaultDomain;
    let avatar: IAvatar = {
-      username: jid.node,
+      username: jid ? jid.node : name,
       displayName: name,
       type: 'placeholder',
    };
@@ -30,7 +30,7 @@ export default async function defaultAvatar(elements: JQuery, name: string, jid:
          return currentMax;
       }, 0);
 
-      avatar = await getAvatar(jid, maxSize);
+      avatar = await getAvatar(avatar.username, maxSize);
    }
 
    $(elements).each(function () {
@@ -44,8 +44,7 @@ export default async function defaultAvatar(elements: JQuery, name: string, jid:
    });
 }
 
-async function getAvatar(jid: IJID, size: number): Promise<IAvatar> {
-   let username = jid.node;
+async function getAvatar(username: string, size: number): Promise<IAvatar> {
    let key = username + '@' + size;
    let cache = Storage.get().getItem('avatar:' + key);
 
