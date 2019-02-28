@@ -36,12 +36,12 @@ class ExternalApiControllerTest extends TestCase
 		$this->user = $this->createMock(IUser::class);
 
 		$this->externalApiController = new ExternalApiController(
-		 'ojsxc',
-		 $this->request,
-		 $this->userManager,
-		 $this->userSession,
-		 $this->groupManager,
-		 $this->logger
+			'ojsxc',
+			$this->request,
+			$this->userManager,
+			$this->userSession,
+			$this->groupManager,
+			$this->logger
 	  );
 	}
 

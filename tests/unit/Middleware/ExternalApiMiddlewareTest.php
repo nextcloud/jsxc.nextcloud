@@ -29,9 +29,9 @@ class ExternalApiMiddlewareTest extends TestCase
 		$this->rawRequest = $this->createMock(RawRequest::class);
 
 		$this->externalApiMiddleware = new ExternalApiMiddleware(
-		 $this->request,
-		 $this->config,
-		 $this->rawRequest
+			$this->request,
+			$this->config,
+			$this->rawRequest
 	  );
 	}
 

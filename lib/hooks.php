@@ -48,11 +48,11 @@ class Hooks
 
 	public function __construct(
 		IUserManager $userManager,
-								IUserSession $userSession,
-								RosterPush $rosterPush,
-								PresenceMapper $presenceMapper,
-								StanzaMapper $stanzaMapper,
-								IGroupManager $groupManager
+		IUserSession $userSession,
+		RosterPush $rosterPush,
+		PresenceMapper $presenceMapper,
+		StanzaMapper $stanzaMapper,
+		IGroupManager $groupManager
 	) {
 		$this->userManager = $userManager;
 		$this->userSession = $userSession;

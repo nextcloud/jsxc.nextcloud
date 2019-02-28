@@ -53,11 +53,11 @@ class RosterPush
 	 */
 	public function __construct(
 		IUserManager $userManager,
-								IUserSession $userSession,
+		IUserSession $userSession,
 		$host,
-								IQRosterPushMapper $iqRosterPushMapper,
-								IDbConnection $db,
-								IUserProvider $userProvider
+		IQRosterPushMapper $iqRosterPushMapper,
+		IDbConnection $db,
+		IUserProvider $userProvider
 	) {
 		$this->userManager = $userManager;
 		$this->userSession = $userSession;

@@ -71,16 +71,16 @@ class ManagedServerControllerTest extends TestCase
 		 ->willReturn($this->createUserMock($this->userId));
 
 		$this->managedServerController = new ManagedServerController(
-		 'ojsxc',
-		 $this->request,
-		 $this->urlGenerator,
-		 $this->config,
-		 $this->userSession,
-		 $this->logger,
-		 $this->dataRetriever,
-		 $this->random,
-		 $this->appManager,
-		 $this->registrationUrl
+			'ojsxc',
+			$this->request,
+			$this->urlGenerator,
+			$this->config,
+			$this->userSession,
+			$this->logger,
+			$this->dataRetriever,
+			$this->random,
+			$this->appManager,
+			$this->registrationUrl
 	  );
 	}
 

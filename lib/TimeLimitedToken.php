@@ -22,9 +22,9 @@ class TimeLimitedToken
 
 		// format as "user-friendly" base64
 		$token = str_replace('=', '', strtr(
-		base64_encode($token),
-	   'OIl',
-		'-$%'
+			base64_encode($token),
+			'OIl',
+			'-$%'
 	  ));
 
 		return $token;
