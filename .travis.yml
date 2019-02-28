@@ -10,7 +10,7 @@ services:
 
 env:
   global:
-    - BRANCH=master
+    - BRANCH=stable15
 
 matrix:
   include:
@@ -25,9 +25,7 @@ matrix:
     - php: 7
       env: DB=mysql
     - php: 5.6
-      env: DB=mysql BRANCH=stable12
-    - php: 5.6
-      env: DB=mysql BRANCH=stable13
+      env: DB=mysql BRANCH=stable14
 
 
 install:
