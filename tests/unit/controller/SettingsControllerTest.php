@@ -2,8 +2,8 @@
 
 namespace OCA\OJSXC\Controller;
 
+use OCA\OJSXC\Config;
 use OCP\IRequest;
-use OCP\IConfig;
 use OCP\IUserManager;
 use OCP\IUser;
 use OCP\IUserSession;
@@ -22,7 +22,7 @@ class SettingsControllerTest extends TestCase
 		parent::setUp();
 
 		$this->request = $this->createMock(IRequest::class);
-		$this->config = $this->createMock(IConfig::class);
+		$this->config = $this->createMock(Config::class);
 		$this->userManager = $this->createMock(IUserManager::class);
 		$this->userSession = $this->createMock(IUserSession::class);
 
@@ -42,28 +42,22 @@ class SettingsControllerTest extends TestCase
 		$this->assertEquals('noauth', $return['result']);
 	}
 
-	public function testIndexDefaultServerType()
-	{
-		$this->expectsInternalServerSettings(null);
-	}
-
-	public function testIndexServerTypeInternal()
-	{
-		$this->expectsInternalServerSettings('internal');
-	}
-
 	public function testIndexPreferPersonalEmail()
 	{
 		$mapGetAppValue = [
-		 ['ojsxc', 'serverType', null, 'external'],
-		 ['ojsxc', 'xmppPreferMail', null, 'true']
-	  ];
+			[Config::XMPP_SERVER_TYPE, 'internal', 'external'],
+		];
+
+		$this->config->method('getBooleanAppValue')->will($this->returnValueMap([
+			[Config::XMPP_PREFER_MAIL, null, true],
+			[Config::XMPP_USE_TIME_LIMITED_TOKEN, null, false]
+		 ]));
 
 		$node = 'foobar';
 		$domain = 'host';
 
 		$mapGetUserValue = [
-		 ['Foo', 'settings', 'email', '', $node.'@'.$domain]
+		 ['Foo', 'settings', 'email', $node.'@'.$domain]
 	  ];
 
 		$this->setUpAuthenticatedIndex($mapGetAppValue, $mapGetUserValue);
@@ -71,17 +65,20 @@ class SettingsControllerTest extends TestCase
 		$return = $this->settingsController->index();
 
 		$this->assertEquals('success', $return['result']);
-		$this->assertEquals($node, $return['data']['xmpp']['username']);
+		$this->assertEquals($node, $return['data']['xmpp']['node']);
 		$this->assertEquals($domain, $return['data']['xmpp']['domain']);
 	}
 
 	public function testIndexTimeLimitedToken()
 	{
 		$mapGetAppValue = [
-		 ['ojsxc', 'serverType', null, 'external'],
-		 ['ojsxc', 'timeLimitedToken', null, 'true'],
-		 ['ojsxc', 'xmppDomain', null, 'localhost']
-	  ];
+			[Config::XMPP_SERVER_TYPE, 'internal', 'external'],
+			['xmppDomain', null, 'localhost']
+		];
+
+		$this->config->method('getBooleanAppValue')->will($this->returnValueMap([
+			[Config::XMPP_USE_TIME_LIMITED_TOKEN, null, true]
+		 ]));
 
 		$this->setUpAuthenticatedIndex($mapGetAppValue);
 
@@ -102,14 +99,18 @@ class SettingsControllerTest extends TestCase
 
 	public function testGetIceServersStoredDataWithPrefix()
 	{
-		$this->setUpGetIceServers('turn:localhost', '12345', 'foobar', 'password', 'secret');
+		$ttl = '1234';
+		$url = 'turn:localhost';
+		$username = 'foobar';
+		$password = 'password';
+		$this->setUpGetIceServers($url, $ttl, $username, $password, 'secret');
 
 		$return = $this->settingsController->getIceServers();
 
-		$this->assertEquals('12345', $return['ttl']);
-		$this->assertEquals('turn:localhost', $return['iceServers'][0]['urls'][0]);
-		$this->assertEquals('foobar', $return['iceServers'][0]['username']);
-		$this->assertEquals('password', $return['iceServers'][0]['credential']);
+		$this->assertEquals($ttl, $return['ttl']);
+		$this->assertEquals($url, $return['iceServers'][0]['urls'][0]);
+		$this->assertEquals($username, $return['iceServers'][0]['username']);
+		$this->assertEquals($password, $return['iceServers'][0]['credential']);
 	}
 
 	public function testGetIceServersGeneratedToken()
@@ -143,7 +144,7 @@ class SettingsControllerTest extends TestCase
 		$this->config
 			->expects($this->at(0))
 			->method('getAppValue')
-			->with('ojsxc', 'serverType', 'internal')
+			->with(Config::XMPP_SERVER_TYPE, 'internal')
 			->willReturn('internal'); // default value
 
 		$this->assertEquals($this->settingsController->getServerType(), ["serverType" => "internal"]);
@@ -151,38 +152,10 @@ class SettingsControllerTest extends TestCase
 		$this->config
 			->expects($this->at(0))
 			->method('getAppValue')
-			->with('ojsxc', 'serverType', 'internal')
+			->with(Config::XMPP_SERVER_TYPE, 'internal')
 			->willReturn('external');
 
 		$this->assertEquals($this->settingsController->getServerType(), ["serverType" => "external"]);
-
-		$this->config
-			->expects($this->at(0))
-			->method('getAppValue')
-			->with('ojsxc', 'serverType', 'internal')
-			->willReturn('');
-
-		$this->assertEquals($this->settingsController->getServerType(), ["serverType" => "internal"]);
-	}
-
-	private function expectsInternalServerSettings($serverType)
-	{
-		$mapGetAppValue = [
-		 ['ojsxc', 'serverType', null, $serverType]
-	  ];
-
-		$this->setUpAuthenticatedIndex($mapGetAppValue);
-
-		$this->request
-		 ->expects($this->once())
-		 ->method('getServerHost')
-		 ->willReturn('localhost');
-
-		$return = $this->settingsController->index();
-
-		$this->assertEquals('success', $return['result']);
-		$this->assertEquals('internal', $return['data']['serverType']);
-		$this->assertEquals('localhost', $return['data']['adminSettings']['xmppDomain']);
 	}
 
 	private function setUpAuthenticatedIndex($mapGetAppValue = [], $mapGetUserValue = [])
@@ -206,11 +179,11 @@ class SettingsControllerTest extends TestCase
 	private function setUpGetIceServers($iceUrl = '', $iceTtl = '', $iceUsername = '', $iceCredential = '', $iceSecret = '')
 	{
 		$mapGetAppValue = [
-		 ['ojsxc', 'iceSecret', null, $iceSecret],
-		 ['ojsxc', 'iceTtl', 3600 * 24, $iceTtl],
-		 ['ojsxc', 'iceUrl', null, $iceUrl],
-		 ['ojsxc', 'iceUsername', '', $iceUsername],
-		 ['ojsxc', 'iceCredential', '', $iceCredential]
+		 [Config::ICE_SECRET, null, $iceSecret],
+		 [Config::ICE_TTL, 3600 * 24, $iceTtl],
+		 [Config::ICE_URL, null, $iceUrl],
+		 [Config::ICE_USERNAME, '', $iceUsername],
+		 [Config::ICE_CREDENTIAL, '', $iceCredential]
 	  ];
 
 		$this->config->method('getAppValue')->will($this->returnValueMap($mapGetAppValue));

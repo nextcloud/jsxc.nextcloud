@@ -59,11 +59,13 @@ class SettingsController extends Controller
 		];
 
 		if ($serverType === Application::INTERNAL) {
+			$serverHost = $this->request->getServerHost();
+
 			$data['xmpp'] = [
-				'defaultDomain' => $this->request->getServerHost(),
+				'defaultDomain' => $serverHost,
 				'url' => \OC::$server->getURLGenerator()->linkToRouteAbsolute('ojsxc.http_bind.index'),
 				'node' => $currentUID,
-				'domain' => $this->request->getServerHost(),
+				'domain' => $serverHost,
 				'resource' => 'internal'
 			];
 
@@ -209,11 +211,11 @@ class SettingsController extends Controller
 	*/
 	public function getIceServers()
 	{
-		$secret = $this->getAppValue(Config::ICE_SECRET);
-		$ttl = $this->getAppValue(Config::ICE_TTL, 3600 * 24); // one day (according to TURN-REST-API)
-		$urlString = $this->getAppValue(Config::ICE_URL);
-		$username = $this->getAppValue(Config::ICE_USERNAME, '');
-		$credential = $this->getAppValue(Config::ICE_CREDENTIAL, '');
+		$secret = $this->config->getAppValue(Config::ICE_SECRET);
+		$ttl = $this->config->getAppValue(Config::ICE_TTL, 3600 * 24); // one day (according to TURN-REST-API)
+		$urlString = $this->config->getAppValue(Config::ICE_URL);
+		$username = $this->config->getAppValue(Config::ICE_USERNAME, '');
+		$credential = $this->config->getAppValue(Config::ICE_CREDENTIAL, '');
 
 		$urls = [];
 		foreach (preg_split('/[\s,]+/', $urlString) as $url) {
