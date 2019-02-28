@@ -262,10 +262,18 @@ class PresenceMapperTest extends MapperTestUtility
 		$expected2->setLastActive(23445645634);
 		$expected2->setTo('admin', 'localhost/internal');
 		$expected2->setFrom('derpina', 'localhost/internal');
+
+		$expected3 = new PresenceEntity();
+		$expected3->setUserid('admin');
+		$expected3->setPresence('chat');
+		$expected3->setLastActive(3234343424);
+		$expected3->setTo('admin', 'localhost/internal');
+		$expected3->setFrom('admin', 'localhost/internal');
+
 		return [
 			[
 				[$input1, $input2, $input3, $input4, $input5],
-				[$expected1, $expected2]
+				[$expected1, $expected2, $expected3]
 			]
 		];
 	}
