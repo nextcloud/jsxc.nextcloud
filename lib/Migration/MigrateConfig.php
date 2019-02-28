@@ -73,7 +73,7 @@ class MigrateConfig implements IRepairStep
 
 		$output->startProgress(count($mapping));
 
-		foreach($mapping as $old => $new) {
+		foreach ($mapping as $old => $new) {
 			$value = $this->config->getAppValue($old);
 
 			if ($value !== null && $this->config->getAppValue($new) !== null) {

@@ -83,7 +83,8 @@ class Admin implements ISettings
 		return 50;
 	}
 
-	private function getParam($key, $default = NULL) {
+	private function getParam($key, $default = null)
+	{
 		return [
 			'name' => $key,
 			'value' => $this->config->getAppValue('ojsxc', $key, $default)

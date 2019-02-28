@@ -84,7 +84,7 @@ class SettingsController extends Controller
 			'url' => $config->getAppValue(Config::XMPP_URL),
 			'domain' => $config->getAppValue(Config::XMPP_DOMAIN),
 			'resource' => $config->getAppValue(Config::XMPP_RESOURCE),
-			'defaultDomain' =>  $config->getAppValue(Config::XMPP_DOMAIN),
+			'defaultDomain' => $config->getAppValue(Config::XMPP_DOMAIN),
 		 ];
 
 		if ($config->getBooleanAppValue(Config::XMPP_PREFER_MAIL) && !$config->getBooleanAppValue(Config::XMPP_USE_TIME_LIMITED_TOKEN)) {
@@ -155,12 +155,12 @@ class SettingsController extends Controller
 
 		$params = [];
 
-		foreach($textParameters as $param) {
+		foreach ($textParameters as $param) {
 			$params[$param] = $this->getTrimParam($param);
 			$this->config->setAppValue($param, $this->getTrimParam($param));
 		}
 
-		foreach($checkboxParameters as $param) {
+		foreach ($checkboxParameters as $param) {
 			$params[$param] = $this->getCheckboxParam($param);
 			$this->config->setAppValue($param, $this->getCheckboxParam($param));
 		}
