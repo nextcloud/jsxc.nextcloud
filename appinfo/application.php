@@ -110,7 +110,7 @@ class Application extends App {
 				$c->query('AppName'),
 				$c->query('Request'),
 				$c->query('OCP\IURLGenerator'),
-				$c->query('OCP\IConfig'),
+				$c->query('Config'),
 				$c->query('OCP\IUserSession'),
 				$c->query('OCP\ILogger'),
 				$c->query('DataRetriever'),
