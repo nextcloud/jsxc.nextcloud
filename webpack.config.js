@@ -15,7 +15,7 @@ const fileLoader = {
    }
 };
 
-module.exports = {
+const config = {
    entry: ['./scss/index.scss', './ts/index.ts'],
    output: {
       filename: 'js/bundle.js',
@@ -34,6 +34,10 @@ module.exports = {
             }
          }
       },
+   },
+   performance: {
+      maxEntrypointSize: 1024 * 1000 * 1000 * 3,
+      maxAssetSize: 1024 * 1000 * 1000 * 3,
    },
    node: {
       fs: 'empty'
@@ -129,4 +133,13 @@ module.exports = {
       // new webpack.ContextReplacementPlugin(/moment[/\\]locale$/, new RegExp(MOMENTJS_LOCALES.join('|'))),
       // new BundleAnalyzerPlugin(),
    ]
+};
+
+module.exports = (env, argv) => {
+
+   if (typeof argv.mode === 'string') {
+      config.mode = argv.mode;
+   }
+
+   return config;
 };
