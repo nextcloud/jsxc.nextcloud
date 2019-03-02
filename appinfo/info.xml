@@ -1,6 +1,5 @@
-<?xml version="1.0"?>
-<info xmlns:xsi= "http://www.w3.org/2001/XMLSchema-instance"
-      xsi:noNamespaceSchemaLocation="https://apps.nextcloud.com/schema/apps/info.xsd">
+<?xml version="1.0" encoding="UTF-8"?>
+<info xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://apps.nextcloud.com/schema/apps/info.xsd">
    <id>ojsxc</id>
    <name>JavaScript XMPP Chat</name>
    <summary>Facebook-like chat</summary>
@@ -41,12 +40,12 @@
    </dependencies>
 
    <repair-steps>
-      <install>
-         <step>OCA\OJSXC\Migration\RefreshRoster</step>
-      </install>
       <post-migration>
          <step>OCA\OJSXC\Migration\MigrateConfig</step>
       </post-migration>
+      <install>
+         <step>OCA\OJSXC\Migration\RefreshRoster</step>
+      </install>
    </repair-steps>
 
    <settings>
