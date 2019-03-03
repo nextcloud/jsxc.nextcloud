@@ -34,7 +34,7 @@ async function createRelease() {
   console.log(`I'm now building JSXC for Nextcloud in version ${version}.`.verbose);
 
   await createBuild();
-  let filePath = await createArchive(version);
+  let filePath = await createArchive('ojsxc-' + version);
   await createSignature(filePath);
 }
 
