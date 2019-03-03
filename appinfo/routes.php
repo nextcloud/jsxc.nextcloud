@@ -24,7 +24,7 @@ $application->registerRoutes($this, array(
 
 		array('name' => 'managedServer#register', 'url' => '/managedServer/register', 'verb' => 'POST'),
 
-		array('name' => 'javascript#generalConfig', 'url' => '/js/config', 'verb' => 'GET'),
+		array('name' => 'javascript#generalConfig', 'url' => '/js/config.js', 'verb' => 'GET'),
 	)
 ));
 ?>

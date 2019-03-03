@@ -2,19 +2,11 @@
 
 use OCA\OJSXC\AppInfo\Application;
 use OCA\OJSXC\Hooks;
+use OCA\OJSXC\Config;
 
 \OCP\App::registerPersonal('ojsxc', 'settings/personal');
 
-$linkToGeneralConfig = \OC::$server->getURLGenerator()->linkToRoute('ojsxc.javascript.generalConfig');
-
-\OCP\Util::addHeader(
-	'script',
-	[
-		'src' => $linkToGeneralConfig,
-		'nonce' => \OC::$server->getContentSecurityPolicyNonceManager()->getNonce()
-	], ''
-);
-
+OCP\Util::addScript ( 'ojsxc', 'config' );
 OCP\Util::addScript ( 'ojsxc', 'libsignal/libsignal-protocol' );
 OCP\Util::addScript ( 'ojsxc', 'jsxc/jsxc.bundle' );
 OCP\Util::addScript ( 'ojsxc', 'bundle');
@@ -42,7 +34,7 @@ if(class_exists('\\OCP\\AppFramework\\Http\\EmptyContentSecurityPolicy')) {
 
 	$policy->addAllowedConnectDomain('\'self\'');
 
-	$boshUrl = \OC::$server->getConfig()->getAppValue('ojsxc', 'boshUrl');
+	$boshUrl = \OC::$server->getConfig()->getAppValue('ojsxc', Config::XMPP_URL);
 
 	if(preg_match('#^(https?:)?//([a-z0-9][a-z0-9\-.]*[a-z0-9](:[0-9]+)?)/#i', $boshUrl, $matches)) {
 		$boshDomain = $matches[2];
@@ -50,7 +42,7 @@ if(class_exists('\\OCP\\AppFramework\\Http\\EmptyContentSecurityPolicy')) {
 		$policy->addAllowedConnectDomain($boshDomain);
 	}
 
-	$externalServices = \OC::$server->getConfig()->getAppValue('ojsxc', 'externalServices');
+	$externalServices = \OC::$server->getConfig()->getAppValue('ojsxc', Config::EXTERNAL_SERVICES);
 	$externalServices = explode("|", $externalServices);
 
 	foreach($externalServices as $es) {
@@ -61,10 +53,10 @@ if(class_exists('\\OCP\\AppFramework\\Http\\EmptyContentSecurityPolicy')) {
 }
 
 $config = \OC::$server->getConfig();
-$apiSecret = $config->getAppValue('ojsxc', 'apiSecret');
+$apiSecret = $config->getAppValue('ojsxc', Config::API_SECRET);
 if(!$apiSecret) {
    $apiSecret = \OC::$server->getSecureRandom()->generate(23);
-   $config->setAppValue('ojsxc', 'apiSecret', $apiSecret);
+   $config->setAppValue('ojsxc', Config::API_SECRET, $apiSecret);
 }
 
 if (Application::getServerType() === 'internal') {
