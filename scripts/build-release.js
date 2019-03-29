@@ -141,7 +141,15 @@ async function validateXml(xmlDoc) {
     throw "Found no schema location";
   }
 
-  let schemaString = await wget(schemaLocation);
+
+  let schemaString;
+  try {
+    schemaString = await wget(schemaLocation);
+  } catch(err) {
+    console.log('Could not download schema. Skip validation.'.warn);
+
+    return;
+  }
   let xsdDoc = libxml.parseXml(schemaString);
 
   if (xmlDoc.validate(xsdDoc)) {
