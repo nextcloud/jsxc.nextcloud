@@ -39,6 +39,6 @@ class JavascriptController extends Controller
 		$code = 'window.jsxc_public_path = OC.generateUrl("apps/ojsxc/js/jsxc/");';
 		$code .= 'var OJSXC_CONFIG = {}; try{OJSXC_CONFIG = JSON.parse(\''.json_encode($settings).'\');}catch(err){}';
 
-		return new DataDownloadResponse($code, 'config.js', 'text/javascript');
+		return new DataDownloadResponse($code, 'config', 'text/javascript');
 	}
 }

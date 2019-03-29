@@ -6,10 +6,29 @@ use OCA\OJSXC\Config;
 
 \OCP\App::registerPersonal('ojsxc', 'settings/personal');
 
-OCP\Util::addScript ( 'ojsxc', 'config' );
-OCP\Util::addScript ( 'ojsxc', 'libsignal/libsignal-protocol' );
-OCP\Util::addScript ( 'ojsxc', 'jsxc/jsxc.bundle' );
-OCP\Util::addScript ( 'ojsxc', 'bundle');
+$config = \OC::$server->getConfig();
+$versionHashSuffix = '';
+
+if (!$config->getSystemValue('debug', false)) {
+	$appVersion = $config->getAppValue('ojsxc', 'installed_version');
+	$versionHashSuffix = '?v=' . substr(md5($appVersion), 0, 8);
+}
+
+function addScript($src) {
+	// use addHeader instead of addScript, because addScript adds js suffix to every src
+	\OCP\Util::addHeader( 'script', [
+			'src' => $src,
+			'nonce' => \OC::$server->getContentSecurityPolicyNonceManager()->getNonce(),
+		], ''
+	);
+}
+
+$urlGenerator = \OC::$server->getURLGenerator();
+
+addScript($urlGenerator->linkToRoute('ojsxc.javascript.generalConfig'));
+addScript($urlGenerator->linkTo('ojsxc', 'js/libsignal/libsignal-protocol.js') . $versionHashSuffix);
+addScript($urlGenerator->linkTo('ojsxc', 'js/jsxc/jsxc.bundle.js') . $versionHashSuffix);
+addScript($urlGenerator->linkTo('ojsxc', 'js/bundle.js') . $versionHashSuffix);
 
 OCP\Util::addStyle ( 'ojsxc', '../js/jsxc/styles/jsxc.bundle' );
 OCP\Util::addStyle ( 'ojsxc', 'bundle' );
@@ -52,7 +71,6 @@ if(class_exists('\\OCP\\AppFramework\\Http\\EmptyContentSecurityPolicy')) {
 	$manager->addDefaultPolicy($policy);
 }
 
-$config = \OC::$server->getConfig();
 $apiSecret = $config->getAppValue('ojsxc', Config::API_SECRET);
 if(!$apiSecret) {
    $apiSecret = \OC::$server->getSecureRandom()->generate(23);
