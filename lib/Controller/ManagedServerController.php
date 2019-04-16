@@ -86,7 +86,7 @@ class ManagedServerController extends Controller
 		$apiUrl = $this->urlGenerator->linkToRouteAbsolute('ojsxc.externalApi.index');
 		$apiSecret = $this->config->getAppValue('ojsxc', 'apiSecret');
 		$userId = $this->userSession->getUser()->getUID();
-		$appVersion = '3.4.0'; //$this->appManager->getAppVersion('ojsxc'); from NC 14
+		$appVersion = $this->appManager->getAppVersion('ojsxc');
 
 		$data = [
 		  'apiUrl' => $apiUrl,
