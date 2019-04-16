@@ -30,8 +30,8 @@ class RefreshRoster extends Command
 
 	public function __construct(
 		IUserManager $userManager,
-								RosterPush $rosterPush,
-	PresenceMapper $presenceMapper
+		RosterPush $rosterPush,
+		PresenceMapper $presenceMapper
 	) {
 		parent::__construct();
 		$this->userManager = $userManager;

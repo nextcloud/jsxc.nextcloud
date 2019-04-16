@@ -27,11 +27,11 @@ class SettingsControllerTest extends TestCase
 		$this->userSession = $this->createMock(IUserSession::class);
 
 		$this->settingsController = new SettingsController(
-		 'ojsxc',
-		 $this->request,
-		 $this->config,
-		 $this->userManager,
-		 $this->userSession
+			'ojsxc',
+			$this->request,
+			$this->config,
+			$this->userManager,
+			$this->userSession
 	  );
 	}
 

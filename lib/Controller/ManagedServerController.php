@@ -27,16 +27,16 @@ class ManagedServerController extends Controller
 	private $random;
 
 	public function __construct(
-	$appName,
-								 IRequest $request,
-								 IURLGenerator $urlGenerator,
-								 IConfig $config,
-								 IUserSession $userSession,
-								 ILogger $logger,
-								 IDataRetriever $dataRetriever,
-								 ISecureRandom $random,
-								 IAppManager $appManager,
-								 $registrationUrl
+		$appName,
+		IRequest $request,
+		IURLGenerator $urlGenerator,
+		IConfig $config,
+		IUserSession $userSession,
+		ILogger $logger,
+		IDataRetriever $dataRetriever,
+		ISecureRandom $random,
+		IAppManager $appManager,
+		$registrationUrl
    ) {
 		parent::__construct($appName, $request);
 

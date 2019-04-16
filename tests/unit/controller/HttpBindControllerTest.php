@@ -403,7 +403,7 @@ XML;
 			->method('handle')
 			->withConsecutive(
 				$this->equalTo(
-				[	'name' => '{jabber:client}message',
+					[	'name' => '{jabber:client}message',
 				'	value' => [
 					'{jabber:client}body' => 'abc',
 				],
