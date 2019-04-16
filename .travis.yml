@@ -22,6 +22,8 @@ matrix:
       env: DB=sqlite
     - php: 7.2
       env: DB=sqlite
+    - php: 7.3
+      env: DB=sqlite
     - php: 7
       env: DB=pgsql
     - php: 7
