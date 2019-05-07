@@ -208,7 +208,7 @@ class Application extends App {
 		$container->registerService('Host', function(IContainer $c) {
 			/** @var IRequest $request */
 			$request = $c->query('Request');
-			return $request->getServerHost();
+			return preg_replace('/:\d+$/', '', $request->getServerHost());
 		});
 
 		/**
