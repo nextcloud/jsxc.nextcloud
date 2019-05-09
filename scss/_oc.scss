@@ -48,6 +48,19 @@
     }
 }
 
+.jsxc_window textarea.jsxc_textinput {
+    background-color: #ffffff !important;
+
+    &:focus,
+    &:hover {
+        background-color: #ffffff !important;
+    }
+}
+
+.jsxc_chatmessage, #jsxc_dialog * {
+    color: #222222;
+}
+
 #jsxc_submit_wrapper {
     display: flex;
     align-items: center;
