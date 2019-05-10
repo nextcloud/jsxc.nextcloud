@@ -24,11 +24,11 @@ class ExternalApiController extends SignatureProtectedApiController
 
 	public function __construct(
 		$appName,
-   IRequest $request,
-   IUserManager $userManager,
-   IUserSession $userSession,
-   IGroupManager $groupManager,
-   ILogger $logger
+		IRequest $request,
+		IUserManager $userManager,
+		IUserSession $userSession,
+		IGroupManager $groupManager,
+		ILogger $logger
 	) {
 		parent::__construct($appName, $request);
 
@@ -47,21 +47,21 @@ class ExternalApiController extends SignatureProtectedApiController
 		switch ($operation) {
 		 case 'auth':
 			return $this->checkPassword(
-			   $this->request->getParam('username'),
-			   $this->request->getParam('password'),
-			   $this->request->getParam('domain')
+				$this->request->getParam('username'),
+				$this->request->getParam('password'),
+				$this->request->getParam('domain')
 			);
 			break;
 		 case 'isuser':
 			return $this->isUser(
-			   $this->request->getParam('username'),
-			   $this->request->getParam('domain')
+				$this->request->getParam('username'),
+				$this->request->getParam('domain')
 			);
 			break;
 		 case 'sharedroster':
 			return $this->sharedRoster(
-			   $this->request->getParam('username'),
-			   $this->request->getParam('domain')
+				$this->request->getParam('username'),
+				$this->request->getParam('domain')
 			);
 			break;
 		 default:

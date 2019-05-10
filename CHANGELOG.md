@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 3.4.4 - 2019-05-10
+### Fixed
+- [jsxc/jsxc#681](https://github.com/jsxc/jsxc/issues/681) sanitize port from internal jabber id
+- [#122](https://github.com/nextcloud/jsxc.nextcloud/issues/122) force light theme
+- [jsxc/jsxc#761](https://github.com/jsxc/jsxc/issues/761) fix overlap with pdf viewer
+- drop support for Nextcloud 13
+- make compatible with Nextcloud 16
+
 ## 3.4.3 - 2018-12-05
 ### Fixed
 - make compatible with Nextcloud 15

@@ -1,13 +1,13 @@
 /*!
- * ojsxc v3.4.3 - 2018-12-05
+ * ojsxc v3.4.4 - 2019-05-10
  * 
- * Copyright (c) 2018 Klaus Herberth <klaus@jsxc.org> <br>
+ * Copyright (c) 2019 Klaus Herberth <klaus@jsxc.org> <br>
  * Released under the MIT license
  * 
  * Please see http://www.jsxc.org/
  * 
  * @author Klaus Herberth <klaus@jsxc.org>
- * @version 3.4.3
+ * @version 3.4.4
  * @license MIT
  */
 
@@ -182,7 +182,7 @@ button::-moz-focus-inner {
   padding: 0;
   width: 90px;
   height: 110px;
-  -webkit-tap-highlight-color: rgba(0, 0, 0, 0); }
+  -webkit-tap-highlight-color: transparent; }
   .mfp-arrow:active {
     margin-top: -54px; }
   .mfp-arrow:hover, .mfp-arrow:focus {
@@ -4111,6 +4111,14 @@ div.jsxc_video {
     #jsxc a:hover {
       text-decoration: none; }
 
+.jsxc_window textarea.jsxc_textinput {
+  background-color: #ffffff !important; }
+  .jsxc_window textarea.jsxc_textinput:focus, .jsxc_window textarea.jsxc_textinput:hover {
+    background-color: #ffffff !important; }
+
+.jsxc_chatmessage, #jsxc_dialog * {
+  color: #222222; }
+
 #jsxc_submit_wrapper {
   display: -ms-flexbox;
   display: flex;
@@ -4243,7 +4251,7 @@ div.jsxc_video {
     opacity: 1; }
 
 @media (min-width: 768px) {
-  #content, #content-wrapper, #filestable > thead {
+  #content, #content-wrapper, #filestable > thead, #pdframe {
     padding-right: 0;
     transition: padding-right 0.5s; }
   #mainContainer, #odf-toolbar, #app-sidebar, #view-toggle {
@@ -4253,7 +4261,7 @@ div.jsxc_video {
     transition: right 0.5s; }
     .app-mail .submit-message-wrapper .submit-message {
       transition: right 0.5s; }
-  .jsxc-roster-shown #content, .jsxc-roster-shown #content-wrapper, .jsxc-roster-shown #filestable > thead {
+  .jsxc-roster-shown #content, .jsxc-roster-shown #content-wrapper, .jsxc-roster-shown #filestable > thead, .jsxc-roster-shown #pdframe {
     padding-right: 210px; }
   .jsxc-roster-shown #mainContainer, .jsxc-roster-shown #odf-toolbar, .jsxc-roster-shown #app-sidebar, .jsxc-roster-shown #view-toggle {
     right: 210px; }

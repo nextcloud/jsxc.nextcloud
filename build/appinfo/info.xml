@@ -5,7 +5,7 @@
    <name>JavaScript XMPP Chat</name>
    <summary>Facebook-like chat</summary>
    <description>Facebook-like chat with end-to-end encrypted conversation, video calls, multi-user rooms, XMPP and internal server backend.</description>
-   <version>3.4.3</version>
+   <version>3.4.4</version>
    <licence>agpl</licence>
    <author mail="klaus@jsxc.org">Klaus Herberth</author>
    <author>Tobia De Koninck</author>
@@ -29,7 +29,7 @@
    <screenshot>https://www.jsxc.org/assets/screenshot-nextcloud-latest.png</screenshot>
 
    <dependencies>
-      <php min-version="5.4" max-version="7"/>
+      <php min-version="7" max-version="7"/>
       <database>sqlite</database>
       <database>mysql</database>
       <database>pgsql</database>
@@ -37,7 +37,7 @@
       <lib>xmlreader</lib>
       <lib>xmlwriter</lib>
       <lib>dom</lib>
-      <nextcloud min-version="12" max-version="16"/>
+      <nextcloud min-version="14" max-version="16"/>
    </dependencies>
 
    <repair-steps>

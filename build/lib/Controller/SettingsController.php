@@ -20,10 +20,10 @@ class SettingsController extends Controller
 
 	public function __construct(
 		$appName,
-   IRequest $request,
-   IConfig $config,
-   IUserManager $userManager,
-   IUserSession $userSession
+		IRequest $request,
+		IConfig $config,
+		IUserManager $userManager,
+		IUserSession $userSession
 	) {
 		parent::__construct($appName, $request);
 

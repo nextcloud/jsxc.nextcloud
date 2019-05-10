@@ -3,8 +3,6 @@
 use OCA\OJSXC\AppInfo\Application;
 use OCA\OJSXC\Hooks;
 
-\OCP\App::registerPersonal('ojsxc', 'settings/personal');
-
 $isDevEnv = \OC::$server->getConfig()->getSystemValue('jsxc.environment') === 'dev';
 $jsxc_root = ($isDevEnv)? 'jsxc/dev/' : 'jsxc/';
 $jsProdSuffix = (!$isDevEnv)? '.min' : '';

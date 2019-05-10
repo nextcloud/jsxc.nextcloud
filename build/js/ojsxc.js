@@ -1,13 +1,13 @@
 /*!
- * ojsxc v3.4.3 - 2018-12-05
+ * ojsxc v3.4.4 - 2019-05-10
  * 
- * Copyright (c) 2018 Klaus Herberth <klaus@jsxc.org> <br>
+ * Copyright (c) 2019 Klaus Herberth <klaus@jsxc.org> <br>
  * Released under the MIT license
  * 
  * Please see http://www.jsxc.org/
  * 
  * @author Klaus Herberth <klaus@jsxc.org>
- * @version 3.4.3
+ * @version 3.4.4
  * @license MIT
  */
 

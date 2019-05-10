@@ -119,21 +119,21 @@ class HttpBindController extends Controller
 	 */
 	public function __construct(
 		$appName,
-								IRequest $request,
-								$userId,
-								StanzaMapper $stanzaMapper,
-								IQ $iqHandler,
-								Message $messageHandler,
-								$host,
-								ILock $lock,
-								ILogger $logger,
-								PresenceHandler $presenceHandler,
-								PresenceMapper $presenceMapper,
-								$body,
-								$sleepTime,
-								$maxCicles,
-								NewContentContainer $newContentContainer,
-								StanzaLogger $stanzaLogger
+		IRequest $request,
+		$userId,
+		StanzaMapper $stanzaMapper,
+		IQ $iqHandler,
+		Message $messageHandler,
+		$host,
+		ILock $lock,
+		ILogger $logger,
+		PresenceHandler $presenceHandler,
+		PresenceMapper $presenceMapper,
+		$body,
+		$sleepTime,
+		$maxCicles,
+		NewContentContainer $newContentContainer,
+		StanzaLogger $stanzaLogger
 	) {
 		parent::__construct($appName, $request);
 		$this->userId = $userId;
