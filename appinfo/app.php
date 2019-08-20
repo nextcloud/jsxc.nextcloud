@@ -77,7 +77,7 @@ if(!$apiSecret) {
    $config->setAppValue('ojsxc', Config::API_SECRET, $apiSecret);
 }
 
-if (Application::getServerType() === 'internal') {
+if (Application::getServerType() === Application::INTERNAL) {
 	Hooks::register();
 }
 

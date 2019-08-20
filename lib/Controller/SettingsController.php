@@ -48,7 +48,6 @@ class SettingsController extends Controller
 			];
 		}
 
-
 		$currentUID = $currentUser->getUID();
 		$config = $this->config;
 

@@ -3,29 +3,27 @@ sudo: false
 
 language: php
 php:
-  - 7
+  - 7.1
 
 services:
   - mysql
 
 env:
   global:
+      # test with different DB's and PHP versions against NC master version.
+      # Test minimum PHP version against NC stable branches.
     - BRANCH=stable15
 
 matrix:
   include:
-    - php: 7
-      env: DB=sqlite
-    - php: 7.1
-      env: DB=sqlite
+    - env: DB=sqlite
     - php: 7.2
       env: DB=sqlite
-    - php: 7
-      env: DB=pgsql
-    - php: 7
-      env: DB=mysql
-    - php: 7.2
-      env: DB=mysql BRANCH=stable14
+    - php: 7.3
+      env: DB=sqlite
+    - env: DB=pgsql
+    - env: DB=mysql
+    - env: DB=mysql BRANCH=stable14
 
 
 install:

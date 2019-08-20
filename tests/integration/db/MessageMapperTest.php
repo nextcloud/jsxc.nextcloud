@@ -57,8 +57,8 @@ class MessageMapperTest extends MapperTestUtility
 		$stanza->setType($type);
 		$stanza->setValue($msg);
 
-		$this->assertEquals($stanza->getFrom(), $from[0]);
-		$this->assertEquals($stanza->getTo(), $to[0]);
+		$this->assertEquals($stanza->getUnSanitizedFrom(), $from[0]);
+		$this->assertEquals($stanza->getUnSanitizedTo(), $to[0]);
 		$this->assertEquals($stanza->getStanza(), $data);
 		$this->assertEquals($stanza->getType(), $type);
 
@@ -67,8 +67,8 @@ class MessageMapperTest extends MapperTestUtility
 		$result = $this->fetchAll();
 
 		$this->assertCount(1, $result);
-		$this->assertEquals($stanza->getFrom(), $result[0]->getFrom());
-		$this->assertEquals($stanza->getTo(), $result[0]->getTo());
+		$this->assertEquals($stanza->getUnSanitizedFrom(), $result[0]->getFrom());
+		$this->assertEquals($stanza->getUnSanitizedTo(), $result[0]->getTo());
 		$this->assertEquals($expectedStanza, $result[0]->getStanza());
 		$this->assertEquals(null, $result[0]->getType()); // type is saved into the XML string, not the DB.
 	}
@@ -128,8 +128,8 @@ class MessageMapperTest extends MapperTestUtility
 		// check if element is deleted
 		$result = $this->fetchAll();
 		$this->assertCount(1, $result);
-		$this->assertEquals($stanza2->getFrom(), $result[0]->getFrom());
-		$this->assertEquals($stanza2->getTo(), $result[0]->getTo());
+		$this->assertEquals($stanza2->getUnSanitizedFrom(), $result[0]->getFrom());
+		$this->assertEquals($stanza2->getUnSanitizedTo(), $result[0]->getTo());
 		$this->assertEquals('<message to="jan" from="thomas" type="test2" xmlns="jabber:client" id="4-msg">Message</message>', $result[0]->getStanza()); // notice that the username isn't replaced by the JID since this tis the task of hte findByTo method
 	}
 
@@ -159,7 +159,7 @@ class MessageMapperTest extends MapperTestUtility
 		$this->assertCount(2, $result);
 
 		// check findByTo
-		$result = $this->mapper->findByTo(Application::sanitizeUserId('john@localhost.com'));
+		$result = $this->mapper->findByTo('john@localhost.com');
 		$this->assertCount(1, $result);
 		$this->assertEquals('<message to="john_ojsxc_esc_at_localhost.com@localhost/internal" from="jan_ojsxc_esc_at_localhost.com@localhost/internal" type="test" xmlns="jabber:client" id="4-msg">Messageabc</message>', $result[0]->getStanza());
 

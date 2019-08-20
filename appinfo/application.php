@@ -2,12 +2,14 @@
 
 namespace OCA\OJSXC\AppInfo;
 
+use OCA\DAV\Server;
 use OCA\OJSXC\Controller\ManagedServerController;
 use OCA\OJSXC\Controller\SettingsController;
 use OCA\OJSXC\Controller\ExternalApiController;
 use OCA\OJSXC\Controller\JavascriptController;
 use OCA\OJSXC\Middleware\ExternalApiMiddleware;
 use OCA\OJSXC\Command\RefreshRoster;
+use OCA\OJSXC\Command\ServerSharing;
 use OCA\OJSXC\Controller\HttpBindController;
 use OCA\OJSXC\Db\IQRosterPushMapper;
 use OCA\OJSXC\Db\MessageMapper;
@@ -67,7 +69,7 @@ class Application extends App {
 			return new HttpBindController(
 				$c->query('AppName'),
 				$c->query('Request'),
-				$c->query('OJSXC_UserId'),
+				$c->query('UserId'),
 				$c->query('StanzaMapper'),
 				$c->query('IQHandler'),
 				$c->query('MessageHandler'),
@@ -172,7 +174,7 @@ class Application extends App {
 			return new PresenceMapper(
 				$container->getServer()->getDatabaseConnection(),
 				$c->query('Host'),
-				$c->query('OJSXC_UserId'),
+				$c->query('UserId'),
 				$c->query('MessageMapper'),
 				$c->query('NewContentContainer'),
 				self::$config['polling']['timeout'],
@@ -186,7 +188,7 @@ class Application extends App {
 		 */
 		$container->registerService('IQHandler', function(IContainer $c) {
 			return new IQ(
-				$c->query('OJSXC_UserId'),
+				$c->query('UserId'),
 				$c->query('Host'),
 				$c->query('OCP\IUserManager'),
 				$c->query('OCP\IConfig'),
@@ -196,7 +198,7 @@ class Application extends App {
 
 		$container->registerService('PresenceHandler', function(IContainer $c) {
 			return new Presence(
-				$c->query('OJSXC_UserId'),
+				$c->query('UserId'),
 				$c->query('Host'),
 				$c->query('PresenceMapper'),
 				$c->query('MessageMapper')
@@ -205,7 +207,7 @@ class Application extends App {
 
 		$container->registerService('MessageHandler', function(IContainer $c) {
 			return new Message(
-				$c->query('OJSXC_UserId'),
+				$c->query('UserId'),
 				$c->query('Host'),
 				$c->query('MessageMapper'),
 				$c->query('UserProvider'),
@@ -219,7 +221,7 @@ class Application extends App {
 		$container->registerService('Host', function(IContainer $c) {
 			/** @var IRequest $request */
 			$request = $c->query('Request');
-			return $request->getServerHost();
+			return preg_replace('/:\d+$/', '', $request->getServerHost());
 		});
 
 		/**
@@ -294,6 +296,12 @@ class Application extends App {
 			);
 		});
 
+		$container->registerService('ServerSharingCommand', function($c) {
+			return new ServerSharing(
+				$c->query('OCP\IConfig')
+			);
+		});
+
 		/**
 		 * A modified userID for use in OJSXC.
 		 * This is automatically made lowercase.
@@ -349,7 +357,7 @@ class Application extends App {
 			} else if ($cache->isAvailable()) {
 				$memcache = $cache->create('ojsxc');
 				return new MemLock(
-					$c->query('OJSXC_UserId'),
+					$c->query('UserId'),
 					$memcache
 				);
 			} else {
@@ -359,7 +367,7 @@ class Application extends App {
 
 		// default
 		return new DbLock(
-			$c->query('OJSXC_UserId'),
+			$c->query('UserId'),
 			$c->query('OCP\IConfig'),
 			$c->getServer()->getDatabaseConnection()
 		);
@@ -410,7 +418,11 @@ class Application extends App {
 	 */
 	public static function contactsStoreApiSupported() {
 		$version = \OCP\Util::getVersion();
-		return $version[0] >= 13;
+		if ($version[0] >= 13 && \OC::$server->getConfig()->getAppValue('ojsxc', 'use_server_sharing_settings', 'no') === 'yes') {
+			// ContactsStore API is supported and feature is enabled
+			return true;
+		}
+		return false;
 	}
 
 	public static function getServerType() {

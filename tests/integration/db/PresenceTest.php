@@ -57,8 +57,8 @@ class PresenceTest extends TestCase
 	{
 		$result = $reader->parse();
 		$result = $result['value'];
-		$this->assertEquals($expectedElement->getTo(), $result->getTo());
-		$this->assertEquals($expectedElement->getFrom(), $result->getFrom());
+		$this->assertEquals($expectedElement->getUnSanitizedTo(), $result->getTo());
+		$this->assertEquals($expectedElement->getUnSanitizedFrom(), $result->getFrom());
 		$this->assertEquals($expectedElement->getPresence(), $result->getPresence());
 		$this->assertEquals($expectedElement->getUserid(), $result->getUserid());
 	}
@@ -137,8 +137,8 @@ class PresenceTest extends TestCase
 		$writer->endElement();
 		$result = $writer->outputMemory();
 
-		$this->assertEquals($to, $presenceEntity->getTo());
-		$this->assertEquals($from, $presenceEntity->getFrom());
+		$this->assertEquals($to, $presenceEntity->getUnSanitizedTo());
+		$this->assertEquals($from, $presenceEntity->getUnSanitizedFrom());
 		$this->assertEquals($presence, $presenceEntity->getPresence());
 		$this->assertSabreXmlEqualsXml($expected, $result);
 	}

@@ -176,11 +176,11 @@ class IQTest extends TestCase
 		$result = $this->iq->handle($stanza);
 
 		if ($expected instanceof IQRoster) {
-			$this->assertEquals($expected->getFrom(), $result->getFrom());
+			$this->assertEquals($expected->getUnSanitizedFrom(), $result->getUnSanitizedFrom());
 			$this->assertEquals($expected->getId(), $result->getId());
 			$this->assertEquals($expected->getItems(), $result->getItems());
 			$this->assertEquals($expected->getQid(), $result->getQid());
-			$this->assertEquals($expected->getTo(), $result->getTo());
+			$this->assertEquals($expected->getUnSanitizedTo(), $result->getUnSanitizedTo());
 			$this->assertEquals($expected->getType(), $result->getType());
 			$this->assertEquals($expected->getStanza(), $result->getStanza());
 		} else {

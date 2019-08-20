@@ -42,6 +42,7 @@
     "webpack-cli": "^3.1.2"
   },
   "dependencies": {
+    "@jsxc/jsxc": "^4.0.0-beta.4",
     "libsignal-protocol": "https://github.com/signalapp/libsignal-protocol-javascript",
     "typescript-formatter": "^7.2.2"
   }

@@ -27,6 +27,7 @@ class ManagedServerControllerTest extends TestCase
 	private $random;
 	private $registrationUrl;
 
+	private $appVersion;
 	private $apiUrl;
 	private $apiSecret;
 	private $userId;
@@ -48,6 +49,7 @@ class ManagedServerControllerTest extends TestCase
 		$this->appManager = $this->createMock(IAppManager::class);
 		$this->registrationUrl = '';
 
+		$this->appVersion = '9.9.9';
 		$this->apiUrl = 'https://localhost/api';
 		$this->apiSecret = 'dummySecret';
 		$this->userId = 'dummyUser';

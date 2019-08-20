@@ -121,9 +121,6 @@ const config = {
       }, {
             from: 'lib/',
             to: 'lib/'
-      }, {
-            from: 'settings/',
-            to: 'settings/'
       }, 'LICENSE']),
       new webpack.LoaderOptionsPlugin({
          options: {

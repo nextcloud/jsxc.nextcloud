@@ -24,6 +24,7 @@ class Personal implements ISettings
 	public function getForm()
 	{
 		$parameters = [];
+
 		$currentUID = \OC::$server->getUserSession()->getUser()->getUID();
 		$options = $this->config->getUserValue($currentUID, 'ojsxc', 'options');
 

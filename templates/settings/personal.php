@@ -24,7 +24,7 @@
 		</p>
 	</div>
 
-	<?php if($_['externalConnectable']): ?>
+	<?php if(isset($_['externalConnectable']) && $_['externalConnectable']): ?>
 	<h3>Connection parameters</h3>
 
 	<div>

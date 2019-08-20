@@ -9,6 +9,41 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - update JSXC to v4.0.0 ([change log](https://github.com/jsxc/jsxc/blob/refactoring/CHANGELOG.md))
 - bump min NC version to 14
 
+## 3.4.4 - 2019-05-10
+### Fixed
+- [jsxc/jsxc#681](https://github.com/jsxc/jsxc/issues/681) sanitize port from internal jabber id
+- [#122](https://github.com/nextcloud/jsxc.nextcloud/issues/122) force light theme
+- [jsxc/jsxc#761](https://github.com/jsxc/jsxc/issues/761) fix overlap with pdf viewer
+- drop support for Nextcloud 13
+- make compatible with Nextcloud 16
+
+## 3.4.3 - 2018-12-05
+### Fixed
+- make compatible with Nextcloud 15
+- fix support for long usernames (internal backend)
+- fix JSXC on login flow page
+- [jsxc/jsxc#726](https://github.com/jsxc/jsxc/issues/726) fix undefined index
+- [jsxc/jsxc#740](https://github.com/jsxc/jsxc/issues/740) ignore not iterable options
+- [#111](https://github.com/nextcloud/jsxc.nextcloud/issues/111) fix missing chat icon in combination with the search app
+- [#80](https://github.com/nextcloud/jsxc.nextcloud/issues/80) invert chat icon on light theme
+
+### Changed
+- update JSXC to v3.4.3 ([change log](https://github.com/jsxc/jsxc/blob/master/CHANGELOG.md))
+- use server sharing settings if enabled by admin to limit chatting scope (internal backend)
+
+## 3.4.2 - 2018-08-05
+### Fixed
+- [jsxc/jsxc#686](https://github.com/jsxc/jsxc/issues/686) fix countable error
+- [#84](https://github.com/nextcloud/jsxc.nextcloud/issues/84) hide some buttons if internal backend is used
+- adapt style for NC 14
+- fix info.xml scheme
+
+### Changed
+- update JSXC to v3.4.2 ([change log](https://github.com/jsxc/jsxc/blob/master/CHANGELOG.md))
+- show XMPP domain of used managed XMPP server
+- allow to change XMPP connection options in personal settings
+- remove deprecated code from settings section
+
 ## 3.4.1 - 2018-07-05
 ### Fixed
 - [#104](https://github.com/nextcloud/jsxc.nextcloud/issues/104) fix call to undefined method
