@@ -14,12 +14,12 @@
     "start": "webpack --mode production",
     "dev": "webpack --watch --mode development --config webpack.config.js",
     "jsxc": "cd node_modules/jsxc/ && webpack --watch --mode development",
-    "fix-typescript-format": "node_modules/.bin/tsfmt  -r",
-    "checking-typescript-format": "node_modules/.bin/tsfmt --verify"
+    "fix-typescript-format": "tslint -c tslint.json \"ts/**/*.ts\" --fix",
+    "checking-typescript-format": "tslint -c tslint.json \"ts/**/*.ts\""
   },
   "husky": {
     "hooks": {
-      "pre-commit": "vendor/bin/php-cs-fixer fix --dry-run && vendor/bin/phpunit -c phpunit.xml",
+      "pre-commit": "yarn checking-typescript-format && vendor/bin/php-cs-fixer fix --dry-run && vendor/bin/phpunit -c phpunit.xml",
       "commit-msg": "commitlint -E HUSKY_GIT_PARAMS "
     }
   },
@@ -48,6 +48,7 @@
   "dependencies": {
     "@jsxc/jsxc": "^4.0.0-beta.4",
     "libsignal-protocol": "https://github.com/signalapp/libsignal-protocol-javascript",
+    "tslint": "^5.19.0",
     "typescript-formatter": "^7.2.2"
   }
 }
