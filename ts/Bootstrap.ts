@@ -71,22 +71,24 @@ export default class Bootstrap {
          jsxc: this.jsxc,
       };
 
-      if (this.jsxc.numberOfCachedAccounts === 0 && oc_current_user) {
-         this.jsxc.start();
-      }
+      if (this.jsxc.numberOfCachedAccounts === 0) {
+         if (oc_current_user) {
+            this.jsxc.start();
+         }
 
-      if (OJSXC_CONFIG.serverType === 'internal') {
-         let storage = Storage.get();
-         let jid = storage.getItem('internal:jid');
-         let url = storage.getItem('internal:url');
+         if (OJSXC_CONFIG.serverType === 'internal') {
+            let storage = Storage.get();
+            let jid = storage.getItem('internal:jid');
+            let url = storage.getItem('internal:url');
 
-         if (jid && url) {
-            console.log('Start connection to internal XMPP server');
+            if (jid && url) {
+               console.log('Start connection to internal XMPP server');
 
-            this.jsxc.start(url, jid, 'sid', '1234');
+               this.jsxc.start(url, jid, 'sid', '1234');
 
-            storage.removeItem('internal:jid');
-            storage.removeItem('internal:url');
+               storage.removeItem('internal:jid');
+               storage.removeItem('internal:url');
+            }
          }
       }
    }
