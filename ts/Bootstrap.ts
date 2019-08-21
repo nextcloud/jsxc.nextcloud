@@ -72,7 +72,7 @@ export default class Bootstrap {
       };
 
       if (this.jsxc.numberOfCachedAccounts === 0) {
-         if (oc_current_user) {
+         if (OC.getCurrentUser().uid) {
             this.jsxc.start();
          }
 

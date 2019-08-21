@@ -1,9 +1,9 @@
 declare var OC: {
     generateUrl(string, any?): string,
     PasswordConfirmation: any,
+    getCurrentUser(): {uid: string, displayName: string}
 };
 declare var oc_requesttoken: string;
-declare var oc_current_user: string;
 declare var JSXC: any;
 declare var OJSXC_CONFIG: {
     defaultLoginFormEnable: boolean,
