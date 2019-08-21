@@ -63,13 +63,22 @@ function requestAvatar(username: string, size: number): Promise<IAvatar> {
    let url = getAvatarUrl(username, size);
 
    return new Promise(resolve => {
-      $.get(url, function (result) {
-         resolve({
-            username: username,
-            type: typeof result === 'string' ? 'url' : 'placeholder',
-            displayName: result.data && result.data.displayname ? result.data.displayname : undefined,
-            url: typeof result === 'string' ? result : undefined,
-         });
+      $.get(url, function (result, textStatus, jqXHR) {
+         if (jqXHR.getResponseHeader('content-type').match(/^image\//i)) {
+            resolve({
+               username: username,
+               type: 'url',
+               displayName: undefined,
+               url: url,
+            });
+         } else {
+            resolve({
+               username: username,
+               type: typeof result === 'string' ? 'url' : 'placeholder',
+               displayName: result.data && result.data.displayname ? result.data.displayname : undefined,
+               url: typeof result === 'string' ? result : undefined,
+            });
+         }
       }).fail(() => {
          resolve({
             username,
@@ -89,7 +98,7 @@ function displayAvatar(element: JQuery, avatar: IAvatar) {
 }
 
 function getAvatarUrl(username: string, size: number) {
-   return OC.generateUrl('/avatar/' + encodeURIComponent(username) + '/' + size + '?requesttoken={requesttoken}', {
+   return OC.generateUrl('/avatar/' + encodeURIComponent(username) + '/' + size, {
       user: username,
       size: size,
       requesttoken: oc_requesttoken
