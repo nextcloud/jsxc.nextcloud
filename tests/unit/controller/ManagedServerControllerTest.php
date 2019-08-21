@@ -2,7 +2,6 @@
 
 namespace OCA\OJSXC\Controller;
 
-use OCP\IConfig;
 use OCP\IRequest;
 use OCP\IUserSession;
 use OCP\IURLGenerator;
@@ -12,6 +11,7 @@ use OCP\AppFramework\Http\JSONResponse;
 use OCP\AppFramework\Http;
 use OCA\OJSXC\Exceptions\Exception;
 use OCA\OJSXC\IDataRetriever;
+use OCA\OJSXC\Config;
 use OCP\Security\ISecureRandom;
 use OCP\App\IAppManager;
 use PHPUnit\Framework\TestCase;
@@ -40,7 +40,7 @@ class ManagedServerControllerTest extends TestCase
 
 		$this->request = $this->createMock(IRequest::class);
 		$this->urlGenerator = $this->createMock(IURLGenerator::class);
-		$this->config = $this->createMock(IConfig::class);
+		$this->config = $this->createMock(Config::class);
 		$this->userSession = $this->createMock(IUserSession::class);
 		$this->logger = $this->createMock(ILogger::class);
 		$this->dataRetriever = $this->createMock(IDataRetriever::class);
@@ -52,6 +52,7 @@ class ManagedServerControllerTest extends TestCase
 		$this->apiUrl = 'https://localhost/api';
 		$this->apiSecret = 'dummySecret';
 		$this->userId = 'dummyUser';
+		$this->appVersion = '99.88.77';
 
 		$this->random
 		 ->expects($this->once())
@@ -65,7 +66,7 @@ class ManagedServerControllerTest extends TestCase
 		$this->config
 		 ->expects($this->once())
 		 ->method('getAppValue')
-		 ->with('ojsxc', 'apiSecret')
+		 ->with(Config::API_SECRET)
 		 ->willReturn($this->apiSecret);
 		$this->userSession
 		 ->expects($this->once())

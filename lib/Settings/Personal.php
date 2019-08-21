@@ -3,6 +3,7 @@
 namespace OCA\OJSXC\Settings;
 
 use OCA\OJSXC\AppInfo\Application;
+use OCA\OJSXC\Config;
 use OCP\AppFramework\Http\TemplateResponse;
 use OCP\Settings\ISettings;
 use OCP\IConfig;
@@ -27,7 +28,7 @@ class Personal implements ISettings
 		$currentUID = \OC::$server->getUserSession()->getUser()->getUID();
 		$options = $this->config->getUserValue($currentUID, 'ojsxc', 'options');
 
-		$domain = $this->config->getAppValue('ojsxc', 'xmppDomain');
+		$domain = $this->config->getAppValue('ojsxc', Config::XMPP_DOMAIN);
 		$node = $currentUID;
 
 		if ($options !== null) {
@@ -35,22 +36,22 @@ class Personal implements ISettings
 
 			if (is_array($options)) {
 				$loginFormEnable = null;
-				if (isset($options['loginForm']) && is_array($options['loginForm']) && isset($options['loginForm']['enable'])) {
-					$loginFormEnable = $options['loginForm']['enable'];
+				if (isset($options['disabled'])) {
+					$loginFormEnable = $options['disabled'];
 				}
 
 				if ($loginFormEnable === true || $loginFormEnable === 'true') {
-					$parameters['loginForm'] = 'enable';
-				} elseif ($loginFormEnable === false || $loginFormEnable === 'false') {
 					$parameters['loginForm'] = 'disable';
+				} elseif ($loginFormEnable === false || $loginFormEnable === 'false') {
+					$parameters['loginForm'] = 'enable';
 				} else {
 					$parameters['loginForm'] = 'default';
 				}
 
-				if (isset($options['xmpp']) && is_array($options['xmpp'])) {
-					if (!empty($options['xmpp']['username'])) {
-						$node = $options['xmpp']['username'];
-						$parameters['xmppUsername'] = $options['xmpp']['username'];
+				if (is_array($options['xmpp'])) {
+					if (!empty($options['xmpp']['node'])) {
+						$node = $options['xmpp']['node'];
+						$parameters['xmppNode'] = $options['xmpp']['node'];
 					}
 
 					if (!empty($options['xmpp']['domain'])) {
@@ -65,11 +66,11 @@ class Personal implements ISettings
 			}
 		}
 
-		$xmppOverwrite = $this->config->getAppValue('ojsxc', 'xmppOverwrite');
+		$xmppOverwrite = $this->config->getAppValue('ojsxc', Config::XMPP_ALLOW_OVERWRITE);
 
-		$parameters['xmppUrl'] = $this->config->getAppValue('ojsxc', 'boshUrl');
-		$parameters['externalConnectable'] = Application::getServerType() !== Application::INTERNAL;
-		$parameters['allowToOverwriteXMPPConfig'] = $xmppOverwrite === 'true';
+		$parameters['xmppUrl'] = $this->config->getAppValue('ojsxc', Config::XMPP_URL);
+		$parameters['externalConnectable'] = Application::getServerType() !== Application.INTERNAL;
+		$parameters['allowToOverwriteXMPPConfig'] = $xmppOverwrite === 'true' || $xmppOverwrite === true || $xmppOverwrite === 1 || $xmppOverwrite === '1';
 		$parameters['jid'] = $node . '@' . $domain;
 
 		return new TemplateResponse('ojsxc', 'settings/personal', $parameters);

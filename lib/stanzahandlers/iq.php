@@ -3,14 +3,12 @@
 namespace OCA\OJSXC\StanzaHandlers;
 
 use OCA\OJSXC\Db\IQRoster;
+use OCA\OJSXC\Db\IQNotImplemented;
+use OCA\OJSXC\Db\Stanza;
 use OCA\OJSXC\Exceptions\TerminateException;
 use OCA\OJSXC\IUserProvider;
-use OCA\OJSXC\NewContentContainer;
 use OCP\IConfig;
 use OCP\IUserManager;
-use Sabre\Xml\Reader;
-use Sabre\Xml\Writer;
-use OCA\OJSXC\AppInfo\Application;
 
 /**
  * Class IQ
@@ -55,7 +53,7 @@ class IQ extends StanzaHandler
 
 	/**
 	 * @param array $stanza
-	 * @return IQRoster
+	 * @return Stanza
 	 * @throws TerminateException
 	 */
 	public function handle(array $stanza)
@@ -83,6 +81,15 @@ class IQ extends StanzaHandler
 				}
 			}
 			return $iqRoster;
+		} elseif ($stanza['value'][0]['name'] === '{http://jabber.org/protocol/pubsub}pubsub') {
+			$id = $stanza['attributes']['id'];
+			$from = $stanza['attributes']['from'] || $this->userId;
+
+			$iq = new IQNotImplemented();
+			$iq->setTo($from);
+			$iq->setQid($id);
+
+			return $iq;
 		}
 	}
 }

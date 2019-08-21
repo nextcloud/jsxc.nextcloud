@@ -1,0 +1,13 @@
+//fonts
+$font-sans: Arial, sans-serif;
+$font-serif: serif;
+
+$window-bar-bg: #0082c9;
+$window-bar-color: #c0dff1;
+$window-bar-color-hover: #fff;
+
+@import "modules/animations";
+@import "vendor/jsxc";
+
+@import "partials/nextcloud";
+@import "partials/misc";

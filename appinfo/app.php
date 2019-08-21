@@ -2,29 +2,34 @@
 
 use OCA\OJSXC\AppInfo\Application;
 use OCA\OJSXC\Hooks;
+use OCA\OJSXC\Config;
 
-$isDevEnv = \OC::$server->getConfig()->getSystemValue('jsxc.environment') === 'dev';
-$jsxc_root = ($isDevEnv)? 'jsxc/dev/' : 'jsxc/';
-$jsProdSuffix = (!$isDevEnv)? '.min' : '';
+$config = \OC::$server->getConfig();
+$versionHashSuffix = '';
 
-$linkToGeneralConfig = \OC::$server->getURLGenerator()->linkToRoute('ojsxc.javascript.generalConfig');
+if (!$config->getSystemValue('debug', false)) {
+	$appVersion = $config->getAppValue('ojsxc', 'installed_version');
+	$versionHashSuffix = '?v=' . substr(md5($appVersion), 0, 8);
+}
 
-\OCP\Util::addHeader(
-	'script',
-	[
-		'src' => $linkToGeneralConfig,
-		'nonce' => \OC::$server->getContentSecurityPolicyNonceManager()->getNonce()
-	], ''
-);
+function addScript($src) {
+	// use addHeader instead of addScript, because addScript adds js suffix to every src
+	\OCP\Util::addHeader( 'script', [
+			'src' => $src,
+			'nonce' => \OC::$server->getContentSecurityPolicyNonceManager()->getNonce(),
+		], ''
+	);
+}
 
-OCP\Util::addScript ( 'ojsxc', $jsxc_root.'lib/jquery.slimscroll' );
-OCP\Util::addScript ( 'ojsxc', $jsxc_root.'lib/jquery.fullscreen' );
-OCP\Util::addScript ( 'ojsxc', $jsxc_root.'lib/jsxc.dep'.$jsProdSuffix );
-OCP\Util::addScript ( 'ojsxc', $jsxc_root.'jsxc'.$jsProdSuffix );
-OCP\Util::addScript ( 'ojsxc', 'ojsxc');
+$urlGenerator = \OC::$server->getURLGenerator();
 
-// ############# CSS #############
-OCP\Util::addStyle ( 'ojsxc', 'jsxc.oc' );
+addScript($urlGenerator->linkToRoute('ojsxc.javascript.generalConfig'));
+addScript($urlGenerator->linkTo('ojsxc', 'js/libsignal/libsignal-protocol.js') . $versionHashSuffix);
+addScript($urlGenerator->linkTo('ojsxc', 'js/jsxc/jsxc.bundle.js') . $versionHashSuffix);
+addScript($urlGenerator->linkTo('ojsxc', 'js/bundle.js') . $versionHashSuffix);
+
+OCP\Util::addStyle ( 'ojsxc', '../js/jsxc/styles/jsxc.bundle' );
+OCP\Util::addStyle ( 'ojsxc', 'bundle' );
 
 if(class_exists('\\OCP\\AppFramework\\Http\\EmptyContentSecurityPolicy')) {
 	$manager = \OC::$server->getContentSecurityPolicyManager();
@@ -34,6 +39,11 @@ if(class_exists('\\OCP\\AppFramework\\Http\\EmptyContentSecurityPolicy')) {
 	$policy->addAllowedStyleDomain('\'unsafe-inline\'');
 
 	$policy->addAllowedScriptDomain('\'self\'');
+
+	if ($config->getSystemValue('jsxc.environment', 'production') === 'development') {
+		// required for source maps
+		$policy->addAllowedScriptDomain('\'unsafe-eval\'');
+	}
 
 	$policy->addAllowedImageDomain('\'self\'');
 	$policy->addAllowedImageDomain('data:');
@@ -46,7 +56,7 @@ if(class_exists('\\OCP\\AppFramework\\Http\\EmptyContentSecurityPolicy')) {
 
 	$policy->addAllowedConnectDomain('\'self\'');
 
-	$boshUrl = \OC::$server->getConfig()->getAppValue('ojsxc', 'boshUrl');
+	$boshUrl = \OC::$server->getConfig()->getAppValue('ojsxc', Config::XMPP_URL);
 
 	if(preg_match('#^(https?:)?//([a-z0-9][a-z0-9\-.]*[a-z0-9](:[0-9]+)?)/#i', $boshUrl, $matches)) {
 		$boshDomain = $matches[2];
@@ -54,7 +64,7 @@ if(class_exists('\\OCP\\AppFramework\\Http\\EmptyContentSecurityPolicy')) {
 		$policy->addAllowedConnectDomain($boshDomain);
 	}
 
-	$externalServices = \OC::$server->getConfig()->getAppValue('ojsxc', 'externalServices');
+	$externalServices = \OC::$server->getConfig()->getAppValue('ojsxc', Config::EXTERNAL_SERVICES);
 	$externalServices = explode("|", $externalServices);
 
 	foreach($externalServices as $es) {
@@ -64,11 +74,10 @@ if(class_exists('\\OCP\\AppFramework\\Http\\EmptyContentSecurityPolicy')) {
 	$manager->addDefaultPolicy($policy);
 }
 
-$config = \OC::$server->getConfig();
-$apiSecret = $config->getAppValue('ojsxc', 'apiSecret');
+$apiSecret = $config->getAppValue('ojsxc', Config::API_SECRET);
 if(!$apiSecret) {
    $apiSecret = \OC::$server->getSecureRandom()->generate(23);
-   $config->setAppValue('ojsxc', 'apiSecret', $apiSecret);
+   $config->setAppValue('ojsxc', Config::API_SECRET, $apiSecret);
 }
 
 if (Application::getServerType() === Application::INTERNAL) {

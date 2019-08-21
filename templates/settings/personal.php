@@ -1,12 +1,3 @@
-<?php
-/** @var $l \OCP\IL10N */
-/** @var $_ array */
-
-if (function_exists('script')) {
-	script('ojsxc', 'settings/personal');
-}
-?>
-
 <div class="section">
 	<h2>JavaScript Xmpp Client</h2>
 	<h3>Settings</h3>
@@ -14,19 +5,19 @@ if (function_exists('script')) {
 	<div id="ojsxc-settings">
 		<p>Launch chat upon login.</p>
 		<p>
-			<input type="radio" name="loginFormEnable" value="" class="radio" id="jsxc-loginFormEnable-default" <?php if($_[ 'loginForm'] === 'default') echo 'checked="checked"';?> />
+			<input type="radio" name="disabled" value="" class="radio" id="jsxc-loginFormEnable-default" <?php if($_[ 'loginForm'] === 'default') echo 'checked="checked"';?> />
 			<label for="jsxc-loginFormEnable-default">
 				Use global default
 			</label>
 		</p>
 		<p>
-			<input type="radio" name="loginFormEnable" value="true" class="radio" id="jsxc-loginFormEnable-enable" <?php if($_[ 'loginForm'] === 'enable') echo 'checked="checked"';?> />
+			<input type="radio" name="disabled" value="false" class="radio" id="jsxc-loginFormEnable-enable" <?php if($_[ 'loginForm'] === 'enable') echo 'checked="checked"';?> />
 			<label for="jsxc-loginFormEnable-enable">
 				Enable
 			</label>
 		</p>
 		<p>
-			<input type="radio" name="loginFormEnable" value="false" class="radio" id="jsxc-loginFormEnable-disable" <?php if($_[ 'loginForm'] === 'disable') echo 'checked="checked"';?> />
+			<input type="radio" name="disabled" value="true" class="radio" id="jsxc-loginFormEnable-disable" <?php if($_[ 'loginForm'] === 'disable') echo 'checked="checked"';?> />
 			<label for="jsxc-loginFormEnable-disable">
 				Disable
 			</label>
@@ -42,7 +33,7 @@ if (function_exists('script')) {
 		<?php if($_['allowToOverwriteXMPPConfig']): ?>
 		<p style="margin-bottom:1em;">You want to use a different XMPP account on this Nextcloud instance? No problem. Just change the fields below.</p>
 
-		<form id="ojsxc">
+		<form id="ojsxc" class="ojsxc">
 			<div class="form-group">
 				<label>BOSH url</label>
 				<div class="form-col">
@@ -51,21 +42,21 @@ if (function_exists('script')) {
 			</div>
 
 			<div class="form-group">
-				<label>Username</label>
+				<label for="ojsxc-xmpp-node">Username</label>
 				<div class="form-col">
-					<input id="ojsxc-xmpp-username" type="text" name="xmpp[username]" value="<?php p($_['xmppUsername']); ?>" pattern="[^&'/:<>@\s]+" />
+					<input id="ojsxc-xmpp-node" type="text" name="xmpp[node]" value="<?php p($_['xmppNode']); ?>" pattern="[^&'/:<>@\s]+" />
 				</div>
 			</div>
 
 			<div class="form-group">
-				<label>Domain</label>
+				<label for="ojsxc-xmpp-domain">Domain</label>
 				<div class="form-col">
 					<input id="ojsxc-xmpp-domain" type="text" name="xmpp[domain]" value="<?php p($_['xmppDomain']); ?>" pattern="[a-z0-9-_.]+" />
 				</div>
 			</div>
 
 			<div class="form-group">
-				<label>Resource</label>
+				<label for="ojsxc-xmpp-resource">Resource</label>
 				<div class="form-col">
 					<input id="ojsxc-xmpp-resource" type="text" name="xmpp[resource]" value="<?php p($_['xmppResource']); ?>" />
 				</div>

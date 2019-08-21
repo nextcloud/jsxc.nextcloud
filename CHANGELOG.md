@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [Unreleased 4.0]
+### Changed
+- update JSXC to v4.0.0 ([change log](https://github.com/jsxc/jsxc/blob/refactoring/CHANGELOG.md))
+- bump min NC version to 14
+
 ## 3.4.4 - 2019-05-10
 ### Fixed
 - [jsxc/jsxc#681](https://github.com/jsxc/jsxc/issues/681) sanitize port from internal jabber id

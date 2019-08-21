@@ -3,7 +3,6 @@
 namespace OCA\OJSXC\Controller;
 
 use OCP\AppFramework\Controller;
-use OCP\IConfig;
 use OCP\IRequest;
 use OCP\IUserSession;
 use OCP\IURLGenerator;
@@ -13,6 +12,7 @@ use OCP\AppFramework\Http;
 use OCA\OJSXC\Exceptions\Exception;
 use OCA\OJSXC\IDataRetriever;
 use OCA\OJSXC\AppInfo\Application;
+use OCA\OJSXC\Config;
 use OCP\Security\ISecureRandom;
 use OCP\App\IAppManager;
 
@@ -30,7 +30,7 @@ class ManagedServerController extends Controller
 		$appName,
 		IRequest $request,
 		IURLGenerator $urlGenerator,
-		IConfig $config,
+		Config $config,
 		IUserSession $userSession,
 		ILogger $logger,
 		IDataRetriever $dataRetriever,
@@ -84,7 +84,7 @@ class ManagedServerController extends Controller
 	private function doRegistration($promotionCode, $requestId)
 	{
 		$apiUrl = $this->urlGenerator->linkToRouteAbsolute('ojsxc.externalApi.index');
-		$apiSecret = $this->config->getAppValue('ojsxc', 'apiSecret');
+		$apiSecret = $this->config->getAppValue(Config::API_SECRET);
 		$userId = $this->userSession->getUser()->getUID();
 		$appVersion = $this->appManager->getAppVersion('ojsxc');
 
@@ -127,19 +127,19 @@ class ManagedServerController extends Controller
 			throw new Exception('Got a bad domain');
 		}
 
-		$this->config->setAppValue('ojsxc', 'serverType', Application::MANAGED);
-		$this->config->setAppValue('ojsxc', 'boshUrl', $responseJSON->boshUrl);
-		$this->config->setAppValue('ojsxc', 'xmppDomain', $responseJSON->domain);
-		$this->config->setAppValue('ojsxc', 'timeLimitedToken', 'true');
-		$this->config->setAppValue('ojsxc', 'xmppPreferMail', 'false');
-		$this->config->setAppValue('ojsxc', 'managedServer', 'registered');
-		$this->config->setAppValue('ojsxc', 'externalServices', implode('|', $responseJSON->externalServices));
+		$this->config->setAppValue(Config::XMPP_SERVER_TYPE, Application::MANAGED);
+		$this->config->setAppValue(Config::XMPP_URL, $responseJSON->boshUrl);
+		$this->config->setAppValue(Config::XMPP_DOMAIN, $responseJSON->domain);
+		$this->config->setAppValue(Config::XMPP_USE_TIME_LIMITED_TOKEN, 1);
+		$this->config->setAppValue(Config::XMPP_PREFER_MAIL, 0);
+		$this->config->setAppValue(Config::MANAGED_SERVER_STATUS, 'registered');
+		$this->config->setAppValue(Config::EXTERNAL_SERVICES, implode('|', $responseJSON->externalServices));
 
-		$this->config->setAppValue('ojsxc', 'iceUrl', implode(', ', $responseJSON->iceServers->urls));
-		$this->config->setAppValue('ojsxc', 'iceUsername', $responseJSON->iceServers->username);
-		$this->config->setAppValue('ojsxc', 'iceSecret', $responseJSON->iceServers->credential);
-		$this->config->setAppValue('ojsxc', 'iceCredential', '');
-		$this->config->setAppValue('ojsxc', 'iceTtl', 3600 * 24);
+		$this->config->setAppValue(Config::ICE_URL, implode(', ', $responseJSON->iceServers->urls));
+		$this->config->setAppValue(Config::ICE_USERNAME, $responseJSON->iceServers->username);
+		$this->config->setAppValue(Config::ICE_SECRET, $responseJSON->iceServers->credential);
+		$this->config->setAppValue(Config::ICE_CREDENTIAL, '');
+		$this->config->setAppValue(Config::ICE_TTL, 3600 * 24);
 
 		return true;
 	}

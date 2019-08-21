@@ -1,0 +1,94 @@
+#mainContainer,
+#odf-toolbar {
+  right: 0;
+  left: 0;
+  width: auto !important;
+  z-index: 70 !important;
+}
+
+#body-login {
+  #jsxc_windowList,
+  #jsxc_roster {
+    display: none;
+  }
+}
+
+#contactsmenu-contacts {
+  .jsxc_statusIndicator {
+    position: relative;
+
+    &:before {
+      width: 6px;
+      height: 6px;
+      right: 13px;
+      top: 13px;
+      position: absolute;
+    }
+  }
+
+  .contact {
+    &:before {
+      position: absolute;
+      top: 7px;
+      left: 7px;
+    }
+
+    .avatar {
+      cursor: pointer;
+    }
+  }
+}
+
+@media (min-width: 768px) {
+
+  #content,
+  #content-wrapper,
+  #filestable>thead {
+    padding-right: 0;
+    transition: padding-right 0.5s;
+  }
+
+  #mainContainer,
+  #odf-toolbar,
+  #app-sidebar,
+  #view-toggle {
+    right: 0;
+    transition: right 0.5s;
+  }
+
+  .app-mail .submit-message-wrapper {
+    transition: right 0.5s;
+
+    .submit-message {
+      transition: right 0.5s;
+    }
+  }
+
+  .jsxc-roster-shown {
+
+    #content,
+    #content-wrapper,
+    #filestable>thead {
+      padding-right: 210px;
+    }
+
+    #mainContainer,
+    #odf-toolbar,
+    #app-sidebar,
+    #view-toggle {
+      right: 210px;
+    }
+
+    .app-mail .submit-message-wrapper {
+      right: 225px;
+
+      .submit-message {
+        right: 225px;
+      }
+    }
+
+    #app-content.with-app-sidebar {
+      padding-right: 50px;
+    }
+  }
+}

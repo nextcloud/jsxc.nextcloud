@@ -1,0 +1,42 @@
+.jsxc-bar--window,
+.jsxc-window-item .jsxc-memberlist {
+  background-color: $window-bar-bg;
+  color: $window-bar-color;
+
+  :hover {
+    // color: $window_bar_color_hover;
+  }
+}
+
+#jsxc {
+  padding: 20px;
+
+  h1 {
+    margin: 15px 0 5px;
+    font-size: 1.5em;
+  }
+
+  a {
+    color: blue;
+    text-decoration: underline;
+
+    &:hover {
+      text-decoration: none;
+    }
+  }
+}
+
+#jsxc-roster {
+  padding-top: 5px; // NC >= 14
+  top: 45px;
+  z-index: 1550;
+}
+
+#jsxc-window-list,
+#jsxc-window-list-handler {
+  z-index: 1500;
+}
+
+.jsxc-dialog-wrapper {
+  z-index: 2600;
+}

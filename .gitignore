@@ -18,3 +18,7 @@ coverage
 .phpstorm_helpers
 .phpcomplete_extended
 .php_cs.cache
+/js/
+yarn-error.log
+/dist/
+tests/bootstrap-config.development.php
