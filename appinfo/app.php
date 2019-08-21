@@ -38,7 +38,12 @@ if(class_exists('\\OCP\\AppFramework\\Http\\EmptyContentSecurityPolicy')) {
 	$policy->addAllowedStyleDomain('\'self\'');
 	$policy->addAllowedStyleDomain('\'unsafe-inline\'');
 
-	$policy->addAllowedScriptDomain('\'self\' \'unsafe-eval\'');
+	$policy->addAllowedScriptDomain('\'self\'');
+
+	if ($config->getSystemValue('jsxc.environment', 'production') === 'development') {
+		// required for source maps
+		$policy->addAllowedScriptDomain('\'unsafe-eval\'');
+	}
 
 	$policy->addAllowedImageDomain('\'self\'');
 	$policy->addAllowedImageDomain('data:');
