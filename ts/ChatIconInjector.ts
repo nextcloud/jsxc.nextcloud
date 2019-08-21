@@ -1,6 +1,6 @@
 
 export default function injectChatIcon(toggleRoster: () => void) {
-   var div = $('<div/>');
+   let div = $('<div/>');
 
    div.addClass('ojsxc-chat-icon');
    div.click(function() {

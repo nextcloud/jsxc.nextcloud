@@ -34,12 +34,12 @@ export default class Settings {
       return new Promise((resolve) => {
          $.ajax({
             type: 'POST',
-            url: url,
-            data: data,
-            success: function (data) {
+            url,
+            data,
+            success(data) {
                resolve(data && data.status === 'success');
             },
-            error: function () {
+            error() {
                resolve(false);
             }
          });
@@ -62,8 +62,8 @@ export default class Settings {
             type: 'POST',
             url: OC.generateUrl('apps/ojsxc/settings'),
             data: {
-               username: username,
-               password: password
+               username,
+               password
             },
             success: (d) => resolve(d),
             error: xhr => reject(xhr),
@@ -76,7 +76,7 @@ export default class Settings {
          let settings = await Settings.load(username, password);
 
          return Settings.getConnectionOptions(settings);
-      } catch(err) {
+      } catch (err) {
          return false;
       }
    }
@@ -130,7 +130,7 @@ export default class Settings {
 
    private static handleLoadResponse(response) {
       if (!response || response.result !== 'success' || !response.data) {
-         throw 'Received unsuccessful response.';
+         throw new Error('Received unsuccessful response.');
       }
 
       Settings.cache = response.data;

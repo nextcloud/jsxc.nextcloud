@@ -1,4 +1,4 @@
-import { DEPENDENCIES } from './CONST'
+import { DEPENDENCIES } from './CONST';
 import Settings from './Settings';
 import injectChatIcon from './ChatIconInjector';
 import { addChatSubmitButton } from './ChatSubmitButtonInjector';
@@ -17,25 +17,25 @@ export default class Bootstrap {
 
    private checkDependencies() {
       for (let dependency of DEPENDENCIES) {
-         if (typeof (<any>window)[dependency] === 'undefined') {
-            throw `Dependency "${dependency}" is missing.`;
+         if (typeof (<any> window)[dependency] === 'undefined') {
+            throw new Error(`Dependency "${dependency}" is missing.`);
          }
       }
    }
 
    private checkFrame() {
       if (window.parent && window !== window.parent) {
-         throw `Abort, because we are running inside a frame.`;
+         throw new Error(`Abort, because we are running inside a frame.`);
       }
    }
 
    private checkSpecialPage() {
       if (/^(\/index.php)?\/s\//.test(location.pathname)) {
-         throw `Abort, because we dont want to start chat on public shares.`;
+         throw new Error(`Abort, because we dont want to start chat on public shares.`);
       }
 
       if (OC.generateUrl('login/flow') === window.location.pathname) {
-         throw `Abort, because chat is not needed on flow login.`;
+         throw new Error(`Abort, because chat is not needed on flow login.`);
       }
    }
 
@@ -137,7 +137,7 @@ export default class Bootstrap {
          } else {
             this.jsxc.start(xmpp.url, jid, xmpp.password || '');
          }
-      } catch(err) {
+      } catch (err) {
          console.log('Error during log in', err);
 
          this.jsxc.showLoginBox();

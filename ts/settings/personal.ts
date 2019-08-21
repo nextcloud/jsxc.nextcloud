@@ -9,7 +9,7 @@ function onLoginFormChanged() {
       data: {
          disabled: value.match(/^true|false$/) ? JSON.parse(value) : null
       },
-      success: function(data) {
+      success(data) {
          if (data && data.status === 'success') {
             console.log('loginFormEnable saved.');
          }
@@ -19,20 +19,20 @@ function onLoginFormChanged() {
 
 function savePersonalSettings() {
    if (OC.PasswordConfirmation && OC.PasswordConfirmation.requiresPasswordConfirmation()) {
-       OC.PasswordConfirmation.requirePasswordConfirmation(savePersonalSettings);
-       return;
-    }
+      OC.PasswordConfirmation.requirePasswordConfirmation(savePersonalSettings);
+      return;
+   }
 
-    var post = $('#ojsxc').serialize();
+   let post = $('#ojsxc').serialize();
 
-    let statusContainer = $('#ojsxc .msg');
-    statusContainer.empty();
+   let statusContainer = $('#ojsxc .msg');
+   statusContainer.empty();
 
-    var statusElement = $('<div/>');
-    statusElement.text('Saving...');
-    statusElement.appendTo(statusContainer);
+   let statusElement = $('<div/>');
+   statusElement.text('Saving...');
+   statusElement.appendTo(statusContainer);
 
-    Settings.saveUser(post).then((isSuccessful) => {
+   Settings.saveUser(post).then((isSuccessful) => {
       if (isSuccessful) {
          statusElement.addClass('jsxc_success').text('Settings saved. Please log out and in again.');
       } else {
@@ -42,14 +42,14 @@ function savePersonalSettings() {
       setTimeout(function() {
          statusElement.hide('slow');
       }, 3000);
-    });
- }
+   });
+}
 
 $('#ojsxc-settings [name="disabled"]').change(onLoginFormChanged);
 
 //@REVIEW id
 $('#ojsxc').submit(function(ev) {
-   ev.preventDefault()
+   ev.preventDefault();
 
    savePersonalSettings();
-})
+});

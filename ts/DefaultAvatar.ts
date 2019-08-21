@@ -1,10 +1,10 @@
-import Storage from "./Storage";
-import { IJID } from "jsxc/src/JID.interface";
+import Storage from './Storage';
+import { IJID } from 'jsxc/src/JID.interface';
 
 interface IAvatar {
-   username: string,
-   type: 'url' | 'placeholder',
-   displayName?: string,
+   username: string;
+   type: 'url' | 'placeholder';
+   displayName?: string;
    url?: string;
 }
 
@@ -33,7 +33,7 @@ export default async function defaultAvatar(elements: JQuery, name: string, jid?
       avatar = await getAvatar(avatar.username, maxSize);
    }
 
-   $(elements).each(function () {
+   $(elements).each(function() {
       let element = $(this);
 
       if (element.length === 0) {
@@ -63,17 +63,17 @@ function requestAvatar(username: string, size: number): Promise<IAvatar> {
    let url = getAvatarUrl(username, size);
 
    return new Promise(resolve => {
-      $.get(url, function (result, textStatus, jqXHR) {
+      $.get(url, function(result, textStatus, jqXHR) {
          if (jqXHR.getResponseHeader('content-type').match(/^image\//i)) {
             resolve({
-               username: username,
+               username,
                type: 'url',
                displayName: undefined,
-               url: url,
+               url,
             });
          } else {
             resolve({
-               username: username,
+               username,
                type: typeof result === 'string' ? 'url' : 'placeholder',
                displayName: result.data && result.data.displayname ? result.data.displayname : undefined,
                url: typeof result === 'string' ? result : undefined,
@@ -100,11 +100,11 @@ function displayAvatar(element: JQuery, avatar: IAvatar) {
 function getAvatarUrl(username: string, size: number) {
    return OC.generateUrl('/avatar/' + encodeURIComponent(username) + '/' + size, {
       user: username,
-      size: size,
+      size,
       requesttoken: oc_requesttoken
-   })
+   });
 }
 
 function setPlaceholder(element, username: string, displayName?: string) {
-   (<any>element).imageplaceholder(username, displayName);
+   (<any> element).imageplaceholder(username, displayName);
 }

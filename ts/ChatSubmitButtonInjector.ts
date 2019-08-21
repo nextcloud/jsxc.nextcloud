@@ -1,4 +1,4 @@
-import Storage from './Storage'
+import Storage from './Storage';
 
 export function addChatSubmitButton(formElement: JQuery<any>, translate: (key: string) => string) {
    let storage = Storage.get();

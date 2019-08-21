@@ -24,8 +24,8 @@ class AdminForm {
    private registerServerTypeHandler() {
       let self = this;
 
-      this.formElement.find('[name="xmpp_serverType"]').change(function () {
-         self.showServerTypeSpecificFields(<string>$(this).val());
+      this.formElement.find('[name="xmpp_serverType"]').change(function() {
+         self.showServerTypeSpecificFields(<string> $(this).val());
       });
    }
    private triggerInitialServerTypeUpdate() {
@@ -33,13 +33,13 @@ class AdminForm {
    }
 
    private registerConnectionHandler() {
-      $('#boshUrl, #xmppDomain').on('input', function () {
-         ConnectionParamter.validate(<string>$('#boshUrl').val(), <string>$('#xmppDomain').val());
+      $('#boshUrl, #xmppDomain').on('input', function() {
+         ConnectionParamter.validate(<string> $('#boshUrl').val(), <string> $('#xmppDomain').val());
       });
    }
 
    private registerSubmitHandler() {
-      this.formElement.submit(function (event) {
+      this.formElement.submit(function(event) {
          event.preventDefault();
 
          AdminSettings.save();
@@ -47,13 +47,13 @@ class AdminForm {
    }
 
    private registerServiceHandler() {
-      this.formElement.find('.add-input').click(function (ev) {
+      this.formElement.find('.add-input').click(function(ev) {
          ev.preventDefault();
 
          ExternalServiceList.addNewField();
       });
 
-      $('#insert-upload-service').click(function (ev) {
+      $('#insert-upload-service').click(function(ev) {
          ev.preventDefault();
 
          ExternalServiceList.addUploadServices();
@@ -61,9 +61,9 @@ class AdminForm {
    }
 
    private registerReadonlyHandler() {
-      this.formElement.find('input[readonly]').focus(function () {
-         if (typeof (<any>this).select === 'function') {
-            (<any>this).select();
+      this.formElement.find('input[readonly]').focus(function() {
+         if (typeof (<any> this).select === 'function') {
+            (<any> this).select();
 
             //@TODO show copied icon
             document.execCommand('copy');
@@ -93,7 +93,7 @@ class ConnectionParamter {
       statusElement.appendTo(statusContainer);
 
       // test only every 2 seconds
-      ConnectionParamter.timeout = setTimeout(function () {
+      ConnectionParamter.timeout = setTimeout(function() {
          JSXC.testBOSHServer(url, domain).then(result => {
             statusElement.addClass('jsxc_success');
             statusElement.html(result);
@@ -118,14 +118,14 @@ class AdminSettings {
       let status = formElement.find('.msg div');
       status.html('<img src="img/loading.gif" alt="wait" width="16px" height="16px" /> Saving...');
 
-      Settings.saveAdmin(post).then(function (isSuccessful) {
+      Settings.saveAdmin(post).then(function(isSuccessful) {
          if (isSuccessful) {
             status.addClass('jsxc_success').text('Settings saved. Please log out and in again.');
          } else {
             status.addClass('jsxc_fail').text('Error!');
          }
 
-         setTimeout(function () {
+         setTimeout(function() {
             status.hide('slow');
          }, 3000);
       });
@@ -144,10 +144,10 @@ class ExternalServiceList {
    }
 
    public static addUploadServices() {
-      let existingServices = <string[]>$('[name="externalServices[]"]').map(function () {
+      let existingServices = <string[]> $('[name="externalServices[]"]').map(function() {
          let inputField = $(this);
 
-         return <any>inputField.val() || null;
+         return <any> inputField.val() || null;
       }).toArray();
 
       let uploadService = ExternalServiceList.discoverUploadService();
@@ -178,9 +178,9 @@ class ManagedServer {
             method: 'POST',
             url: OC.generateUrl('apps/ojsxc/managedServer/register'),
             data: {
-               promotionCode: promotionCode
+               promotionCode
             }
-         }).always(function (responseJSON) {
+         }).always(function(responseJSON) {
 
             if (responseJSON && responseJSON.result === 'success') {
                return resolve();
@@ -195,7 +195,7 @@ class ManagedServer {
 
             reject([errorMsg, requestId]);
          });
-      })
+      });
    }
 }
 
@@ -204,21 +204,21 @@ class RegistrationForm {
       $('#ojsxc-register').click(this.onRegisterClickHandler);
       $('.ojsxc-refresh-registration').click(this.onRefreshClickHandler);
 
-      $('#ojsxc-legal, #ojsxc-dp').on('change', function () {
+      $('#ojsxc-legal, #ojsxc-dp').on('change', function() {
          $('#ojsxc-register').prop('disabled', !$('#ojsxc-legal').prop('checked') || !$('#ojsxc-dp').prop('checked'));
-      })
+      });
    }
 
    private onRegisterClickHandler() {
       let el = $(this);
       let statusElement = el.parents('.ojsxc-managed').find('.msg');
-      let promotionCode = <string>$('#ojsxc-managed-promotion-code').val();
+      let promotionCode = <string> $('#ojsxc-managed-promotion-code').val();
 
       if (promotionCode.length > 0 && !/^[0-9a-z]+$/i.test(promotionCode)) {
          statusElement.addClass('jsxc_fail');
          statusElement.text('Your promotion code is invalid.');
 
-         $('#ojsxc-managed-promotion-code').one('input', function () {
+         $('#ojsxc-managed-promotion-code').one('input', function() {
             statusElement.removeClass('jsxc_fail');
             statusElement.text('');
          });

@@ -8,5 +8,5 @@ declare var JSXC: any;
 declare var OJSXC_CONFIG: {
     defaultLoginFormEnable: boolean,
     startMinimized: boolean,
-    serverType: 'external'|'internal'|'managed',
+    serverType: 'external' | 'internal' | 'managed',
 };
