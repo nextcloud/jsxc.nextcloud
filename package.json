@@ -19,10 +19,14 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "vendor/bin/php-cs-fixer fix --dry-run && vendor/bin/phpunit -c phpunit.xml"
+      "pre-commit": "vendor/bin/php-cs-fixer fix --dry-run && vendor/bin/phpunit -c phpunit.xml",
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS "
     }
   },
   "devDependencies": {
+    "@commitlint/cli": "^8.1.0",
+    "@commitlint/config-conventional": "^8.1.0",
+    "@commitlint/travis-cli": "^8.1.0",
     "@types/jquery": "^3.3.6",
     "archiver": "^3.0.0",
     "clean-webpack-plugin": "^0.1.19",
