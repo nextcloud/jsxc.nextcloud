@@ -31,7 +31,6 @@ class ManagedServerControllerTest extends TestCase
 	private $apiUrl;
 	private $apiSecret;
 	private $userId;
-	private $appVersion;
 
 	private $managedServerController;
 
