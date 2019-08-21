@@ -13,6 +13,7 @@
   "scripts": {
     "start": "webpack --mode production",
     "dev": "webpack --watch --mode development --config webpack.config.js",
+    "test": "vendor/bin/phpunit -c phpunit.xml",
     "jsxc": "cd node_modules/jsxc/ && webpack --watch --mode development",
     "fix-typescript-format": "tslint -c tslint.json \"ts/**/*.ts\" --fix",
     "checking-typescript-format": "tslint -c tslint.json \"ts/**/*.ts\""

@@ -12,7 +12,7 @@ env:
   global:
       # test with different DB's and PHP versions against NC master version.
       # Test minimum PHP version against NC stable branches.
-    - BRANCH=stable15
+    - BRANCH=stable16
 
 matrix:
   include:
@@ -23,7 +23,7 @@ matrix:
       env: DB=sqlite
     - env: DB=pgsql
     - env: DB=mysql
-    - env: DB=mysql BRANCH=stable14
+    - env: DB=mysql BRANCH=stable15
 
 
 install:
