@@ -295,7 +295,7 @@ class SettingsController extends Controller
 	{
 		$currentUser = false;
 
-		if (\OCP\User::isLoggedIn()) {
+		if ($this->userSession->isLoggedIn()) {
 			$currentUser = $this->userSession->getUser();
 		} elseif (!empty($this->getParam('username')) && !empty($this->getParam('password'))) {
 			$currentUser = $this->userManager->checkPassword($this->getParam('username'), $this->getParam('password'));

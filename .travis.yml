@@ -38,7 +38,7 @@ script:
   - ./vendor/bin/phpunit -c phpunit.integration.xml --coverage-clover=integration-coverage.xml
   - cat ../../data/nextcloud.log
   - vendor/bin/php-cs-fixer fix --dry-run --using-cache=no
-  - rm -r vendor/ && ../../occ app:check-code ojsxc  || true
+  - rm -r vendor/ && ../../occ app:check-code ojsxc
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)

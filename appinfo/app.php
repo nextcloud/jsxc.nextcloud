@@ -4,8 +4,6 @@ use OCA\OJSXC\AppInfo\Application;
 use OCA\OJSXC\Hooks;
 use OCA\OJSXC\Config;
 
-\OCP\App::registerPersonal('ojsxc', 'settings/personal');
-
 $config = \OC::$server->getConfig();
 $versionHashSuffix = '';
 
