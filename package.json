@@ -12,7 +12,7 @@
   },
   "scripts": {
     "start": "webpack --mode production",
-    "dev": "mkdir node_modules/jsxc/dist/; webpack --watch --mode development --config webpack.config.js",
+    "dev": "webpack --watch --mode development --config webpack.config.js",
     "jsxc": "cd node_modules/jsxc/ && webpack --watch --mode development",
     "fix-typescript-format": "node_modules/.bin/tsfmt  -r",
     "checking-typescript-format": "node_modules/.bin/tsfmt --verify"
