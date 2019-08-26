@@ -130,7 +130,11 @@ export default class Bootstrap {
          }
 
          let xmpp = settings.xmpp;
-         let jid = xmpp.node + '@' + xmpp.domain + '/' + xmpp.resource;
+         let jid = xmpp.node + '@' + xmpp.domain;
+
+         if (xmpp.resource) {
+            jid +=  '/' + xmpp.resource;
+         }
 
          if (OJSXC_CONFIG.serverType === 'internal') {
             this.jsxc.start(xmpp.url, jid, 'sid', '1234');
