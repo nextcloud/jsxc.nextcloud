@@ -66,6 +66,18 @@ class Personal implements ISettings
 			}
 		}
 
+		$xmppPreferMail = $this->config->getAppValue('ojsxc', Config::XMPP_PREFER_MAIL);
+		if ($xmppPreferMail === true || $xmppPreferMail === 'true') {
+			$mail = $this->config->getUserValue($currentUID, 'settings', 'email');
+			if ($mail !== null) {
+				list($u, $d) = explode("@", $mail, 2);
+				if ($d !== null && $d !== "") {
+					$node = strtolower($u);
+					$domain = strtolower($d);
+				}
+			}
+		}
+
 		$xmppOverwrite = $this->config->getAppValue('ojsxc', Config::XMPP_ALLOW_OVERWRITE);
 
 		$parameters['xmppUrl'] = $this->config->getAppValue('ojsxc', Config::XMPP_URL);
