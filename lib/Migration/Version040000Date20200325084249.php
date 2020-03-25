@@ -12,7 +12,7 @@ use OCP\Migration\IOutput;
 /**
  * Auto-generated migration step: Please modify to your needs!
  */
-class CreateDatabaseStructure extends SimpleMigrationStep
+class Version040000Date20200325084249 extends SimpleMigrationStep
 {
 
 	/**
