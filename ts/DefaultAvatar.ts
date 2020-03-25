@@ -101,7 +101,7 @@ function getAvatarUrl(username: string, size: number) {
    return OC.generateUrl('/avatar/' + encodeURIComponent(username) + '/' + size, {
       user: username,
       size,
-      requesttoken: oc_requesttoken
+      requesttoken: OC.requestToken || oc_requesttoken
    });
 }
 
