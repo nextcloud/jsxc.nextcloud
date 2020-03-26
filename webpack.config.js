@@ -113,6 +113,9 @@ const config = {
          from: 'appinfo/',
          to: 'appinfo/'
       }, {
+         from: 'js/',
+         to: 'js/'
+      }, {
             from: 'img/',
             to: 'img/'
       }, {
