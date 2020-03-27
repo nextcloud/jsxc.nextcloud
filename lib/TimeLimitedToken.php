@@ -25,7 +25,7 @@ class TimeLimitedToken
 			base64_encode($token),
 			'OIl',
 			'-$%'
-	  ));
+		));
 
 		return $token;
 	}

@@ -37,7 +37,7 @@ class ManagedServerController extends Controller
 		ISecureRandom $random,
 		IAppManager $appManager,
 		$registrationUrl
-   ) {
+	) {
 		parent::__construct($appName, $request);
 
 		$this->urlGenerator = $urlGenerator;

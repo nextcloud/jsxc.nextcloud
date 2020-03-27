@@ -62,7 +62,7 @@ class HttpBindControllerTest extends TestCase
 	 */
 	private $stanzaLogger;
 
-	public function setUp()
+	public function setUp(): void
 	{
 		$this->stanzaLogger = $this->getMockBuilder('OCA\OJSXC\StanzaLogger')->disableOriginalConstructor()->getMock();
 	}
@@ -402,9 +402,9 @@ XML;
 		$this->messageHandler->expects($this->exactly(3))
 			->method('handle')
 			->withConsecutive(
-				$this->equalTo(
+				[$this->equalTo(
 					[	'name' => '{jabber:client}message',
-				'	value' => [
+				'value' => [
 					'{jabber:client}body' => 'abc',
 				],
 				'attributes' => [
@@ -412,24 +412,29 @@ XML;
 					'type' => 'chat',
 					'id' => '1452960296859-msg',
 				]]
-				),
-				$this->equalTo([	'name' => '{jabber:client}message',
+				)],
+				[$this->equalTo([
+					'name' => '{jabber:client}message',
 					'value' => [
-					'{jabber:client}body' => 'abc2',
-				],	'attributes' => [
-					'to' => 'derp@own.dev',
-					'type' => 'chat',
-					'id' => '1452960296860-msg',
-				]]),
-				$this->equalTo([	'name' => '{jabber:client}message',
+						'{jabber:client}body' => 'abc2',
+					],
+					'attributes' => [
+						'to' => 'derp@own.dev',
+						'type' => 'chat',
+						'id' => '1452960296860-msg',
+					]
+				])],
+				[$this->equalTo([
+					'name' => '{jabber:client}message',
 					'value' => [
 						'{jabber:client}body' => 'abc3',
-					],	'attributes' => [
-					'to' => 'derp@own.dev',
-					'type' => 'chat',
-					'id' => '1452960296861-msg',
-				]])
-
+					],
+					'attributes' => [
+						'to' => 'derp@own.dev',
+						'type' => 'chat',
+						'id' => '1452960296861-msg',
+					]
+				])]
 			);
 
 		$this->stanzaMapper->expects($this->exactly(10))

@@ -17,7 +17,7 @@ class SettingsControllerTest extends TestCase
 	private $userSession;
 	private $settingsController;
 
-	public function setUp()
+	public function setUp(): void
 	{
 		parent::setUp();
 
@@ -32,7 +32,7 @@ class SettingsControllerTest extends TestCase
 			$this->config,
 			$this->userManager,
 			$this->userSession
-	  );
+		);
 	}
 
 	public function testIndexWithoutUser()

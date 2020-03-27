@@ -61,7 +61,7 @@ class RosterPushTest extends TestCase
 	 */
 	private $contactsStore;
 
-	public function setUp()
+	public function setUp(): void
 	{
 		if (!Application::contactsStoreApiSupported()) {
 			$this->markTestSkipped();

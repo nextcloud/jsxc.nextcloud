@@ -43,7 +43,7 @@ class RosterPushTest extends TestCase
 	 */
 	private $userProvider;
 
-	public function setUp()
+	public function setUp(): void
 	{
 		$this->userManager = $this->getMockBuilder('OCP\IUserManager')
 			->disableOriginalConstructor()->getMock();

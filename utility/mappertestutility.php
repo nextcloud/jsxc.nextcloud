@@ -22,7 +22,8 @@ class MapperTestUtility extends TestCase {
 
 	protected $userId;
 
-	protected function setUp() {
+	protected function setUp(): void
+	{
 		parent::setUp();
 		$app = new Application();
 		$this->overwriteApplicationService($app, 'Host','localhost');
@@ -37,7 +38,7 @@ class MapperTestUtility extends TestCase {
 		$con->executeQuery('DELETE FROM ' . $this->mapper->getTableName());
 	}
 
-	protected function tearDown() {
+	protected function tearDown(): void {
 		$con = $this->container->getServer()->getDatabaseConnection();
 		$con->executeQuery('DELETE FROM ' . $this->mapper->getTableName());
 	}

@@ -33,7 +33,7 @@ class PresenceMapperTest extends MapperTestUtility
 	 */
 	protected $newContentContainer;
 
-	protected function setUp()
+	protected function setUp(): void
 	{
 		$this->entityName = 'OCA\OJSXC\Db\Presence';
 		$this->mapperName = 'PresenceMapper';
@@ -49,7 +49,7 @@ class PresenceMapperTest extends MapperTestUtility
 		}
 	}
 
-	protected function tearDown()
+	protected function tearDown(): void
 	{
 		foreach (\OC::$server->getUserManager()->search('') as $user) {
 			$user->delete();

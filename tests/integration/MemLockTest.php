@@ -38,7 +38,7 @@ class MemLockTest extends TestCase
 
 	public static $time;
 
-	public function setUp()
+	public function setUp(): void
 	{
 		parent::setUp();
 		$app = new Application();

@@ -16,7 +16,7 @@ class StanzaMapperTest extends MapperTestUtility
 	 */
 	protected $mapper;
 
-	protected function setUp()
+	protected function setUp(): void
 	{
 		$this->entityName = 'OCA\OJSXC\Db\Stanza';
 		$this->mapperName = 'StanzaMapper';
@@ -33,7 +33,7 @@ class StanzaMapperTest extends MapperTestUtility
 			]
 		];
 	}
-	
+
 	/**
 	 * @dataProvider insertProvider
 	 */

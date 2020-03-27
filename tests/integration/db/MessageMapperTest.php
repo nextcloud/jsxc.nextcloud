@@ -23,7 +23,7 @@ class MessageMapperTest extends MapperTestUtility
 	 */
 	protected $mapper;
 
-	protected function setUp()
+	protected function setUp(): void
 	{
 		$this->entityName = 'OCA\OJSXC\Db\Message';
 		$this->mapperName = 'MessageMapper';
