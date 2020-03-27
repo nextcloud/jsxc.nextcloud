@@ -21,8 +21,8 @@ matrix:
       env: DB=sqlite
     - env: DB=pgsql
     - env: DB=mysql
-    - env: DB=mysql BRANCH=stable16
-    - env: DB=mysql BRANCH=stable17
+    # - env: DB=mysql BRANCH=stable16
+    # - env: DB=mysql BRANCH=stable17
 
 
 install:
