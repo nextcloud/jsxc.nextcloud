@@ -28,8 +28,11 @@ addScript($urlGenerator->linkTo('ojsxc', 'js/libsignal/libsignal-protocol.js') .
 addScript($urlGenerator->linkTo('ojsxc', 'js/jsxc/jsxc.bundle.js') . $versionHashSuffix);
 addScript($urlGenerator->linkTo('ojsxc', 'js/bundle.js') . $versionHashSuffix);
 
-OCP\Util::addStyle ( 'ojsxc', '../js/jsxc/styles/jsxc.bundle' );
-OCP\Util::addStyle ( 'ojsxc', 'bundle' );
+// workaround to overwrite localStorage.clear
+\OC_Util::addScript( 'ojsxc', 'overwriteClearStorage', true );
+
+\OCP\Util::addStyle ( 'ojsxc', '../js/jsxc/styles/jsxc.bundle' );
+\OCP\Util::addStyle ( 'ojsxc', 'bundle' );
 
 if(class_exists('\\OCP\\AppFramework\\Http\\EmptyContentSecurityPolicy')) {
 	$manager = \OC::$server->getContentSecurityPolicyManager();
