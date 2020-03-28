@@ -1,5 +1,5 @@
 import Storage from './Storage';
-import { IJID } from 'jsxc/src/JID.interface';
+import { IJID } from '@jsxc/jsxc/src/JID.interface';
 
 interface IAvatar {
    username: string;

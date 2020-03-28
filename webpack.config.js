@@ -104,7 +104,7 @@ const config = {
       }),
       new CleanWebpackPlugin([DESTINATION_DIR]),
       new CopyWebpackPlugin([{
-         from: 'node_modules/jsxc/dist/',
+         from: 'node_modules/@jsxc/jsxc/dist/',
          to: 'js/jsxc/'
       }, {
          from: 'node_modules/libsignal-protocol/dist/',

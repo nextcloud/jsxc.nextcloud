@@ -2,7 +2,7 @@ import { DEPENDENCIES } from './CONST';
 import Settings from './Settings';
 import injectChatIcon from './ChatIconInjector';
 import { addChatSubmitButton } from './ChatSubmitButtonInjector';
-import { IJID } from 'jsxc/src/JID.interface';
+import { IJID } from '@jsxc/jsxc/src/JID.interface';
 import defaultAvatar from './DefaultAvatar';
 import Storage from './Storage';
 
