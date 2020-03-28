@@ -7,7 +7,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased 4.0]
 ### Changed
 - update JSXC to v4.0.0 ([change log](https://github.com/jsxc/jsxc/blob/refactoring/CHANGELOG.md))
-- bump min NC version to 14
+- bump min NC version to 16
+- use db migration
+- show always login with and without chat buttons
+- preserve local storage during logout
+- adapt feature policy
 
 ## 3.4.4 - 2019-05-10
 ### Fixed
