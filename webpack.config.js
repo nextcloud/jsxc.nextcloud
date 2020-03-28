@@ -3,7 +3,7 @@ const path = require("path");
 const webpack = require("webpack");
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-const CleanWebpackPlugin = require('clean-webpack-plugin');
+const {CleanWebpackPlugin} = require('clean-webpack-plugin');
 
 const DESTINATION_DIR = 'dist/';
 
@@ -102,7 +102,7 @@ const config = {
       new MiniCssExtractPlugin({
          filename: 'css/bundle.css',
       }),
-      new CleanWebpackPlugin([DESTINATION_DIR]),
+      new CleanWebpackPlugin(),
       new CopyWebpackPlugin([{
          from: 'node_modules/@jsxc/jsxc/dist/',
          to: 'js/jsxc/'
