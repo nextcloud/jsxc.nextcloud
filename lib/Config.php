@@ -20,8 +20,6 @@ class Config
 	const ICE_CREDENTIAL = 'ice_credential';
 	const ICE_SECRET = 'ice_secret';
 	const ICE_TTL = 'ice_ttl';
-	const FIREFOX_EXTENSION = 'firefoxExtension';
-	const CHROME_EXTENSION = 'chromeExtension';
 	const EXTERNAL_SERVICES = 'externalServices';
 	const API_SECRET = 'apiSecret';
 	const MANAGED_SERVER_STATUS = 'managedServerStatus';
