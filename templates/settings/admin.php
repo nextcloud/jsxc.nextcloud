@@ -104,7 +104,9 @@ function printRadioInput($key, $value, $required=true) {
 				<div class="form-col">
 					<?php printCheckboxInput('xmppStartMinimized'); ?>
 				</div>
+			</div>
 
+			<div class="form-group">
 				<label for="loginFormEnable">Enable chat on log in</label>
 				<div class="form-col">
 					<?php printCheckboxInput('loginFormEnable'); ?>
