@@ -237,7 +237,14 @@ class SettingsController extends Controller
 				],
 			];
 		} else {
-			$data = [];
+			$data = [
+				'ttl' => $ttl,
+				'iceServers' => [
+					[
+						'urls' => ['stun:stun.stunprotocol.org']
+					]
+				]
+			];
 		}
 
 		return $data;
