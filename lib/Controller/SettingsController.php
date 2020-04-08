@@ -209,7 +209,7 @@ class SettingsController extends Controller
 
 		$urls = [];
 		foreach (preg_split('/[\s,]+/', $urlString) as $url) {
-			if (preg_match('/^(turn|stun):/', $url)) {
+			if (preg_match('/^(turn|stun)s?:/', $url)) {
 				$urls[] = $url;
 			} elseif (!empty($url)) {
 				$urls[] = 'turn:'.$url;
