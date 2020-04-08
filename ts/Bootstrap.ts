@@ -64,6 +64,9 @@ export default class Bootstrap {
             defaultAvatar(element, name, jid);
          },
          onUserRequestsToGoOnline: this.onUserRequestsToGoOnline.bind(this),
+         RTCPeerConfig: {
+            url: OC.generateUrl('apps/ojsxc/settings/iceServers')
+         },
       });
 
       //For debugging
