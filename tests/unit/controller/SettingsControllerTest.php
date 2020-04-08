@@ -94,7 +94,8 @@ class SettingsControllerTest extends TestCase
 
 		$return = $this->settingsController->getIceServers();
 
-		$this->assertEquals([], $return);
+		$this->assertEquals('', $return['ttl']);
+		$this->assertEquals('stun:stun.stunprotocol.org', $return['iceServers'][0]['urls'][0]);
 	}
 
 	public function testGetIceServersStoredDataWithPrefix()
