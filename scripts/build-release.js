@@ -35,7 +35,9 @@ async function createRelease() {
 
   await createBuild();
   let filePath = await createArchive('ojsxc-' + version);
-  await createSignature(filePath);
+  await createNextcloudSignature(filePath);
+  await createGPGSignature(filePath);
+  await createGPGArmorSignature(filePath);
 }
 
 function createBuild() {
@@ -94,13 +96,13 @@ function createArchive(fileBaseName) {
   });
 }
 
-function createSignature(filePath) {
+function createNextcloudSignature(filePath) {
   const {
      exec
   } = require('child_process');
 
   return new Promise((resolve, reject) => {
-    const sigPath = `${filePath}.sig`;
+    const sigPath = `${filePath}.ncsig`;
      exec(`openssl dgst -sha512 -sign ~/.nextcloud/certificates/ojsxc.key ${filePath} | openssl base64 > ${sigPath}`, (error, stdout, stderr) => {
         if (error) {
            throw error;
@@ -114,7 +116,59 @@ function createSignature(filePath) {
            console.log(`stderr: ${stderr}`);
         }
 
-        console.log(`Created signature: ${path.basename(sigPath)}`.verbose);
+        console.log(`Created Nextcloud signature: ${path.basename(sigPath)}`.verbose);
+
+        resolve();
+     });
+  });
+}
+
+function createGPGSignature(filePath) {
+  const {
+     exec
+  } = require('child_process');
+
+  return new Promise((resolve, reject) => {
+     exec(`gpg --yes --detach-sign "${filePath}"`, (error, stdout, stderr) => {
+        if (error) {
+           throw error;
+        }
+
+        if (stdout) {
+           console.log(`stdout: ${stdout}`);
+        }
+
+        if (stderr) {
+           console.log(`stderr: ${stderr}`);
+        }
+
+        console.log(`Created detached signature: ${path.basename(filePath)}.sig`.verbose);
+
+        resolve();
+     });
+  });
+}
+
+function createGPGArmorSignature(filePath) {
+  const {
+     exec
+  } = require('child_process');
+
+  return new Promise((resolve, reject) => {
+     exec(`gpg --yes --detach-sign --armor "${filePath}"`, (error, stdout, stderr) => {
+        if (error) {
+           throw error;
+        }
+
+        if (stdout) {
+           console.log(`stdout: ${stdout}`);
+        }
+
+        if (stderr) {
+           console.log(`stderr: ${stderr}`);
+        }
+
+        console.log(`Created detached signature: ${path.basename(filePath)}.asc`.verbose);
 
         resolve();
      });
