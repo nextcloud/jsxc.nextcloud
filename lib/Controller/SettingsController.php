@@ -54,7 +54,7 @@ class SettingsController extends Controller
 		$serverType = $config->getAppValue(Config::XMPP_SERVER_TYPE, Application::INTERNAL);
 
 		$data = [
-			'disabled' => !$config->getAppValue(Config::XMPP_START_ON_LOGIN, true),
+			'disabled' => !$config->getBooleanAppValue(Config::XMPP_START_ON_LOGIN, true),
 		];
 
 		if ($serverType === Application::INTERNAL) {
@@ -189,6 +189,10 @@ class SettingsController extends Controller
 			$options[$key] = $val;
 		}
 
+		if ($options['disabled'] === '') {
+			unset($options['disabled']);
+		}
+
 		$this->config->setUserValue($uid, 'ojsxc', 'options', json_encode($options));
 
 		return [
@@ -319,9 +323,6 @@ class SettingsController extends Controller
 
 		$options = (array) json_decode($options, true);
 
-		//@TODO only for debugging
-		$data['user'] = $options;
-
 		if (!is_array($options)) {
 			return $data;
 		}
@@ -330,10 +331,14 @@ class SettingsController extends Controller
 
 		foreach ($options as $prop => $value) {
 			if ($prop !== 'xmpp' || $allowToOverwriteXMPPOptions) {
-				foreach ($value as $key => $v) {
-					if (!empty($v) && $key !== 'url') {
-						$data [$prop] [$key] = ($v === 'false' || $v === 'true') ? $this->validateBoolean($v) : $v;
+				if (is_array($value)) {
+					foreach ($value as $key => $v) {
+						if (!empty($v) && $key !== 'url') {
+							$data [$prop] [$key] = ($v === 'false' || $v === 'true') ? $this->validateBoolean($v) : $v;
+						}
 					}
+				} else {
+					$data[$prop] = ($value === 'false' || $value === 'true') ? $this->validateBoolean($value) : $value;
 				}
 			}
 		}

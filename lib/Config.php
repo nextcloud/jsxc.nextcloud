@@ -54,7 +54,7 @@ class Config
 	{
 		$value = $this->config->getAppValue($this->appName, $key, $default);
 
-		return (empty($value)) ? $default : trim($value);
+		return (empty($value) && $value !== '0') ? $default : trim($value);
 	}
 
 	public function setAppValue($key, $value)
