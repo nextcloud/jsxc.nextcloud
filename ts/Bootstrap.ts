@@ -2,7 +2,7 @@ import { DEPENDENCIES } from './CONST';
 import Settings from './Settings';
 import injectChatIcon from './ChatIconInjector';
 import { addChatSubmitButton } from './ChatSubmitButtonInjector';
-import { IJID } from 'jsxc/src/JID.interface';
+import { IJID } from '@jsxc/jsxc/src/JID.interface';
 import defaultAvatar from './DefaultAvatar';
 import Storage from './Storage';
 
@@ -64,6 +64,9 @@ export default class Bootstrap {
             defaultAvatar(element, name, jid);
          },
          onUserRequestsToGoOnline: this.onUserRequestsToGoOnline.bind(this),
+         RTCPeerConfig: {
+            url: OC.generateUrl('apps/ojsxc/settings/iceServers')
+         },
       });
 
       //For debugging
@@ -130,7 +133,11 @@ export default class Bootstrap {
          }
 
          let xmpp = settings.xmpp;
-         let jid = xmpp.node + '@' + xmpp.domain + '/' + xmpp.resource;
+         let jid = xmpp.node + '@' + xmpp.domain;
+
+         if (xmpp.resource) {
+            jid +=  '/' + xmpp.resource;
+         }
 
          if (OJSXC_CONFIG.serverType === 'internal') {
             this.jsxc.start(xmpp.url, jid, 'sid', '1234');

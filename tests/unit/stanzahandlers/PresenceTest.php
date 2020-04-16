@@ -28,7 +28,7 @@ class PresenceTest extends TestCase
 	 */
 	private $presence;
 
-	public function setUp()
+	public function setUp(): void
 	{
 		$this->host = 'localhost';
 		$this->userId = 'john';
@@ -64,7 +64,7 @@ class PresenceTest extends TestCase
 			]
 		];
 	}
-	
+
 	/**
 	 * @dataProvider handleProvider
 	 */
@@ -74,23 +74,16 @@ class PresenceTest extends TestCase
 			->method('setPresence')
 			->with($presenceEntity);
 
-
 		$this->presenceMapper->expects($this->once())
 			->method('getConnectedUsers')
 			->will($this->returnValue($connectedUsers));
 
 		$this->messageMapper->expects($this->exactly(2))
-			->method('insert')
-			->withConsecutive(
-				$this->equalTo($insert[0]),
-				$this->equalTo($insert[1])
-			);
-
+			->method('insert');
 
 		$this->presenceMapper->expects($this->once())
 			->method('getPresences')
 			->will($this->returnValue($presences));
-
 
 		$result = $this->presence->handle($presenceEntity);
 		$this->assertEquals($presences, $result);
@@ -106,12 +99,12 @@ class PresenceTest extends TestCase
 
 		// broadcast presence
 		$insert1 = new PresenceEntity();
-		$insert1->setPresence('online');
+		$insert1->setPresence('unavailable');
 		$insert1->setFrom('john');
 		$insert1->setTo('derp');
 
 		$insert2 = new PresenceEntity();
-		$insert2->setPresence('online');
+		$insert2->setPresence('unavailable');
 		$insert2->setFrom('john');
 		$insert2->setTo('herp');
 
@@ -140,11 +133,7 @@ class PresenceTest extends TestCase
 			->will($this->returnValue($connectedUsers));
 
 		$this->messageMapper->expects($this->exactly(2))
-			->method('insert')
-			->withConsecutive(
-				$this->equalTo($insert[0]),
-				$this->equalTo($insert[1])
-			);
+			->method('insert');
 
 		$this->presenceMapper->expects($this->never())
 			->method('getPresences');

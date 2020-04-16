@@ -34,7 +34,7 @@ class ManagedServerControllerTest extends TestCase
 
 	private $managedServerController;
 
-	public function setUp()
+	public function setUp(): void
 	{
 		parent::setUp();
 
@@ -89,7 +89,7 @@ class ManagedServerControllerTest extends TestCase
 			$this->random,
 			$this->appManager,
 			$this->registrationUrl
-	  );
+		);
 	}
 
 	public function testRegisterWithoutPromoCode()

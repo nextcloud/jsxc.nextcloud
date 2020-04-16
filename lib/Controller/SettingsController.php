@@ -74,11 +74,6 @@ class SettingsController extends Controller
 			];
 		}
 
-		$data ['client']['screenMediaExtension'] = [
-			'firefox' => $config->getAppValue(Config::FIREFOX_EXTENSION),
-			'chrome' => $config->getAppValue(Config::CHROME_EXTENSION),
-		 ];
-
 		$data ['xmpp'] = [
 			'url' => $config->getAppValue(Config::XMPP_URL),
 			'domain' => $config->getAppValue(Config::XMPP_DOMAIN),
@@ -107,8 +102,6 @@ class SettingsController extends Controller
 		}
 
 		$data = $this->overwriteByUserDefined($currentUID, $data);
-
-		$data['firefox'] = $config->getAppValue(Config::FIREFOX_EXTENSION);
 
 		return [
 			'result' => SUCCESS,
@@ -139,8 +132,6 @@ class SettingsController extends Controller
 			Config::ICE_CREDENTIAL,
 			Config::ICE_SECRET,
 			Config::ICE_TTL,
-			Config::FIREFOX_EXTENSION,
-			Config::CHROME_EXTENSION,
 		];
 
 		$checkboxParameters = [
@@ -218,7 +209,7 @@ class SettingsController extends Controller
 
 		$urls = [];
 		foreach (preg_split('/[\s,]+/', $urlString) as $url) {
-			if (preg_match('/^(turn|stun):/', $url)) {
+			if (preg_match('/^(turn|stun)s?:/', $url)) {
 				$urls[] = $url;
 			} elseif (!empty($url)) {
 				$urls[] = 'turn:'.$url;
@@ -246,7 +237,14 @@ class SettingsController extends Controller
 				],
 			];
 		} else {
-			$data = [];
+			$data = [
+				'ttl' => $ttl,
+				'iceServers' => [
+					[
+						'urls' => ['stun:stun.stunprotocol.org']
+					]
+				]
+			];
 		}
 
 		return $data;

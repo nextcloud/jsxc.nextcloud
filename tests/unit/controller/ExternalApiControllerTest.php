@@ -24,7 +24,7 @@ class ExternalApiControllerTest extends TestCase
 	private $user;
 	private $externalApiController;
 
-	public function setUp()
+	public function setUp(): void
 	{
 		parent::setUp();
 
@@ -42,7 +42,7 @@ class ExternalApiControllerTest extends TestCase
 			$this->userSession,
 			$this->groupManager,
 			$this->logger
-	  );
+		);
 	}
 
 	public function testSignatureProtected()

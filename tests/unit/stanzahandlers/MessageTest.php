@@ -43,7 +43,7 @@ class MessageTest extends TestCase
 	 */
 	private $logger;
 
-	public function setUp()
+	public function setUp(): void
 	{
 		$this->host = 'localhost';
 		$this->userId = 'john';

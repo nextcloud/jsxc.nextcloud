@@ -52,11 +52,11 @@ class HooksTest extends TestCase
 	 */
 	private $groupManager;
 
-	public function setUp()
+	public function setUp(): void
 	{
 		$this->userManager = $this->getMockBuilder('OCP\IUserManager')->setMethods(['listen', 'registerBackend', 'getBackends', 'removeBackend', 'clearBackends', 'get', 'userExists', 'checkPassword', 'search', 'searchDisplayName', 'createUser', 'createUserFromBackend', 'countUsers', 'callForAllUsers', 'countDisabledUsers', 'countSeenUsers', 'callForSeenUsers', 'getByEmail'])->getMock();
 
-		$this->userSession = $this->getMockBuilder('OCP\IUserSession')->setMethods(['listen', 'login', 'logout', 'setUser', 'getUser', 'isLoggedIn'])->getMock();
+		$this->userSession = $this->getMockBuilder('OCP\IUserSession')->setMethods(['listen', 'login', 'logout', 'setUser', 'getUser', 'isLoggedIn', 'getImpersonatingUserID', 'setImpersonatingUserID'])->getMock();
 
 
 		$this->rosterPush = $this->getMockBuilder('OCA\OJSXC\RosterPush')->disableOriginalConstructor()->getMock();

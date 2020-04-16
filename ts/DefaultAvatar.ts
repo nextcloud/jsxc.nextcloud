@@ -1,5 +1,5 @@
 import Storage from './Storage';
-import { IJID } from 'jsxc/src/JID.interface';
+import { IJID } from '@jsxc/jsxc/src/JID.interface';
 
 interface IAvatar {
    username: string;
@@ -101,7 +101,7 @@ function getAvatarUrl(username: string, size: number) {
    return OC.generateUrl('/avatar/' + encodeURIComponent(username) + '/' + size, {
       user: username,
       size,
-      requesttoken: oc_requesttoken
+      requesttoken: OC.requestToken || oc_requesttoken
    });
 }
 

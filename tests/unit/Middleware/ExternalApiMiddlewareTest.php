@@ -20,7 +20,7 @@ class ExternalApiMiddlewareTest extends TestCase
 	private $rawRequest;
 	private $externalApiMiddleware;
 
-	public function setUp()
+	public function setUp(): void
 	{
 		parent::setUp();
 
@@ -32,7 +32,7 @@ class ExternalApiMiddlewareTest extends TestCase
 			$this->request,
 			$this->config,
 			$this->rawRequest
-	  );
+		);
 	}
 
 	public function testBeforeControllerForNonSignatureProtected()

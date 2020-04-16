@@ -9,27 +9,33 @@ export function addChatSubmitButton(formElement: JQuery<any>, translate: (key: s
    let submitElement = $('<input>');
    submitElement.attr({
       type: 'button',
-      id: 'jsxc-submit',
    });
-   submitElement.addClass('login primary');
-   if (defaultEnable) {
-      submitElement.val(translate('Log_in_without_chat'));
-      submitElement.click(function() {
-         storage.setItem('loginForm:disable', true);
+   submitElement.addClass('login primary jsxc-submit');
 
-         formElement.submit();
-      });
+   let submitElementWithout = submitElement.clone();
+   submitElementWithout.val(translate('Log_in_without_chat'));
+   submitElementWithout.click(function() {
+      storage.setItem('loginForm:disable', true);
+
+      formElement.submit();
+   });
+
+   let submitElementWith = submitElement.clone();
+   submitElementWith.val(translate('Log_in_with_chat'));
+   submitElementWith.click(function() {
+      storage.setItem('loginForm:disable', false);
+
+      formElement.submit();
+   });
+
+   submitWrapperElement.append(submitElementWithout);
+   submitWrapperElement.append(submitElementWith);
+
+   if (formElement.find('.login-additional').length > 0) {
+      formElement.find('.login-additional').prepend(submitWrapperElement);
    } else {
-      submitElement.val(translate('Log_in_with_chat'));
-      submitElement.click(function() {
-         storage.setItem('loginForm:disable', false);
-
-         formElement.submit();
-      });
+      formElement.find('#submit-wrapper').after(submitWrapperElement);
    }
-
-   submitWrapperElement.append(submitElement);
-   formElement.find('.login-additional').prepend(submitWrapperElement);
 
    $('#lost-password').mouseup(function(ev) {
       ev.preventDefault();

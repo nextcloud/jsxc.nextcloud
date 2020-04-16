@@ -41,7 +41,7 @@ class DbLockTest extends TestCase
 	 */
 	private $container;
 
-	public function setUp()
+	public function setUp(): void
 	{
 		parent::setUp();
 		$app = new Application();

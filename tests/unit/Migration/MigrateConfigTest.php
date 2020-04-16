@@ -13,7 +13,7 @@ class MigrateConfigTest extends TestCase
 	private $config;
 	private $output;
 
-	public function setUp()
+	public function setUp(): void
 	{
 		parent::setUp();
 

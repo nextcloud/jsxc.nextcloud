@@ -15,7 +15,7 @@ class NewContentContainerTest extends TestCase
 	 */
 	private $newContentContainer;
 
-	public function setUp()
+	public function setUp(): void
 	{
 		$this->newContentContainer = new NewContentContainer();
 	}

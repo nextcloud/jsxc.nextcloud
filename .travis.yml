@@ -3,7 +3,7 @@ sudo: false
 
 language: php
 php:
-  - 7.1
+  - 7.2
 
 services:
   - mysql
@@ -12,18 +12,17 @@ env:
   global:
       # test with different DB's and PHP versions against NC master version.
       # Test minimum PHP version against NC stable branches.
-    - BRANCH=stable16
+    - BRANCH=stable18
 
 matrix:
   include:
     - env: DB=sqlite
-    - php: 7.2
-      env: DB=sqlite
     - php: 7.3
       env: DB=sqlite
     - env: DB=pgsql
     - env: DB=mysql
-    - env: DB=mysql BRANCH=stable15
+    # - env: DB=mysql BRANCH=stable16
+    # - env: DB=mysql BRANCH=stable17
 
 
 install:
@@ -32,13 +31,11 @@ install:
 
 # Note the install script should make sure we are in the apps/ojsxc directory
 script:
-  - rm composer.lock
   - composer install
   - ./vendor/bin/phpunit -c phpunit.xml --coverage-clover=unit-coverage.xml
   - ./vendor/bin/phpunit -c phpunit.integration.xml --coverage-clover=integration-coverage.xml
   - cat ../../data/nextcloud.log
-  - vendor/bin/php-cs-fixer fix --dry-run --using-cache=no
-  - rm -r vendor/ && ../../occ app:check-code ojsxc
+#  - rm -rf vendor/ && ../../occ app:check-code ojsxc
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)

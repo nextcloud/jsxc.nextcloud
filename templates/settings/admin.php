@@ -104,7 +104,9 @@ function printRadioInput($key, $value, $required=true) {
 				<div class="form-col">
 					<?php printCheckboxInput('xmppStartMinimized'); ?>
 				</div>
+			</div>
 
+			<div class="form-group">
 				<label for="loginFormEnable">Enable chat on log in</label>
 				<div class="form-col">
 					<?php printCheckboxInput('loginFormEnable'); ?>
@@ -233,24 +235,6 @@ function printRadioInput($key, $value, $required=true) {
 				<div class="form-col">
 					<?php printTextInput('iceTtl', false, 'number'); ?>
 					<em>Lifetime for TURN-REST-API credentials in seconds.</em>
-				</div>
-			</div>
-		</fieldset>
-
-		<fieldset>
-			<h3>Screen sharing</h3>
-			<div class="form-group">
-				<label for="firefoxExtension">Firefox Extension URL</label>
-				<div class="form-col">
-					<?php printTextInput('firefoxExtension', false, 'url'); ?>
-					<em>Firefox needs an extension in order to support screen sharing. <a href="https://github.com/jsxc/jsxc/wiki/Screen-sharing">More details.</a></em>
-				</div>
-			</div>
-			<div class="form-group">
-				<label for="chromeExtension">Chrome Extension URL</label>
-				<div class="form-col">
-					<?php printTextInput('chromeExtension', false, 'url'); ?>
-					<em>Chrome needs an extension in order to support screen sharing. <a href="https://github.com/jsxc/jsxc/wiki/Screen-sharing">More details.</a></em>
 				</div>
 			</div>
 		</fieldset>

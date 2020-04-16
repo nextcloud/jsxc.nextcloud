@@ -17,7 +17,7 @@ class SettingsControllerTest extends TestCase
 	private $userSession;
 	private $settingsController;
 
-	public function setUp()
+	public function setUp(): void
 	{
 		parent::setUp();
 
@@ -32,7 +32,7 @@ class SettingsControllerTest extends TestCase
 			$this->config,
 			$this->userManager,
 			$this->userSession
-	  );
+		);
 	}
 
 	public function testIndexWithoutUser()
@@ -94,7 +94,8 @@ class SettingsControllerTest extends TestCase
 
 		$return = $this->settingsController->getIceServers();
 
-		$this->assertEquals([], $return);
+		$this->assertEquals('', $return['ttl']);
+		$this->assertEquals('stun:stun.stunprotocol.org', $return['iceServers'][0]['urls'][0]);
 	}
 
 	public function testGetIceServersStoredDataWithPrefix()

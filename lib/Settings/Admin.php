@@ -47,8 +47,6 @@ class Admin implements ISettings
 		   'iceCredential' => $this->getParam(CONFIG::ICE_CREDENTIAL),
 		   'iceSecret' => $this->getParam(CONFIG::ICE_SECRET),
 		   'iceTtl' => $this->getParam(CONFIG::ICE_TTL),
-		   'firefoxExtension' => $this->getParam(CONFIG::FIREFOX_EXTENSION),
-		   'chromeExtension' => $this->getParam(CONFIG::CHROME_EXTENSION),
 		   'timeLimitedToken' => $this->getParam(CONFIG::XMPP_USE_TIME_LIMITED_TOKEN),
 		   'externalServices' => [
 			   'name' => CONFIG::EXTERNAL_SERVICES . '[]',

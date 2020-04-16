@@ -60,7 +60,7 @@ class ContactsStoreUserProviderTest extends TestCase
 	 */
 	private $contactsManager;
 
-	public function setUp()
+	public function setUp(): void
 	{
 		if (!Application::contactsStoreApiSupported()) {
 			$this->markTestSkipped();
@@ -148,7 +148,7 @@ class ContactsStoreUserProviderTest extends TestCase
 		return $addressBookId;
 	}
 
-	protected function tearDown()
+	protected function tearDown(): void
 	{
 		$config = \OC::$server->getConfig();
 		$config->setAppValue('core', 'shareapi_only_share_with_group_members', 'no');
