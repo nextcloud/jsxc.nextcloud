@@ -11,7 +11,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - default stun server
 
 ### Changed
-- update JSXC to v4.0.0 ([change log](https://github.com/jsxc/jsxc/blob/refactoring/CHANGELOG.md))
+- update JSXC to v4.0.0 ([change log](https://github.com/jsxc/jsxc/blob/master/CHANGELOG.md))
 - bump min NC version to 16
 - bump max NC version to 18
 - use db migration
