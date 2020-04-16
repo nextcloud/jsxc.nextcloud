@@ -67,7 +67,7 @@ class Personal implements ISettings
 		}
 
 		$xmppPreferMail = $this->config->getAppValue('ojsxc', Config::XMPP_PREFER_MAIL);
-		if ($xmppPreferMail === true || $xmppPreferMail === 'true') {
+		if ($xmppPreferMail === true || $xmppPreferMail === 'true' || $xmppPreferMail === 1 || $xmppPreferMail === '1') {
 			$mail = $this->config->getUserValue($currentUID, 'settings', 'email');
 			if ($mail !== null) {
 				list($u, $d) = explode("@", $mail, 2);
