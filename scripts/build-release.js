@@ -8,18 +8,42 @@ const fs = require("fs");
 const path = require("path");
 const libxml = require("libxmljs");
 const https = require('https');
-const GitRevisionPlugin = new(require('git-revision-webpack-plugin'))();
+const execa = require('execa');
+const GitRevisionPlugin = new (require('git-revision-webpack-plugin'))();
 const package = require('../package.json');
 
 const infoXmlPath = './appinfo/info.xml';
 const isStableRelease = process.argv.indexOf('--stable') > 1;
 const version = isStableRelease ? package.version : package.version.replace(/-.+$/, '') + '-git.' + GitRevisionPlugin.version();
 
-run();
+createRelease().catch(err => {
+  console.log(`✘ ${err.toString()}`.error);
+});
 
-async function run() {
+async function createRelease() {
+  console.log(`I'm now building JSXC for Nextcloud in version ${version}.`.verbose);
+
+  await execa('yarn', ['checking']);
+  console.log('✔ all code checks passed'.green);
+
+  await execa('yarn', ['test']);
+  console.log('✔ all tests passed'.green);
+
   await prepareInfoXml();
-  await createRelease();
+
+  await createBuild();
+  console.log('✔ build created'.green);
+
+  let filePath = await createArchive('ojsxc-' + version);
+
+  await createNextcloudSignature(filePath);
+  console.log(`✔ created Nextcloud signature`.green);
+
+  await createGPGSignature(filePath);
+  console.log(`✔ created detached signature`.green);
+
+  await createGPGArmorSignature(filePath);
+  console.log(`✔ created detached signature`.green);
 }
 
 async function prepareInfoXml() {
@@ -27,17 +51,9 @@ async function prepareInfoXml() {
   const xmlDoc = libxml.parseXml(infoFile);
 
   updateVersion(xmlDoc, version);
+  console.log('✔ version updated in info.xml'.green);
+
   await validateXml(xmlDoc);
-}
-
-async function createRelease() {
-  console.log(`I'm now building JSXC for Nextcloud in version ${version}.`.verbose);
-
-  await createBuild();
-  let filePath = await createArchive('ojsxc-' + version);
-  await createNextcloudSignature(filePath);
-  await createGPGSignature(filePath);
-  await createGPGArmorSignature(filePath);
 }
 
 function createBuild() {
@@ -66,19 +82,19 @@ function createArchive(fileBaseName) {
   let filePath = path.normalize(__dirname + `/../archives/${fileName}`);
   let output = fs.createWriteStream(filePath);
   let archive = require('archiver')('tar', {
-     gzip: true,
+    gzip: true,
   });
 
-  archive.on('warning', function(err) {
-     if (err.code === 'ENOENT') {
-        console.warn('Archive warning: '.warn, err);
-     } else {
-        throw err;
-     }
+  archive.on('warning', function (err) {
+    if (err.code === 'ENOENT') {
+      console.warn('Archive warning: '.warn, err);
+    } else {
+      throw err;
+    }
   });
 
-  archive.on('error', function(err) {
-     throw err;
+  archive.on('error', function (err) {
+    throw err;
   });
 
   archive.pipe(output);
@@ -86,93 +102,35 @@ function createArchive(fileBaseName) {
   archive.directory('dist/', 'ojsxc');
 
   return new Promise(resolve => {
-     output.on('close', function() {
-        console.log(`Wrote ${archive.pointer()} bytes to ${fileName}`.verbose);
+    output.on('close', function () {
+      console.log(`✔ wrote ${archive.pointer()} bytes to ${fileName}`.green);
 
-        resolve(filePath);
-     });
+      resolve(filePath);
+    });
 
-     archive.finalize();
+    archive.finalize();
   });
 }
 
 function createNextcloudSignature(filePath) {
-  const {
-     exec
-  } = require('child_process');
+  const sigPath = `${filePath}.ncsig`;
+  const keyFile = path.join(process.env.HOME, '.nextcloud/certificates/ojsxc.key');
 
-  return new Promise((resolve, reject) => {
-    const sigPath = `${filePath}.ncsig`;
-     exec(`openssl dgst -sha512 -sign ~/.nextcloud/certificates/ojsxc.key ${filePath} | openssl base64 > ${sigPath}`, (error, stdout, stderr) => {
-        if (error) {
-           throw error;
-        }
+  const signProcess = execa('openssl', ['dgst', '-sha512', '-sign', keyFile, filePath]);
+  const base64Process = execa('openssl', ['base64']);
 
-        if (stdout) {
-           console.log(`stdout: ${stdout}`);
-        }
+  signProcess.stdout.pipe(base64Process.stdin);
+  base64Process.stdout.pipe(fs.createWriteStream(sigPath));
 
-        if (stderr) {
-           console.log(`stderr: ${stderr}`);
-        }
-
-        console.log(`Created Nextcloud signature: ${path.basename(sigPath)}`.verbose);
-
-        resolve();
-     });
-  });
+  return base64Process;
 }
 
 function createGPGSignature(filePath) {
-  const {
-     exec
-  } = require('child_process');
-
-  return new Promise((resolve, reject) => {
-     exec(`gpg --yes --detach-sign "${filePath}"`, (error, stdout, stderr) => {
-        if (error) {
-           throw error;
-        }
-
-        if (stdout) {
-           console.log(`stdout: ${stdout}`);
-        }
-
-        if (stderr) {
-           console.log(`stderr: ${stderr}`);
-        }
-
-        console.log(`Created detached signature: ${path.basename(filePath)}.sig`.verbose);
-
-        resolve();
-     });
-  });
+  return execa('gpg', ['--yes', '--detach-sign', filePath]);
 }
 
 function createGPGArmorSignature(filePath) {
-  const {
-     exec
-  } = require('child_process');
-
-  return new Promise((resolve, reject) => {
-     exec(`gpg --yes --detach-sign --armor "${filePath}"`, (error, stdout, stderr) => {
-        if (error) {
-           throw error;
-        }
-
-        if (stdout) {
-           console.log(`stdout: ${stdout}`);
-        }
-
-        if (stderr) {
-           console.log(`stderr: ${stderr}`);
-        }
-
-        console.log(`Created detached signature: ${path.basename(filePath)}.asc`.verbose);
-
-        resolve();
-     });
-  });
+  return execa('gpg', ['--yes', '--detach-sign', '--armor', filePath]);
 }
 
 function updateVersion(xmlDoc, version) {
@@ -199,7 +157,7 @@ async function validateXml(xmlDoc) {
   let schemaString;
   try {
     schemaString = await wget(schemaLocation);
-  } catch(err) {
+  } catch (err) {
     console.log('Could not download schema. Skip validation.'.warn);
 
     return;
@@ -207,12 +165,12 @@ async function validateXml(xmlDoc) {
   let xsdDoc = libxml.parseXml(schemaString);
 
   if (xmlDoc.validate(xsdDoc)) {
-    console.log('✔ Document valid'.green);
+    console.log('✔ document valid'.green);
   } else {
-    console.log('✘ Document INVALID'.error);
+    console.log('✘ document INVALID'.error);
 
     xmlDoc.validationErrors.forEach((error, index) => {
-      console.log(`#${index+1}\t${error.toString().trim()}`.warn);
+      console.log(`#${index + 1}\t${error.toString().trim()}`.warn);
       console.log(`\tLine ${error.line}:${error.column} (level ${error.level})`.verbose);
     });
 
