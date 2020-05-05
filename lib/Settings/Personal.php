@@ -48,7 +48,7 @@ class Personal implements ISettings
 					$parameters['loginForm'] = 'default';
 				}
 
-				if (is_array($options['xmpp'])) {
+				if (array_key_exists('xmpp', $options) && is_array($options['xmpp'])) {
 					if (!empty($options['xmpp']['node'])) {
 						$node = $options['xmpp']['node'];
 						$parameters['xmppNode'] = $options['xmpp']['node'];
@@ -81,7 +81,7 @@ class Personal implements ISettings
 		$xmppOverwrite = $this->config->getAppValue('ojsxc', Config::XMPP_ALLOW_OVERWRITE);
 
 		$parameters['xmppUrl'] = $this->config->getAppValue('ojsxc', Config::XMPP_URL);
-		$parameters['externalConnectable'] = Application::getServerType() !== Application.INTERNAL;
+		$parameters['externalConnectable'] = Application::getServerType() !== Application::INTERNAL;
 		$parameters['allowToOverwriteXMPPConfig'] = $xmppOverwrite === 'true' || $xmppOverwrite === true || $xmppOverwrite === 1 || $xmppOverwrite === '1';
 		$parameters['jid'] = $node . '@' . $domain;
 

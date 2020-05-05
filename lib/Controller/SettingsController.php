@@ -189,7 +189,7 @@ class SettingsController extends Controller
 			$options[$key] = $val;
 		}
 
-		if ($options['disabled'] === '') {
+		if (array_key_exists('disabled', $options) && $options['disabled'] === '') {
 			unset($options['disabled']);
 		}
 
