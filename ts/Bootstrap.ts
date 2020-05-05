@@ -31,12 +31,16 @@ export default class Bootstrap {
    }
 
    private checkSpecialPage() {
-      if (/^(\/index.php)?\/s\//.test(location.pathname)) {
+      if (/^(\/index.php)?\/s\//.test(window.location.pathname)) {
          throw new Error(`Abort, because we dont want to start chat on public shares.`);
       }
 
       if (OC.generateUrl('login/flow') === window.location.pathname) {
          throw new Error(`Abort, because chat is not needed on flow login.`);
+      }
+
+      if (OC.generateUrl('login/challenge/totp') === window.location.pathname) {
+         throw new Error('Abort, because chat is not needed on totp page.');
       }
    }
 
