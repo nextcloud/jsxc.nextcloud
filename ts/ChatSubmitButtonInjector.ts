@@ -2,7 +2,6 @@ import Storage from './Storage';
 
 export function addChatSubmitButton(formElement: JQuery<any>, translate: (key: string) => string) {
    let storage = Storage.get();
-   let defaultEnable = OJSXC_CONFIG.defaultLoginFormEnable;
    let submitWrapperElement = $('<div>');
    submitWrapperElement.attr('id', 'jsxc-submit-wrapper');
 

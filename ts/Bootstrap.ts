@@ -5,6 +5,7 @@ import { addChatSubmitButton } from './ChatSubmitButtonInjector';
 import { IJID } from '@jsxc/jsxc/src/JID.interface';
 import defaultAvatar from './DefaultAvatar';
 import Storage from './Storage';
+import { armXMPPSchemaHandler } from './XMPPSchemaHandler';
 
 export default class Bootstrap {
    private jsxc;
@@ -51,6 +52,7 @@ export default class Bootstrap {
       this.addAlternativeLogin();
 
       injectChatIcon(this.jsxc.toggleRoster);
+      armXMPPSchemaHandler(this.jsxc.executeXMPPUri);
    }
 
    private initJSXC() {
