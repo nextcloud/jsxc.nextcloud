@@ -5,6 +5,25 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+### Added
+- bump max nc version to 19
+- ship with own version of jquery
+- [#143](https://github.com/jsxc/jsxc/issues/143) handle xmpp links
+
+### Fixed
+- remove external service detection
+- [#142](https://github.com/jsxc/jsxc/issues/142) php notices
+- disable jsxc on totp page
+- [#139](https://github.com/jsxc/jsxc/issues/139) follow personal start setting
+
+### Misc
+- update JSXC to v4.1.0-rc.1 ([change log](https://github.com/jsxc/jsxc/blob/master/CHANGELOG.md))
+- change dev structure
+- use fully-qualifier class name
+- move app file to lib
+- add publish script
+- beautify build output
+- show webpack progress
 
 ## 4.0.0 - 2020-04-08
 ### Fixed
