@@ -54,6 +54,7 @@
   },
   "dependencies": {
     "@jsxc/jsxc": "^4.0.0-rc.2",
+    "jquery": "^3.5.1",
     "libsignal-protocol": "https://github.com/signalapp/libsignal-protocol-javascript",
     "tslint": "^6.1.0",
     "typescript-formatter": "^7.2.2"

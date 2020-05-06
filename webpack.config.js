@@ -94,9 +94,12 @@ const config = {
       alias: {}
    },
    externals: {
-      'jquery': 'jQuery',
    },
    plugins: [
+      new webpack.ProvidePlugin({
+         $: 'jquery',
+         jQuery: 'jquery'
+      }),
       new MiniCssExtractPlugin({
          filename: 'css/bundle.css',
       }),

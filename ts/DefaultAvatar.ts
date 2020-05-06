@@ -106,5 +106,9 @@ function getAvatarUrl(username: string, size: number) {
 }
 
 function setPlaceholder(element, username: string, displayName?: string) {
-   (<any> element).imageplaceholder(username, displayName);
+   let imagePlaceholder = (<any> window).$(element).imageplaceholder?.bind($(element));
+
+   if (typeof imagePlaceholder === 'function') {
+      imagePlaceholder(username, displayName);
+   }
 }
