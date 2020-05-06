@@ -2,7 +2,6 @@
 
 namespace OCA\OJSXC\AppInfo;
 
-use OCA\DAV\Server;
 use OCA\OJSXC\Controller\ManagedServerController;
 use OCA\OJSXC\Controller\SettingsController;
 use OCA\OJSXC\Controller\ExternalApiController;
@@ -14,7 +13,6 @@ use OCA\OJSXC\Controller\HttpBindController;
 use OCA\OJSXC\Db\IQRosterPushMapper;
 use OCA\OJSXC\Db\MessageMapper;
 use OCA\OJSXC\Db\PresenceMapper;
-use OCA\OJSXC\Db\Stanza;
 use OCA\OJSXC\Db\StanzaMapper;
 use OCA\OJSXC\Migration\RefreshRoster as RefreshRosterMigration;
 use OCA\OJSXC\NewContentContainer;
@@ -38,34 +36,39 @@ use OCP\IRequest;
 use OCP\IUserBackend;
 use OCA\OJSXC\Migration\MigrateConfig;
 
-class Application extends App {
-
+class Application extends App
+{
 	const INTERNAL = 'internal';
 	const EXTERNAL = 'external';
 	const MANAGED = 'managed';
 
 	private static $config = [];
 
-	public function __construct(array $urlParams=array()){
+	public function __construct(array $urlParams = [])
+	{
 		parent::__construct('ojsxc', $urlParams);
 		$container = $this->getContainer();
 
 		/** @var $config \OCP\IConfig */
 		$configManager = $container->query('OCP\IConfig');
 
-		self::$config['polling'] = $configManager->getSystemValue('ojsxc.polling',
-			['sleep_time' => 1, 'max_cycles' => 10]);
+		self::$config['polling'] = $configManager->getSystemValue(
+			'ojsxc.polling',
+			['sleep_time' => 1, 'max_cycles' => 10]
+		);
 
 		self::$config['polling']['timeout'] = self::$config['polling']['sleep_time'] * self::$config['polling']['max_cycles'] + 5;
 
-		self::$config['use_memcache'] = $configManager->getSystemValue('ojsxc.use_memcache',
-			['locking' => false]);
+		self::$config['use_memcache'] = $configManager->getSystemValue(
+			'ojsxc.use_memcache',
+			['locking' => false]
+		);
 
 
 		/**
 		 * Controllers
 		 */
-		$container->registerService('HttpBindController', function(IContainer $c) {
+		$container->registerService('HttpBindController', function (IContainer $c) {
 			return new HttpBindController(
 				$c->query('AppName'),
 				$c->query('Request'),
@@ -86,7 +89,7 @@ class Application extends App {
 			);
 		});
 
-		$container->registerService('SettingsController', function(IContainer $c) {
+		$container->registerService('SettingsController', function (IContainer $c) {
 			return new SettingsController(
 				$c->query('AppName'),
 				$c->query('Request'),
@@ -96,7 +99,7 @@ class Application extends App {
 			);
 		});
 
-		$container->registerService('ExternalApiController', function(IContainer $c) {
+		$container->registerService('ExternalApiController', function (IContainer $c) {
 			return new ExternalApiController(
 				$c->query('AppName'),
 				$c->query('Request'),
@@ -107,7 +110,7 @@ class Application extends App {
 			);
 		});
 
-		$container->registerService('ManagedServerController', function(IContainer $c) {
+		$container->registerService('ManagedServerController', function (IContainer $c) {
 			return new ManagedServerController(
 				$c->query('AppName'),
 				$c->query('Request'),
@@ -122,7 +125,7 @@ class Application extends App {
 			);
 		});
 
-		$container->registerService('JavascriptController', function(IContainer $c) {
+		$container->registerService('JavascriptController', function (IContainer $c) {
 			return new JavascriptController(
 				$c->query('AppName'),
 				$c->query('Request'),
@@ -134,7 +137,7 @@ class Application extends App {
 		 * Middleware
 		 */
 
-		$container->registerService('ExternalApiMiddleware', function(IContainer $c) {
+		$container->registerService('ExternalApiMiddleware', function (IContainer $c) {
 			return new ExternalApiMiddleware(
 				$c->query('Request'),
 				$c->query('OCP\IConfig'),
@@ -146,7 +149,7 @@ class Application extends App {
 		/**
 		 * Database Layer
 		 */
-		$container->registerService('MessageMapper', function(IContainer $c) use ($container) {
+		$container->registerService('MessageMapper', function (IContainer $c) use ($container) {
 			return new MessageMapper(
 				$container->getServer()->getDatabaseConnection(),
 				$c->query('Host'),
@@ -154,7 +157,7 @@ class Application extends App {
 			);
 		});
 
-		$container->registerService('IQRosterPushMapper', function(IContainer $c) use ($container) {
+		$container->registerService('IQRosterPushMapper', function (IContainer $c) use ($container) {
 			return new IQRosterPushMapper(
 				$container->getServer()->getDatabaseConnection(),
 				$c->query('Host'),
@@ -162,7 +165,7 @@ class Application extends App {
 			);
 		});
 
-		$container->registerService('StanzaMapper', function(IContainer $c) use ($container) {
+		$container->registerService('StanzaMapper', function (IContainer $c) use ($container) {
 			return new StanzaMapper(
 				$container->getServer()->getDatabaseConnection(),
 				$c->query('Host'),
@@ -170,7 +173,7 @@ class Application extends App {
 			);
 		});
 
-		$container->registerService('PresenceMapper', function(IContainer $c) use ($container) {
+		$container->registerService('PresenceMapper', function (IContainer $c) use ($container) {
 			return new PresenceMapper(
 				$container->getServer()->getDatabaseConnection(),
 				$c->query('Host'),
@@ -186,7 +189,7 @@ class Application extends App {
 		/**
 		 * XMPP Stanza Handlers
 		 */
-		$container->registerService('IQHandler', function(IContainer $c) {
+		$container->registerService('IQHandler', function (IContainer $c) {
 			return new IQ(
 				$c->query('UserId'),
 				$c->query('Host'),
@@ -196,7 +199,7 @@ class Application extends App {
 			);
 		});
 
-		$container->registerService('PresenceHandler', function(IContainer $c) {
+		$container->registerService('PresenceHandler', function (IContainer $c) {
 			return new Presence(
 				$c->query('UserId'),
 				$c->query('Host'),
@@ -205,7 +208,7 @@ class Application extends App {
 			);
 		});
 
-		$container->registerService('MessageHandler', function(IContainer $c) {
+		$container->registerService('MessageHandler', function (IContainer $c) {
 			return new Message(
 				$c->query('UserId'),
 				$c->query('Host'),
@@ -218,7 +221,7 @@ class Application extends App {
 		/**
 		 * Config values
 		 */
-		$container->registerService('Host', function(IContainer $c) {
+		$container->registerService('Host', function (IContainer $c) {
 			/** @var IRequest $request */
 			$request = $c->query('Request');
 			return preg_replace('/:\d+$/', '', $request->getServerHost());
@@ -227,18 +230,18 @@ class Application extends App {
 		/**
 		 * Helpers
 		 */
-		$container->registerService('Config', function(IContainer $c) {
+		$container->registerService('Config', function (IContainer $c) {
 			return new Config(
 				$c->query('AppName'),
 				$c->query('OCP\IConfig')
 			);
 		});
 
-		$container->registerService('NewContentContainer', function() {
+		$container->registerService('NewContentContainer', function () {
 			return new NewContentContainer();
 		});
 
-		$container->registerService('StanzaLogger', function(IContainer $c) {
+		$container->registerService('StanzaLogger', function (IContainer $c) {
 			return new StanzaLogger(
 				$c->query('\OCP\ILogger'),
 				$c->query('UserId')
@@ -246,7 +249,7 @@ class Application extends App {
 		});
 
 
-		$container->registerService('RosterPush', function($c) {
+		$container->registerService('RosterPush', function ($c) {
 			return new RosterPush(
 				$c->query('ServerContainer')->getUserManager(),
 				$c->query('ServerContainer')->getUserSession(),
@@ -257,7 +260,7 @@ class Application extends App {
 			);
 		});
 
-		$container->registerService('UserHooks', function($c) {
+		$container->registerService('UserHooks', function ($c) {
 			return new Hooks(
 				$c->query('ServerContainer')->getUserManager(),
 				$c->query('ServerContainer')->getUserSession(),
@@ -268,7 +271,7 @@ class Application extends App {
 			);
 		});
 
-		$container->registerService('UserProvider', function(IContainer $c) {
+		$container->registerService('UserProvider', function (IContainer $c) {
 			if (self::contactsStoreApiSupported()) {
 				return new ContactsStoreUserProvider(
 					$c->query('OCP\Contacts\ContactsMenu\IContactsStore'),
@@ -288,7 +291,7 @@ class Application extends App {
 		/**
 		 * Commands
 		 */
-		$container->registerService('RefreshRosterCommand', function($c) {
+		$container->registerService('RefreshRosterCommand', function ($c) {
 			return new RefreshRoster(
 				$c->query('ServerContainer')->getUserManager(),
 				$c->query('RosterPush'),
@@ -296,7 +299,7 @@ class Application extends App {
 			);
 		});
 
-		$container->registerService('ServerSharingCommand', function($c) {
+		$container->registerService('ServerSharingCommand', function ($c) {
 			return new ServerSharing(
 				$c->query('OCP\IConfig')
 			);
@@ -306,21 +309,22 @@ class Application extends App {
 		 * A modified userID for use in OJSXC.
 		 * This is automatically made lowercase.
 		 */
-		$container->registerParameter('OJSXC_UserId',
-			 self::sanitizeUserId(self::convertToRealUID($container->query('UserId')))
+		$container->registerParameter(
+			'OJSXC_UserId',
+			self::sanitizeUserId(self::convertToRealUID($container->query('UserId')))
 		);
 
 		/**
 		 * Raw request body
 		 */
-		$container->registerService('RawRequest', function($c) {
+		$container->registerService('RawRequest', function ($c) {
 			return new RawRequest();
 		});
 
 		/**
 		 * Data retriever
 		 */
-		$container->registerService('DataRetriever', function($c) {
+		$container->registerService('DataRetriever', function ($c) {
 			return new DataRetriever();
 		});
 
@@ -328,7 +332,7 @@ class Application extends App {
 		/**
 		 * Migrations
 		 */
-		$container->registerService('OCA\OJSXC\Migration\RefreshRoster', function(IContainer $c) {
+		$container->registerService('OCA\OJSXC\Migration\RefreshRoster', function (IContainer $c) {
 			return new RefreshRosterMigration(
 				$c->query('RosterPush'),
 				$c->query('OCP\IConfig'),
@@ -336,25 +340,25 @@ class Application extends App {
 			);
 		});
 
-		$container->registerService('OCA\OJSXC\Migration\MigrateConfig', function(IContainer $c) {
+		$container->registerService('OCA\OJSXC\Migration\MigrateConfig', function (IContainer $c) {
 			return new MigrateConfig(
 				$c->query('Config')
 			);
 		});
-
 	}
 
 	/**
 	 * @return ILock
 	 */
-	private function getLock() {
+	private function getLock()
+	{
 		$c = $this->getContainer();
 		if (self::$config['use_memcache']['locking'] === true) {
 			$cache = $c->getServer()->getMemCacheFactory();
 			$version = \OC::$server->getSession()->get('OC_Version');
-			if ($version[0] === 8 && $version[1] === 0){
+			if ($version[0] === 8 && $version[1] === 0) {
 				$c->getServer()->getLogger()->warning('OJSXC is configured to use memcache as backend for locking, but ownCloud version 8  doesn\'t suppor this.');
-			} else if ($cache->isAvailable()) {
+			} elseif ($cache->isAvailable()) {
 				$memcache = $cache->create('ojsxc');
 				return new MemLock(
 					$c->query('UserId'),
@@ -374,20 +378,27 @@ class Application extends App {
 	}
 
 
-	public static function sanitizeUserId($providedUid) {
-		return str_replace([" ", "'", "@"], ["_ojsxc_esc_space_", "_ojsxc_squote_space_", "_ojsxc_esc_at_"],
+	public static function sanitizeUserId($providedUid)
+	{
+		return str_replace(
+			[" ", "'", "@"],
+			["_ojsxc_esc_space_", "_ojsxc_squote_space_", "_ojsxc_esc_at_"],
 			$providedUid
 		);
 	}
 
-	public static function deSanitize($providedUid) {
-		return str_replace(["_ojsxc_esc_space_", "_ojsxc_squote_space_", "_ojsxc_esc_at_"], [" ", "'", "@"],
+	public static function deSanitize($providedUid)
+	{
+		return str_replace(
+			["_ojsxc_esc_space_", "_ojsxc_squote_space_", "_ojsxc_esc_at_"],
+			[" ", "'", "@"],
 			$providedUid
 		);
 	}
 
 
-	public static function convertToRealUID($providedUid) {
+	public static function convertToRealUID($providedUid)
+	{
 		$user = \OC::$server->getUserManager()->get($providedUid);
 		if (is_null($user)) {
 			return $providedUid;
@@ -416,7 +427,8 @@ class Application extends App {
 	/**
 	 * @return bool whether the ContactsStore API is enabled
 	 */
-	public static function contactsStoreApiSupported() {
+	public static function contactsStoreApiSupported()
+	{
 		$version = \OCP\Util::getVersion();
 		if ($version[0] >= 13 && \OC::$server->getConfig()->getAppValue('ojsxc', 'use_server_sharing_settings', 'no') === 'yes') {
 			// ContactsStore API is supported and feature is enabled
@@ -425,10 +437,8 @@ class Application extends App {
 		return false;
 	}
 
-	public static function getServerType() {
+	public static function getServerType()
+	{
 		return \OC::$server->getConfig()->getAppValue('ojsxc', Config::XMPP_SERVER_TYPE, self::INTERNAL);
 	}
-
-
-
 }
