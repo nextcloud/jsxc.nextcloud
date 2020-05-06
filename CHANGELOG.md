@@ -17,7 +17,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - [#139](https://github.com/jsxc/jsxc/issues/139) follow personal start setting
 
 ### Misc
-- update JSXC to v4.1.0-rc.1 ([change log](https://github.com/jsxc/jsxc/blob/master/CHANGELOG.md))
+- update JSXC to v4.1.0-rc.2 ([change log](https://github.com/jsxc/jsxc/blob/master/CHANGELOG.md))
 - change dev structure
 - use fully-qualifier class name
 - move app file to lib
