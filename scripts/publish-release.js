@@ -6,6 +6,7 @@ require('colors').setTheme({
 
 const fs = require('fs');
 const path = require('path');
+const https = require('https');
 const { Octokit } = require('@octokit/rest');
 const execa = require('execa');
 const inquirer = require('inquirer');
