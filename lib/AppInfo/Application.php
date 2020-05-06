@@ -50,7 +50,7 @@ class Application extends App
 		$container = $this->getContainer();
 
 		/** @var $config \OCP\IConfig */
-		$configManager = $container->query('OCP\IConfig');
+		$configManager = $container->query(\OCP\IConfig::class);
 
 		self::$config['polling'] = $configManager->getSystemValue(
 			'ojsxc.polling',
@@ -78,7 +78,7 @@ class Application extends App
 				$c->query('MessageHandler'),
 				$c->query('Host'),
 				$this->getLock(),
-				$c->query('OCP\ILogger'),
+				$c->query(\OCP\ILogger::class),
 				$c->query('PresenceHandler'),
 				$c->query('PresenceMapper'),
 				file_get_contents("php://input"),
@@ -94,7 +94,7 @@ class Application extends App
 				$c->query('AppName'),
 				$c->query('Request'),
 				$c->query('Config'),
-				$c->query('OCP\IUserManager'),
+				$c->query(\OCP\IUserManager::class),
 				\OC::$server->getUserSession()
 			);
 		});
@@ -103,10 +103,10 @@ class Application extends App
 			return new ExternalApiController(
 				$c->query('AppName'),
 				$c->query('Request'),
-				$c->query('OCP\IUserManager'),
-				$c->query('OCP\IUserSession'),
-				$c->query('OCP\IGroupManager'),
-				$c->query('OCP\ILogger')
+				$c->query(\OCP\IUserManager::class),
+				$c->query(\OCP\IUserSession::class),
+				$c->query(\OCP\IGroupManager::class),
+				$c->query(\OCP\ILogger::class)
 			);
 		});
 
@@ -114,13 +114,13 @@ class Application extends App
 			return new ManagedServerController(
 				$c->query('AppName'),
 				$c->query('Request'),
-				$c->query('OCP\IURLGenerator'),
+				$c->query(\OCP\IURLGenerator::class),
 				$c->query('Config'),
-				$c->query('OCP\IUserSession'),
-				$c->query('OCP\ILogger'),
+				$c->query(\OCP\IUserSession::class),
+				$c->query(\OCP\ILogger::class),
 				$c->query('DataRetriever'),
-				$c->query('OCP\Security\ISecureRandom'),
-				$c->query('OCP\App\IAppManager'),
+				$c->query(\OCP\Security\ISecureRandom::class),
+				$c->query(\OCP\App\IAppManager::class),
 				'https://xmpp.jsxc.ch/registration'
 			);
 		});
@@ -140,7 +140,7 @@ class Application extends App
 		$container->registerService('ExternalApiMiddleware', function (IContainer $c) {
 			return new ExternalApiMiddleware(
 				$c->query('Request'),
-				$c->query('OCP\IConfig'),
+				$c->query(\OCP\IConfig::class),
 				$c->query('RawRequest')
 			);
 		});
@@ -193,8 +193,8 @@ class Application extends App
 			return new IQ(
 				$c->query('UserId'),
 				$c->query('Host'),
-				$c->query('OCP\IUserManager'),
-				$c->query('OCP\IConfig'),
+				$c->query(\OCP\IUserManager::class),
+				$c->query(\OCP\IConfig::class),
 				$c->query('UserProvider')
 			);
 		});
@@ -214,7 +214,7 @@ class Application extends App
 				$c->query('Host'),
 				$c->query('MessageMapper'),
 				$c->query('UserProvider'),
-				$c->query('OCP\ILogger')
+				$c->query(\OCP\ILogger::class)
 			);
 		});
 
@@ -233,7 +233,7 @@ class Application extends App
 		$container->registerService('Config', function (IContainer $c) {
 			return new Config(
 				$c->query('AppName'),
-				$c->query('OCP\IConfig')
+				$c->query(\OCP\IConfig::class)
 			);
 		});
 
@@ -274,11 +274,11 @@ class Application extends App
 		$container->registerService('UserProvider', function (IContainer $c) {
 			if (self::contactsStoreApiSupported()) {
 				return new ContactsStoreUserProvider(
-					$c->query('OCP\Contacts\ContactsMenu\IContactsStore'),
+					$c->query(\OCP\Contacts\ContactsMenu\IContactsStore::class),
 					$c->query('ServerContainer')->getUserSession(),
 					$c->query('ServerContainer')->getUserManager(),
-					$c->query('OCP\IGroupManager'),
-					$c->query('OCP\IConfig')
+					$c->query(\OCP\IGroupManager::class),
+					$c->query(\OCP\IConfig::class)
 				);
 			} else {
 				return new UserManagerUserProvider(
@@ -301,7 +301,7 @@ class Application extends App
 
 		$container->registerService('ServerSharingCommand', function ($c) {
 			return new ServerSharing(
-				$c->query('OCP\IConfig')
+				$c->query(\OCP\IConfig::class)
 			);
 		});
 
@@ -335,8 +335,8 @@ class Application extends App
 		$container->registerService('OCA\OJSXC\Migration\RefreshRoster', function (IContainer $c) {
 			return new RefreshRosterMigration(
 				$c->query('RosterPush'),
-				$c->query('OCP\IConfig'),
-				$c->query('OCP\ILogger')
+				$c->query(\OCP\IConfig::class),
+				$c->query(\OCP\ILogger::class)
 			);
 		});
 
@@ -372,7 +372,7 @@ class Application extends App
 		// default
 		return new DbLock(
 			$c->query('UserId'),
-			$c->query('OCP\IConfig'),
+			$c->query(\OCP\IConfig::class),
 			$c->getServer()->getDatabaseConnection()
 		);
 	}
