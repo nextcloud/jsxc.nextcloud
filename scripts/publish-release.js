@@ -37,7 +37,7 @@ async function isRepoClean() {
         throw 'Repo not clean. Found staged files.';
     }
 
-    if (status.modified.length > 0) {
+    if (status.modified.length > 2 || !status.modified.includes('package.json') || !status.modified.includes('appinfo/info.xml')) {
         throw 'Repo not clean. Found modified files.';
     }
 
@@ -163,7 +163,7 @@ function hasChangeLogEntry() {
         fs.readFile(path.join(__dirname, '..', 'CHANGELOG.md'), function (err, data) {
             if (err) throw err;
 
-            if (!data.includes(`## ${package.version}`)) {
+            if (!data.includes(`## ${package.version}`) && package.version.match(/^\d+\.\d+\.\d+$/)) {
                 throw `Found no change log entry for ${package.version}`;
             }
 
@@ -381,10 +381,10 @@ async function run() {
     await pull();
     console.log('✔ pulled latest changes'.green);
 
-    // await isRepoClean();
+    await isRepoClean();
     console.log('✔ repo is clean'.green);
 
-    // await notAlreadyTagged();
+    await notAlreadyTagged();
     console.log('✔ not already tagged'.green);
 
     await lastCommitNotBuild();
@@ -398,6 +398,8 @@ async function run() {
 
     changeLog = await editChangeLog(changeLog);
     console.log('✔ change log updated'.green);
+
+    console.log(changeLog);
 
     console.log('Press any key to continue...');
     await keypress();
