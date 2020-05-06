@@ -248,7 +248,7 @@ function printRadioInput($key, $value, $required=true) {
 					<input type="text" name="<?php p($_['externalServices']['name']); ?>" value="<?php p($external); ?>" pattern="^(https://)?([\w\d*][\w\d-]*)(\.[\w\d-]+)+(:[\d]+)?$" />
 					<?php endforeach;?>
 					<button class="add-input">+</button>
-					<em>All domains of additional services JSXC should be able to contact, e.g., your XMPP server's http file upload service. <a href="#" id="insert-upload-service">Insert upload services automatically</a>.</em>
+					<em>All domains of additional services JSXC should be able to contact, e.g., your XMPP server's http file upload service.</em>
 				</div>
 			</div>
 		</fieldset>
