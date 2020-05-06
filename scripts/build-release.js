@@ -35,6 +35,7 @@ async function createRelease() {
   console.log('✔ build created'.green);
 
   let filePath = await createArchive('ojsxc-' + version);
+  console.log(`✔ wrote archive`.green);
 
   await createNextcloudSignature(filePath);
   console.log(`✔ created Nextcloud signature`.green);
@@ -77,39 +78,14 @@ function createBuild() {
   });
 }
 
-function createArchive(fileBaseName) {
+async function createArchive(fileBaseName) {
   let fileName = `${fileBaseName}.tar.gz`;
   let filePath = path.normalize(__dirname + `/../archives/${fileName}`);
-  let output = fs.createWriteStream(filePath);
-  let archive = require('archiver')('tar', {
-    gzip: true,
-  });
+  let files = ['appinfo/', 'css/', 'img/', 'js/', 'lib/', 'templates/', 'LICENSE'];
 
-  archive.on('warning', function (err) {
-    if (err.code === 'ENOENT') {
-      console.warn('Archive warning: '.warn, err);
-    } else {
-      throw err;
-    }
-  });
+  await execa('tar', ['-czhf', filePath, `--transform=s,^,ojsxc/,`, ...files]);
 
-  archive.on('error', function (err) {
-    throw err;
-  });
-
-  archive.pipe(output);
-
-  archive.directory('dist/', 'ojsxc');
-
-  return new Promise(resolve => {
-    output.on('close', function () {
-      console.log(`✔ wrote ${archive.pointer()} bytes to ${fileName}`.green);
-
-      resolve(filePath);
-    });
-
-    archive.finalize();
-  });
+  return filePath;
 }
 
 function createNextcloudSignature(filePath) {

@@ -24,3 +24,4 @@ tests/bootstrap-config.development.php
 .phpunit.result.cache
 bootstrap-config.development.php
 /.env
+js/bundle.js
