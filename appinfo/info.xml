@@ -3,7 +3,17 @@
    <id>ojsxc</id>
    <name>JavaScript XMPP Chat</name>
    <summary>Facebook-like chat</summary>
-   <description>Facebook-like chat with end-to-end encrypted conversation, video calls, multi-user rooms, XMPP and internal server backend.</description>
+   <description><![CDATA[**💬 Facebook-like chat for Nextcloud**
+
+* **🌎 XMPP based** federated chat protocol
+* **🤝 Groups** multi-user conversation
+* **🛩️ File transfer** send and receive files
+* **📺 Video calls** without plugins
+* **🔔 Notifications** don't miss a single message
+* **🔐 End-to-End encryption** protect your messages
+
+*This app works best with a external XMPP server.*
+    ]]></description>
    <version>4.1.0-rc.3</version>
    <licence>agpl</licence>
    <author mail="klaus@jsxc.org">Klaus Herberth</author>
