@@ -53,7 +53,7 @@
     "webpack-cli": "^3.1.2"
   },
   "dependencies": {
-    "@jsxc/jsxc": "^4.0.0-rc.2",
+    "@jsxc/jsxc": "^4.1.0",
     "jquery": "^3.5.1",
     "libsignal-protocol": "https://github.com/signalapp/libsignal-protocol-javascript",
     "tslint": "^6.1.0",
