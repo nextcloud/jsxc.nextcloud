@@ -51,6 +51,13 @@ export default class Bootstrap {
          return;
       }
 
+      JSXC.jQuery(document).on('ajaxSend', function(_elm, xhr, settings) {
+         if (settings.crossDomain === false) {
+            xhr.setRequestHeader('requesttoken', OC.requestToken);
+            xhr.setRequestHeader('OCS-APIREQUEST', 'true');
+         }
+      });
+
       this.initJSXC();
       this.addWatcher();
       this.addAlternativeLogin();
