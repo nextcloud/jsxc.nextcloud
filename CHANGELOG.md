@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+
+## 4.1.0 (2020-05-15)
 ### Added
 - bump max nc version to 19
 - ship with own version of jquery
@@ -17,7 +19,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - [#139](https://github.com/jsxc/jsxc/issues/139) follow personal start setting
 
 ### Misc
-- update JSXC to v4.1.0-rc.3 ([change log](https://github.com/jsxc/jsxc/blob/master/CHANGELOG.md))
+- update JSXC to v4.1.0 ([change log](https://github.com/jsxc/jsxc/blob/master/CHANGELOG.md))
 - change dev structure
 - use fully-qualifier class name
 - move app file to lib
