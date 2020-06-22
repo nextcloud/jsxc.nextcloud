@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## 4.1.1 (2020-06-22)
+### Misc
+- update JSXC to v4.1.1 ([change log](https://github.com/jsxc/jsxc/blob/master/CHANGELOG.md))
+- update dependencies
+
 ## 4.1.0 (2020-05-15)
 ### Added
 - bump max nc version to 19
