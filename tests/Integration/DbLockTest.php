@@ -1,8 +1,8 @@
 <?php
-namespace OCA\OJSXC;
+namespace OCA\OJSXC\Tests\Integration;
 
 use OCP\AppFramework\Db\DoesNotExistException;
-use Test\TestCase;
+use PHPUnit\Framework\TestCase;
 use OCA\OJSXC\AppInfo\Application;
 use OCA\OJSXC\DbLock;
 

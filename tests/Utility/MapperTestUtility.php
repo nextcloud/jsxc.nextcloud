@@ -1,13 +1,14 @@
 <?php
 
-namespace OCA\OJSXC\Utility;
+namespace OCA\OJSXC\Tests\Utility;
 
 use OCA\OJSXC\AppInfo\Application;
 
 /**
  * @group DB
  */
-class MapperTestUtility extends TestCase {
+class MapperTestUtility extends TestCase
+{
 
 	/**
 	 * @var \OCP\AppFramework\IAppContainer
@@ -26,7 +27,7 @@ class MapperTestUtility extends TestCase {
 	{
 		parent::setUp();
 		$app = new Application();
-		$this->overwriteApplicationService($app, 'Host','localhost');
+		$this->overwriteApplicationService($app, 'Host', 'localhost');
 		$this->overwriteApplicationService($app, 'UserId', 'admin');
 		$this->container = $app->getContainer();
 		$this->mapper = $this->container[$this->mapperName];
@@ -38,18 +39,21 @@ class MapperTestUtility extends TestCase {
 		$con->executeQuery('DELETE FROM ' . $this->mapper->getTableName());
 	}
 
-	protected function tearDown(): void {
+	protected function tearDown(): void
+	{
 		$con = $this->container->getServer()->getDatabaseConnection();
 		$con->executeQuery('DELETE FROM ' . $this->mapper->getTableName());
 	}
 
-	protected function fetchAll(){
+	protected function fetchAll()
+	{
 		$con = $this->container->getServer()->getDatabaseConnection();
 		$stmt = $con->executeQuery('SELECT * FROM ' . $this->mapper->getTableName());
 		$entities = [];
 
-		while($row = $stmt->fetch()){
-			$entities[] = call_user_func($this->entityName . '::fromRow', $row);;
+		while ($row = $stmt->fetch()) {
+			$entities[] = call_user_func($this->entityName . '::fromRow', $row);
+			;
 		}
 
 		$stmt->closeCursor();
@@ -57,7 +61,8 @@ class MapperTestUtility extends TestCase {
 		return $entities;
 	}
 
-	protected function fetchAllAsArray($tableName = null){
+	protected function fetchAllAsArray($tableName = null)
+	{
 		if (is_null($tableName)) {
 			$tableName = $this->mapper->getTableName();
 		} else {
@@ -66,7 +71,7 @@ class MapperTestUtility extends TestCase {
 		$stmt = $con->executeQuery('SELECT * FROM ' . $tableName);
 
 		$result = [];
-		while($row = $stmt->fetch()){
+		while ($row = $stmt->fetch()) {
 			$result[] = $row;
 		}
 		$stmt->closeCursor();
@@ -74,9 +79,8 @@ class MapperTestUtility extends TestCase {
 		return $result;
 	}
 
-	public function getLastInsertedId() {
+	public function getLastInsertedId()
+	{
 		return $this->container->getServer()->getDatabaseConnection()->lastInsertId();
-
 	}
-
 }

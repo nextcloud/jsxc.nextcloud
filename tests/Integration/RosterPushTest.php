@@ -1,6 +1,6 @@
 <?php
 
-namespace OCA\OJSXC;
+namespace OCA\OJSXC\Tests\Integration;
 
 use OCA\OJSXC\AppInfo\Application;
 use OCA\OJSXC\Db\IQRosterPushMapper;

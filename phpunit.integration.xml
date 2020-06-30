@@ -2,21 +2,16 @@
          convertErrorsToExceptions="true"
          convertNoticesToExceptions="true"
          convertWarningsToExceptions="true"
+         colors="true"
 >
     <testsuites>
         <testsuite name="integration">
-            <directory>./tests/integration</directory>
+            <directory>tests/Integration</directory>
         </testsuite>
     </testsuites>
     <filter>
         <whitelist processUncoveredFilesFromWhitelist="true">
-            <directory suffix=".php">lib/db</directory>
-            <file>lib/dblock.php</file>
-            <file>lib/memlock.php</file>
-            <file>lib/User.php</file>
-            <file>lib/ContactsStoreUserProvider.php</file>
-            <file>lib/UserManagerUserProvider.php</file>
-            <file>lib/rosterpush.php</file>
+            <directory suffix=".php">lib</directory>
         </whitelist>
     </filter>
 </phpunit>

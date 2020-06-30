@@ -1,8 +1,8 @@
 <?php
-namespace OCA\OJSXC;
+namespace OCA\OJSXC\Tests\Integration;
 
 use OCP\AppFramework\Db\DoesNotExistException;
-use Test\TestCase;
+use PHPUnit\Framework\TestCase;
 use OCA\OJSXC\AppInfo\Application;
 use OCA\OJSXC\MemLock;
 
@@ -43,11 +43,6 @@ class MemLockTest extends TestCase
 		parent::setUp();
 		$app = new Application();
 		$this->container = $app->getContainer();
-
-		$version = \OC::$server->getSession()->get('OC_Version');
-		if ($version[0] === 8 && $version[1] == 0) {
-			$this->markTestSkipped();
-		}
 	}
 
 	/**
@@ -62,7 +57,8 @@ class MemLockTest extends TestCase
 		if ($cache->isAvailable()) {
 			$this->memCache = $cache->create('ojsxc');
 		} else {
-			die('No memcache available');
+			$this->markTestSkipped();
+			return;
 		}
 
 		$this->memLock = new MemLock(

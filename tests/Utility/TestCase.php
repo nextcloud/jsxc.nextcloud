@@ -1,22 +1,22 @@
 <?php
 
-namespace OCA\OJSXC\Utility;
+namespace OCA\OJSXC\Tests\Utility;
 
 use OCA\OJSXC\AppInfo\Application;
 use OCP\AppFramework\Db\Entity;
 use Sabre\Xml\Service;
-use Test\TestCase as CoreTestCase;
+use PHPUnit\Framework\TestCase as CoreTestCase;
 
-class TestCase extends CoreTestCase {
-
-	public static function assertSabreXmlEqualsXml($expected, $actual) {
+class TestCase extends CoreTestCase
+{
+	public static function assertSabreXmlEqualsXml($expected, $actual)
+	{
 		$service = new Service();
 
 		$parsedExpected = $service->parse("<?xml version=\"1.0\" encoding=\"utf-8\"?><unit-wrapper>" . $expected . "</unit-wrapper>");
 		$parsedActual = $service->parse("<?xml version=\"1.0\" encoding=\"utf-8\"?><unit-wrapper>" . $actual . "</unit-wrapper>");
 
 		self::assertEquals($parsedExpected, $parsedActual, 'Failed asserting that two XML strings are equal.');
-
 	}
 
 	/**
@@ -24,7 +24,8 @@ class TestCase extends CoreTestCase {
 	 * @param Entity[] $actual
 	 * @param array $fields Use camelCase for this instead of snake_case!
 	 */
-	public static function assertObjectDbResultsEqual($expected, $actual, array $fields) {
+	public static function assertObjectDbResultsEqual($expected, $actual, array $fields)
+	{
 		$expectedArray = [];
 		$actualArray = [];
 
@@ -39,7 +40,8 @@ class TestCase extends CoreTestCase {
 		self::assertArrayDbResultsEqual($expectedArray, $actualArray, $fields);
 	}
 
-	public static function assertArrayDbResultsEqual(array $expected, array $actual, array $fields) {
+	public static function assertArrayDbResultsEqual(array $expected, array $actual, array $fields)
+	{
 		$expectedFiltered = [];
 		$actualFiltered = [];
 
@@ -64,10 +66,10 @@ class TestCase extends CoreTestCase {
 
 		self::assertCount(count($expected), $actual);
 		self::assertEquals($expectedFiltered, $actualFiltered);
-
 	}
 
-	public function overwriteApplicationService(Application $app, $name, $newService) {
+	public function overwriteApplicationService(Application $app, $name, $newService)
+	{
 		$app->getContainer()->registerService($name, function () use ($newService) {
 			return $newService;
 		});
@@ -79,12 +81,12 @@ class TestCase extends CoreTestCase {
 	 * @param $name
 	 * @param $newValue
 	 */
-	public function setValueOfPrivateProperty($obj, $name, $newValue) {
+	public function setValueOfPrivateProperty($obj, $name, $newValue)
+	{
 		$refl = new \ReflectionObject($obj);
 		$p = $refl->getProperty($name);
 		$p->setAccessible(true);
 		$p->setValue($obj, $newValue);
 		$p->setAccessible(false);
 	}
-
 }

@@ -1,11 +1,11 @@
 <?php
 
-namespace OCA\OJSXC\Db;
+namespace OCA\OJSXC\Tests\Integration\Db;
 
 use OCA\OJSXC\AppInfo\Application;
 use OCA\OJSXC\Db\Presence as PresenceEntity;
 use OCA\OJSXC\NewContentContainer;
-use OCA\OJSXC\Utility\MapperTestUtility;
+use OCA\OJSXC\Tests\Utility\MapperTestUtility;
 use OCA\DAV\AppInfo\Application as DavApp;
 
 $time = 0;

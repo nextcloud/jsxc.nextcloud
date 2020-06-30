@@ -1,6 +1,6 @@
 <?php
 
-namespace OCA\OJSXC;
+namespace OCA\OJSXC\Tests\Integration;
 
 use OC\Contacts\ContactsMenu\ContactsStore;
 use OCA\DAV\CardDAV\AddressBookImpl;
@@ -15,7 +15,7 @@ use OCA\DAV\AppInfo\Application as DavApp;
 use OCA\DAV\CardDAV\CardDavBackend;
 use PHPUnit\Framework\Constraint\IsEqual;
 use Sabre\VObject\Component\VCard;
-use OCA\OJSXC\Utility\TestCase;
+use OCA\OJSXC\Tests\Utility\TestCase;
 
 class ContactsStoreUserProviderTest extends TestCase
 {

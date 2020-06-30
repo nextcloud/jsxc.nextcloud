@@ -1,8 +1,8 @@
 <?php
 
-namespace OCA\OJSXC\Db;
+namespace OCA\OJSXC\Tests\Integration\Db;
 
-use OCA\OJSXC\Utility\MapperTestUtility;
+use OCA\OJSXC\Tests\Utility\MapperTestUtility;
 use OCP\AppFramework\Db\DoesNotExistException;
 
 /**
