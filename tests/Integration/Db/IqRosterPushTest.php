@@ -3,6 +3,7 @@ namespace OCA\OJSXC\Tests\Integration\Db;
 
 use Sabre\Xml\Writer;
 use OCA\OJSXC\Tests\Utility\TestCase;
+use OCA\OJSXC\Db\IQRosterPush;
 
 class IqRosterPushTest extends TestCase
 {

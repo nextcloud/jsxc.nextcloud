@@ -4,6 +4,7 @@ namespace OCA\OJSXC\Tests\Integration\Db;
 
 use OCA\OJSXC\Tests\Utility\MapperTestUtility;
 use OCP\AppFramework\Db\DoesNotExistException;
+use OCA\OJSXC\Db\Stanza;
 
 /**
  * @group DB

@@ -7,6 +7,7 @@ use Sabre\Xml\Writer;
 use Sabre\Xml\LibXMLException;
 use Sabre\Xml\ParseException;
 use OCA\OJSXC\Tests\Utility\TestCase;
+use OCA\OJSXC\Db\Presence;
 
 class PresenceTest extends TestCase
 {

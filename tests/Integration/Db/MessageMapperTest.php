@@ -3,6 +3,7 @@
 namespace OCA\OJSXC\Tests\Integration\Db;
 
 use OCA\OJSXC\AppInfo\Application;
+use OCA\OJSXC\Db\Message;
 use OCA\OJSXC\Tests\Utility\MapperTestUtility;
 use OCP\AppFramework\Db\DoesNotExistException;
 
