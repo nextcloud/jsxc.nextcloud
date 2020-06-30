@@ -7,12 +7,6 @@ use OCA\OJSXC\Db\Message;
 use OCA\OJSXC\Tests\Utility\MapperTestUtility;
 use OCP\AppFramework\Db\DoesNotExistException;
 
-function uniqid()
-{
-	return 4; // chosen by fair dice roll.
-			  // guaranteed to be unique.
-}
-
 /**
  * @group DB
  */
@@ -52,6 +46,7 @@ class MessageMapperTest extends MapperTestUtility
 	public function testInsert($from, $to, $data, $type, $msg, $expectedStanza)
 	{
 		$stanza = new Message();
+		$stanza->setAttrId('4-msg');
 		$stanza->setFrom($from[0]);
 		$stanza->setTo($to[0]);
 		$stanza->setStanza($data);
@@ -103,6 +98,7 @@ class MessageMapperTest extends MapperTestUtility
 		// when the username doesn't contain a @ the domain is removed and stored as such in the DB
 		// the resulting stanza then contains the full JID
 		$stanza1 = new Message();
+		$stanza->setAttrId('4');
 		$stanza1->setFrom('jan');
 		$stanza1->setTo('john');
 		$stanza1->setType('test');
@@ -110,6 +106,7 @@ class MessageMapperTest extends MapperTestUtility
 		$this->mapper->insert($stanza1);
 
 		$stanza2 = new Message();
+		$stanza2->setAttrId('5');
 		$stanza2->setFrom('thomas');
 		$stanza2->setTo('jan');
 		$stanza2->setType('test2');
@@ -124,14 +121,14 @@ class MessageMapperTest extends MapperTestUtility
 		// check findByTo
 		$result = $this->mapper->findByTo('john');
 		$this->assertCount(1, $result);
-		$this->assertEquals('<message to="john@localhost/internal" from="jan@localhost/internal" type="test" xmlns="jabber:client" id="4-msg">Messageabc</message>', $result[0]->getStanza());
+		$this->assertEquals('<message to="john@localhost/internal" from="jan@localhost/internal" type="test" xmlns="jabber:client" id="4">Messageabc</message>', $result[0]->getStanza());
 
 		// check if element is deleted
 		$result = $this->fetchAll();
 		$this->assertCount(1, $result);
 		$this->assertEquals($stanza2->getUnSanitizedFrom(), $result[0]->getFrom());
 		$this->assertEquals($stanza2->getUnSanitizedTo(), $result[0]->getTo());
-		$this->assertEquals('<message to="jan" from="thomas" type="test2" xmlns="jabber:client" id="4-msg">Message</message>', $result[0]->getStanza()); // notice that the username isn't replaced by the JID since this tis the task of hte findByTo method
+		$this->assertEquals('<message to="jan" from="thomas" type="test2" xmlns="jabber:client" id="5">Message</message>', $result[0]->getStanza()); // notice that the username isn't replaced by the JID since this tis the task of hte findByTo method
 	}
 
 	public function testFindByToFoundWithAtSign()
@@ -139,6 +136,7 @@ class MessageMapperTest extends MapperTestUtility
 		// when the username does contain a @ the domain is removed and stored as such in the DB, but with the @ still
 		// in the username, the resulting stanza then contains the full JID
 		$stanza1 = new Message();
+		$stanza1->setAttrId('4-msg');
 		$stanza1->setFrom('jan@localhost.com');
 		$stanza1->setTo('john@localhost.com');
 		$stanza1->setStanza('abcd1');
@@ -147,6 +145,7 @@ class MessageMapperTest extends MapperTestUtility
 		$this->mapper->insert($stanza1);
 
 		$stanza2 = new Message();
+		$stanza2->setAttrId('4-msg');
 		$stanza2->setFrom('thomas@localhost.com');
 		$stanza2->setTo('jan@localhost.com');
 		$stanza2->setStanza('abcd2');
@@ -162,13 +161,13 @@ class MessageMapperTest extends MapperTestUtility
 		// check findByTo
 		$result = $this->mapper->findByTo('john@localhost.com');
 		$this->assertCount(1, $result);
-		$this->assertEquals('<message to="john_ojsxc_esc_at_localhost.com@localhost/internal" from="jan_ojsxc_esc_at_localhost.com@localhost/internal" type="test" xmlns="jabber:client" id="4-msg">Messageabc</message>', $result[0]->getStanza());
+		$this->assertXmlStringEqualsXmlString('<message to="john_ojsxc_esc_at_localhost.com@localhost/internal" from="jan_ojsxc_esc_at_localhost.com@localhost/internal" type="test" xmlns="jabber:client" id="4-msg">Messageabc</message>', $result[0]->getStanza());
 
 		// check if element is deleted
 		$result = $this->fetchAll();
 		$this->assertCount(1, $result);
 		$this->assertEquals($stanza2->getFrom(), $result[0]->getFrom());
 		$this->assertEquals($stanza2->getTo(), $result[0]->getTo());
-		$this->assertEquals('<message to="jan_ojsxc_esc_at_localhost.com" from="thomas_ojsxc_esc_at_localhost.com" type="test2" xmlns="jabber:client" id="4-msg">Message</message>', $result[0]->getStanza());
+		$this->assertXmlStringEqualsXmlString('<message to="jan_ojsxc_esc_at_localhost.com" from="thomas_ojsxc_esc_at_localhost.com" type="test2" xmlns="jabber:client" id="4-msg">Message</message>', $result[0]->getStanza());
 	}
 }

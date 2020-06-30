@@ -75,7 +75,7 @@ class IQRosterPush extends Stanza implements XmlSerializable
 				'attributes' => [
 					'to' => $this->to,
 					'type' => 'set',
-					'id' => uniqid()
+					'id' => $this->attrId !== null ? $this->attrId : uniqid(),
 				],
 				'value' => [[
 					'name' => 'query',

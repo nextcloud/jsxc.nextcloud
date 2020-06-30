@@ -566,26 +566,6 @@ class PresenceMapperTest extends MapperTestUtility
 		];
 	}
 
-	/**
-	 * @dataProvider  setActiveProvider
-	 */
-	public function testSetActive($inputs, $expected)
-	{
-		global $time;
-
-		foreach ($inputs as $input) {
-			$this->mapper->setPresence($input);
-		}
-		$time = 1010;
-		$this->mapper->setActive('admin');
-		$time = 1020;
-		$this->mapper->setActive('derp');
-
-		$result = $this->fetchAllAsArray();
-
-		$this->assertArrayDbResultsEqual($expected, $result, ['userid', 'last_active', 'presence']);
-	}
-
 	public function deletePresenceProvider()
 	{
 		$input1 = new PresenceEntity();

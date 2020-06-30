@@ -16,6 +16,7 @@ use Sabre\Xml\XmlSerializable;
  * for inserting into the stanza table
  * @method string getStanza()
  * @method void setStanza($stanza)
+ * @method void setAttrId(string $id)
  */
 class Stanza extends Entity implements XmlSerializable
 {
@@ -23,6 +24,11 @@ class Stanza extends Entity implements XmlSerializable
 	{
 		$this->setStanza($stanza);
 	}
+
+	/**
+	 * @var string
+	 */
+	public $attrId;
 
 	/**
 	 * @var string $to The sanitized userId of the recipient of this stanza.

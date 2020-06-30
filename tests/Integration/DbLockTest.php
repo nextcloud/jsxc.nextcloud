@@ -56,8 +56,6 @@ class DbLockTest extends TestCase
 	 */
 	public function testLock()
 	{
-		global $time;
-		$time = 4;
 		$this->dbLock = new DbLock(
 			'john',
 			$this->container->getServer()->getConfig(),
@@ -69,11 +67,8 @@ class DbLockTest extends TestCase
 		$this->assertEquals($result[0]['userid'], 'john');
 		$this->assertEquals($result[0]['appid'], 'ojsxc');
 		$this->assertEquals($result[0]['configkey'], 'longpolling');
-		$this->assertEquals($result[0]['configvalue'], '4');
 		$this->assertTrue($this->dbLock->stillLocked());
 
-
-		$time = 5;
 		$this->dbLock2 = new DbLock(
 			'john',
 			$this->container->getServer()->getConfig(),
@@ -88,7 +83,6 @@ class DbLockTest extends TestCase
 		$this->assertEquals($result[0]['userid'], 'john');
 		$this->assertEquals($result[0]['appid'], 'ojsxc');
 		$this->assertEquals($result[0]['configkey'], 'longpolling');
-		$this->assertEquals($result[0]['configvalue'], '5');
 		$this->assertTrue($this->dbLock2->stillLocked());
 	}
 

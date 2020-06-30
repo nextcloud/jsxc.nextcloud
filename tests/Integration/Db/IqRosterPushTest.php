@@ -9,14 +9,13 @@ class IqRosterPushTest extends TestCase
 {
 	public function testIqRoster()
 	{
-		$expected = '<body xmlns="http://jabber.org/protocol/httpbind"><iq to="jan@localhost" type="set" id="4"><query xmlns="jabber:iq:roster"><item jid="john@localhost" name="john" subscription="both"></item></query></iq></body>';
-
 		$writer = new Writer();
 		$writer->openMemory();
 		$writer->startElement('body');
 		$writer->writeAttribute('xmlns', 'http://jabber.org/protocol/httpbind');
 
 		$iqRosterPush = new IQRosterPush();
+		$iqRosterPush->setAttrId('4');
 		$iqRosterPush->setJid('john', 'localhost');
 		$iqRosterPush->setTo('jan', 'localhost');
 		$iqRosterPush->setName('john');
@@ -33,6 +32,8 @@ class IqRosterPushTest extends TestCase
 		$writer->endElement();
 		$result = $writer->outputMemory();
 
-		$this->assertEquals($expected, $result);
+		$expected = '<body xmlns="http://jabber.org/protocol/httpbind"><iq to="jan@localhost" type="set" id="4"><query xmlns="jabber:iq:roster"><item jid="john@localhost" name="john" subscription="both"></item></query></iq></body>';
+
+		$this->assertXmlStringEqualsXmlString($expected, $result);
 	}
 }

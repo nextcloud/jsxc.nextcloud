@@ -1,13 +1,5 @@
 <?php
 
-namespace  OCA\OJSXC\Db {
-	function uniqid()
-	{
-		return 4; // chosen by fair dice roll.
-		// guaranteed to be unique.
-	}
-}
-
 namespace OCA\OJSXC\Http {
 
 	use OCA\OJSXC\Db\Message;
@@ -25,6 +17,7 @@ namespace OCA\OJSXC\Http {
 			$stanza1->setStanza('abc');
 
 			$stanza2 = new Message();
+			$stanza2->setAttrId('4-msg');
 			$stanza2->setFrom('test', 'test.be');
 			$stanza2->setTo('test.be');
 			$stanza2->setStanza('abc');

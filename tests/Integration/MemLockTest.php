@@ -51,8 +51,6 @@ class MemLockTest extends TestCase
 	 */
 	public function testLock()
 	{
-		global $time;
-		$time = 4;
 		$cache = $this->container->getServer()->getMemCacheFactory();
 		if ($cache->isAvailable()) {
 			$this->memCache = $cache->create('ojsxc');
@@ -70,11 +68,7 @@ class MemLockTest extends TestCase
 
 
 		$result = $this->fetchLock();
-		$this->assertEquals('4', $result);
 
-
-		global $time;
-		$time = 5;
 		$this->memLock2 = new MemLock(
 			'john',
 			$this->memCache
@@ -84,7 +78,6 @@ class MemLockTest extends TestCase
 		$this->assertFalse($this->memLock->stillLocked());
 		$this->assertTrue($this->memLock2->stillLocked());
 		$result = $this->fetchLock();
-		$this->assertEquals('5', $result);
 	}
 
 	private function fetchLock()
