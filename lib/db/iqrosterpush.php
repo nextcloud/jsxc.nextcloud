@@ -56,6 +56,19 @@ class IQRosterPush extends Stanza implements XmlSerializable
 
 	public function xmlSerialize(Writer $writer)
 	{
+		$item = [
+			"name" => "item",
+			"attributes" => [
+				"jid" => $this->jid,
+				"subscription" => $this->subscription
+			],
+			"value" => ''
+		];
+
+		if ($this->name !== null) {
+			$item['attributes']['name'] = $this->name;
+		}
+
 		$writer->write([
 			[
 				'name' => 'iq',
@@ -69,15 +82,7 @@ class IQRosterPush extends Stanza implements XmlSerializable
 					'attributes' => [
 						'xmlns' => 'jabber:iq:roster',
 					],
-					'value' => [
-						"name" => "item",
-						"attributes" => [
-							"jid" => $this->jid,
-							"name" => $this->name,
-							"subscription" => $this->subscription
-						],
-						"value" => ''
-					]
+					'value' => $item,
 				]]
 			]
 		]);
