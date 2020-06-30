@@ -69,19 +69,17 @@ class MessageMapperTest extends MapperTestUtility
 		$this->assertEquals(null, $result[0]->getType()); // type is saved into the XML string, not the DB.
 	}
 
-	/**
-	 * @expectedException \OCP\AppFramework\Db\DoesNotExistException
-	 */
 	public function testFindByToNotFound()
 	{
+		$this->expectedException(\OCP\AppFramework\Db\DoesNotExistException::class);
+
 		$this->mapper->findByTo('test');
 	}
 
-	/**
-	 * @expectedException \OCP\AppFramework\Db\DoesNotExistException
-	 */
 	public function testFindByToNotFound2()
 	{
+		$this->expectedException(\OCP\AppFramework\Db\DoesNotExistException::class);
+
 		$stanza = new Message();
 		$stanza->setFrom('john', 'localhost');
 		$stanza->setTo('john', 'localhost');
