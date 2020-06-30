@@ -4,25 +4,33 @@ sudo: false
 language: php
 php:
   - 7.2
+  - 7.3
+  - 7.4
 
 services:
   - mysql
+  - postgresql
 
 env:
   global:
-      # test with different DB's and PHP versions against NC master version.
-      # Test minimum PHP version against NC stable branches.
-    - BRANCH=stable18
+    - BRANCH=stable19
+    - DB=mysql
+    - LINT=false
 
 matrix:
   include:
-    - env: DB=sqlite
+    - php: 7.2
+      env: DB=sqlite
     - php: 7.3
       env: DB=sqlite
+    - php: 7.4
+      env: DB=sqlite LINT=true
     - env: DB=pgsql
-    - env: DB=mysql
-    # - env: DB=mysql BRANCH=stable16
-    # - env: DB=mysql BRANCH=stable17
+    - env: BRANCH=stable17
+    - env: BRANCH=stable18
+    - env: BRANCH=master
+  allow_failures:
+    - env: BRANCH=master
 
 
 install:
@@ -35,7 +43,8 @@ script:
   - ./vendor/bin/phpunit -c phpunit.xml --coverage-clover=unit-coverage.xml
   - ./vendor/bin/phpunit -c phpunit.integration.xml --coverage-clover=integration-coverage.xml
   - cat ../../data/nextcloud.log
-#  - rm -rf vendor/ && ../../occ app:check-code ojsxc
+  - if [[ "$LINT" = 'true' ]]; vendor/bin/php-cs-fixer fix --dry-run; fi
+  - rm -rf vendor/ && ../../occ app:check-code ojsxc || true
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
