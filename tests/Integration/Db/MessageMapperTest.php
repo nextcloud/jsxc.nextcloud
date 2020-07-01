@@ -71,14 +71,14 @@ class MessageMapperTest extends MapperTestUtility
 
 	public function testFindByToNotFound()
 	{
-		$this->expectedException(\OCP\AppFramework\Db\DoesNotExistException::class);
+		$this->expectException(\OCP\AppFramework\Db\DoesNotExistException::class);
 
 		$this->mapper->findByTo('test');
 	}
 
 	public function testFindByToNotFound2()
 	{
-		$this->expectedException(\OCP\AppFramework\Db\DoesNotExistException::class);
+		$this->expectException(\OCP\AppFramework\Db\DoesNotExistException::class);
 
 		$stanza = new Message();
 		$stanza->setFrom('john', 'localhost');
@@ -96,7 +96,7 @@ class MessageMapperTest extends MapperTestUtility
 		// when the username doesn't contain a @ the domain is removed and stored as such in the DB
 		// the resulting stanza then contains the full JID
 		$stanza1 = new Message();
-		$stanza->setAttrId('4');
+		$stanza1->setAttrId('4');
 		$stanza1->setFrom('jan');
 		$stanza1->setTo('john');
 		$stanza1->setType('test');

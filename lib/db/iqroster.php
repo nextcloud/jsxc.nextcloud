@@ -12,8 +12,8 @@ use Sabre\Xml\XmlSerializable;
  * Class IQRoster
  *
  * @package OCA\OJSXC\Db
- * @method void setType($type)
- * @method void setQid($qid)
+ * @method void setType(string $type)
+ * @method void setQid(string $qid)
  * @method void setItems(array $items)
  * @method string getType()
  * @method string getQid()

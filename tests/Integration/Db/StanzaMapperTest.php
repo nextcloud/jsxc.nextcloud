@@ -61,14 +61,14 @@ class StanzaMapperTest extends MapperTestUtility
 
 	public function testFindByToNotFound()
 	{
-		$this->expectedException(\OCP\AppFramework\Db\DoesNotExistException::class);
+		$this->expectException(\OCP\AppFramework\Db\DoesNotExistException::class);
 
 		$this->mapper->findByTo('test');
 	}
 
 	public function testFindByToNotFound2()
 	{
-		$this->expectedException(\OCP\AppFramework\Db\DoesNotExistException::class);
+		$this->expectException(\OCP\AppFramework\Db\DoesNotExistException::class);
 
 		$stanza = new Stanza();
 		$stanza->setFrom('john@localhost');

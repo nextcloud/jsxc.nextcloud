@@ -15,17 +15,16 @@ class IqRosterTest extends TestCase
 		$writer->writeAttribute('xmlns', 'http://jabber.org/protocol/httpbind');
 
 		$iqRoster = new IQRoster();
-		$iqRoster->setAttrId('4');
 		$iqRoster->setType('result');
 		$iqRoster->setTo('john', 'localhost');
-		$iqRoster->setQid(4434);
+		$iqRoster->setQid('4434');
 		$iqRoster->addItem('test@test.be', 'Test Test');
 		$iqRoster->addItem('test2@test.be', 'Test2 Test');
 
 		$this->assertEquals('result', $iqRoster->getType());
 		$this->assertEquals('john', $iqRoster->getUnSanitizedTo());
 		$this->assertEquals('john@localhost', $iqRoster->to);
-		$this->assertEquals(4434, $iqRoster->getQid());
+		$this->assertEquals('4434', $iqRoster->getQid());
 		$this->assertEquals([
 			[
 				"name" => "item",
@@ -52,7 +51,7 @@ class IqRosterTest extends TestCase
 		$writer->endElement();
 		$result = $writer->outputMemory();
 
-		$expected = '<body xmlns="http://jabber.org/protocol/httpbind"><iq to="john@localhost" type="result" id="4"><query xmlns="jabber:iq:roster"><item jid="test@test.be" name="Test Test" subscription="both"></item><item jid="test2@test.be" name="Test2 Test" subscription="both"></item></query></iq></body>';
+		$expected = '<body xmlns="http://jabber.org/protocol/httpbind"><iq to="john@localhost" type="result" id="4434"><query xmlns="jabber:iq:roster"><item jid="test@test.be" name="Test Test" subscription="both"></item><item jid="test2@test.be" name="Test2 Test" subscription="both"></item></query></iq></body>';
 
 		$this->assertXmlStringEqualsXmlString($expected, $result);
 	}

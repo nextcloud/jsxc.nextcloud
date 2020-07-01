@@ -477,44 +477,6 @@ class PresenceMapperTest extends MapperTestUtility
 		];
 	}
 
-	/**
-	 * @dataProvider updatePresenceProvider
-	 * @param PresenceEntity[] $inputs
-	 * @param array $expInput
-	 * @param array $expConnectedUsers
-	 * @param PresenceEntity[] $expNewContent
-	 * @param int $expNewContentCount
-	 * @param array $expStanzasToSend
-	 */
-	public function testUpdatePresence($inputs, $expInput, $expConnectedUsers, $expNewContent, $expNewContentCount, $expStanzasToSend)
-	{
-		$this->setupContactsStoreAPI();
-		global $time;
-		$time = 1000;
-		foreach ($inputs as $input) {
-			$this->mapper->setPresence($input);
-		}
-		$this->assertArrayDbResultsEqual($expInput, $this->fetchAllAsArray(), ['userid', 'presence', 'last_active']);
-
-		$connectedUsers = $this->mapper->getConnectedUsers();
-		sort($expConnectedUsers);
-		sort($connectedUsers);
-		$this->assertEquals($expConnectedUsers, $connectedUsers); // before cleaning
-
-		$this->mapper->updatePresence();
-
-		$this->assertEquals($expNewContentCount, $this->newContentContainer->getCount());
-		$newContent = $this->newContentContainer->getStanzas();
-		sort($expNewContent);
-		sort($newContent);
-		$this->assertObjectDbResultsEqual($expNewContent, $newContent, ['userid', 'presence', 'lastActive', 'to', 'from']);
-		$this->assertEquals(0, $this->newContentContainer->getCount()); // stanzas will be removed once fetched
-
-		$stanzasToSend = $this->fetchAllAsArray('*PREFIX*ojsxc_stanzas');
-
-		$this->assertArrayDbResultsEqual($expStanzasToSend, $stanzasToSend, ['to', 'from', 'stanza']);
-	}
-
 	public function setActiveProvider()
 	{
 		$input1 = new PresenceEntity();
