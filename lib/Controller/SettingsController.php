@@ -59,12 +59,13 @@ class SettingsController extends Controller
 
 		if ($serverType === Application::INTERNAL) {
 			$serverHost = $this->request->getServerHost();
+			$domain = parse_url($serverHost)['host'];
 
 			$data['xmpp'] = [
-				'defaultDomain' => $serverHost,
+				'defaultDomain' => $domain,
 				'url' => \OC::$server->getURLGenerator()->linkToRouteAbsolute('ojsxc.http_bind.index'),
 				'node' => $currentUID,
-				'domain' => $serverHost,
+				'domain' => $domain,
 				'resource' => 'internal'
 			];
 
