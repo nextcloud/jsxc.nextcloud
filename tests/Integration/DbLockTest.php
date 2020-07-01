@@ -6,14 +6,6 @@ use PHPUnit\Framework\TestCase;
 use OCA\OJSXC\AppInfo\Application;
 use OCA\OJSXC\DbLock;
 
-$time = 0;
-
-function time()
-{
-	global $time;
-	return $time;
-}
-
 /**
  * @group DB
  */
@@ -78,6 +70,7 @@ class DbLockTest extends TestCase
 
 		$this->assertFalse($this->dbLock->stillLocked());
 		$this->assertTrue($this->dbLock2->stillLocked());
+
 		$result = $this->fetchLocks();
 		$this->assertCount(1, $result);
 		$this->assertEquals($result[0]['userid'], 'john');

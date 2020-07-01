@@ -3,7 +3,6 @@
 namespace OCA\OJSXC;
 
 use OCP\IConfig;
-
 use OCP\IDBConnection;
 
 /**
@@ -24,7 +23,7 @@ class DbLock implements ILock
 	private $userId;
 
 	/**
-	 * @var int $pollingId
+	 * @var string $pollingId
 	 */
 	private $pollingId;
 
@@ -38,7 +37,7 @@ class DbLock implements ILock
 	{
 		$this->userId = $userId;
 		$this->config = $config;
-		$this->pollingId = time();
+		$this->pollingId = microtime();
 		$this->con = $con;
 	}
 
@@ -56,6 +55,6 @@ class DbLock implements ILock
 		$q = $this->con->prepare($sql);
 		$q->execute([$this->userId]);
 		$r = $q->fetch();
-		return (int)$r['configvalue'] === (int)$this->pollingId;
+		return $r['configvalue'] === $this->pollingId;
 	}
 }

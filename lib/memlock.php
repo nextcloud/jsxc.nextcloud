@@ -23,7 +23,7 @@ class MemLock implements ILock
 	private $userId;
 
 	/**
-	 * @var int $pollingId
+	 * @var string $pollingId
 	 */
 	private $pollingId;
 
@@ -37,7 +37,7 @@ class MemLock implements ILock
 	{
 		$this->userId = $userId;
 		$this->memcache = $cache;
-		$this->pollingId = time();
+		$this->pollingId = microtime();
 	}
 
 	public function setLock()
