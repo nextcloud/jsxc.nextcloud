@@ -28,9 +28,11 @@ matrix:
     - env: DB=pgsql
     - env: BRANCH=stable17
     - env: BRANCH=stable18
-    - env: BRANCH=master
+    - php: 7.4
+      env: BRANCH=master
   allow_failures:
-    - env: BRANCH=master
+    - php: 7.4
+      env: BRANCH=master
 
 
 install:
