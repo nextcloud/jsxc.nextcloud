@@ -11,7 +11,8 @@ class DataRetriever implements IDataRetriever
 			  'method' => 'POST',
 			  'ignore_errors' => '1',
 			  'header' => 'Content-type: application/x-www-form-urlencoded',
-			  'content' => http_build_query($data)
+			  'content' => http_build_query($data),
+			  'timeout' => 120,
 		  ]
 	  ]);
 

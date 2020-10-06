@@ -129,7 +129,7 @@ function printRadioInput($key, $value, $required=true) {
 
 				<div class="ojsxc-managed-registration <?php if($_['managedServer'] === 'registered'){echo 'hidden';} ?>">
 					<p class="text">In order to create a managed XMPP server for you, we will send the following information to
-						our registration server. The set-up process will take about 20-30 seconds.</p>
+						our registration server. The set-up process will take about 1-2 minutes.</p>
 
 					<div class="form-group">
 						<label>API URL</label>
