@@ -2,6 +2,32 @@
 $font-sans: Arial, sans-serif;
 $font-serif: serif;
 
+:root {
+  --jsxc-color-main-text: var(--color-main-text);
+  --jsxc-color-main-background: var(--color-main-background);
+  --jsxc-color-main-background-translucent: var(--color-main-background-translucent);
+  --jsxc-color-background-hover: var(--color-background-hover);
+  --jsxc-color-background-dark: var(--color-background-dark);
+  --jsxc-color-background-darker: var(--color-background-darker);
+  --jsxc-color-placeholder-light: var(--color-placeholder-light);
+  --jsxc-color-placeholder-dark: var(--color-placeholder-dark);
+  --jsxc-color-primary: var(--color-primary);
+  --jsxc-color-primary-light: var(--color-primary-light);
+  --jsxc-color-primary-text: var(--color-primary-text);
+  --jsxc-color-primary-text-dark: var(--color-primary-text-dark);
+  --jsxc-color-error: var(--color-error);
+  --jsxc-color-warning: var(--color-warning);
+  --jsxc-color-success: var(--color-success);
+  --jsxc-color-text-maxcontrast: var(--color-text-maxcontrast);
+  --jsxc-color-text-light: var(--color-text-light);
+  --jsxc-color-text-lighter: var(--color-text-lighter);
+  --jsxc-color-loading-light: var(--color-loading-light);
+  --jsxc-color-loading-dark: var(--color-loading-dark);
+  --jsxc-color-box-shadow: var(--color-box-shadow);
+  --jsxc-color-border: var(--color-border);
+  --jsxc-color-border-dark: var(--color-border-dark);
+}
+
 $window-bar-bg: #0082c9;
 $window-bar-color: #c0dff1;
 $window-bar-color-hover: #fff;
