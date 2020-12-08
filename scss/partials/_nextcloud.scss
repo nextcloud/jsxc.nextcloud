@@ -42,8 +42,7 @@
 @media (min-width: 768px) {
 
   #content,
-  #content-wrapper,
-  #filestable>thead {
+  #content-wrapper {
     padding-right: 0;
     transition: padding-right 0.5s;
   }
@@ -67,8 +66,7 @@
   .jsxc-roster-shown {
 
     #content,
-    #content-wrapper,
-    #filestable>thead {
+    #content-wrapper {
       padding-right: 210px;
     }
 
