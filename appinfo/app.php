@@ -29,7 +29,7 @@ addScript($urlGenerator->linkTo('ojsxc', 'js/jsxc/jsxc.bundle.js') . $versionHas
 addScript($urlGenerator->linkTo('ojsxc', 'js/bundle.js') . $versionHashSuffix);
 
 // workaround to overwrite localStorage.clear
-\OC_Util::addScript( 'ojsxc', 'overwriteClearStorage', true );
+\OCP\Util::addScript( 'ojsxc', 'overwriteClearStorage', true );
 
 \OCP\Util::addStyle ( 'ojsxc', '../js/jsxc/styles/jsxc.bundle' );
 \OCP\Util::addStyle ( 'ojsxc', 'bundle' );
