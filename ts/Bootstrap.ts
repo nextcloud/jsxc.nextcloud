@@ -59,8 +59,11 @@ export default class Bootstrap {
       });
 
       this.initJSXC();
-      this.addWatcher();
-      this.addAlternativeLogin();
+
+      if (OC.generateUrl('/login') === window.location.pathname) {
+         this.addWatcher();
+         this.addAlternativeLogin();
+      }
 
       injectChatIcon(this.jsxc.toggleRoster);
       armXMPPSchemaHandler(this.jsxc.executeXMPPUri);
