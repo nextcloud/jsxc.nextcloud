@@ -83,6 +83,7 @@ export default class Bootstrap {
          RTCPeerConfig: {
             url: OC.generateUrl('apps/ojsxc/settings/iceServers')
          },
+         automaticallyRestoreAccounts: window.location.pathname.indexOf(OC.generateUrl('/login')) !== 0,
       });
 
       //For debugging
