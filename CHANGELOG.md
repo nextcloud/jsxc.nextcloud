@@ -6,6 +6,30 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## 4.2.0 (2020-12-13)
+### Added
+- update JSXC to 4.2.0 ([changelog](https://github.com/jsxc/jsxc/blob/master/CHANGELOG.md))
+- use Nextcloud color scheme
+- bump max Nextcloud version to 20
+
+### Fixed
+- [#159](https://github.com/nextcloud/jsxc.nextcloud/issues/159) do not restore accounts on login page
+- add chat login only to main login page
+- fix roster space for files table
+- fix correct use of ocp/util
+- increase timeout to register managed server
+- fix hosts with custom port
+- fix fast repeating locks
+- [jsxc/jsxc#916](https://github.com/jsxc/jsxc/issues/916) fix null xml attribute
+
+### Misc
+- run tests with master and php 7.4
+- update ci to bionic
+- replace deprecated annotations
+- fix integration tests with random values
+- add missing imports
+- update composer dependencies
+
 ## 4.1.1 (2020-06-22)
 ### Misc
 - update JSXC to v4.1.1 ([change log](https://github.com/jsxc/jsxc/blob/master/CHANGELOG.md))
