@@ -6,6 +6,15 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## 4.2.1 (2020-12-28)
+### Fixed
+- fix undefined host key
+- fix undefined array key
+- fix chat icon injection
+
+### Misc
+- update JSXC to 4.2.1 ([changelog](https://github.com/jsxc/jsxc/blob/master/CHANGELOG.md))
+
 ## 4.2.0 (2020-12-13)
 ### Added
 - update JSXC to 4.2.0 ([changelog](https://github.com/jsxc/jsxc/blob/master/CHANGELOG.md))
