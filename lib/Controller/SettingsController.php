@@ -59,7 +59,11 @@ class SettingsController extends Controller
 
 		if ($serverType === Application::INTERNAL) {
 			$serverHost = $this->request->getServerHost();
-			$domain = parse_url($serverHost)['host'];
+			$domain = parse_url($serverHost, PHP_URL_HOST);
+
+			if ($domain === null) {
+				$domain = !empty($serverHost) ? $serverHost : 'jsxc.nextcloud';
+			}
 
 			$data['xmpp'] = [
 				'defaultDomain' => $domain,
