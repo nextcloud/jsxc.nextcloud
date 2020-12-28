@@ -83,7 +83,7 @@ class IQ extends StanzaHandler
 			return $iqRoster;
 		} elseif ($stanza['value'][0]['name'] === '{http://jabber.org/protocol/pubsub}pubsub') {
 			$id = $stanza['attributes']['id'];
-			$from = $stanza['attributes']['from'] || $this->userId;
+			$from = \array_key_exists('from', $stanza['attributes']) ? $stanza['attributes']['from'] : $this->userId;
 
 			$iq = new IQNotImplemented();
 			$iq->setTo($from);
