@@ -97,7 +97,7 @@ class RosterPushTest extends TestCase
 			->method('createOrUpdateRosterItem')
 			->with($user3);
 
-		$resultStatement = $this->getMockBuilder('OCP\DB\IResult')->getMock();
+		$resultStatement = interface_exists('OCP\DB\IResult') ? $this->getMockBuilder('OCP\DB\IResult')->getMock() : $this->getMockBuilder('Doctrine\DBAL\Driver\ResultStatement')->getMock();
 
 		$resultStatement->expects($this->at(0))
 			->method('fetchAll')
