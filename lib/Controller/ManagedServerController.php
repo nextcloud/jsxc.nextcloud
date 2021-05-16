@@ -135,7 +135,7 @@ class ManagedServerController extends Controller
 		$this->config->setAppValue(Config::MANAGED_SERVER_STATUS, 'registered');
 		$this->config->setAppValue(Config::EXTERNAL_SERVICES, implode('|', $responseJSON->externalServices));
 
-		$this->config->setAppValue(Config::ICE_URL, implode(', ', $responseJSON->iceServers->urls));
+		$this->config->setAppValue(Config::ICE_URL, implode(', ', is_array($responseJSON->iceServers->urls) ? $responseJSON->iceServers->urls : []));
 		$this->config->setAppValue(Config::ICE_USERNAME, $responseJSON->iceServers->username);
 		$this->config->setAppValue(Config::ICE_SECRET, $responseJSON->iceServers->credential);
 		$this->config->setAppValue(Config::ICE_CREDENTIAL, '');
