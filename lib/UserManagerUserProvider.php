@@ -68,13 +68,13 @@ class UserManagerUserProvider implements IUserProvider
 	public function hasUserForUser(User $user1, User $user2)
 	{
 		// since we don't have access to the ContactsStore, we don't apply the enhancement privacy rules.
-		$this->hasUser($user2);
+		return $this->hasUser($user2);
 	}
 
 	public function hasUserForUserByUID($uid1, $uid2)
 	{
 		// since we don't have access to the ContactsStore, we don't apply the enhancement privacy rules.
-		$this->hasUserByUID($uid2);
+		return $this->hasUserByUID($uid2);
 	}
 
 	public function isUserExcluded($userId)

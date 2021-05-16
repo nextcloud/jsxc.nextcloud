@@ -64,10 +64,10 @@ class Stanza extends Entity implements XmlSerializable
 	 * Sets the to user as a `user`.
 	 *
 	 * @see setFullTo
-	 * @param $userId
-	 * @param null $host_and_or_resource
+	 * @param string $userId
+	 * @param string $host_and_or_resource
 	 */
-	public function setTo($userId, $host_and_or_resource = null)
+	public function setTo($userId, ?string $host_and_or_resource = null)
 	{
 		if (is_array($userId)) {
 			// support mapFromRow
@@ -87,9 +87,9 @@ class Stanza extends Entity implements XmlSerializable
 	 *
 	 * @see setFullFrom
 	 * @param $userId
-	 * @param null $host_and_or_resource
+	 * @param string $host_and_or_resource
 	 */
-	public function setFrom($userId, $host_and_or_resource = null)
+	public function setFrom($userId, ?string $host_and_or_resource = null)
 	{
 		if (is_array($userId)) {
 			// support mapFromRow

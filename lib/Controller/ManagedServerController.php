@@ -23,8 +23,9 @@ class ManagedServerController extends Controller
 	private $userSession;
 	private $logger;
 	private $dataRetriever;
-	private $registrationUrl;
 	private $random;
+	private $appManager;
+	private $registrationUrl;
 
 	public function __construct(
 		$appName,

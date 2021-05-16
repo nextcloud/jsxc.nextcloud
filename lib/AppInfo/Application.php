@@ -30,11 +30,11 @@ use OCA\OJSXC\Hooks;
 use OCA\OJSXC\UserManagerUserProvider;
 use OCA\OJSXC\ContactsStoreUserProvider;
 use OCA\OJSXC\Config;
-use OCP\AppFramework\App;
 use OCP\IContainer;
 use OCP\IRequest;
 use OCP\IUserBackend;
 use OCA\OJSXC\Migration\MigrateConfig;
+use OCP\AppFramework\App;
 
 class Application extends App
 {

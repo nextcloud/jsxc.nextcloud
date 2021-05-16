@@ -13,7 +13,7 @@ class MemLock implements ILock
 {
 
 	/**
-	 * @var \OCP\ICache $memcache
+	 * @var ICache $memcache
 	 */
 	private $memcache;
 
@@ -43,7 +43,7 @@ class MemLock implements ILock
 	public function setLock()
 	{
 		$this->memcache->remove('-' . $this->userId . '-ojxsc-lock');
-		$this->memcache->add('-' . $this->userId . '-ojxsc-lock', $this->pollingId);
+		$this->memcache->set('-' . $this->userId . '-ojxsc-lock', $this->pollingId);
 	}
 
 	/**

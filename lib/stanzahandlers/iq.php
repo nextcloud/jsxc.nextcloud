@@ -53,7 +53,7 @@ class IQ extends StanzaHandler
 
 	/**
 	 * @param array $stanza
-	 * @return Stanza
+	 * @return Stanza|null
 	 * @throws TerminateException
 	 */
 	public function handle(array $stanza)

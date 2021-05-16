@@ -58,18 +58,16 @@ class HttpBindController extends Controller
 	 */
 	private $messageHandler;
 
-	/**
-	 * @var Body request body
-	 */
+	/** @var string */
 	private $body;
 
 	/**
-	 * @var SleepTime
+	 * @var int SleepTime
 	 */
 	private $sleepTime;
 
 	/**
-	 * @var SleepTime
+	 * @var int
 	 */
 	private $maxCicles;
 
@@ -245,7 +243,7 @@ class HttpBindController extends Controller
 
 	/**
 	 * @param $stanza
-	 * @return int
+	 * @return int|null
 	 * @codeCoverageIgnore
 	 */
 	private function getStanzaType($stanza)

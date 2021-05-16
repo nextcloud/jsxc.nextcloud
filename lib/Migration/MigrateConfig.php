@@ -3,6 +3,7 @@
 namespace OCA\OJSXC\Migration;
 
 use OCA\OJSXC\Config;
+use OCP\ILogger;
 use OCP\Migration\IOutput;
 use OCP\Migration\IRepairStep;
 
@@ -14,7 +15,7 @@ class MigrateConfig implements IRepairStep
 	private $config;
 
 	/**
-	 * @param IConfig $config
+	 * @param Config $config
 	 * @param ILogger $logger
 	 */
 	public function __construct(Config $config)

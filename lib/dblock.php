@@ -27,6 +27,9 @@ class DbLock implements ILock
 	 */
 	private $pollingId;
 
+	/** @var IDBConnection */
+	private $con;
+
 	/**
 	 * DbLock constructor.
 	 *

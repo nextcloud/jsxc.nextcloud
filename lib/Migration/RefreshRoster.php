@@ -64,7 +64,7 @@ class RefreshRoster implements IRepairStep
 		 * We want only to refresh the rosters if this app was installed before,
 		 * since only then the rosters can be outdated.
 		 */
-		if ($this->config->getAppValue('ojsxc', 'installed_version', null) !== null
+		if ($this->config->getAppValue('ojsxc', 'installed_version') !== ''
 			&& Application::getServerType() === Application::INTERNAL) {
 			$stats = $this->rosterPush->refreshRoster();
 			$output->info("Updated " . $stats["updated"] . " roster items");

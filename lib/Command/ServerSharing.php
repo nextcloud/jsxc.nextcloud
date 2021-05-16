@@ -8,7 +8,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class serversharing extends Command
+class ServerSharing extends Command
 {
 
 	/**
@@ -33,14 +33,9 @@ class serversharing extends Command
 
 	protected function execute(InputInterface $input, OutputInterface $output)
 	{
-		if (\OCP\Util::getVersion()[0] < 13) {
-			$output->write('This feature is only supported in Nextcloud 13 or later.', true);
-			return;
-		}
-
 		if (Application::getServerType() !== 'internal') {
 			$output->write('This feature is only supported using the internal backend.', true);
-			return;
+			return 0;
 		}
 
 		$enable = $input->getOption('enable');
@@ -53,13 +48,13 @@ class serversharing extends Command
 				$state = 'disabled';
 			}
 			$output->write('This feature is currently ' . $state, true);
-			return;
+			return 0;
 		}
 
 		if ($enable === $disable) {
 			// if both enable and disable passed or none option
 			$output->write('Please provide only --enable or --disable', true);
-			return;
+			return 1;
 		}
 
 
@@ -72,5 +67,7 @@ class serversharing extends Command
 			$this->config->setAppValue('ojsxc', 'use_server_sharing_settings', 'no');
 			$output->write('Successfully disabled.', true);
 		}
+
+		return 0;
 	}
 }

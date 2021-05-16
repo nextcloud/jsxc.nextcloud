@@ -50,5 +50,7 @@ class RefreshRoster extends Command
 		$stats = $this->rosterPush->refreshRoster();
 		$output->writeln("Updated " . $stats["updated"] . " roster items");
 		$output->writeln("Removed " . $stats["removed"] . " roster items");
+
+		return 0;
 	}
 }
