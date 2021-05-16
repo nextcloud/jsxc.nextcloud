@@ -8,7 +8,7 @@
         "friendsofphp/php-cs-fixer": "^2.14"
     },
     "scripts": {
-        "test": "phpunit --configuration phpunit.xml --fail-on-warning",
+        "test": "phpunit --configuration phpunit.xml",
         "cs:check": "php-cs-fixer fix --dry-run --diff",
         "cs:fix": "php-cs-fixer fix",
         "lint": "find . -name \\*.php -not -path './vendor/*' -exec php -l \"{}\" \\;"
