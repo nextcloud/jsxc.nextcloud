@@ -4,7 +4,6 @@ namespace OCA\OJSXC;
 
 use OCA\OJSXC\Db\Message;
 use OCA\OJSXC\Db\Stanza;
-//use PHPUnit_Framework_TestCase;
 use PHPUnit\Framework\TestCase;
 
 class NewContentContainerTest extends TestCase

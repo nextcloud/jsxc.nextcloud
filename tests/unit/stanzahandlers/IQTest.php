@@ -1,16 +1,16 @@
 <?php
 
-namespace OCA\OJSXC\StanzaHandlers;
+namespace OCA\OJSXC\Tests\Unit\StanzaHandlers;
 
 use OCA\OJSXC\Db\IQRoster;
 use OCA\OJSXC\Exceptions\TerminateException;
 use OCA\OJSXC\IUserProvider;
+use OCA\OJSXC\StanzaHandlers\IQ;
 use OCA\OJSXC\User;
 use OCP\IConfig;
 use PHPUnit\Framework\TestCase;
 use OCP\IUserManager;
 use PHPUnit_Framework_MockObject_MockObject;
-use PHPUnit_Framework_TestCase;
 
 class IQTest extends TestCase
 {
@@ -50,9 +50,10 @@ class IQTest extends TestCase
 	{
 		$this->host = 'localhost';
 		$this->userId = 'john';
-		$this->userManager = $this->getMockBuilder('OCP\IUserManager')->disableOriginalConstructor()->getMock();
-		$this->config = $this->getMockBuilder('OCP\IConfig')->disableOriginalConstructor()->getMock();
-		$this->userProvider = $this->getMockBuilder('OCA\OJSXC\IUserProvider')->disableOriginalConstructor()->getMock();
+		$this->userManager = $this->getMockBuilder(IUserManager::class)->getMock();
+		$this->config = $this->getMockBuilder(IConfig::class)->getMock();
+		$this->userProvider = $this->getMockBuilder(IUserProvider::class)->getMock();
+
 		$this->iq = new IQ($this->userId, $this->host, $this->userManager, $this->config, $this->userProvider);
 	}
 
