@@ -58,9 +58,9 @@ class HooksTest extends TestCase
 	public function setUp(): void
 	{
 		/** @var IUserManager */
-		$this->userManager = $this->getMockBuilder(IUserManager::class)->setMethods(['listen', 'registerBackend', 'getBackends', 'removeBackend', 'clearBackends', 'get', 'userExists', 'checkPassword', 'search', 'searchDisplayName', 'createUser', 'createUserFromBackend', 'countUsers', 'callForAllUsers', 'countDisabledUsers', 'countSeenUsers', 'callForSeenUsers', 'getByEmail'])->getMock();
+		$this->userManager = $this->getMockBuilder(IUserManager::class)->getMock();
 		/** @var IUserSession */
-		$this->userSession = $this->getMockBuilder(IUserSession::class)->setMethods(['listen', 'login', 'logout', 'setUser', 'getUser', 'isLoggedIn', 'getImpersonatingUserID', 'setImpersonatingUserID'])->getMock();
+		$this->userSession = $this->getMockBuilder(IUserSession::class)->getMock();
 		/** @var RosterPush */
 		$this->rosterPush = $this->getMockBuilder(RosterPush::class)->disableOriginalConstructor()->getMock();
 		/** @var PresenceMapper */
@@ -68,7 +68,7 @@ class HooksTest extends TestCase
 		/** @var StanzaMapper */
 		$this->stanzaMapper = $this->getMockBuilder(StanzaMapper::class)->disableOriginalConstructor()->getMock();
 		/** @var IGroupManager */
-		$this->groupManager = $this->getMockBuilder(IGroupManager::class)->disableOriginalConstructor()->setMethods(['listen', 'isBackendUsed', 'addBackend', 'clearBackends', 'get', 'groupExists', 'createGroup', 'search', 'getUserGroups', 'getUserGroupIds', 'displayNamesInGroup', 'isAdmin', 'isInGroup', 'getBackends'])->getMock();
+		$this->groupManager = $this->getMockBuilder(IGroupManager::class)->disableOriginalConstructor()->getMock();
 
 		$this->hooks = new Hooks(
 			$this->userManager,
