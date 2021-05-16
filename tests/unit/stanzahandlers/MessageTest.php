@@ -7,7 +7,6 @@ use PHPUnit\Framework\TestCase;
 use OCA\OJSXC\Db\MessageMapper;
 use OCA\OJSXC\IUserProvider;
 use OCP\ILogger;
-use PHPUnit_Framework_TestCase;
 use PHPUnit_Framework_MockObject_MockObject;
 
 class MessageTest extends TestCase

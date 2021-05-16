@@ -57,6 +57,3 @@ jobs:
     - name: Run unit tests
       working-directory: nextcloud/apps/ojsxc
       run: composer run test
-    - name: Run integration tests
-      working-directory: nextcloud/apps/ojsxc
-      run: composer run test:integration
