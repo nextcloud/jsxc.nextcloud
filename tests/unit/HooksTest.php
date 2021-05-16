@@ -1,17 +1,20 @@
 <?php
 
 
-namespace OCA\OJSXC;
+namespace OCA\OJSXC\Tests\Unit;
 
 use OCA\OJSXC\AppInfo\Application;
 use OCA\OJSXC\Db\Presence;
 use OCA\OJSXC\Db\PresenceMapper;
 use OCA\OJSXC\Db\StanzaMapper;
+use OCA\OJSXC\Hooks;
+use OCA\OJSXC\RosterPush;
 use OCP\IGroup;
+use OCP\IGroupManager;
 use OCP\IUser;
 use OCP\IUserManager;
 use OCP\IUserSession;
-use PHPUnit_Framework_MockObject_MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class HooksTest extends TestCase
@@ -23,49 +26,49 @@ class HooksTest extends TestCase
 	private $hooks;
 
 	/**
-	 * @var PHPUnit_Framework_MockObject_MockObject | IUserManager
+	 * @var MockObject
 	 */
 	private $userManager;
 
 	/**
-	 * @var PHPUnit_Framework_MockObject_MockObject | IuserSession
+	 * @var MockObject
 	 */
 	private $userSession;
 
 	/**
-	 * @var PHPUnit_Framework_MockObject_MockObject | RosterPush
+	 * @var MockObject
 	 */
 	private $rosterPush;
 
 	/**
-	 * @var PHPUnit_Framework_MockObject_MockObject | PresenceMapper
+	 * @var MockObject
 	 */
 	private $presenceMapper;
 
 	/**
-	 * @var PHPUnit_Framework_MockObject_MockObject | StanzaMapper
+	 * @var MockObject
 	 */
 	private $stanzaMapper;
 
 	/**
-	 * @var PHPUnit_Framework_MockObject_MockObject | \OCP\IGroupManager
+	 * @var MockObject
 	 */
 	private $groupManager;
 
 	public function setUp(): void
 	{
-		$this->userManager = $this->getMockBuilder('OCP\IUserManager')->setMethods(['listen', 'registerBackend', 'getBackends', 'removeBackend', 'clearBackends', 'get', 'userExists', 'checkPassword', 'search', 'searchDisplayName', 'createUser', 'createUserFromBackend', 'countUsers', 'callForAllUsers', 'countDisabledUsers', 'countSeenUsers', 'callForSeenUsers', 'getByEmail'])->getMock();
-
-		$this->userSession = $this->getMockBuilder('OCP\IUserSession')->setMethods(['listen', 'login', 'logout', 'setUser', 'getUser', 'isLoggedIn', 'getImpersonatingUserID', 'setImpersonatingUserID'])->getMock();
-
-
-		$this->rosterPush = $this->getMockBuilder('OCA\OJSXC\RosterPush')->disableOriginalConstructor()->getMock();
-
-		$this->presenceMapper = $this->getMockBuilder('OCA\OJSXC\Db\PresenceMapper')->disableOriginalConstructor()->getMock();
-
-		$this->stanzaMapper = $this->getMockBuilder('OCA\OJSXC\Db\StanzaMapper')->disableOriginalConstructor()->getMock();
-
-		$this->groupManager = $this->getMockBuilder('OCP\IGroupManager')->disableOriginalConstructor()->setMethods(['listen', 'isBackendUsed', 'addBackend', 'clearBackends', 'get', 'groupExists', 'createGroup', 'search', 'getUserGroups', 'getUserGroupIds', 'displayNamesInGroup', 'isAdmin', 'isInGroup', 'getBackends'])->getMock();
+		/** @var IUserManager */
+		$this->userManager = $this->getMockBuilder(IUserManager::class)->setMethods(['listen', 'registerBackend', 'getBackends', 'removeBackend', 'clearBackends', 'get', 'userExists', 'checkPassword', 'search', 'searchDisplayName', 'createUser', 'createUserFromBackend', 'countUsers', 'callForAllUsers', 'countDisabledUsers', 'countSeenUsers', 'callForSeenUsers', 'getByEmail'])->getMock();
+		/** @var IUserSession */
+		$this->userSession = $this->getMockBuilder(IUserSession::class)->setMethods(['listen', 'login', 'logout', 'setUser', 'getUser', 'isLoggedIn', 'getImpersonatingUserID', 'setImpersonatingUserID'])->getMock();
+		/** @var RosterPush */
+		$this->rosterPush = $this->getMockBuilder(RosterPush::class)->disableOriginalConstructor()->getMock();
+		/** @var PresenceMapper */
+		$this->presenceMapper = $this->getMockBuilder(PresenceMapper::class)->disableOriginalConstructor()->getMock();
+		/** @var StanzaMapper */
+		$this->stanzaMapper = $this->getMockBuilder(StanzaMapper::class)->disableOriginalConstructor()->getMock();
+		/** @var IGroupManager */
+		$this->groupManager = $this->getMockBuilder(IGroupManager::class)->disableOriginalConstructor()->setMethods(['listen', 'isBackendUsed', 'addBackend', 'clearBackends', 'get', 'groupExists', 'createGroup', 'search', 'getUserGroups', 'getUserGroupIds', 'displayNamesInGroup', 'isAdmin', 'isInGroup', 'getBackends'])->getMock();
 
 		$this->hooks = new Hooks(
 			$this->userManager,
@@ -77,9 +80,17 @@ class HooksTest extends TestCase
 		);
 	}
 
+	private function buildUser()
+	{
+		/** @var IUser */
+		$user = $this->getMockBuilder(IUser::class)->disableOriginalConstructor()->getMock();
+
+		return $user;
+	}
+
 	public function testOnCreateUser()
 	{
-		$user = $this->getMockBuilder('OCP\IUser')->disableOriginalConstructor()->getMock();
+		$user = $this->buildUser();
 
 		$this->rosterPush->expects($this->once())
 			->method('createOrUpdateRosterItem')
@@ -90,7 +101,7 @@ class HooksTest extends TestCase
 
 	public function testOnDeleteUser()
 	{
-		$user = $this->getMockBuilder('OCP\IUser')->disableOriginalConstructor()->getMock();
+		$user = $this->buildUser();
 
 		$user->expects($this->exactly(3))
 			->method('getUID')
@@ -114,46 +125,50 @@ class HooksTest extends TestCase
 
 	public function testOnChangeUserEnabled()
 	{
-		$user = $this->getMockBuilder('OCP\IUser')->disableOriginalConstructor()->getMock();
+		$user = $this->buildUser();
 
-		$hooks = $this->getMockBuilder('OCA\OJSXC\Hooks')->disableOriginalConstructor()->setMethods(['onCreateUser'])->getMock();
+		$hooks = $this->getMockBuilder(Hooks::class)->disableOriginalConstructor()->setMethods(['onCreateUser'])->getMock();
 
 		$hooks->expects($this->once())
 			->method('onCreateUser')
 			->with($user, '');
 
+		/** @var Hooks $hooks */
 		$hooks->onChangeUser($user, 'enabled', 'true');
 	}
 
 	public function testOnChangeUserDisabled()
 	{
-		$user = $this->getMockBuilder('OCP\IUser')->disableOriginalConstructor()->getMock();
+		$user = $this->buildUser();
 
-		$hooks = $this->getMockBuilder('OCA\OJSXC\Hooks')->disableOriginalConstructor()->setMethods(['onDeleteUser'])->getMock();
+		$hooks = $this->getMockBuilder(Hooks::class)->disableOriginalConstructor()->setMethods(['onDeleteUser'])->getMock();
 
 		$hooks->expects($this->once())
 			->method('onDeleteUser')
 			->with($user);
 
+		/** @var Hooks $hooks */
 		$hooks->onChangeUser($user, 'enabled', 'false');
 	}
 
 	public function testOnChangeUserDisplayName()
 	{
-		$user = $this->getMockBuilder('OCP\IUser')->disableOriginalConstructor()->getMock();
+		$user = $this->buildUser();
 
-		$hooks = $this->getMockBuilder('OCA\OJSXC\Hooks')->disableOriginalConstructor()->setMethods(['onCreateUser'])->getMock();
+		$hooks = $this->getMockBuilder(Hooks::class)->disableOriginalConstructor()->setMethods(['onCreateUser'])->getMock();
 
 		$hooks->expects($this->once())
 			->method('onCreateUser')
 			->with($user);
 
+		/** @var Hooks $hooks */
 		$hooks->onChangeUser($user, 'displayName', 'abc');
 	}
 
 	public function testOnAddUserToGroup()
 	{
-		$user = $this->getMockBuilder(IUser::class)->disableOriginalConstructor()->getMock();
+		$user = $this->buildUser();
+		/** @var IGroup */
 		$group = $this->getMockBuilder(IGroup::class)->disableOriginalConstructor()->getMock();
 
 		$this->rosterPush->expects($this->once())->method('createOrUpdateRosterItem')->with($user);
@@ -164,7 +179,8 @@ class HooksTest extends TestCase
 
 	public function testOnRemoveUserFromGroup()
 	{
-		$user = $this->getMockBuilder(IUser::class)->disableOriginalConstructor()->getMock();
+		$user = $this->buildUser();
+		/** @var IGroup */
 		$group = $this->getMockBuilder(IGroup::class)->disableOriginalConstructor()->getMock();
 
 		if (Application::contactsStoreApiSupported()) {
