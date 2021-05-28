@@ -197,24 +197,6 @@ class Application extends App
 				);
 			}
 		});
-
-
-		/**
-		 * Commands
-		 */
-		$container->registerService('RefreshRosterCommand', function ($c) {
-			return new RefreshRoster(
-				$c->query('ServerContainer')->getUserManager(),
-				$c->query(RosterPush::class),
-				$c->query(PresenceMapper::class)
-			);
-		});
-
-		$container->registerService('ServerSharingCommand', function ($c) {
-			return new ServerSharing(
-				$c->query(\OCP\IConfig::class)
-			);
-		});
 	}
 
 	/**
