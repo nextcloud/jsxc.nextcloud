@@ -85,7 +85,6 @@ class Message extends StanzaHandler
 			];
 		}
 		$this->type = $this->getAttribute($stanza, 'type');
-		$this->msgId = $this->getAttribute($stanza, 'id');
 
 		$message = new MessageEntity();
 		$message->setTo($this->to);
