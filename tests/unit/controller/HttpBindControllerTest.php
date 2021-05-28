@@ -1,13 +1,22 @@
 <?php
 
-namespace OCA\OJSXC\Controller;
+namespace OCA\OJSXC\Tests\Unit\Controller;
 
+use OCA\OJSXC\Controller\HttpBindController;
 use OCA\OJSXC\Db\Presence;
+use OCA\OJSXC\Db\PresenceMapper;
 use OCA\OJSXC\Db\Stanza;
+use OCA\OJSXC\Db\StanzaMapper;
 use OCA\OJSXC\Exceptions\TerminateException;
 use OCA\OJSXC\Http\XMPPResponse;
+use OCA\OJSXC\ILock;
+use OCA\OJSXC\NewContentContainer;
+use OCA\OJSXC\StanzaHandlers\IQ;
+use OCA\OJSXC\StanzaHandlers\Message;
+use OCA\OJSXC\StanzaHandlers\Presence as StanzaHandlersPresence;
 use OCA\OJSXC\StanzaLogger;
 use OCP\AppFramework\Db\DoesNotExistException;
+use OCP\IRequest;
 use PHPUnit\Framework\TestCase;
 use Sabre\Xml\Writer;
 use PHPUnit_Framework_MockObject_MockObject;
@@ -85,17 +94,29 @@ class HttpBindControllerTest extends TestCase
 	 */
 	private function setUpController($requestBody)
 	{
-		$request = $this->getMockBuilder('OCP\IRequest')->disableOriginalConstructor()->getMock();
-		$this->stanzaMapper = $this->getMockBuilder('OCA\OJSXC\Db\StanzaMapper')->disableOriginalConstructor()->getMock();
-		$this->presenceMapper = $this->getMockBuilder('OCA\OJSXC\Db\PresenceMapper')->disableOriginalConstructor()->getMock();
+		/** @var IRequest */
+		$request = $this->getMockBuilder(IRequest::class)->disableOriginalConstructor()->getMock();
 
-		$this->iqHandler = $this->getMockBuilder('OCA\OJSXC\StanzaHandlers\IQ')->disableOriginalConstructor()->getMock();
-		$this->messageHandler = $this->getMockBuilder('OCA\OJSXC\StanzaHandlers\Message')->disableOriginalConstructor()->getMock();
-		$this->presenceHandler = $this->getMockBuilder('OCA\OJSXC\StanzaHandlers\Presence')->disableOriginalConstructor()->getMock();
-		$this->lock = $this->getMockBuilder('OCA\OJSXC\ILock')->disableOriginalConstructor()->getMock();
-		$this->newContentContainer = $this->getMockBuilder('OCA\OJSXC\NewContentContainer')->disableOriginalConstructor()->getMock();
+		/** @var StanzaMapper */
+		$this->stanzaMapper = $this->getMockBuilder(StanzaMapper::class)->disableOriginalConstructor()->getMock();
 
-		$logger = \OC::$server->getLogger();
+		/** @var PresenceMapper */
+		$this->presenceMapper = $this->getMockBuilder(PresenceMapper::class)->disableOriginalConstructor()->getMock();
+
+		/** @var IQ */
+		$this->iqHandler = $this->getMockBuilder(IQ::class)->disableOriginalConstructor()->getMock();
+
+		/** @var Message */
+		$this->messageHandler = $this->getMockBuilder(Message::class)->disableOriginalConstructor()->getMock();
+
+		/** @var StanzaHandlersPresence */
+		$this->presenceHandler = $this->getMockBuilder(StanzaHandlersPresence::class)->disableOriginalConstructor()->getMock();
+
+		/** @var ILock */
+		$this->lock = $this->getMockBuilder(ILock::class)->disableOriginalConstructor()->getMock();
+
+		/** @var NewContentContainer */
+		$this->newContentContainer = $this->getMockBuilder(NewContentContainer::class)->disableOriginalConstructor()->getMock();
 
 		$this->controller = new HttpBindController(
 			'ojsxc',
@@ -104,9 +125,7 @@ class HttpBindControllerTest extends TestCase
 			$this->stanzaMapper,
 			$this->iqHandler,
 			$this->messageHandler,
-			'localhost',
 			$this->lock,
-			$logger,
 			$this->presenceHandler,
 			$this->presenceMapper,
 			$requestBody,

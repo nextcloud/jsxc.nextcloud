@@ -15,7 +15,6 @@ use OCA\OJSXC\StanzaHandlers\Presence as PresenceHandler;
 use OCA\OJSXC\StanzaLogger;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Db\DoesNotExistException;
-use OCP\ILogger;
 use OCP\IRequest;
 use Sabre\Xml\Reader;
 use Sabre\Xml\LibXMLException;
@@ -105,9 +104,7 @@ class HttpBindController extends Controller
 	 * @param StanzaMapper $stanzaMapper
 	 * @param IQ $iqHandler
 	 * @param Message $messageHandler
-	 * @param string $host
 	 * @param ILock $lock
-	 * @param ILogger $logger
 	 * @param PresenceHandler $presenceHandler
 	 * @param PresenceMapper $presenceMapper
 	 * @param string $body
@@ -122,9 +119,7 @@ class HttpBindController extends Controller
 		StanzaMapper $stanzaMapper,
 		IQ $iqHandler,
 		Message $messageHandler,
-		$host,
 		ILock $lock,
-		ILogger $logger,
 		PresenceHandler $presenceHandler,
 		PresenceMapper $presenceMapper,
 		$body,

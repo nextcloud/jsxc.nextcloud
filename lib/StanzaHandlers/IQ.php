@@ -33,6 +33,9 @@ class IQ extends StanzaHandler
 	 */
 	private $userProvider;
 
+	/** @var string */
+	private $host;
+
 	/**
 	 * IQ constructor.
 	 *
@@ -42,12 +45,13 @@ class IQ extends StanzaHandler
 	 * @param IConfig $config
 	 * @param IUserProvider $userProvider
 	 */
-	public function __construct($userId, $host, IUserManager $userManager, IConfig $config, IUserProvider $userProvider)
+	public function __construct($userId, string $host, IUserManager $userManager, IConfig $config, IUserProvider $userProvider)
 	{
-		parent::__construct($userId, $host);
+		parent::__construct($userId);
 		$this->userManager = $userManager;
 		$this->config = $config;
 		$this->userProvider = $userProvider;
+		$this->host = $host;
 	}
 
 

@@ -37,11 +37,6 @@ class Message extends StanzaHandler
 	private $values;
 
 	/**
-	 * @var string $msgId
-	 */
-	private $msgId;
-
-	/**
 	 * @var ILogger $logger
 	 */
 	private $logger;
@@ -50,13 +45,12 @@ class Message extends StanzaHandler
 	 * Message constructor.
 	 *
 	 * @param string $userId
-	 * @param string $host
 	 * @param MessageMapper $messageMapper
 	 * @param IUserProvider $userProvider
 	 */
-	public function __construct($userId, $host, MessageMapper $messageMapper, IUserProvider $userProvider, ILogger $logger)
+	public function __construct($userId, MessageMapper $messageMapper, IUserProvider $userProvider, ILogger $logger)
 	{
-		parent::__construct($userId, $host);
+		parent::__construct($userId);
 		$this->messageMapper = $messageMapper;
 		$this->userProvider = $userProvider;
 		$this->logger = $logger;

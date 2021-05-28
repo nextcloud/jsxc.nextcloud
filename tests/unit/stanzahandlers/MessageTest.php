@@ -1,11 +1,12 @@
 <?php
 
-namespace OCA\OJSXC\StanzaHandlers;
+namespace OCA\OJSXC\Tests\Unit\StanzaHandlers;
 
 use OCA\OJSXC\Db\Message as MessageEntity;
 use PHPUnit\Framework\TestCase;
 use OCA\OJSXC\Db\MessageMapper;
 use OCA\OJSXC\IUserProvider;
+use OCA\OJSXC\StanzaHandlers\Message;
 use OCP\ILogger;
 use PHPUnit_Framework_MockObject_MockObject;
 
@@ -46,10 +47,17 @@ class MessageTest extends TestCase
 	{
 		$this->host = 'localhost';
 		$this->userId = 'john';
-		$this->messageMapper = $this->getMockBuilder('OCA\OJSXC\Db\MessageMapper')->disableOriginalConstructor()->getMock();
-		$this->userProvider = $this->getMockBuilder('OCA\OJSXC\IUserProvider')->disableOriginalConstructor()->getMock();
-		$this->logger = $this->getMockBuilder('OCP\ILogger')->disableOriginalConstructor()->getMock();
-		$this->message = new Message($this->userId, $this->host, $this->messageMapper, $this->userProvider, $this->logger);
+
+		/** @var MessageMapper */
+		$this->messageMapper = $this->getMockBuilder(MessageMapper::class)->disableOriginalConstructor()->getMock();
+
+		/** @var IUserProvider */
+		$this->userProvider = $this->getMockBuilder(IUserProvider::class)->disableOriginalConstructor()->getMock();
+
+		/** @var ILogger */
+		$this->logger = $this->getMockBuilder(ILogger::class)->disableOriginalConstructor()->getMock();
+
+		$this->message = new Message($this->userId, $this->messageMapper, $this->userProvider, $this->logger);
 	}
 
 	public function messageProvider()

@@ -9,7 +9,6 @@ use OCP\IGroup;
 use OCP\IUserManager;
 
 use OCP\IUser;
-use OCP\IUserSession;
 
 class RosterPush
 {
@@ -23,13 +22,6 @@ class RosterPush
 	 * @var IQRosterPushMapper
 	 */
 	private $iqRosterPushMapper;
-
-	private $host;
-
-	/**
-	 * @var IUserSession
-	 */
-	private $userSession;
 
 	/**
 	 * @var IDBConnection
@@ -45,23 +37,17 @@ class RosterPush
 	 * RosterPush constructor.
 	 *
 	 * @param IUserManager $userManager
-	 * @param IUserSession $userSession
-	 * @param string $host
 	 * @param IQRosterPushMapper $iqRosterPushMapper
 	 * @param IDBConnection $db
 	 * @param IUserProvider $userProvider
 	 */
 	public function __construct(
 		IUserManager $userManager,
-		IUserSession $userSession,
-		$host,
 		IQRosterPushMapper $iqRosterPushMapper,
 		IDbConnection $db,
 		IUserProvider $userProvider
 	) {
 		$this->userManager = $userManager;
-		$this->userSession = $userSession;
-		$this->host = $host;
 		$this->iqRosterPushMapper = $iqRosterPushMapper;
 		$this->db = $db;
 		$this->userProvider = $userProvider;

@@ -9,18 +9,13 @@ use Sabre\Xml\Writer;
  *
  * @package OCA\OJSXC\StanzaHandlers
  */
-class StanzaHandler
+abstract class StanzaHandler
 {
 
 	/**
 	 * @var string $userId
 	 */
 	protected $userId;
-
-	/**
-	 * @var string $host
-	 */
-	protected $host;
 
 	/**
 	 * @var string $to
@@ -31,12 +26,10 @@ class StanzaHandler
 	 * StanzaHandler constructor.
 	 *
 	 * @param string 1$userId
-	 * @param string $host
 	 */
-	public function __construct($userId, $host)
+	public function __construct($userId)
 	{
 		$this->userId = $userId;
-		$this->host = $host;
 	}
 
 	/**

@@ -5,8 +5,6 @@ namespace OCA\OJSXC\StanzaHandlers;
 use OCA\OJSXC\Db\MessageMapper;
 use OCA\OJSXC\Db\PresenceMapper;
 use OCA\OJSXC\Exceptions\TerminateException;
-use Sabre\Xml\Reader;
-use Sabre\Xml\Writer;
 use OCA\OJSXC\Db\Presence as PresenceEntity;
 
 /**
@@ -31,13 +29,12 @@ class Presence extends StanzaHandler
 	 * Presence constructor.
 	 *
 	 * @param $userId
-	 * @param string $host
 	 * @param PresenceMapper $presenceMapper
 	 * @param MessageMapper $messageMapper
 	 */
-	public function __construct($userId, $host, PresenceMapper $presenceMapper, MessageMapper $messageMapper)
+	public function __construct($userId, PresenceMapper $presenceMapper, MessageMapper $messageMapper)
 	{
-		parent::__construct($userId, $host);
+		parent::__construct($userId);
 		$this->presenceMapper = $presenceMapper;
 		$this->messageMapper = $messageMapper;
 	}

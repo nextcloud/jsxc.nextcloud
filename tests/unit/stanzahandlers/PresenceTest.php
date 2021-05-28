@@ -1,9 +1,11 @@
 <?php
 
-namespace OCA\OJSXC\StanzaHandlers;
+namespace OCA\OJSXC\Tests\Unit\StanzaHandlers;
 
+use OCA\OJSXC\Db\MessageMapper;
 use OCA\OJSXC\StanzaHandlers\Presence;
 use OCA\OJSXC\Db\Presence as PresenceEntity;
+use OCA\OJSXC\Db\PresenceMapper;
 use PHPUnit\Framework\TestCase;
 use PHPUnit_Framework_MockObject_MockObject;
 
@@ -32,10 +34,14 @@ class PresenceTest extends TestCase
 	{
 		$this->host = 'localhost';
 		$this->userId = 'john';
-		$this->presenceMapper = $this->getMockBuilder('OCA\OJSXC\Db\PresenceMapper')->disableOriginalConstructor()->getMock();
-		$this->messageMapper = $this->getMockBuilder('OCA\OJSXC\Db\MessageMapper')->disableOriginalConstructor()->getMock();
 
-		$this->presence = new Presence($this->userId, $this->host, $this->presenceMapper, $this->messageMapper);
+		/** @var PresenceMapper */
+		$this->presenceMapper = $this->getMockBuilder(PresenceMapper::class)->disableOriginalConstructor()->getMock();
+
+		/** @var MessageMapper */
+		$this->messageMapper = $this->getMockBuilder(MessageMapper::class)->disableOriginalConstructor()->getMock();
+
+		$this->presence = new Presence($this->userId, $this->presenceMapper, $this->messageMapper);
 	}
 
 	public function handleProvider()

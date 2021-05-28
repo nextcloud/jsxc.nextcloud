@@ -199,25 +199,6 @@ class Application extends App
 			);
 		});
 
-		$container->registerService('PresenceHandler', function (IContainer $c) {
-			return new Presence(
-				$c->query('UserId'),
-				$c->query('Host'),
-				$c->query('PresenceMapper'),
-				$c->query('MessageMapper')
-			);
-		});
-
-		$container->registerService('MessageHandler', function (IContainer $c) {
-			return new Message(
-				$c->query('UserId'),
-				$c->query('Host'),
-				$c->query('MessageMapper'),
-				$c->query('UserProvider'),
-				$c->query(\OCP\ILogger::class)
-			);
-		});
-
 		/**
 		 * Config values
 		 */
@@ -245,29 +226,6 @@ class Application extends App
 			return new StanzaLogger(
 				$c->query('\OCP\ILogger'),
 				$c->query('UserId')
-			);
-		});
-
-
-		$container->registerService('RosterPush', function ($c) {
-			return new RosterPush(
-				$c->query('ServerContainer')->getUserManager(),
-				$c->query('ServerContainer')->getUserSession(),
-				$c->query('Host'),
-				$c->query('IQRosterPushMapper'),
-				$c->query('ServerContainer')->getDatabaseConnection(),
-				$c->query('UserProvider')
-			);
-		});
-
-		$container->registerService('UserHooks', function ($c) {
-			return new Hooks(
-				$c->query('ServerContainer')->getUserManager(),
-				$c->query('ServerContainer')->getUserSession(),
-				$c->query('RosterPush'),
-				$c->query('PresenceMapper'),
-				$c->query('StanzaMapper'),
-				$c->query('ServerContainer')->query('GroupManager')
 			);
 		});
 
@@ -302,47 +260,6 @@ class Application extends App
 		$container->registerService('ServerSharingCommand', function ($c) {
 			return new ServerSharing(
 				$c->query(\OCP\IConfig::class)
-			);
-		});
-
-		/**
-		 * A modified userID for use in OJSXC.
-		 * This is automatically made lowercase.
-		 */
-		$container->registerParameter(
-			'OJSXC_UserId',
-			self::sanitizeUserId(self::convertToRealUID($container->query('UserId')))
-		);
-
-		/**
-		 * Raw request body
-		 */
-		$container->registerService('RawRequest', function ($c) {
-			return new RawRequest();
-		});
-
-		/**
-		 * Data retriever
-		 */
-		$container->registerService('DataRetriever', function ($c) {
-			return new DataRetriever();
-		});
-
-
-		/**
-		 * Migrations
-		 */
-		$container->registerService('OCA\OJSXC\Migration\RefreshRoster', function (IContainer $c) {
-			return new RefreshRosterMigration(
-				$c->query('RosterPush'),
-				$c->query(\OCP\IConfig::class),
-				$c->query(\OCP\ILogger::class)
-			);
-		});
-
-		$container->registerService('OCA\OJSXC\Migration\MigrateConfig', function (IContainer $c) {
-			return new MigrateConfig(
-				$c->query('Config')
 			);
 		});
 	}
