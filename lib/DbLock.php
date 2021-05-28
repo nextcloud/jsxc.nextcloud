@@ -54,10 +54,8 @@ class DbLock implements ILock
 	 */
 	public function stillLocked()
 	{
-		$sql = "SELECT `configvalue` FROM `*PREFIX*preferences` WHERE `userid` = ? AND `appid`='ojsxc' AND `configkey`='longpolling'";
-		$q = $this->con->prepare($sql);
-		$q->execute([$this->userId]);
-		$r = $q->fetch();
-		return $r['configvalue'] === $this->pollingId;
+		$storedPollingId = $this->config->getUserValue($this->userId, 'ojsxc', 'longpolling');
+
+		return $storedPollingId === $this->pollingId;
 	}
 }

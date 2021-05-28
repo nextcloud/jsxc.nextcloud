@@ -30,6 +30,7 @@ use OCA\OJSXC\Hooks;
 use OCA\OJSXC\UserManagerUserProvider;
 use OCA\OJSXC\ContactsStoreUserProvider;
 use OCA\OJSXC\Config;
+use OCA\OJSXC\IUserProvider;
 use OCP\IContainer;
 use OCP\IRequest;
 use OCP\IUserBackend;
@@ -73,40 +74,17 @@ class Application extends App
 				$c->query('AppName'),
 				$c->query('Request'),
 				$c->query('UserId'),
-				$c->query('StanzaMapper'),
-				$c->query('IQHandler'),
-				$c->query('MessageHandler'),
-				$c->query('Host'),
+				$c->query(StanzaMapper::class),
+				$c->query(IQ::class),
+				$c->query(Message::class),
 				$this->getLock(),
-				$c->query(\OCP\ILogger::class),
-				$c->query('PresenceHandler'),
-				$c->query('PresenceMapper'),
+				$c->query(Presence::class),
+				$c->query(PresenceMapper::class),
 				file_get_contents("php://input"),
 				self::$config['polling']['sleep_time'],
 				self::$config['polling']['max_cycles'],
-				$c->query('NewContentContainer'),
-				$c->query('StanzaLogger')
-			);
-		});
-
-		$container->registerService('SettingsController', function (IContainer $c) {
-			return new SettingsController(
-				$c->query('AppName'),
-				$c->query('Request'),
-				$c->query('Config'),
-				$c->query(\OCP\IUserManager::class),
-				\OC::$server->getUserSession()
-			);
-		});
-
-		$container->registerService('ExternalApiController', function (IContainer $c) {
-			return new ExternalApiController(
-				$c->query('AppName'),
-				$c->query('Request'),
-				$c->query(\OCP\IUserManager::class),
-				$c->query(\OCP\IUserSession::class),
-				$c->query(\OCP\IGroupManager::class),
-				$c->query(\OCP\ILogger::class)
+				$c->query(NewContentContainer::class),
+				$c->query(StanzaLogger::class)
 			);
 		});
 
@@ -115,21 +93,13 @@ class Application extends App
 				$c->query('AppName'),
 				$c->query('Request'),
 				$c->query(\OCP\IURLGenerator::class),
-				$c->query('Config'),
+				$c->query(Config::class),
 				$c->query(\OCP\IUserSession::class),
 				$c->query(\OCP\ILogger::class),
 				$c->query('DataRetriever'),
 				$c->query(\OCP\Security\ISecureRandom::class),
 				$c->query(\OCP\App\IAppManager::class),
 				'https://xmpp.jsxc.ch/registration'
-			);
-		});
-
-		$container->registerService('JavascriptController', function (IContainer $c) {
-			return new JavascriptController(
-				$c->query('AppName'),
-				$c->query('Request'),
-				$c->query('Config')
 			);
 		});
 
@@ -149,39 +119,39 @@ class Application extends App
 		/**
 		 * Database Layer
 		 */
-		$container->registerService('MessageMapper', function (IContainer $c) use ($container) {
+		$container->registerService(MessageMapper::class, function (IContainer $c) use ($container) {
 			return new MessageMapper(
 				$container->getServer()->getDatabaseConnection(),
 				$c->query('Host'),
-				$c->query('StanzaLogger')
+				$c->query(StanzaLogger::class)
 			);
 		});
 
-		$container->registerService('IQRosterPushMapper', function (IContainer $c) use ($container) {
+		$container->registerService(IQRosterPushMapper::class, function (IContainer $c) use ($container) {
 			return new IQRosterPushMapper(
 				$container->getServer()->getDatabaseConnection(),
 				$c->query('Host'),
-				$c->query('StanzaLogger')
+				$c->query(StanzaLogger::class)
 			);
 		});
 
-		$container->registerService('StanzaMapper', function (IContainer $c) use ($container) {
+		$container->registerService(StanzaMapper::class, function (IContainer $c) use ($container) {
 			return new StanzaMapper(
 				$container->getServer()->getDatabaseConnection(),
 				$c->query('Host'),
-				$c->query('StanzaLogger')
+				$c->query(StanzaLogger::class)
 			);
 		});
 
-		$container->registerService('PresenceMapper', function (IContainer $c) use ($container) {
+		$container->registerService(PresenceMapper::class, function (IContainer $c) use ($container) {
 			return new PresenceMapper(
 				$container->getServer()->getDatabaseConnection(),
 				$c->query('Host'),
 				$c->query('UserId'),
-				$c->query('MessageMapper'),
-				$c->query('NewContentContainer'),
+				$c->query(MessageMapper::class),
+				$c->query(NewContentContainer::class),
 				self::$config['polling']['timeout'],
-				$c->query('UserProvider')
+				$c->query(IUserProvider::class)
 			);
 		});
 
@@ -189,13 +159,13 @@ class Application extends App
 		/**
 		 * XMPP Stanza Handlers
 		 */
-		$container->registerService('IQHandler', function (IContainer $c) {
+		$container->registerService(IQ::class, function (IContainer $c) {
 			return new IQ(
 				$c->query('UserId'),
 				$c->query('Host'),
 				$c->query(\OCP\IUserManager::class),
 				$c->query(\OCP\IConfig::class),
-				$c->query('UserProvider')
+				$c->query(IUserProvider::class)
 			);
 		});
 
@@ -211,25 +181,8 @@ class Application extends App
 		/**
 		 * Helpers
 		 */
-		$container->registerService('Config', function (IContainer $c) {
-			return new Config(
-				$c->query('AppName'),
-				$c->query(\OCP\IConfig::class)
-			);
-		});
 
-		$container->registerService('NewContentContainer', function () {
-			return new NewContentContainer();
-		});
-
-		$container->registerService('StanzaLogger', function (IContainer $c) {
-			return new StanzaLogger(
-				$c->query('\OCP\ILogger'),
-				$c->query('UserId')
-			);
-		});
-
-		$container->registerService('UserProvider', function (IContainer $c) {
+		$container->registerService(IUserProvider::class, function (IContainer $c) {
 			if (self::contactsStoreApiSupported()) {
 				return new ContactsStoreUserProvider(
 					$c->query(\OCP\Contacts\ContactsMenu\IContactsStore::class),
@@ -252,8 +205,8 @@ class Application extends App
 		$container->registerService('RefreshRosterCommand', function ($c) {
 			return new RefreshRoster(
 				$c->query('ServerContainer')->getUserManager(),
-				$c->query('RosterPush'),
-				$c->query('PresenceMapper')
+				$c->query(RosterPush::class),
+				$c->query(PresenceMapper::class)
 			);
 		});
 
