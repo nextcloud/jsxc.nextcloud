@@ -6,6 +6,33 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## 4.3.0-beta.1 (2021-05-29)
+### Added
+- update JSXC to 4.3.0-beta.1 ([changelog](https://github.com/jsxc/jsxc/releases/tag/v4.3.0-beta.1))
+- bump Nextcloud to version 21
+
+### Fixed
+- remove obsolete variable
+- command DI
+- multiple DI issues
+- php8 type error
+
+### Misc
+- use more automated DI
+- align filename with class name
+- add psalm
+- update dependencies
+- remove deprecated mock method
+- refactor deprecated tests
+- refactor hooks test
+- fix compatibility between nc versions
+- update phpunit
+- fix phpunit
+- fix nc version for php 8
+- fix branch name
+- move to github actions
+- update ci badge
+
 ## 4.2.1 (2020-12-28)
 ### Fixed
 - fix undefined host key
