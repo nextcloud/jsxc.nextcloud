@@ -6,9 +6,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
-## 4.3.0-beta.1 (2021-05-29)
+## 4.3.0 (2021-07-05)
 ### Added
-- update JSXC to 4.3.0-beta.1 ([changelog](https://github.com/jsxc/jsxc/releases/tag/v4.3.0-beta.1))
+- update JSXC to 4.3.0 ([changelog](https://github.com/jsxc/jsxc/releases/tag/v4.3.0))
 - bump Nextcloud to version 21
 
 ### Fixed
