@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - php8 type error
 
 ### Misc
+- internal server is deprecated
 - use more automated DI
 - align filename with class name
 - add psalm
