@@ -6,6 +6,16 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## 4.3.1 (2021-07-08)
+### Fixed
+- update JSXC to 4.3.1 ([changelog](https://github.com/jsxc/jsxc/releases/tag/v4.3.1))
+- add deprecation label to internal option
+
+### Misc
+- update jsxc
+- update changelog
+- update dependencies
+
 ## 4.3.0 (2021-07-05)
 ### Added
 - update JSXC to 4.3.0 ([changelog](https://github.com/jsxc/jsxc/releases/tag/v4.3.0))
