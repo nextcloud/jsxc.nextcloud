@@ -40,7 +40,7 @@ function printRadioInput($key, $value, $required=true) {
 		<div class="form-group">
 			<label class="text-left form-no-padding">
 				<?php printRadioInput('serverType', 'internal'); ?>
-				Internal
+				Internal (deprecated)
 			</label>
 			<em>Limited functionality only: No clients besides JSXC in Nextcloud, no multi-user chat,
 				no server-to-server federations.</em>
