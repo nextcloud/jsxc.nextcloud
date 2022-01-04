@@ -2,12 +2,10 @@
 
 namespace OCA\OJSXC\AppInfo;
 
-use OC\Security\CSP\ContentSecurityPolicyManager;
 use OCA\OJSXC\Controller\ManagedServerController;
 use OCA\OJSXC\Middleware\ExternalApiMiddleware;
 use OCA\OJSXC\Config;
 use OCA\OJSXC\Listener\AddFeaturePolicyListener;
-use OCP\IContainer;
 use OCP\AppFramework\App;
 use OCP\AppFramework\Bootstrap\IBootContext;
 use OCP\AppFramework\Bootstrap\IBootstrap;
