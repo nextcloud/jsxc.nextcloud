@@ -16,6 +16,7 @@ use OCP\IConfig;
 use OCP\IServerContainer;
 use OCP\IURLGenerator;
 use OCP\Security\FeaturePolicy\AddFeaturePolicyEvent;
+use OCP\Security\IContentSecurityPolicyManager;
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
 
@@ -56,7 +57,7 @@ class Application extends App implements IBootstrap
 			);
 		});
 
-		$context->registerMiddleware('ExternalApiMiddleware');
+		$context->registerMiddleware(ExternalApiMiddleware::class);
 
 		$context->registerEventListener(AddFeaturePolicyEvent::class, AddFeaturePolicyListener::class);
 	}
@@ -72,8 +73,8 @@ class Application extends App implements IBootstrap
 		/** @var IConfig */
 		$config = $container->get(IConfig::class);
 
-		/** @var ContentSecurityPolicyManager */
-		$manager = $container->get(ContentSecurityPolicyManager::class);
+		/** @var IContentSecurityPolicyManager */
+		$manager = $container->get(IContentSecurityPolicyManager::class);
 
 		$policy = new \OCP\AppFramework\Http\EmptyContentSecurityPolicy();
 
