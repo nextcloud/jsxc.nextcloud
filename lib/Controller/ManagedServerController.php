@@ -89,6 +89,10 @@ class ManagedServerController extends Controller
 		$userId = $this->userSession->getUser()->getUID();
 		$appVersion = $this->appManager->getAppVersion('ojsxc');
 
+		if (!$apiSecret) {
+			throw new Exception('API secret not available');
+		}
+
 		$data = [
 		  'apiUrl' => $apiUrl,
 		  'apiSecret' => $apiSecret,
