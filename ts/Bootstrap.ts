@@ -58,6 +58,10 @@ export default class Bootstrap {
          }
       });
 
+      if (OJSXC_CONFIG.serverType !== 'external' && OJSXC_CONFIG.serverType !== 'managed') {
+         return;
+      }
+
       this.initJSXC();
 
       if (OC.generateUrl('/login') === window.location.pathname) {
