@@ -40,10 +40,9 @@ function printRadioInput($key, $value, $required=true) {
 		<div class="form-group">
 			<label class="text-left form-no-padding">
 				<?php printRadioInput('serverType', 'internal'); ?>
-				Internal (deprecated)
+				Internal (removed)
 			</label>
-			<em>Limited functionality only: No clients besides JSXC in Nextcloud, no multi-user chat,
-				no server-to-server federations.</em>
+			<em>We are sorry, but the internal server was removed. Please use the managed server or your own XMPP server.</em>
 		</div>
 		<div class="form-group">
 			<label class="text-left form-no-padding">

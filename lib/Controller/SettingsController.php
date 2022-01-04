@@ -51,33 +51,20 @@ class SettingsController extends Controller
 		$currentUID = $currentUser->getUID();
 		$config = $this->config;
 
-		$serverType = $config->getAppValue(Config::XMPP_SERVER_TYPE, Application::INTERNAL);
+		$serverType = $config->getAppValue(Config::XMPP_SERVER_TYPE, Application::NOT_CONFIGURED);
+
+		if ($serverType !== Application::EXTERNAL && $serverType !== Application::MANAGED) {
+			return [
+				'result' => SUCCESS,
+				'data' => [
+					'disabled' => true,
+				],
+			];
+		}
 
 		$data = [
 			'disabled' => !$config->getBooleanAppValue(Config::XMPP_START_ON_LOGIN, true),
 		];
-
-		if ($serverType === Application::INTERNAL) {
-			$serverHost = $this->request->getServerHost();
-			$domain = parse_url($serverHost, PHP_URL_HOST);
-
-			if ($domain === null) {
-				$domain = !empty($serverHost) ? $serverHost : 'jsxc.nextcloud';
-			}
-
-			$data['xmpp'] = [
-				'defaultDomain' => $domain,
-				'url' => \OC::$server->getURLGenerator()->linkToRouteAbsolute('ojsxc.http_bind.index'),
-				'node' => $currentUID,
-				'domain' => $domain,
-				'resource' => 'internal'
-			];
-
-			return [
-			   'result' => 'success',
-			   'data' => $data,
-			];
-		}
 
 		$data ['xmpp'] = [
 			'url' => $config->getAppValue(Config::XMPP_URL),
@@ -295,7 +282,7 @@ class SettingsController extends Controller
 	 */
 	public function getServerType()
 	{
-		return ["serverType" => $this->config->getAppValue(Config::XMPP_SERVER_TYPE, Application::INTERNAL)];
+		return ["serverType" => $this->config->getAppValue(Config::XMPP_SERVER_TYPE, Application::NOT_CONFIGURED)];
 	}
 
 	private function getCurrentUser()

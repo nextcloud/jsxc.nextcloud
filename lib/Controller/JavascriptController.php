@@ -26,7 +26,7 @@ class JavascriptController extends Controller
 	 */
 	public function generalConfig()
 	{
-		$serverType = $this->config->getAppValue(Config::XMPP_SERVER_TYPE, Application::INTERNAL);
+		$serverType = $this->config->getAppValue(Config::XMPP_SERVER_TYPE, Application::NOT_CONFIGURED);
 		$startMinimized = $this->config->getBooleanAppValue(Config::XMPP_START_MINIMIZED);
 		$loginFormEnable = $this->config->getBooleanAppValue(Config::XMPP_START_ON_LOGIN, true);
 

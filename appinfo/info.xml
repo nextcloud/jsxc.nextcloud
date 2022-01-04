@@ -53,9 +53,6 @@
       <post-migration>
          <step>OCA\OJSXC\Migration\MigrateConfig</step>
       </post-migration>
-      <install>
-         <step>OCA\OJSXC\Migration\RefreshRoster</step>
-      </install>
    </repair-steps>
 
    <settings>

@@ -95,21 +95,6 @@ export default class Bootstrap {
          if (OC.getCurrentUser().uid) {
             this.jsxc.start();
          }
-
-         if (OJSXC_CONFIG.serverType === 'internal') {
-            let storage = Storage.get();
-            let jid = storage.getItem('internal:jid');
-            let url = storage.getItem('internal:url');
-
-            if (jid && url) {
-               console.log('Start connection to internal XMPP server');
-
-               this.jsxc.start(url, jid, 'sid', '1234');
-
-               storage.removeItem('internal:jid');
-               storage.removeItem('internal:url');
-            }
-         }
       }
    }
 
@@ -156,11 +141,7 @@ export default class Bootstrap {
             jid +=  '/' + xmpp.resource;
          }
 
-         if (OJSXC_CONFIG.serverType === 'internal') {
-            this.jsxc.start(xmpp.url, jid, 'sid', '1234');
-         } else {
-            this.jsxc.start(xmpp.url, jid, xmpp.password || '');
-         }
+         this.jsxc.start(xmpp.url, jid, xmpp.password || '');
       } catch (err) {
          console.log('Error during log in', err);
 

@@ -1,7 +1,5 @@
 {
     "require": {
-        "sabre/xml": "^1.2",
-        "sabre/uri": "~1.0"
     },
     "require-dev": {
         "phpunit/phpunit": "^8.5 || ^9.3",

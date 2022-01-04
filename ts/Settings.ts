@@ -101,17 +101,6 @@ export default class Settings {
 
       storage.removeItem('loginForm:disable');
 
-      if (OJSXC_CONFIG.serverType === 'internal') {
-         storage.removeItem('serverIsOmniscient');
-
-         if (!disabled) {
-            let jid = xmpp.node + '@' + xmpp.domain + '/' + xmpp.resource;
-
-            storage.setItem('internal:jid', jid);
-            storage.setItem('internal:url', xmpp.url);
-         }
-      }
-
       return {
          disabled,
          xmpp: {
