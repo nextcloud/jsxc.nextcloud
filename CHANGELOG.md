@@ -6,6 +6,23 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## 5.0.0-beta.1 (2022-01-04)
+### Added
+- bump Nextcloud support
+- bump JSXC to 4.4.0-beta.1
+- BREAKING CHANGE: remove internal backend
+
+### Fixed
+- remove deprecated app.php
+- disable jsxc if not configured
+- hide internal option if not used
+
+### Misc
+- change version requirements
+- satisfy psalm
+- fix xml schema
+- update dependencies
+
 ## 4.3.1 (2021-07-08)
 ### Fixed
 - update JSXC to 4.3.1 ([changelog](https://github.com/jsxc/jsxc/releases/tag/v4.3.1))
