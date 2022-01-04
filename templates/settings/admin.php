@@ -37,6 +37,7 @@ function printRadioInput($key, $value, $required=true) {
 	<h2>JavaScript Xmpp Client</h2>
 	<form id="ojsxc-admin" class="ojsxc">
 		<h3>Server type</h3>
+		<?php if($_['serverType'] === 'internal'): ?>
 		<div class="form-group">
 			<label class="text-left form-no-padding">
 				<?php printRadioInput('serverType', 'internal'); ?>
@@ -44,6 +45,7 @@ function printRadioInput($key, $value, $required=true) {
 			</label>
 			<em>We are sorry, but the internal server was removed. Please use the managed server or your own XMPP server.</em>
 		</div>
+		<?php endif; ?>
 		<div class="form-group">
 			<label class="text-left form-no-padding">
 				<?php printRadioInput('serverType', 'external'); ?>
