@@ -46,7 +46,7 @@
       <lib>xmlreader</lib>
       <lib>xmlwriter</lib>
       <lib>dom</lib>
-      <nextcloud min-version="20" max-version="21"/>
+      <nextcloud min-version="22" max-version="23"/>
    </dependencies>
 
    <repair-steps>
