@@ -81,7 +81,7 @@ class Personal implements ISettings
 		$xmppOverwrite = $this->config->getAppValue('ojsxc', Config::XMPP_ALLOW_OVERWRITE);
 
 		$parameters['xmppUrl'] = $this->config->getAppValue('ojsxc', Config::XMPP_URL);
-		$parameters['externalConnectable'] = Application::getServerType() !== Application::INTERNAL;
+		$parameters['externalConnectable'] = Application::getServerType() === Application::MANAGED || Application::getServerType() === Application::EXTERNAL;
 		$parameters['allowToOverwriteXMPPConfig'] = $xmppOverwrite === 'true' || $xmppOverwrite === true || $xmppOverwrite === 1 || $xmppOverwrite === '1';
 		$parameters['jid'] = $node . '@' . $domain;
 

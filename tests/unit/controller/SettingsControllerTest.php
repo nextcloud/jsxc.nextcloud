@@ -45,7 +45,7 @@ class SettingsControllerTest extends TestCase
 	public function testIndexPreferPersonalEmail()
 	{
 		$mapGetAppValue = [
-			[Config::XMPP_SERVER_TYPE, 'internal', 'external'],
+			[Config::XMPP_SERVER_TYPE, 'not-configured', 'external'],
 		];
 
 		$this->config->method('getBooleanAppValue')->will($this->returnValueMap([
@@ -58,7 +58,7 @@ class SettingsControllerTest extends TestCase
 
 		$mapGetUserValue = [
 		 ['Foo', 'settings', 'email', $node.'@'.$domain]
-	  ];
+		];
 
 		$this->setUpAuthenticatedIndex($mapGetAppValue, $mapGetUserValue);
 
@@ -72,7 +72,7 @@ class SettingsControllerTest extends TestCase
 	public function testIndexTimeLimitedToken()
 	{
 		$mapGetAppValue = [
-			[Config::XMPP_SERVER_TYPE, 'internal', 'external'],
+			[Config::XMPP_SERVER_TYPE, 'not-configured', 'external'],
 			['xmppDomain', null, 'localhost']
 		];
 
@@ -143,17 +143,8 @@ class SettingsControllerTest extends TestCase
 	public function testServerType()
 	{
 		$this->config
-			->expects($this->at(0))
 			->method('getAppValue')
-			->with(Config::XMPP_SERVER_TYPE, 'internal')
-			->willReturn('internal'); // default value
-
-		$this->assertEquals($this->settingsController->getServerType(), ["serverType" => "internal"]);
-
-		$this->config
-			->expects($this->at(0))
-			->method('getAppValue')
-			->with(Config::XMPP_SERVER_TYPE, 'internal')
+			->with(Config::XMPP_SERVER_TYPE, 'not-configured')
 			->willReturn('external');
 
 		$this->assertEquals($this->settingsController->getServerType(), ["serverType" => "external"]);

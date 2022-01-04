@@ -95,12 +95,4 @@ if(!$apiSecret) {
    $config->setAppValue('ojsxc', Config::API_SECRET, $apiSecret);
 }
 
-if (Application::getServerType() === Application::INTERNAL) {
-	Hooks::register();
-}
-
-if (!class_exists("\\Sabre\\Xml\\Version")) {
-    require_once __DIR__ . "/../vendor/autoload.php";
-}
-
 ?>
