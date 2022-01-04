@@ -4,7 +4,7 @@
     "require-dev": {
         "phpunit/phpunit": "^8.5 || ^9.3",
         "friendsofphp/php-cs-fixer": "^2.14",
-        "christophwurst/nextcloud": "dev-stable20 || dev-stable21",
+        "christophwurst/nextcloud": "dev-stable22 || dev-stable23",
         "vimeo/psalm": "^4.5"
     },
     "scripts": {
