@@ -50,12 +50,12 @@
    </dependencies>
 
    <repair-steps>
-      <install>
-         <step>OCA\OJSXC\Migration\InitApiSecret</step>
-      </install>
       <post-migration>
          <step>OCA\OJSXC\Migration\MigrateConfig</step>
       </post-migration>
+      <install>
+         <step>OCA\OJSXC\Migration\InitApiSecret</step>
+      </install>
    </repair-steps>
 
    <settings>
