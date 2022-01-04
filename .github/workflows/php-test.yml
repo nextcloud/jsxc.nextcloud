@@ -36,6 +36,10 @@ jobs:
     - name: Remove OCP
       working-directory: nextcloud/apps/ojsxc
       run: composer remove --no-update --dev christophwurst/nextcloud
+    - name: Downgrade packages for php7.3
+      if: ${{ matrix.php-versions == '7.3' }}
+      working-directory: nextcloud/apps/ojsxc
+      run: composer update -W
     - name: Install dependencies
       working-directory: nextcloud/apps/ojsxc
       run: composer install
