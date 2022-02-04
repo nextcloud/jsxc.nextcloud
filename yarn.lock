@@ -174,10 +174,10 @@
   resolved "https://registry.yarnpkg.com/@interactjs/types/-/types-1.10.11.tgz#29be25d503f9c7842df062fa3cda5b044a47cf2a"
   integrity sha512-YRsVFWjL8Gkkvlx3qnjeaxW4fnibSJ9791g8BA7Pv5ANByI64WmtR1vU7A2rXcrOn8XvyCEfY0ss1s8NhZP+MA==
 
-"@jsxc/jsxc@^4.1.0":
-  version "4.3.1"
-  resolved "https://registry.yarnpkg.com/@jsxc/jsxc/-/jsxc-4.3.1.tgz#897dfb8139cfcaf991c0273d912bbe1a53439c5d"
-  integrity sha512-IPbIGhN25XBzpMhs64It7IqZS6v6IWnqXoastSsDGUr1Zwzu9kTe+e9Cz20IaDN7fmarlUx8Ub3e5ohvWF7zug==
+"@jsxc/jsxc@^4.4.0":
+  version "4.4.0"
+  resolved "https://registry.yarnpkg.com/@jsxc/jsxc/-/jsxc-4.4.0.tgz#170fc4c465efeea91b5859ccfec849f8f55ab153"
+  integrity sha512-wiMFt4K9cpkhTnTJJIhI97ho5aaGuNM1W4gvr/sJ7AbU0MTji0TdWheOxbKqt1DjZCPy1iPtK7vNlmf4b0bggg==
   dependencies:
     "@types/qrcode" "^1.3.5"
     bootstrap-sass "^3.4.1"
