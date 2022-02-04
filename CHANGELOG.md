@@ -6,7 +6,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
-## 5.0.0-beta.1 (2022-01-04)
+## 5.0.0 (2022-02-04)
 ### Added
 - bump Nextcloud support
 - bump JSXC to 4.4.0-beta.1
