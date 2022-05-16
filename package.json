@@ -40,7 +40,7 @@
     "git-revision-webpack-plugin": "^3.0.3",
     "husky": "^4.2.3",
     "inquirer": "^7.1.0",
-    "libxmljs": "^0.19.5",
+    "libxmljs": "^0.19.8",
     "mini-css-extract-plugin": "^0.9.0",
     "node-sass": "4.13.1",
     "npm-run-all": "^4.1.5",
