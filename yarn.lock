@@ -4109,9 +4109,9 @@ mixin-deep@^1.2.0:
     minimist "^1.2.5"
 
 moment@^2.29.1:
-  version "2.29.1"
-  resolved "https://registry.yarnpkg.com/moment/-/moment-2.29.1.tgz#b2be769fa31940be9eeea6469c075e35006fa3d3"
-  integrity sha512-kHmoybcPV8Sqy59DwNDY3Jefr64lK/by/da0ViFcuA4DH0vQg5Q6Ze5VimxkfQNSC+Mls/Kx53s7TjP1RhFEDQ==
+  version "2.29.4"
+  resolved "https://registry.yarnpkg.com/moment/-/moment-2.29.4.tgz#3dbe052889fe7c1b2ed966fcb3a77328964ef108"
+  integrity sha512-5LC9SOxjSc2HF6vO2CyuTDNivEdoz2IvyJJGj6X8DJ0eFyfszE0QiEd+iXmBvUP3WHxSjFH/vIsA0EN00cgr8w==
 
 move-concurrently@^1.0.1:
   version "1.0.1"
@@ -4529,9 +4529,10 @@ osenv@0, osenv@^0.1.4:
     os-homedir "^1.0.0"
     os-tmpdir "^1.0.0"
 
-"otr@git+https://github.com/sualko/otr.git#1ee459b4eda85d0a7d76d7da7b3a36861294346e":
+"otr@https://github.com/sualko/otr.git#1ee459b4eda85d0a7d76d7da7b3a36861294346e":
   version "0.3.0-sualko"
-  resolved "git+https://github.com/sualko/otr.git#1ee459b4eda85d0a7d76d7da7b3a36861294346e"
+  uid "1ee459b4eda85d0a7d76d7da7b3a36861294346e"
+  resolved "https://github.com/sualko/otr.git#1ee459b4eda85d0a7d76d7da7b3a36861294346e"
 
 p-finally@^1.0.0:
   version "1.0.0"
