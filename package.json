@@ -58,5 +58,9 @@
     "libsignal-protocol": "https://github.com/signalapp/libsignal-protocol-javascript",
     "tslint": "^6.1.0",
     "typescript-formatter": "^7.2.2"
+  },
+  "engines": {
+    "node": "^20.0.0",
+    "npm": "^9.0.0"
   }
 }
