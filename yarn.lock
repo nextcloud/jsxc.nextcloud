@@ -943,9 +943,9 @@ bootstrap-sass@^3.4.1:
   integrity sha512-p5rxsK/IyEDQm2CwiHxxUi0MZZtvVFbhWmyMOt4lLkA4bujDA1TGoKT0i1FKIWiugAdP+kK8T5KMDFIKQCLYIA==
 
 brace-expansion@^1.1.7:
-  version "1.1.11"
-  resolved "https://registry.yarnpkg.com/brace-expansion/-/brace-expansion-1.1.11.tgz#3c7fcbf529d87226f3d2f52b966ff5271eb441dd"
-  integrity sha512-iCuPHDFgrHX7H2vEI/5xpz07zSHB00TpugqhmYtVmMO6518mCuRMoOYFldEBl0g187ufozdaHgWKcYFb61qGiA==
+  version "1.1.13"
+  resolved "https://registry.yarnpkg.com/brace-expansion/-/brace-expansion-1.1.13.tgz#d37875c01dc9eff988dd49d112a57cb67b54efe6"
+  integrity sha512-9ZLprWS6EENmhEOpjCYW2c8VkmOvckIJZfkr7rBW6dObmfgJ/L1GpSYW5Hpo9lDz4D1+n0Ckz8rU7FwHDQiG/w==
   dependencies:
     balanced-match "^1.0.0"
     concat-map "0.0.1"
@@ -4529,9 +4529,10 @@ osenv@0, osenv@^0.1.4:
     os-homedir "^1.0.0"
     os-tmpdir "^1.0.0"
 
-"otr@git+https://github.com/sualko/otr.git#1ee459b4eda85d0a7d76d7da7b3a36861294346e":
+"otr@https://github.com/sualko/otr.git#1ee459b4eda85d0a7d76d7da7b3a36861294346e":
   version "0.3.0-sualko"
-  resolved "git+https://github.com/sualko/otr.git#1ee459b4eda85d0a7d76d7da7b3a36861294346e"
+  uid "1ee459b4eda85d0a7d76d7da7b3a36861294346e"
+  resolved "https://github.com/sualko/otr.git#1ee459b4eda85d0a7d76d7da7b3a36861294346e"
 
 p-finally@^1.0.0:
   version "1.0.0"
